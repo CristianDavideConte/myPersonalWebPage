@@ -57,5 +57,5 @@ function expandHamburgerMenu(hamburgerMenu) {
 * This is used to fix the different height behaviour of the mobile browsers' navigation bars 
 */
 function resetHeight(){
-	documentBodyElement.style.height = window.innerHeight + "px";
+	document.body.style.height = window.innerHeight + "px";
 }
