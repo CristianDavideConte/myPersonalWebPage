@@ -1,21 +1,21 @@
-::-webkit-scrollbar {
+.content::-webkit-scrollbar {
 	width: 10px;
 	transition: 1s;
 }
 
 /* Track */
-::-webkit-scrollbar-track {
+.content::-webkit-scrollbar-track {
 	background: #14141f;
 }
 
 /* Handle */
-::-webkit-scrollbar-thumb {
+.content::-webkit-scrollbar-thumb {
 	background: #46466d;
 	border-radius: 10px;
 }
 
 /* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
+.content::-webkit-scrollbar-thumb:hover {
 	background: #5a5a8c;
 }
 
@@ -130,11 +130,19 @@ p {
 	font-size: 150%;
 }
 
+.content {
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+	overflow-x: hidden;		
+	scroll-snap-type: y mandatory;
+}
+
 body {
 	margin: 0;
 	width: 100%;
 	height: 100%;
-	overflow-y: scroll;
+	position: fixed;
 	overflow-x: hidden;	
 	background-image: url("../images/Mountains.jpg");
 	background-repeat: no-repeat;
@@ -147,7 +155,6 @@ html {
 	height: 100vh;
 	font-family: "Baloo Bhaina 2"; 
 	font-size: 1.3vmin;
-	scroll-snap-type: y mandatory;
 	-webkit-touch-callout: none !important; /* iOS Safari */
 	-webkit-user-select: none !important; /* Safari */
 	-khtml-user-select: none !important; /* Konqueror HTML */
