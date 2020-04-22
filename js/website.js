@@ -34,14 +34,17 @@ function expandHamburgerMenu(hamburgerMenu) {
 		
 		setTimeout(() => header.removeChild(secondHeaderChild), 100);
 	} else {
+		let div = document.createElement("div");
 		let mail = document.createElement("p");
-		mail.setAttribute("id", "mail");
 		mail.innerHTML = "email: cristiandavideconte@gmail.com";
 		mail.style.margin = "0 auto 0 0";
 		
-		children[0].after(mail);
+		div.setAttribute("id", "mail");
+		div.appendChild(mail);
 		
-		mail.animate([
+		children[0].after(div);
+		
+		div.animate([
 			{ offset: 0, transform: "translateY(-100%)" },
 			{ offset: 1, transform: "translateY(0%)" }
 		], {
