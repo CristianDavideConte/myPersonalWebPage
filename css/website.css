@@ -30,7 +30,8 @@
 	flex-flow: row wrap;
 	align-items: center;
 	justify-content: flex-end;
-	backdrop-filter: blur(10px) opacity(0.2);
+	backdrop-filter: blur(10px) opacity(0.2) !important;
+	-webkit-backdrop-filter: blur(10px) opacity(0.2) !important;
 	//background: #14141f;
 }
 
@@ -95,7 +96,8 @@ h1, h2 {
 	overscroll-behavior: none;
 	border-radius: 5%;
 	padding: 2.5em;
-	backdrop-filter: blur(10px) opacity(0.8);
+	backdrop-filter: blur(10px) opacity(0.8) !important;
+	-webkit-backdrop-filter: blur(10px) opacity(0.8) !important;
 	
 }
 
