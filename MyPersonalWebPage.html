@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaina+2&display=swap" rel="stylesheet">
+		
+		<style>
+			::-webkit-scrollbar {
+				width: 10px;
+				transition: 1s;
+			}
+
+			/* Track */
+			::-webkit-scrollbar-track {
+				background: #14141f;
+			}
+
+			/* Handle */
+			::-webkit-scrollbar-thumb {
+				background: #46466d;
+				border-radius: 10px;
+			}
+
+			/* Handle on hover */
+			::-webkit-scrollbar-thumb:hover {
+				background: #5a5a8c;
+			}
+		</style>
+		<style>
+			.header {	
+				z-index: 2;
+				position: fixed;
+				top: 0%;
+				left: 0%;
+				width: 100%;
+				overscroll-behavior: none;
+				display: flex;
+				flex-flow: row wrap;
+				align-items: center;
+				justify-content: flex-end;
+				backdrop-filter: blur(10px) opacity(0.2);
+				//background: #14141f;
+			}
+			
+			.header .expanded {
+			
+			}
+			
+			.header > div{
+				margin-right: auto;
+			}
+			
+			.header > * {
+				position: relative;
+				padding: 10px;
+				height: 35px;
+				border-radius: 100%; 
+				filter: grayscale(100%);
+				transition: 0.3s;
+			}
+			
+			.header >img:hover {	
+				transform: scale3d(1.1, 1.1, 1.1);
+				filter: grayscale(0%);
+			}
+			
+			h1 {
+				font-size: 7em;
+			}
+			
+			h2 {
+				font-size: 2.5em;
+			}
+			
+			h1, h2 {
+				margin: 0;
+				text-shadow: 5px 5px 5px #14141f;
+			}
+
+			
+			#profilePic {
+				z-index: 1;
+				position: relative;
+				border-radius: 50%; 
+				box-shadow: 0 0 10px #14141f;
+				height: 14em;
+				transform: translate3d(0,20%,0);
+				
+				user-drag: none !important; 
+				user-select: none !important;
+				-moz-user-select: none !important;
+				-webkit-user-drag: none !important;
+				-webkit-user-select: none !important;
+				-ms-user-select: none !important;
+			}
+			
+			.presentationCard {
+				width: 40em;
+				height: 43em;
+				box-shadow: 0 0 10px #14141f;
+				overflow-x: hidden;
+				overflow-y: scroll;	
+				overscroll-behavior: none;
+				border-radius: 5%;
+				padding: 2.5em;
+				backdrop-filter: blur(10px) opacity(0.8);
+				
+			}
+
+			.presentationCard::-webkit-scrollbar {
+			  display: none;
+			}
+
+			.presentationCard {
+			  -ms-overflow-style: none;
+			}
+			
+			.presentationCard > * {
+				margin-top: 1em;
+				margin-bottom: 1em;
+				text-shadow: 3px 3px 5px #14141f;
+			}
+			
+			.page {
+				padding-top: 4em;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				scroll-snap-align: start;
+			}
+			
+			p {
+				font-size: 150%;
+			}
+			
+			body {
+				margin: 0;
+				width: 100%;
+				height: 100%;
+				overflow-y: scroll;
+				overflow-x: hidden;	
+				background-image: url("./Images/Mountains.jpg");
+				background-repeat: no-repeat;
+				background-size: cover;
+				background-attachment: fixed;
+			}
+			
+			html {				
+				width: 100vw;
+				height: 100vh;
+				font-family: "Baloo Bhaina 2"; 
+				font-size: 1.3vmin;
+				scroll-snap-type: y mandatory;
+				-webkit-touch-callout: none !important; /* iOS Safari */
+				-webkit-user-select: none !important; /* Safari */
+				-khtml-user-select: none !important; /* Konqueror HTML */
+				-moz-user-select: none !important; /* Old versions of Firefox */
+				-ms-user-select: none !important; /* Internet Explorer/Edge */
+				user-select: none !important; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+			}
+			
+			* {
+				color:white; 
+			}
+		</style>
+		
+		<style>
+			.hamburgerMenu {
+				display: inline-block;
+				cursor: pointer;
+				//outline: 0;
+			}
+
+			.bar1, .bar2 {
+			  width: 35px;
+			  height: 5px;
+			  border-radius: 10px;
+			  background-color: white;
+			  margin-top: 7px;
+			  transition: 0.3s;
+			}
+
+			.changeHamburgerMenuState .bar1 {
+			  -webkit-transform: rotate(45deg) translate3d(0,9px,0)  !important;
+			  transform: rotate(45deg) translate3d(0, 9px,0)  !important;
+			}
+
+			.changeHamburgerMenuState .bar2 {
+			  -webkit-transform: rotate(-45deg) translate3d(0, -8px,0)  !important;
+			  transform: rotate(-45deg) translate3d(0, -8px,0)  !important;
+			}
+		</style>
+		
+		<script>
+			function init() {
+				let profilePic = document.getElementById("profilePic");
+				profilePic.src = "https://instagram.fmxp3-1.fna.fbcdn.net/v/t51.2885-19/s150x150/75252749_1705239399607205_9103749054403182592_n.jpg?_nc_ht=instagram.fmxp3-1.fna.fbcdn.net&_nc_ohc=wsB9gkHxBb0AX8l194O&oh=87e350c2332eb8af36e79c5e1b7ced6b&oe=5EC8DF25";
+				profilePic.alt = "";				
+				
+				let instagramLink = document.getElementById("instagramLink");
+				instagramLink.src = "./Images/instagramLink.jpg";
+				instagramLink.alt = "";
+				instagramLink.addEventListener("click", () => window.open("https://www.instagram.com/cristian_davide_conte/?hl=it"));
+				
+				let facebookLink = document.getElementById("facebookLink");
+				facebookLink.src = "./Images/facebookLink.jpg";
+				facebookLink.alt = "";	
+				facebookLink.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));			
+			}
+			
+			function expandHamburgerMenu(hamburgerMenu) {
+				let menu = document.getElementsByClassName("hamburgerMenu")[0];
+				menu.removeEventListener("click", expandHamburgerMenu);
+				let header = document.getElementsByClassName("header")[0];
+				let children = header.children;
+				let secondHeaderChild = children[1];
+				
+				if(secondHeaderChild.id == "mail") {
+					secondHeaderChild.animate([
+						{ offset: 0, transform: "translateY(0%)" },
+						{ offset: 1, transform: "translateY(-100%)" }
+					], {
+						duration: 200
+					});
+					
+					setTimeout(() => header.removeChild(secondHeaderChild), 100);
+				} else {
+					let mail = document.createElement("p");
+					mail.setAttribute("id", "mail");
+					mail.innerHTML = "email: cristiandavideconte@gmail.com";
+					mail.style.margin = "0 auto 0 0";
+					
+					children[0].after(mail);
+					
+					mail.animate([
+						{ offset: 0, transform: "translateY(-100%)" },
+						{ offset: 1, transform: "translateY(0%)" }
+					], {
+						duration: 200
+					});
+				}	
+				
+				hamburgerMenu.classList.toggle("changeHamburgerMenuState");
+				menu.addEventListener("click", expandHamburgerMenu);
+				
+			}
+		</script>
+	</head>
+	<body onload = "init()">
+		<div class = "header">		
+			<div class="hamburgerMenu" onclick="expandHamburgerMenu(this)">
+				<div class="bar1"></div>
+				<div class="bar2"></div>
+			</div>
+			<img id = "instagramLink"/>
+			<img id = "facebookLink"/>	
+		</div>
+		<div class = "page">
+			<h1>Welcome to my Website</h1>
+			<h2>Scroll down to know more about me</h2>
+		</div>	
+		<div class = "page">
+			<img id = "profilePic"/>
+			<div class = "presentationCard">
+				<p>
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat nunc lorem, quis commodo elit interdum vitae. Aliquam malesuada erat at dictum pretium. Donec pellentesque sed metus id commodo. Vivamus luctus erat non dui consequat, a tincidunt eros luctus. Vestibulum vel imperdiet risus, congue vehicula massa. Proin non iaculis nisl. Nam iaculis, libero ac accumsan bibendum, augue ante blandit mi, quis ullamcorper lacus metus eget risus. Duis in pretium sem.
+					Sed suscipit porttitor odio, ac auctor quam. Praesent gravida vulputate tortor id cursus. Nulla imperdiet luctus purus, vel suscipit ante lacinia vitae. Cras in quam dignissim, lacinia diam non, tristique purus. Curabitur sit amet risus a augue gravida accumsan ac vel massa. Nulla semper magna felis, ut malesuada ex semper quis. Suspendisse venenatis interdum turpis eget facilisis. Donec tincidunt, purus pharetra convallis volutpat, ante ex venenatis erat, et ultricies justo magna a tortor. Pellentesque commodo nisi mi, non lobortis velit cursus id. Praesent venenatis, tortor quis gravida gravida, tellus metus consectetur massa, non fermentum nisl massa nec nunc. Etiam sapien tortor, aliquam sed diam non, bibendum pellentesque neque. Curabitur facilisis sapien vel mollis viverra. Phasellus at aliquet eros. Curabitur suscipit, lorem in pellentesque consectetur, quam nulla hendrerit sem, quis congue odio elit vitae nulla. Sed viverra mauris eget elit elementum fringilla.
+				</p>
+			<div>	
+		</div>
+	</body>
+</html>
