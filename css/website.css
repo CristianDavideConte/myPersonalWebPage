@@ -123,6 +123,7 @@ h1, h2 {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	text-overflow: clip; 
 	scroll-snap-align: start;
 }
 
