@@ -30,7 +30,7 @@ function expandHamburgerMenu(hamburgerMenu) {
 	
 	hamburgerMenu.disabled = true;
 	if(secondHeaderChild.id == "mail") {	
-		if (isBrowserChrome() && !isBrowserEdge()) 
+		if (!isBrowserEdge()) 
 			secondHeaderChild.animate([
 				{ offset: 0, transform: "translateY(0%)" },
 				{ offset: 1, transform: "translateY(-100%)" }
@@ -50,7 +50,7 @@ function expandHamburgerMenu(hamburgerMenu) {
 		
 		children[0].after(div);
 
-		if (isBrowserChrome() && !isBrowserEdge()) {		
+		if (!isBrowserEdge()) {		
 			div.animate([
 				{ offset: 0, transform: "translateY(-100%)" },
 				{ offset: 1, transform: "translateY(0%)" }

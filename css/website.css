@@ -31,9 +31,9 @@
 	flex-flow: row wrap;
 	align-items: center;
 	justify-content: flex-end;
-	background: none;
-	-webkit-backdrop-filter: blur(10px) opacity(0.2);
-	backdrop-filter: blur(10px) opacity(0.2);
+	background: rgba(0,0,0,0.7); 
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
 	overscroll-behavior: none;
 }
 
@@ -108,8 +108,9 @@ h1, h2 {
 	border-radius: 5%;
 	padding: 2.5em;
 	background: none;
-	-webkit-backdrop-filter: blur(10px) opacity(0.8);
-	backdrop-filter: blur(10px) opacity(0.8);
+	background: rgba(0,0,0,0.3); 
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
 	overscroll-behavior: none;
 }
 
