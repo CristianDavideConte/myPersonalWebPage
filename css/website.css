@@ -31,7 +31,7 @@
 	flex-flow: row wrap;
 	align-items: center;
 	justify-content: flex-end;
-	backdrop-filter: blur(10px) opacity(0.2);
+	backdrop-filter: blur(10px) opacity(0.2) !important;
 	-webkit-backdrop-filter: blur(10px) opacity(0.2);
 	//background: #14141f;
 }
@@ -146,6 +146,7 @@ p {
 	margin-top: 55px;
 	overflow-y: scroll;
 	overflow-x: hidden;		
+	-ms-overflow-style: -ms-autohiding-scrollbar !important;
 	scroll-snap-type: y mandatory;
 }
 
