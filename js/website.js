@@ -19,7 +19,7 @@ function init() {
 	let hamburgerMenu = document.getElementsByClassName("hamburgerMenu")[0]
 	hamburgerMenu.addEventListener("mousedown", event => {
 		event.preventDefault();
-		expandHamburgerMenu(event.target)
+		expandHamburgerMenu(hamburgerMenu)
 	}, {passive:false});
 }
 
