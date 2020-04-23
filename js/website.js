@@ -25,13 +25,17 @@ function expandHamburgerMenu(hamburgerMenu) {
 	let secondHeaderChild = children[1];
 	
 	if(secondHeaderChild.id == "mail") {
-		secondHeaderChild.animate([
-			{ offset: 0, transform: "translateY(0%)" },
-			{ offset: 1, transform: "translateY(-100%)" }
-		], {
-			duration: 200
-		});
-		
+		console.log("NuovaVersione");
+		console.log(navigator.userAgent.search("Chrome"));
+		console.log(navigator.userAgent.search("Chrome"));
+		if (navigator.userAgent.search("Chrome")) {
+			secondHeaderChild.animate([
+				{ offset: 0, transform: "translateY(0%)" },
+				{ offset: 1, transform: "translateY(-100%)" }
+			], {
+				duration: 200
+			});
+		}
 		setTimeout(() => header.removeChild(secondHeaderChild), 100);
 	} else {
 		let div = document.createElement("div");
@@ -43,13 +47,15 @@ function expandHamburgerMenu(hamburgerMenu) {
 		div.appendChild(mail);
 		
 		children[0].after(div);
-		
-		div.animate([
-			{ offset: 0, transform: "translateY(-100%)" },
-			{ offset: 1, transform: "translateY(0%)" }
-		], {
-			duration: 200
-		});
+
+		if (navigator.userAgent.search("Chrome")) {		
+			div.animate([
+				{ offset: 0, transform: "translateY(-100%)" },
+				{ offset: 1, transform: "translateY(0%)" }
+			], {
+				duration: 200
+			});
+		}
 	}	
 	
 	hamburgerMenu.classList.toggle("changeHamburgerMenuState");
