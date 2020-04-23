@@ -27,13 +27,14 @@
 	left: 0%;
 	width: 100%;
 	height: auto;
-	overscroll-behavior: none;
 	display: flex;
 	flex-flow: row wrap;
 	align-items: center;
 	justify-content: flex-end;
+	background: none;
 	-webkit-backdrop-filter: blur(10px) opacity(0.2);
 	backdrop-filter: blur(10px) opacity(0.2);
+	overscroll-behavior: none;
 }
 
 /*background: #14141f;*/
@@ -104,12 +105,12 @@ h1, h2 {
 	box-shadow: 0 0 10px #14141f;
 	overflow-x: hidden;
 	overflow-y: scroll;	
-	overscroll-behavior: none;
 	border-radius: 5%;
 	padding: 2.5em;
+	background: none;
 	-webkit-backdrop-filter: blur(10px) opacity(0.8);
 	backdrop-filter: blur(10px) opacity(0.8);
-	
+	overscroll-behavior: none;
 }
 
 .presentationCard::-webkit-scrollbar {
