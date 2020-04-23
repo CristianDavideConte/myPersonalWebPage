@@ -26,6 +26,7 @@
 	top: 0%;
 	left: 0%;
 	width: 100%;
+	height: auto;
 	overscroll-behavior: none;
 	display: flex;
 	flex-flow: row wrap;
@@ -33,9 +34,9 @@
 	justify-content: flex-end;
 	-webkit-backdrop-filter: blur(10px) opacity(0.2);
 	backdrop-filter: blur(10px) opacity(0.2);
-	//background: #14141f;
 }
 
+/*background: #14141f;*/
 .header > div{
 	margin-right: auto;
 	display: flex;
