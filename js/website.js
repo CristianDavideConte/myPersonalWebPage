@@ -14,26 +14,30 @@ function init() {
 	let facebookLink = document.getElementById("facebookLink");
 	facebookLink.src = "./images/facebookLink.jpg";
 	facebookLink.alt = "";	
-	facebookLink.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));			
+	facebookLink.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));		
+
+	let hamburgerMenu = document.getElementsByClassName("hamburgerMenu")[0]
+	hamburgerMenu.addEventListener("mousedown", event => {
+		event.preventDefault();
+		expandHamburgerMenu(event.target)
+	}, {passive:false});
 }
 
 function expandHamburgerMenu(hamburgerMenu) {
-	let menu = document.getElementsByClassName("hamburgerMenu")[0];
-	menu.removeEventListener("click", expandHamburgerMenu);
 	let header = document.getElementsByClassName("header")[0];
 	let children = header.children;
 	let secondHeaderChild = children[1];
 	
-	if(secondHeaderChild.id == "mail") {
-		
-		if (isBrowserChrome() && !isBrowserEdge()) {
+	hamburgerMenu.disabled = true;
+	if(secondHeaderChild.id == "mail") {	
+		if (isBrowserChrome() && !isBrowserEdge()) 
 			secondHeaderChild.animate([
 				{ offset: 0, transform: "translateY(0%)" },
 				{ offset: 1, transform: "translateY(-100%)" }
 			], {
 				duration: 200
 			});
-		}
+		
 		setTimeout(() => header.removeChild(secondHeaderChild), 100);
 	} else {
 		let div = document.createElement("div");
@@ -57,7 +61,7 @@ function expandHamburgerMenu(hamburgerMenu) {
 	}	
 	
 	hamburgerMenu.classList.toggle("changeHamburgerMenuState");
-	menu.addEventListener("click", expandHamburgerMenu);	
+	hamburgerMenu.disabled = false;
 }
 
 function isBrowserChrome() {
