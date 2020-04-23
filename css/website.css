@@ -30,8 +30,8 @@
 	flex-flow: row wrap;
 	align-items: center;
 	justify-content: flex-end;
-	backdrop-filter: blur(10px) opacity(0.2) !important;
-	-webkit-backdrop-filter: blur(10px) opacity(0.2) !important;
+	-webkit-backdrop-filter: blur(10px) opacity(0.2);
+	backdrop-filter: blur(10px) opacity(0.2);
 	//background: #14141f;
 }
 
@@ -100,8 +100,8 @@ h1, h2 {
 	overscroll-behavior: none;
 	border-radius: 5%;
 	padding: 2.5em;
-	backdrop-filter: blur(10px) opacity(0.8) !important;
-	-webkit-backdrop-filter: blur(10px) opacity(0.8) !important;
+	backdrop-filter: blur(10px) opacity(0.8);
+	-webkit-backdrop-filter: blur(10px) opacity(0.8);
 	
 }
 
@@ -188,11 +188,11 @@ html {
 }
 
 .changeHamburgerMenuState .bar1 {
-  -webkit-transform: rotate(45deg) translate3d(1px,10px,0) !important;
-  transform: rotate(45deg) translate3d(1px, 10px,0) !important;
+  -webkit-transform: rotate(45deg) translate3d(1px,10px,0);
+  transform: rotate(45deg) translate3d(1px, 10px,0);
 }
 
 .changeHamburgerMenuState .bar2 {
-  -webkit-transform: rotate(-45deg) translate3d(0, -10px,0) !important;
-  transform: rotate(-45deg) translate3d(0, -10px,0) !important;
+  -webkit-transform: rotate(-45deg) translate3d(0, -10px,0);
+  transform: rotate(-45deg) translate3d(0, -10px,0);
 }
