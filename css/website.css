@@ -146,7 +146,7 @@ p {
 	margin-top: 55px;
 	overflow-y: scroll;
 	overflow-x: hidden;		
-	-ms-overflow-style: -ms-autohiding-scrollbar !important;
+	-ms-overflow-style: none !important;
 	scroll-snap-type: y mandatory;
 }
 
