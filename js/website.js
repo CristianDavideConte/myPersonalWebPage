@@ -27,7 +27,7 @@ function expandHamburgerMenu(hamburgerMenu) {
 	if(secondHeaderChild.id == "mail") {
 		console.log("NuovaVersione");
 		console.log(navigator.userAgent.search("Chrome"));
-		console.log(navigator.userAgent.search("Chrome"));
+		console.log(navigator.userAgent.search("Edge"));
 		if (navigator.userAgent.search("Chrome")) {
 			secondHeaderChild.animate([
 				{ offset: 0, transform: "translateY(0%)" },
