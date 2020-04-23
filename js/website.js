@@ -25,10 +25,8 @@ function expandHamburgerMenu(hamburgerMenu) {
 	let secondHeaderChild = children[1];
 	
 	if(secondHeaderChild.id == "mail") {
-		console.log("NuovaVersione");
-		console.log(navigator.userAgent.search("Chrome"));
-		console.log(navigator.userAgent.search("Edge"));
-		if (navigator.userAgent.search("Chrome")) {
+		
+		if (isBrowserChrome() && !isBrowserEdge()) {
 			secondHeaderChild.animate([
 				{ offset: 0, transform: "translateY(0%)" },
 				{ offset: 1, transform: "translateY(-100%)" }
@@ -48,7 +46,7 @@ function expandHamburgerMenu(hamburgerMenu) {
 		
 		children[0].after(div);
 
-		if (navigator.userAgent.search("Chrome")) {		
+		if (isBrowserChrome() && !isBrowserEdge()) {		
 			div.animate([
 				{ offset: 0, transform: "translateY(-100%)" },
 				{ offset: 1, transform: "translateY(0%)" }
@@ -60,6 +58,15 @@ function expandHamburgerMenu(hamburgerMenu) {
 	
 	hamburgerMenu.classList.toggle("changeHamburgerMenuState");
 	menu.addEventListener("click", expandHamburgerMenu);	
+}
+
+function isBrowserChrome() {
+	return navigator.userAgent.search("Chrome") == 81;
+}
+
+function isBrowserEdge() {
+	let chrome = navigator.userAgent.search("Chrome") == 81;
+	return chrome && navigator.userAgent.search("Edge") == 116;
 }
 
 /* This Function resets the body height to that of the inner browser
