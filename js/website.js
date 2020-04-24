@@ -64,10 +64,6 @@ function expandHamburgerMenu(hamburgerMenu) {
 	hamburgerMenu.disabled = false;
 }
 
-function isBrowserChrome() {
-	return navigator.userAgent.search("Chrome") == 81;
-}
-
 function isBrowserEdge() {
 	let chrome = navigator.userAgent.search("Chrome") == 81;
 	return chrome && navigator.userAgent.search("Edge") == 116;
