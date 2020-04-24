@@ -1,3 +1,11 @@
+/* latin-ext */
+@font-face {
+  font-family: "Baloo Bhaina 2";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./fonts/BalooBhaina2/BalooBhaina2-Regular.ttf");
+}
+
 .content::-webkit-scrollbar {
 	width: 1em;
 }
