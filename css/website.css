@@ -100,6 +100,7 @@ h1, h2 {
 .presentationCard {
 	width: 40em;
 	height: 43em;
+	box-shadow: 0 0 10px #14141f;
 	overflow-x: hidden;
 	overflow-y: scroll;	
 	border-radius: 5%;
@@ -110,7 +111,6 @@ h1, h2 {
 	-ms-overflow-style: none !important;								/* Edge */
 	scrollbar-width: none !important;									/* Firefox */	
 	overscroll-behavior: none;
-	//box-shadow: 0 0 10px #14141f;
 }
 
 .presentationCard::-webkit-scrollbar {
