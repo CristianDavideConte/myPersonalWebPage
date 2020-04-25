@@ -173,6 +173,7 @@ body {
 	margin: 0;
 	width: 100%;
 	overflow: hidden;	
+	overscroll-behavior-y: contain;
 	background-image: url("../images/Mountains.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
