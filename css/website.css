@@ -48,16 +48,6 @@
 	transition: 0.3s;
 }
 
-.changeHamburgerMenuState .bar1 {
-	-webkit-transform: rotate(45deg) translate3d(0, var(--bar-offset-translate3d), 0);
-	transform: rotate(45deg) translate3d(0, var(--bar-offset-translate3d), 0);
-}
-
-.changeHamburgerMenuState .bar2 {
-	-webkit-transform: rotate(-45deg) translate3d(0, var(--bar-offset-inverted-translate3d), 0);
-	transform: rotate(-45deg) translate3d(0, var(--bar-offset-inverted-translate3d), 0);
-}
-
 .socialNetworks {
 	margin-left: auto;
 	display:flex;
@@ -76,6 +66,16 @@
 .socialNetworks > *:hover {	
 	transform: scale3d(1.1, 1.1, 1.1);
 	filter: grayscale(0%);
+}
+
+.changeHamburgerMenuState .bar1 {
+	-webkit-transform: rotate(45deg) translate3d(0, var(--bar-offset-translate3d), 0);
+	transform: rotate(45deg) translate3d(0, var(--bar-offset-translate3d), 0);
+}
+
+.changeHamburgerMenuState .bar2 {
+	-webkit-transform: rotate(-45deg) translate3d(0, var(--bar-offset-inverted-translate3d), 0);
+	transform: rotate(-45deg) translate3d(0, var(--bar-offset-inverted-translate3d), 0);
 }
 
 .title {
