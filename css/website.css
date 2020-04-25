@@ -162,6 +162,7 @@ p {
 .content {
 	width: 100%;
 	height: 100%;
+	overflow-y: scroll;	
 	overflow-x: hidden;		
 	-ms-overflow-style: none !important;								/* Edge */
 	scrollbar-width: none !important;									/* Firefox */
