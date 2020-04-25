@@ -172,8 +172,10 @@ p {
 body {
 	margin: 0;
 	width: 100%;
+	position: fixed;
 	overflow: hidden;	
-	overscroll-behavior-y: contain;
+	overscroll-behavior-y: none;
+	-webkit-overflow-scrolling: touch;								/* Safari */
 	background-image: url("../images/Mountains.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
