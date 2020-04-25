@@ -43,7 +43,6 @@ function expandHamburgerMenu(hamburgerMenu) {
 		let div = document.createElement("div");
 		let mail = document.createElement("p");
 		mail.innerHTML = "email: cristiandavideconte@gmail.com";
-		mail.style.margin = "0 auto 0 0";
 		
 		div.setAttribute("id", "mail");
 		div.appendChild(mail);
