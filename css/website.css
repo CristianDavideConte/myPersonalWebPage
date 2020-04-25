@@ -5,6 +5,7 @@
   font-weight: 400;
   src: url("../fonts/BalooBhaina2/BalooBhaina2-Regular.ttf");
 }
+
 :root {	
 	--header-elements-height: 35px;
 	--header-elements-padding: 10px;	
