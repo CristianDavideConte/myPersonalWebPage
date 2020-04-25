@@ -1,5 +1,4 @@
 function init() {	
-	document.body.requestFullscreen();
 	resetHeight();												//Initially sets the height (fixes mobile top search bar behavior)
 	window.addEventListener("resize", resetHeight);																		//Resets the height whenever the window's resized
 			
