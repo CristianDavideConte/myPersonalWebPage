@@ -21,6 +21,13 @@ function init() {
 		event.preventDefault();
 		expandHamburgerMenu(hamburgerMenu)
 	}, {passive:false});
+	
+	let websiteShowcase = document.getElementsByClassName("websiteShowcase")[0];
+	websiteShowcase.addEventListener("wheel", (event) => {
+		websiteShowcase.scrollLeft -= (-event.deltaY/3);
+		event.preventDefault();
+	});
+	
 }
 
 function expandHamburgerMenu(hamburgerMenu) {
