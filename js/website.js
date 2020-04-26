@@ -1,5 +1,5 @@
 function init() {	
-	//resetHeight();												//Initially sets the height (fixes mobile top search bar behavior)
+	resetHeight();												//Initially sets the height (fixes mobile top search bar behavior)
 	//window.addEventListener("resize", resetHeight);																		//Resets the height whenever the window's resized
 			
 	let profilePic = document.getElementById("profilePic");
@@ -26,7 +26,7 @@ function init() {
 	websiteShowcase.addEventListener("wheel", (event) => {
 		websiteShowcase.scrollLeft -= (-event.deltaY/3);
 		event.preventDefault();
-	});
+	}, {passive:false});
 	
 }
 
