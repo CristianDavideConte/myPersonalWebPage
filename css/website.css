@@ -7,7 +7,8 @@
 }
 
 :root {	
-	--header-elements-height: 4em;
+	--header-elements-height: 35px;
+	--header-elements-max-height: 6em;
 	--header-elements-padding: 1em;	
 	--bar-margin: 1.1em;
 	--bar-width: 3em;
@@ -139,6 +140,7 @@ p {
 	cursor: pointer;
 	filter: grayscale(100%);
 	height: var(--header-elements-height);
+	max-height: var(--header-elements-max-height);
 	padding: var(--header-elements-padding);
 	transition: 0.3s;
 }
