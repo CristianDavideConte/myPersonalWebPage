@@ -32,6 +32,10 @@ html {
 	height: 100vh;
 	font-family: "Baloo Bhaina 2"; 
 	font-size: 1.3vmin;
+	background-image: url("../images/LakeAndMountains.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50% 0%;
 	-webkit-touch-callout: none !important; /* iOS Safari */
 	-webkit-user-select: none !important; /* Safari */
 	-khtml-user-select: none !important; /* Konqueror HTML */
@@ -47,10 +51,6 @@ body {
 	overflow: hidden;	
 	overscroll-behavior-y: none;
 	-webkit-overflow-scrolling: touch;								/* Safari */
-	background-image: url("../images/LakeAndMountains.jpg");
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: 50% 0%;
 }
 
 .content::-webkit-scrollbar {
@@ -187,7 +187,6 @@ h1, h2 {
 
 .presentationCard {
 	width: 37em;
-	height: 40em;
 	box-shadow: 0 0 10px #14141f;
 	overflow-x: hidden;
 	overflow-y: scroll;	
