@@ -28,7 +28,39 @@ function init() {
 		event.preventDefault();
 	}, {passive:false});
 	
+	var carouselButtonMouseDownInterval;
+	function carouselButtonMouseDownIntervalSet(carouselButtons) {
+		carouselButtons.dispatchEvent(new MouseEvent("mousedown"));
+	}
+	
+	function carouselButtonMouseDownIntervalReset() {
+		clearInterval(carouselButtonMouseDownInterval);
+		carouselButtonMouseDownInterval = null;
+		this.removeEventListener("mouseup", carouselButtonMouseDownIntervalReset, {passive:true});				/* There's no need for the window to keep listening to this event after the user stops interacting with the carouselButton */
+	}
+	
+	let carouselButtons = document.getElementsByClassName("carouselButton");
+	carouselButtons[0].addEventListener("mousedown", () => {
+		websiteShowcase.dispatchEvent(new WheelEvent("wheel", {
+			deltaY: -30
+		}));
+		
+		if(carouselButtonMouseDownInterval == null)
+			carouselButtonMouseDownInterval = setInterval(() => carouselButtonMouseDownIntervalSet(carouselButtons[0]), 10);
+		window.addEventListener("mouseup", carouselButtonMouseDownIntervalReset);	
+	}, {passive:true});
+	
+	carouselButtons[1].addEventListener("mousedown", () => {
+		websiteShowcase.dispatchEvent(new WheelEvent("wheel", {
+			deltaY: 30	
+		}));
+		
+		if(carouselButtonMouseDownInterval == null)
+			carouselButtonMouseDownInterval = setInterval(() => carouselButtonMouseDownIntervalSet(carouselButtons[1]), 10);
+		window.addEventListener("mouseup", carouselButtonMouseDownIntervalReset);	
+	}, {passive:true});
 }
+
 
 function expandHamburgerMenu(hamburgerMenu) {
 	let header = document.getElementsByClassName("header")[0];
