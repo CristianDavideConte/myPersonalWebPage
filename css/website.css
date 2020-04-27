@@ -7,7 +7,7 @@
 }
 
 :root {	
-	--header-elements-height: 35px;
+	--header-elements-height: 3em;
 	--header-elements-max-height: 6em;
 	--header-elements-padding: 1em;	
 	--bar-margin: 1em;
@@ -303,6 +303,17 @@ h1, h2 {
 }
 
 @media only screen and (max-width: 1080px) {	
+	:root {	
+		--header-elements-height: 35px;
+		--header-elements-max-height: 35px;
+		--header-elements-padding: 15px;	
+		--bar-margin: 18px;
+		--bar-width: 45px;
+		--bar-height: 5px;
+		--bar-offset-translate3d: calc(var(--bar-height) + var(--bar-margin) / 2);
+		--bar-offset-inverted-translate3d: calc(-1 * var(--bar-offset-translate3d));	
+	}
+	
 	.hamburgerMenu {
 		margin-right: auto;
 		cursor: pointer;
