@@ -7,14 +7,8 @@
 }
 
 :root {	
-	--header-elements-height: 3em;
-	--header-elements-max-height: 6em;
-	--header-elements-padding: 1em;	
-	--bar-margin: 1em;
-	--bar-width: 4em;
-	--bar-height: 0.6em;
-	--bar-offset-translate3d: calc(var(--bar-height) + var(--bar-margin) / 2);
-	--bar-offset-inverted-translate3d: calc(-1 * var(--bar-offset-translate3d));	
+	--header-elements-height: 4em;
+	--header-elements-padding: 1em;		
 }
 
 * {
@@ -106,8 +100,9 @@ p {
 	top: 0%;
 	left: 0%;
 	width: 100%;
+	height: var(--header-elements-height);
+	padding: var(--header-elements-padding);
 	display: flex;
-	flex-direction: row;
 	align-items: center;
 	background: rgba(0,0,0,0.7); 
 	-webkit-backdrop-filter: blur(10px);
@@ -115,10 +110,17 @@ p {
 	overscroll-behavior: none;
 }
 
+.header div > * {
+	padding-left: var(--header-elements-padding);
+	padding-right: var(--header-elements-padding);	
+}
+
 .socialNetworks {
 	margin-left: auto;
 	display:flex;
-	flex-direction:row;
+	align-items: center;
+	height: 100%;
+	padding-right: var(--header-elements-padding);
 }
 
 .socialNetworks > * {
@@ -126,8 +128,6 @@ p {
 	cursor: pointer;
 	filter: grayscale(100%);
 	height: var(--header-elements-height);
-	max-height: var(--header-elements-max-height);
-	padding: var(--header-elements-padding);
 	transition: 0.3s;
 }
 	
@@ -135,16 +135,6 @@ p {
 	-webkit-transform: scale3d(1.1, 1.1, 1.1);
 	transform: scale3d(1.1, 1.1, 1.1);
 	filter: grayscale(0%);
-}
-
-.changeHamburgerMenuState .bar1 {
-	-webkit-transform: rotate(45deg) translate3d(0, var(--bar-offset-translate3d), 0);
-	transform: rotate(45deg) translate3d(0, var(--bar-offset-translate3d), 0);
-}
-
-.changeHamburgerMenuState .bar2 {
-	-webkit-transform: rotate(-45deg) translate3d(0, var(--bar-offset-inverted-translate3d), 0);
-	transform: rotate(-45deg) translate3d(0, var(--bar-offset-inverted-translate3d), 0);
 }
 
 .title {
@@ -255,8 +245,7 @@ h1, h2 {
 }
 
 .websiteShowcase > *{
-	-webkit-transform: scale3d(0.9,0.9,0.9);
-	transform: scale3d(0.9,0.9,0.9);	
+	padding: 1em;	
 }
 
 .websitePreview {
@@ -304,32 +293,37 @@ h1, h2 {
 
 @media only screen and (max-width: 1080px) {	
 	:root {	
-		--header-elements-height: 35px;
-		--header-elements-max-height: 35px;
-		--header-elements-padding: 15px;	
-		--bar-margin: 18px;
-		--bar-width: 45px;
-		--bar-height: 5px;
-		--bar-offset-translate3d: calc(var(--bar-height) + var(--bar-margin) / 2);
+		--header-elements-height: 50px;
+		--header-elements-padding: 10px;		
+		--bar-margin: 15px;
+		--bar-width: 30px;
+		--bar-height: 4px;
+		--bar-offset-translate3d: calc(var(--bar-height)/2 + var(--bar-margin)/2);
 		--bar-offset-inverted-translate3d: calc(-1 * var(--bar-offset-translate3d));	
 	}
 	
 	.hamburgerMenu {
+		height: 100%;
 		margin-right: auto;
 		cursor: pointer;
 	}
 
 	.hamburgerMenu > * {
-		margin: var(--header-elements-padding);
 		width: var(--bar-width);
 		height: var(--bar-height);
+		margin: var(--bar-margin) var(--bar-margin)  var(--bar-margin) 0;
 		border-radius: 10px;
 		background-color: #f2f2f2;
 		transition: 0.3s;
 	}	
-		
-	.socialNetworks > * {
-		height: 40px;
-		//max-height: 40px;	
+	
+	.changeHamburgerMenuState .bar1 {
+		-webkit-transform: translate3d(0, var(--bar-offset-translate3d), 0)  rotate(45deg);
+		transform: translate3d(0, var(--bar-offset-translate3d), 0)  rotate(45deg);
+	}
+
+	.changeHamburgerMenuState .bar2 {
+		-webkit-transform: translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate(-45deg);
+		transform: translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate(-45deg);
 	}
 }
