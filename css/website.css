@@ -10,9 +10,9 @@
 	--header-elements-height: 35px;
 	--header-elements-max-height: 6em;
 	--header-elements-padding: 1em;	
-	--bar-margin: 1.1em;
-	--bar-width: 3em;
-	--bar-height: 0.5em;
+	--bar-margin: 1em;
+	--bar-width: 4em;
+	--bar-height: 0.6em;
 	--bar-offset-translate3d: calc(var(--bar-height) + var(--bar-margin) / 2);
 	--bar-offset-inverted-translate3d: calc(-1 * var(--bar-offset-translate3d));	
 }
@@ -113,20 +113,6 @@ p {
 	-webkit-backdrop-filter: blur(10px);
 	backdrop-filter: blur(10px);
 	overscroll-behavior: none;
-}
-
-.hamburgerMenu {
-	margin-right: auto;
-	cursor: pointer;
-}
-
-.hamburgerMenu > * {
-	margin: var(--header-elements-padding);
-	width: var(--bar-width);
-	height: var(--bar-height);
-	border-radius: 10px;
-	background-color: #f2f2f2;
-	transition: 0.3s;
 }
 
 .socialNetworks {
@@ -314,4 +300,25 @@ h1, h2 {
 
 .websitePreview .websiteGoToButton {
 	padding: 10px;
+}
+
+@media only screen and (max-width: 1080px) {	
+	.hamburgerMenu {
+		margin-right: auto;
+		cursor: pointer;
+	}
+
+	.hamburgerMenu > * {
+		margin: var(--header-elements-padding);
+		width: var(--bar-width);
+		height: var(--bar-height);
+		border-radius: 10px;
+		background-color: #f2f2f2;
+		transition: 0.3s;
+	}	
+		
+	.socialNetworks > * {
+		height: 40px;
+		//max-height: 40px;	
+	}
 }
