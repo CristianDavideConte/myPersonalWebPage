@@ -1,6 +1,6 @@
 function init() {	
-	//resetHeight();																						//Initially sets the height (fixes mobile top search bar behavior)
-	//window.addEventListener("resize", resetHeight);														//Resets the height whenever the window's resized
+	resetHeight();																						//Initially sets the height (fixes mobile top search bar behavior)
+	window.addEventListener("resize", resetHeight);														//Resets the height whenever the window's resized
 	//document.getElementsByClassName("background")[0].style.height = window.outerHeight + "px";			//Fixes the background stattering on mobile url bar resizing
 	
 	let profilePic = document.getElementById("profilePic");
