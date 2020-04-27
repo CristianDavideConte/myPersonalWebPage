@@ -1,7 +1,7 @@
 function init() {	
-	resetHeight();																						//Initially sets the height (fixes mobile top search bar behavior)
-	window.addEventListener("resize", resetHeight);														//Resets the height whenever the window's resized
-	document.getElementsByClassName("background")[0].style.height = window.outerHeight + "px";			//Fixes the background stattering on mobile url bar resizing
+	//resetHeight();																						//Initially sets the height (fixes mobile top search bar behavior)
+	//window.addEventListener("resize", resetHeight);														//Resets the height whenever the window's resized
+	//document.getElementsByClassName("background")[0].style.height = window.outerHeight + "px";			//Fixes the background stattering on mobile url bar resizing
 	
 	let profilePic = document.getElementById("profilePic");
 	profilePic.src = "https://instagram.fmxp3-1.fna.fbcdn.net/v/t51.2885-19/s150x150/75252749_1705239399607205_9103749054403182592_n.jpg?_nc_ht=instagram.fmxp3-1.fna.fbcdn.net&_nc_ohc=wsB9gkHxBb0AX8l194O&oh=87e350c2332eb8af36e79c5e1b7ced6b&oe=5EC8DF25";
