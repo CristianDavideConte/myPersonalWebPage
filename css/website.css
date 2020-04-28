@@ -263,7 +263,7 @@ h1, h2 {
 }
 
 .websitePreviewImage > *{	
-	border-radius: 50%;	
+	border-radius: 100%;	
 	width: 60%;
 }
 

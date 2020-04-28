@@ -103,14 +103,17 @@ function expandHamburgerMenu(hamburgerMenu) {
 	hamburgerMenu.disabled = false;
 }
 
+/* This Function returns true if the browser used is the Microsoft Old Edge, false otherwise.
+ * The result is determined by looking at the browser's user agent
+ */
 function isBrowserEdge() {
 	let chrome = navigator.userAgent.search("Chrome") == 81;
 	return chrome && navigator.userAgent.search("Edge") == 116;
 }
 
 /* This Function resets the body height to that of the inner browser
-* This is used to fix the different height behaviour of the mobile browsers' navigation bars 
-*/
+ * This is used to fix the different height behaviour of the mobile browsers' navigation bars 
+ */
 function resetHeight(){
 	document.body.style.height = window.innerHeight + "px";
 }
