@@ -333,9 +333,7 @@ h1, h2 {
 	
 	.mobileExpanded {
 		height: 100%;
-		background: #0d0d0d; 
-		-webkit-backdrop-filter: none;
-		backdrop-filter: none;
+		background: rgba(0,0,0,0.9); 
 	}
 	
 	.hamburgerMenu {
