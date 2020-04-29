@@ -19,11 +19,8 @@ function init() {
 	let hamburgerMenu = document.getElementsByClassName("hamburgerMenu")[0];		
 	let pageLinks = document.getElementsByClassName("pageLink");	
 	for(const pageLink of pageLinks)
-		pageLink.addEventListener("mouseup", () => toggleExpandHamburgerMenu(hamburgerMenu), {passive:true});
-	hamburgerMenu.addEventListener("mousedown", event => {
-		event.preventDefault();	
-		toggleExpandHamburgerMenu(hamburgerMenu);
-	}, {passive:false});
+		pageLink.addEventListener("mouseup", () => toggleExpandHamburgerMenu(hamburgerMenu), {passive:false});
+	hamburgerMenu.addEventListener("mousedown", event => toggleExpandHamburgerMenu(hamburgerMenu), {passive:false});
 	
 	let websiteShowcase = document.getElementsByClassName("websiteShowcase")[0];
 	websiteShowcase.addEventListener("wheel", (event) => {
@@ -65,6 +62,7 @@ function init() {
 }
 
 function toggleExpandHamburgerMenu(hamburgerMenu) {
+	event.preventDefault();	
 	if(window.innerWidth <= 1080) {
 		hamburgerMenu.classList.toggle("changeHamburgerMenuState")
 		document.getElementsByClassName("header")[0].classList.toggle("mobileExpanded");
