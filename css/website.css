@@ -333,7 +333,9 @@ h1, h2 {
 	
 	.mobileExpanded {
 		height: 100%;
-		background: rgba(0,0,0,0.9); 
+		background: #0d0d0d; 
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
 	}
 	
 	.hamburgerMenu {
@@ -344,7 +346,7 @@ h1, h2 {
 	.hamburgerMenu > * {
 		width: var(--bar-width);
 		height: var(--bar-height);
-		margin: var(--bar-margin) var(--bar-margin)  var(--bar-margin) 0;
+		margin: var(--bar-margin) var(--bar-margin) var(--bar-margin) 0;
 		border-radius: 10px;
 		background-color: #f2f2f2;
 		transition: var(--header-transition-time);
@@ -352,23 +354,23 @@ h1, h2 {
 	
 	.changeHamburgerMenuState {
 		transition: var(--header-transition-time);
-		-webkit-transform: rotate(90deg);
-		transform: rotate(90deg);
+		-webkit-transform: rotate3d(0,0,1,-90deg);
+		transform: rotate3d(0,0,1,-90deg);
 	}
 	
 	.changeHamburgerMenuState .bar1 {
-		-webkit-transform: translate3d(0, var(--bar-offset-translate3d), 0)  rotate(45deg);
-		transform: translate3d(0, var(--bar-offset-translate3d), 0)  rotate(45deg);
+		-webkit-transform: translate3d(0, var(--bar-offset-translate3d), 0) rotate3d(0,0,1,45deg);
+		transform: translate3d(0, var(--bar-offset-translate3d), 0) rotate3d(0,0,1,45deg);
 	}
 
 	.changeHamburgerMenuState .bar2 {
-		-webkit-transform: translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate(-45deg);
-		transform: translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate(-45deg);
+		-webkit-transform: translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate3d(0,0,1,-45deg);
+		transform: translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate3d(0,0,1,-45deg);
 	}	
 
 	.linkSection {
-		display: flex;
 		flex-direction: column;
+		margin: 0;
 		opacity: 0;
 	}
 	
@@ -385,14 +387,14 @@ h1, h2 {
 
 	
 	.mobileExpanded .socialNetworks {
-		-webkit-transform: rotate(90deg);
-		transform: rotate(90deg);
+		-webkit-transform: rotate3d(0,0,1,90deg);
+		transform: rotate3d(0,0,1,90deg);
 	}
 	
 	.mobileExpanded .socialNetworks > *{
 		filter: grayscale(100%);
-		-webkit-transform: rotate(-90deg);
-		transform: rotate(-90deg);
+		-webkit-transform: rotate3d(0,0,1,-90deg);
+		transform: rotate3d(0,0,1,-90deg);
 	}
 	
 	.socialNetworks > * {
