@@ -67,10 +67,8 @@ function init() {
 
 function toggleExpandHamburgerMenu(hamburgerMenu) {
 	event.preventDefault();	
-	if(window.innerWidth <= 1080) {
-		hamburgerMenu.classList.toggle("changeHamburgerMenuState")
+	if(window.innerWidth <= 1080) 
 		header.classList.toggle("mobileExpanded");
-	}
 }
 
 /* This Function returns true if the browser used is the Microsoft Old Edge, false otherwise.

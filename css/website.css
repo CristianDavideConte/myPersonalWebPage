@@ -377,7 +377,11 @@ h1, h2 {
 		background-color: #f2f2f2;
 		transition: var(--header-transition-time);
 	}	
-
+	.mobileExpanded .hamburgerMenu {
+		-webkit-transform:translate3d(0, calc(-1*var(--header-elements-padding)), 0);
+		transform: translate3d(0, calc(-1*var(--header-elements-padding)), 0);		
+	}
+	
 	.mobileExpanded .bar1 {
 		-webkit-transform: translate3d(0, var(--bar-offset-translate3d), 0) rotate3d(0,0,1,45deg);
 		transform: translate3d(0, var(--bar-offset-translate3d), 0) rotate3d(0,0,1,45deg);
@@ -411,12 +415,12 @@ h1, h2 {
 	.mobileExpanded .socialNetworks {
 		z-index: 4;
 		filter: grayscale(100%);	
-		-webkit-transform: rotate3d(0,0,1,90deg);
-		transform: rotate3d(0,0,1, 90deg);
-	
+		-webkit-transform: rotate3d(0,0,1,90deg) translate3d(calc(var(--header-elements-height) + 2*var(--header-elements-padding)), 0, 0);
+		transform: rotate3d(0,0,1, 90deg) translate3d(calc(var(--header-elements-height) + 2*var(--header-elements-padding)), 0, 0);
+		transform-origin: right top;
 	}
 	
-	.mobileExpanded .socialNetworks > *{
+	.mobileExpanded .socialNetworks > * {
 		-webkit-transform: rotate3d(0,0,1,-90deg);
 		transform: rotate3d(0,0,1, -90deg);
 	}
