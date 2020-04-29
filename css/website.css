@@ -369,16 +369,14 @@ h1, h2 {
 	
 	.changeHamburgerMenuState {
 		transition: var(--header-transition-time);
-		-webkit-transform: rotate3d(0,0,1,-90deg);
-		transform: rotate3d(0,0,1,-90deg);
 	}
 	
-	.changeHamburgerMenuState .bar1 {
+	.mobileExpanded .bar1 {
 		-webkit-transform: translate3d(0, var(--bar-offset-translate3d), 0) rotate3d(0,0,1,45deg);
 		transform: translate3d(0, var(--bar-offset-translate3d), 0) rotate3d(0,0,1,45deg);
 	}
 
-	.changeHamburgerMenuState .bar2 {
+	.mobileExpanded .bar2 {
 		-webkit-transform: translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate3d(0,0,1,-45deg);
 		transform: translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate3d(0,0,1,-45deg);
 	}	

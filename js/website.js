@@ -1,3 +1,6 @@
+var header;
+var hamburgerMen;
+
 function init() {	
 	resetHeight();																						//Initially sets the height (fixes mobile top search bar behavior)
 	window.addEventListener("resize", resetHeight);														//Resets the height whenever the window's resized
@@ -16,11 +19,12 @@ function init() {
 	facebookLink.alt = "";	
 	facebookLink.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));		
 
-	let hamburgerMenu = document.getElementsByClassName("hamburgerMenu")[0];		
+	header = document.getElementsByClassName("header")[0];
+	hamburgerMenu = document.getElementsByClassName("hamburgerMenu")[0];	
+	hamburgerMenu.addEventListener("mousedown", event => toggleExpandHamburgerMenu(hamburgerMenu), {passive:false});
 	let pageLinks = document.getElementsByClassName("pageLink");	
 	for(const pageLink of pageLinks)
 		pageLink.addEventListener("mouseup", () => toggleExpandHamburgerMenu(hamburgerMenu), {passive:false});
-	hamburgerMenu.addEventListener("mousedown", event => toggleExpandHamburgerMenu(hamburgerMenu), {passive:false});
 	
 	let websiteShowcase = document.getElementsByClassName("websiteShowcase")[0];
 	websiteShowcase.addEventListener("wheel", (event) => {
@@ -65,7 +69,7 @@ function toggleExpandHamburgerMenu(hamburgerMenu) {
 	event.preventDefault();	
 	if(window.innerWidth <= 1080) {
 		hamburgerMenu.classList.toggle("changeHamburgerMenuState")
-		document.getElementsByClassName("header")[0].classList.toggle("mobileExpanded");
+		header.classList.toggle("mobileExpanded");
 	}
 }
 
