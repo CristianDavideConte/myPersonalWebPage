@@ -40,7 +40,6 @@ html {
 body {
 	margin: 0;
 	width: 100%;
-	height: 100%;
 	position: fixed;
 	overflow: hidden;	
 	overscroll-behavior-y: none;
@@ -49,8 +48,6 @@ body {
 
 .background {    
 	position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
 	background-image: url("../images/backgroundImages/LakeAndMountains.jpg");
@@ -178,9 +175,6 @@ p {
 
 .title {
 	width:100%;
-	display:flex;
-	flex-direction: column;
-	justify-content: center;
 	text-align:center;
 	text-overflow: clip; 
 	margin-top: auto;				/* Centers the title*/
@@ -202,10 +196,11 @@ h1, h2 {
 
 #profilePic {
 	z-index: 1;
-	position: relative;
 	border-radius: 50%; 
+	border: none;
 	box-shadow: 0 0 10px #14141f;
 	height: 14em;
+	width: 14em;
 	margin-top: auto;				/* Centers the title*/
 	-webkit-transform: translate3d(0, 20%, 0);
 	transform: translate3d(0, 20%, 0);
@@ -271,6 +266,10 @@ h1, h2 {
 	padding: 1em;	
 }
 
+.websiteGoToButton {
+	text-decoration: none;
+}
+
 .websitePreview {
 	display: flex;
 	flex-direction: column;
@@ -298,15 +297,12 @@ h1, h2 {
 	padding-top: 10px;
 	padding-left: 10px;
 	padding-right: 10px;
+	border: none;
 }
 
 .websitePreviewImage > *{	
 	border-radius: 100%;	
 	width: 60%;
-}
-
-.websiteGoToButton {
-	text-decoration: none;
 }
 
 .carouselButton {	
@@ -424,6 +420,21 @@ h1, h2 {
 		filter: grayscale(0%);
 	}	
 		
+	.presentationCard {
+		width: 50em;
+		height: 60em;
+	}
+	
+	.presentationCard > * {
+		font-size: 300%;
+		backface-visibility: hidden;						/* Blurry text fix */
+	}
+	
+	#profilePic {
+		width: 20em;
+		height: 20em;
+	}
+	
 	.websiteShowcase {
 		max-width: 85%;
 	}
