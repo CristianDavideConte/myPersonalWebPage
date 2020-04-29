@@ -4,21 +4,21 @@ var hamburgerMen;
 function init() {	
 	resetHeight();																						//Initially sets the height (fixes mobile top search bar behavior)
 	window.addEventListener("resize", resetHeight);														//Resets the height whenever the window's resized
-	
-	let profilePic = document.getElementById("profilePic");
-	profilePic.src = "https://instagram.fmxp3-1.fna.fbcdn.net/v/t51.2885-19/s150x150/75252749_1705239399607205_9103749054403182592_n.jpg?_nc_ht=instagram.fmxp3-1.fna.fbcdn.net&_nc_ohc=wsB9gkHxBb0AX8l194O&oh=87e350c2332eb8af36e79c5e1b7ced6b&oe=5EC8DF25";
-	profilePic.alt = "";				
-	
+
 	let instagramLink = document.getElementById("instagramLink");
-	instagramLink.src = "./images/instagramLink.jpg";
+	instagramLink.src = "./images/socialNetworksLinks/instagramLink.jpg";
 	instagramLink.alt = "";
 	instagramLink.addEventListener("click", () => window.open("https://www.instagram.com/cristian_davide_conte/?hl=it"));
 	
 	let facebookLink = document.getElementById("facebookLink");
-	facebookLink.src = "./images/facebookLink.jpg";
+	facebookLink.src = "./images/socialNetworksLinks/facebookLink.jpg";
 	facebookLink.alt = "";	
 	facebookLink.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));		
-
+	
+	let profilePic = document.getElementById("profilePic");
+	profilePic.src = "./images/profilePictures/profilePicture.jpg";
+	profilePic.alt = "";				
+	
 	header = document.getElementsByClassName("header")[0];
 	hamburgerMenu = document.getElementsByClassName("hamburgerMenu")[0];	
 	hamburgerMenu.addEventListener("mousedown", event => toggleExpandHamburgerMenu(hamburgerMenu), {passive:false});
