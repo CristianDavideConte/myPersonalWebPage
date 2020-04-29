@@ -331,22 +331,15 @@ h1, h2 {
 			transform: scale3d(0, 0, 0);
 		}
 					
-		40% {
-			-webkit-transform: scale3d(1.5, 1.5, 1.5);
-			transform: scale3d(1.5, 1.5, 1.5);
+		30% {
+			-webkit-transform: scale3d(1.2, 1.2, 1.2);
+			transform: scale3d(1.2, 1.2, 1.2);
 		}	
 		
 		to {
 			-webkit-transform: scale3d(1, 1, 1);
 			transform: scale3d(1, 1, 1);
 		}	
-	}
-	
-	@keyframes rotate90{
-		to {
-			-webkit-transform: rotate3d(0,0,1,90deg);
-			transform: rotate3d(0,0,1,90deg);
-		}
 	}
 	
 	:root {	
@@ -398,7 +391,7 @@ h1, h2 {
 	.mobileExpanded .linkSection {
 		pointer-events: auto;
 		z-index: 3;
-		font-size: 190%;
+		font-size: 3em;
 		opacity: 1;
 		animation: slideIn calc(2*var(--header-transition-time));
 		transition: var(--header-transition-time);
@@ -411,15 +404,21 @@ h1, h2 {
 	
 	.mobileExpanded .socialNetworks {
 		z-index: 4;
-		filter: grayscale(100%);	
 		-webkit-transform: translate3d(calc(var(--header-socialNetworks-div-width)/2 - var(--header-elements-height)/ 2), 0, 0) rotate3d(0,0,1,90deg);
 		transform: translate3d(calc(var(--header-socialNetworks-div-width)/2 - var(--header-elements-height)/ 2), 0, 0) rotate3d(0,0,1, 90deg);
 	}
 	
 	.mobileExpanded .socialNetworks > * {
+		filter: grayscale(100%);	
 		-webkit-transform: rotate3d(0,0,1,-90deg);
 		transform: rotate3d(0,0,1, -90deg);
 	}
+	
+	.mobileExpanded .socialNetworks > *:hover {
+		filter: grayscale(0%);
+		-webkit-transform: rotate3d(0,0,1,-90deg) scale3d(1.1, 1.1, 1.1);
+		transform: rotate3d(0,0,1, -90deg) scale3d(1.1, 1.1, 1.1);
+	}	
 		
 	.socialNetworks > * {
 		filter: grayscale(0%);
