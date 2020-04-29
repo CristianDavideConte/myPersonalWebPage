@@ -320,7 +320,24 @@ h1, h2 {
 	backdrop-filter: blur(10px);
 }
 
-@media only screen and (max-width: 1080px) {	
+@media only screen and (max-width: 1080px) {
+	@keyframes slideIn{
+		from {
+			-webkit-transform: scale3d(0, 0, 0);
+			transform: scale3d(0, 0, 0);
+		}
+					
+		40% {
+			-webkit-transform: scale3d(1.5, 1.5, 1.5);
+			transform: scale3d(1.5, 1.5, 1.5);
+		}	
+		
+		to {
+			-webkit-transform: scale3d(1, 1, 1);
+			transform: scale3d(1, 1, 1);
+		}	
+	}
+	
 	:root {	
 		--header-elements-height: 50px;
 		--header-elements-padding: 10px;		
@@ -380,6 +397,7 @@ h1, h2 {
 	.mobileExpanded .linkSection {
 		font-size: 190%;
 		opacity: 1;
+		animation: slideIn calc(2*var(--header-transition-time));
 		transition: var(--header-transition-time);
 	}
 
