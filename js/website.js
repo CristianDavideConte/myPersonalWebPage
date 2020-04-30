@@ -4,20 +4,6 @@ var hamburgerMen;
 function init() {	
 	resetHeight();																						//Initially sets the height (fixes mobile top search bar behavior)
 	window.addEventListener("resize", resetHeight);														//Resets the height whenever the window's resized
-
-	let instagramLink = document.getElementById("instagramLink");
-	instagramLink.src = "./images/socialNetworksLinks/instagramLink.jpg";
-	instagramLink.alt = "";
-	instagramLink.addEventListener("click", () => window.open("https://www.instagram.com/cristian_davide_conte/?hl=it"));
-	
-	let facebookLink = document.getElementById("facebookLink");
-	facebookLink.src = "./images/socialNetworksLinks/facebookLink.jpg";
-	facebookLink.alt = "";	
-	facebookLink.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));		
-	
-	let profilePic = document.getElementById("profilePic");
-	profilePic.src = "./images/profilePictures/profilePicture.jpg";
-	profilePic.alt = "";				
 	
 	header = document.getElementById("header");
 	hamburgerMenu = document.getElementById("hamburgerMenu");	
@@ -63,6 +49,45 @@ function init() {
 			carouselButtonMouseDownInterval = setInterval(() => carouselButtonMouseDownIntervalSet(carouselButtons[1]), 10);
 		window.addEventListener("mouseup", carouselButtonMouseDownIntervalReset);	
 	}, {passive:true});
+	
+	imageLoading();	
+}
+
+function imageLoading() {
+	let backgroundImage = new Image();
+	backgroundImage.onload = () => { 
+		let backgroundElement = document.getElementById("background");
+		backgroundElement.style.backgroundImage = "none";
+		backgroundElement.src = backgroundImage.src;
+	}
+	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
+	
+	let instagramLinkElement = document.getElementById("instagramLink");
+	instagramLinkElement.addEventListener("click", () => window.open("https://www.instagram.com/cristian_davide_conte/?hl=it"));
+	let instagramLinkImage = new Image();
+	instagramLinkImage.onload = () => { 
+		instagramLinkElement.style.backgroundImage = "none";
+		instagramLinkElement.src = instagramLinkImage.src;
+	}
+	instagramLinkImage.src = "./images/socialNetworksLinks/instagramLink.jpg";
+	
+	
+	let facebookLinkElement = document.getElementById("facebookLink");
+	facebookLinkElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));		
+	let facebookLinkImage = new Image();
+	facebookLinkImage.onload = () => { 
+		facebookLinkElement.style.backgroundImage = "none";
+		facebookLinkElement.src = facebookLinkImage.src;
+	}
+	facebookLinkImage.src = "./images/socialNetworksLinks/facebookLink.jpg";
+	
+	let profilePicImage = new Image();
+	profilePicImage.onload = () => { 
+		let profilePic = document.getElementById("profilePic");
+		profilePic.style.backgroundImage = "none";
+		profilePic.src = profilePicImage.src;
+	}
+	profilePicImage.src = "./images/profilePictures/profilePicture.jpg";	
 }
 
 function toggleExpandHamburgerMenu(hamburgerMenu) {
