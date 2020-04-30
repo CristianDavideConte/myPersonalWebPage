@@ -58,7 +58,7 @@ function imageLoading() {
 	backgroundImage.onload = () => { 
 		let backgroundElement = document.getElementById("background");
 		let backgroundElementLoaded = backgroundElement.cloneNode(true);
-		backgroundElementLoaded.src = backgroundImage.src;
+		backgroundElementLoaded.style.backgroundImage = "url(" + backgroundImage.src + ")";
 		backgroundElement.before(backgroundElementLoaded);
 		backgroundElement.classList.add("contentLoaded");
 		setTimeout(() => {
