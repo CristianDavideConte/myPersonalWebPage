@@ -59,7 +59,7 @@ body {
 }
 
 .contentImage {
-	animation: unblur 1s;
+	animation: unblur 0.5s;
 }
 
 #background {    
@@ -188,20 +188,6 @@ p {
 	-webkit-transform: scale3d(1.1, 1.1, 1.1);
 	transform: scale3d(1.1, 1.1, 1.1);
 	filter: grayscale(0%);
-}
-
-#instagramLink {
-	background-image: url("../images/socialNetworksLinks/instagramLink_Compressed.jpg");
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: 50% 0%;
-}
-
-#facebookLink {
-	background-image: url("../images/socialNetworksLinks/facebookLink_Compressed.jpg");
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: 50% 0%;	
 }
 
 .title {
@@ -421,7 +407,7 @@ h1, h2 {
 	.mobileExpanded .linkSection {
 		pointer-events: auto;
 		z-index: 3;
-		font-size: 3em;
+		font-size: 2.5em;
 		opacity: 1;
 		animation: slideIn calc(2*var(--header-transition-time));
 		transition: var(--header-transition-time);

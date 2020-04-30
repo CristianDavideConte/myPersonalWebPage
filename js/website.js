@@ -57,41 +57,30 @@ function imageLoading() {
 	let backgroundImage = new Image();
 	backgroundImage.onload = () => { 
 		let backgroundElement = document.getElementById("background");
-		setTimeout(() => backgroundElement.classList.remove("contentImage"), 1000); 
-		backgroundElement.style.backgroundImage = "url(" + backgroundImage.src + ")";
+		setTimeout(() => backgroundElement.classList.remove("contentImage"), 100); 
 		backgroundElement.classList.add("contentImage");
+		backgroundElement.style.backgroundImage = "url(" + backgroundImage.src + ")";
 	}
 	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
+	//backgroundImage.src = "https://s1.1zoom.me/big3/181/BMW_F83_White_549918_6576x4384.jpg";
 	
 	let instagramLinkElement = document.getElementById("instagramLink");
+	instagramLinkElement.src = "./images/socialNetworksLinks/instagramLink.jpg";
 	instagramLinkElement.addEventListener("click", () => window.open("https://www.instagram.com/cristian_davide_conte/?hl=it"));
-	let instagramLinkImage = new Image();
-	instagramLinkImage.onload = () => { 
-		setTimeout(() => instagramLinkElement.classList.remove("contentImage"), 1000); 
-		instagramLinkElement.classList.add("contentImage");
-		instagramLinkElement.style.backgroundImage = "none";
-		instagramLinkElement.src = instagramLinkImage.src;
-	}
-	instagramLinkImage.src = "./images/socialNetworksLinks/instagramLink.jpg";
 	
 	
 	let facebookLinkElement = document.getElementById("facebookLink");
+	facebookLinkElement.src = "./images/socialNetworksLinks/facebookLink.jpg";
 	facebookLinkElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));		
-	let facebookLinkImage = new Image();
-	facebookLinkImage.onload = () => { 
-		setTimeout(() => facebookLinkElement.classList.remove("contentImage"), 1000); 
-		facebookLinkElement.classList.add("contentImage");
-		facebookLinkElement.style.backgroundImage = "none";
-		facebookLinkElement.src = facebookLinkImage.src;
-	}
-	facebookLinkImage.src = "./images/socialNetworksLinks/facebookLink.jpg";
 	
 	let profilePicImage = new Image();
 	profilePicImage.onload = () => { 
 		let profilePic = document.getElementById("profilePic");
-		setTimeout(() => profilePic.classList.remove("contentImage"), 1000); 
+		setTimeout(() => {
+			profilePic.style.backgroundImage = "none";
+			profilePic.classList.remove("contentImage");
+		}, 1000); 
 		profilePic.classList.add("contentImage");
-		profilePic.style.backgroundImage = "none";
 		profilePic.src = profilePicImage.src;
 	}
 	profilePicImage.src = "./images/profilePictures/profilePicture.jpg";	
