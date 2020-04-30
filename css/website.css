@@ -6,15 +6,13 @@
   src: url("../fonts/BalooBhaina2/BalooBhaina2-Regular.ttf");
 }
 
-@keyframes unblur{
+@keyframes fade {
 	from {
-		-webkit-filter: blur(30px);
-		filter: blur(30px);
-	}		
+		opacity: 1;
+	}
 	
 	to {
-		-webkit-filter: blur(0px);
-		filter: blur(0px);
+		opacity: 0;
 	}	
 }
 
@@ -58,8 +56,8 @@ body {
 	-webkit-overflow-scrolling: touch;								/* Safari */
 }
 
-.contentImage {
-	animation: unblur 0.5s;
+.contentLoaded {
+	animation: fade 0.5s;
 }
 
 #background {    

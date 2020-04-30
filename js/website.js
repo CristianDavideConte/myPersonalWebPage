@@ -57,12 +57,15 @@ function imageLoading() {
 	let backgroundImage = new Image();
 	backgroundImage.onload = () => { 
 		let backgroundElement = document.getElementById("background");
-		setTimeout(() => backgroundElement.classList.remove("contentImage"), 100); 
-		backgroundElement.classList.add("contentImage");
-		backgroundElement.style.backgroundImage = "url(" + backgroundImage.src + ")";
+		let backgroundElementLoaded = backgroundElement.cloneNode(true);
+		backgroundElementLoaded.src = backgroundImage.src;
+		backgroundElement.before(backgroundElementLoaded);
+		backgroundElement.classList.add("contentLoaded");
+		setTimeout(() => {
+			backgroundElement.parentElement.removeChild(backgroundElement);
+		}, 500); 
 	}
 	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
-	//backgroundImage.src = "https://s1.1zoom.me/big3/181/BMW_F83_White_549918_6576x4384.jpg";
 	
 	let instagramLinkElement = document.getElementById("instagramLink");
 	instagramLinkElement.src = "./images/socialNetworksLinks/instagramLink.jpg";
@@ -73,19 +76,11 @@ function imageLoading() {
 	facebookLinkElement.src = "./images/socialNetworksLinks/facebookLink.jpg";
 	facebookLinkElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));		
 	
-	let profilePicImage = new Image();
-	profilePicImage.onload = () => { 
-		let profilePic = document.getElementById("profilePic");
-		setTimeout(() => {
-			profilePic.style.backgroundImage = "none";
-			profilePic.classList.remove("contentImage");
-		}, 1000); 
-		profilePic.classList.add("contentImage");
-		profilePic.src = profilePicImage.src;
-	}
-	profilePicImage.src = "./images/profilePictures/profilePicture.jpg";	
+	let profilePicElement = document.getElementById("profilePic");
+	profilePicElement.src = "./images/profilePictures/profilePicture.jpg";	
 }
 
+/* This Function toggle the class mobileExpanded in the hamburgerMenu element */
 function toggleExpandHamburgerMenu(hamburgerMenu) {
 	if(window.innerWidth <= 1080) 
 		header.classList.toggle("mobileExpanded");
