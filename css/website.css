@@ -21,6 +21,10 @@
 	--header-elements-padding: 1em;	
 	--header-transition-time: 0.5s;
 	--header-socialNetworks-div-width :calc(2*var(--header-elements-height) + var(--header-elements-padding));
+	
+	--profilePic-size: 17vmin;
+	--presentationCard-height: 60vmin;
+	--presentationCard-width: 55vmin;
 }
 
 * {
@@ -208,32 +212,26 @@ h1, h2 {
 	text-shadow: 5px 5px 5px #14141f;
 }
 
-
 #profilePic {
 	z-index: 1;
 	border-radius: 100%; 
 	box-shadow: 0 0 10px #14141f;
-	height: 14em;
-	width: 14em;
-	-webkit-transform: translate3d(0, 20%, 0);
-	transform: translate3d(0, 20%, 0);
-	background-image: url("../images/profilePictures/profilePicture_Compressed.jpg");
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: 50% 0%;	
-	
+	height: var(--profilePic-size);
+	width: var(--profilePic-size);
+	-webkit-transform: translate3d(0, calc(50vh - var(--profilePic-size)/2 - var(--presentationCard-height)/2), 0);
+	transform: translate3d(0, calc(50vh - var(--profilePic-size)/2 - var(--presentationCard-height)/2), 0);
 }
 
 .presentationCard {
-	width: 37em;
-	height: 40em;
+	height: var(--presentationCard-height);
+	width: var(--presentationCard-width);
 	box-shadow: 0 0 10px #14141f;
 	overflow-x: hidden;
 	overflow-y: scroll;	
 	border-radius: 5%;
-	padding: 2.5em;
-	margin-bottom: auto;				/* Centers the title*/
 	
+	margin: 0;
+	transform: translate3d(0, calc(50vh - var(--presentationCard-height)/2 - var(--profilePic-size)), 0);
 	background: rgba(0,0,0,0.3); 
 	-webkit-backdrop-filter: blur(10px);
 	backdrop-filter: blur(10px);
@@ -248,8 +246,7 @@ h1, h2 {
 }
 
 .presentationCard > * {
-	margin-top: 1em;
-	margin-bottom: 1em;
+	margin: calc(0.5 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size)) calc(0.5 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size));
 	text-shadow: 3px 3px 5px #14141f;
 }
 
@@ -363,7 +360,11 @@ h1, h2 {
 		--bar-width: 40px;
 		--bar-height: 4px;
 		--bar-offset-translate3d: calc(var(--bar-height)/2 + var(--bar-margin)/2);
-		--bar-offset-inverted-translate3d: calc(-1 * var(--bar-offset-translate3d));	
+		--bar-offset-inverted-translate3d: calc(-1 * var(--bar-offset-translate3d));
+
+		--profilePic-size: 23vmin;
+		--presentationCard-height: 80vmin;
+		--presentationCard-width: 75vmin;
 	}
 	
 	#header.mobileExpanded {
@@ -437,22 +438,12 @@ h1, h2 {
 	.socialNetworks > * {
 		filter: grayscale(0%);
 	}	
-		
-	.presentationCard {
-		width: 50em;
-		height: 60em;
-	}
-	
+
 	.presentationCard > * {
 		font-size: 300%;
 		backface-visibility: hidden;						/* Blurry text fix */
 	}
-	
-	#profilePic {
-		width: 20em;
-		height: 20em;
-	}
-	
+
 	.websiteShowcase {
 		max-width: 85%;
 	}
