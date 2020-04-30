@@ -6,6 +6,18 @@
   src: url("../fonts/BalooBhaina2/BalooBhaina2-Regular.ttf");
 }
 
+@keyframes unblur{
+	from {
+		-webkit-filter: blur(30px);
+		filter: blur(30px);
+	}		
+	
+	to {
+		-webkit-filter: blur(0px);
+		filter: blur(0px);
+	}	
+}
+
 :root {	
 	--header-elements-height: 4em;
 	--header-elements-padding: 1em;	
@@ -44,6 +56,10 @@ body {
 	overflow: hidden;	
 	overscroll-behavior-y: none;
 	-webkit-overflow-scrolling: touch;								/* Safari */
+}
+
+.contentImage {
+	animation: unblur 1s;
 }
 
 #background {    

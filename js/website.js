@@ -56,7 +56,10 @@ function init() {
 function imageLoading() {
 	let backgroundImage = new Image();
 	backgroundImage.onload = () => { 
-		document.getElementById("background").style.backgroundImage = "url(" + backgroundImage.src + ")";
+		let backgroundElement = document.getElementById("background");
+		setTimeout(() => backgroundElement.classList.remove("contentImage"), 1000); 
+		backgroundElement.style.backgroundImage = "url(" + backgroundImage.src + ")";
+		backgroundElement.classList.add("contentImage");
 	}
 	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
 	
@@ -64,6 +67,8 @@ function imageLoading() {
 	instagramLinkElement.addEventListener("click", () => window.open("https://www.instagram.com/cristian_davide_conte/?hl=it"));
 	let instagramLinkImage = new Image();
 	instagramLinkImage.onload = () => { 
+		setTimeout(() => instagramLinkElement.classList.remove("contentImage"), 1000); 
+		instagramLinkElement.classList.add("contentImage");
 		instagramLinkElement.style.backgroundImage = "none";
 		instagramLinkElement.src = instagramLinkImage.src;
 	}
@@ -74,6 +79,8 @@ function imageLoading() {
 	facebookLinkElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));		
 	let facebookLinkImage = new Image();
 	facebookLinkImage.onload = () => { 
+		setTimeout(() => facebookLinkElement.classList.remove("contentImage"), 1000); 
+		facebookLinkElement.classList.add("contentImage");
 		facebookLinkElement.style.backgroundImage = "none";
 		facebookLinkElement.src = facebookLinkImage.src;
 	}
@@ -82,6 +89,8 @@ function imageLoading() {
 	let profilePicImage = new Image();
 	profilePicImage.onload = () => { 
 		let profilePic = document.getElementById("profilePic");
+		setTimeout(() => profilePic.classList.remove("contentImage"), 1000); 
+		profilePic.classList.add("contentImage");
 		profilePic.style.backgroundImage = "none";
 		profilePic.src = profilePicImage.src;
 	}
