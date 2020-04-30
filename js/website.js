@@ -56,9 +56,7 @@ function init() {
 function imageLoading() {
 	let backgroundImage = new Image();
 	backgroundImage.onload = () => { 
-		let backgroundElement = document.getElementById("background");
-		backgroundElement.style.backgroundImage = "none";
-		backgroundElement.src = backgroundImage.src;
+		document.getElementById("background").style.backgroundImage = "url(" + backgroundImage.src + ")";
 	}
 	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
 	
