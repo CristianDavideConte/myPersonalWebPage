@@ -19,12 +19,12 @@ function init() {
 	profilePic.src = "./images/profilePictures/profilePicture.jpg";
 	profilePic.alt = "";				
 	
-	header = document.getElementsByClassName("header")[0];
-	hamburgerMenu = document.getElementsByClassName("hamburgerMenu")[0];	
-	hamburgerMenu.addEventListener("mousedown", event => toggleExpandHamburgerMenu(hamburgerMenu), {passive:false});
+	header = document.getElementById("header");
+	hamburgerMenu = document.getElementById("hamburgerMenu");	
+	hamburgerMenu.addEventListener("mousedown", () => toggleExpandHamburgerMenu(hamburgerMenu), {passive:true});
 	let pageLinks = document.getElementsByClassName("pageLink");	
 	for(const pageLink of pageLinks)
-		pageLink.addEventListener("mouseup", () => toggleExpandHamburgerMenu(hamburgerMenu), {passive:false});
+		pageLink.addEventListener("mouseup", () => toggleExpandHamburgerMenu(hamburgerMenu), {passive:true});
 	
 	let websiteShowcase = document.getElementsByClassName("websiteShowcase")[0];
 	websiteShowcase.addEventListener("wheel", (event) => {
@@ -66,7 +66,6 @@ function init() {
 }
 
 function toggleExpandHamburgerMenu(hamburgerMenu) {
-	event.preventDefault();	
 	if(window.innerWidth <= 1080) 
 		header.classList.toggle("mobileExpanded");
 }

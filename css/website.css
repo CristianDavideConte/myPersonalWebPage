@@ -95,7 +95,7 @@ p {
 	display: none;
 }
 
-.header {	
+#header {	
 	z-index: 2;
 	position: fixed;
 	top: 0%;
@@ -113,7 +113,7 @@ p {
 	overscroll-behavior: none;
 }
 
-.header > * {
+#header > * {
 	height: var(--header-elements-height);
 }
 
@@ -348,18 +348,18 @@ h1, h2 {
 		--bar-offset-inverted-translate3d: calc(-1 * var(--bar-offset-translate3d));	
 	}
 	
-	.mobileExpanded {
+	#header.mobileExpanded {
 		height: 100%;
 		background: rgba(0,0,0,0.9); 
 		justify-content: center;
 	}
 	
-	.hamburgerMenu {
+	#hamburgerMenu {
 		z-index: 4;
 		cursor: pointer;
 	}
 
-	.hamburgerMenu > * {
+	#hamburgerMenu > * {
 		width: var(--bar-width);
 		height: var(--bar-height);
 		margin: var(--bar-margin) 0 var(--bar-margin) 0;
