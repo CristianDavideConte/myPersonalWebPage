@@ -330,7 +330,7 @@ h1, h2 {
 }
 
 @media only screen and (max-width: 1080px) {
-	@keyframes slideIn{
+	@keyframes increaseSize{
 		from {
 			-webkit-transform: scale3d(0, 0, 0);
 			transform: scale3d(0, 0, 0);
@@ -374,7 +374,7 @@ h1, h2 {
 		width: var(--bar-width);
 		height: var(--bar-height);
 		margin: var(--bar-margin) 0 var(--bar-margin) 0;
-		border-radius: 10px;
+		border-radius: var(--boxShapedElement-border-radius);
 		background-color: #f2f2f2;
 		transition: var(--header-transition-time);
 	}	
@@ -392,25 +392,26 @@ h1, h2 {
 	.linkSection {
 		pointer-events: none;
 		flex-direction: column;
+		font-size: 2.5em;
 		opacity: 0;
 	}
 
 	.mobileExpanded .linkSection {
 		pointer-events: auto;
-		z-index: 3;
-		font-size: 2.5em;
 		opacity: 1;
-		animation: slideIn calc(2*var(--header-transition-time));
-		transition: var(--header-transition-time);
+		animation: increaseSize calc(2*var(--header-transition-time));
 	}
 	
-	.linkSection > * {
+	.pageLink {
 		margin-top: 3em;
 		margin-bottom: 3em;
 	}
 	
-	.mobileExpanded .socialNetworks {
+	.socialNetworks {
 		z-index: 4;
+	}
+	
+	.mobileExpanded .socialNetworks {
 		-webkit-transform: translate3d(calc(var(--header-socialNetworks-div-width)/2 - var(--header-elements-height)/ 2), 0, 0) rotate3d(0,0,1,90deg);
 		transform: translate3d(calc(var(--header-socialNetworks-div-width)/2 - var(--header-elements-height)/ 2), 0, 0) rotate3d(0,0,1, 90deg);
 	}
