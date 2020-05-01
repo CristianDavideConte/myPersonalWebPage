@@ -9,6 +9,11 @@ function init() {
 	window.addEventListener("resize", updateWindowSize);														//Resets the height whenever the window's resized
 	
 	hamburgerMenu.addEventListener("mousedown", () => toggleExpandHamburgerMenu(hamburgerMenu), {passive:true});
+	hamburgerMenu.addEventListener("touchstart", event => {
+		toggleExpandHamburgerMenu(hamburgerMenu);
+		event.preventDefault();
+	}, {passive:false});
+	
 	let pageLinks = document.getElementsByClassName("pageLink");	
 	for(const pageLink of pageLinks)
 		pageLink.addEventListener("mouseup", () => toggleExpandHamburgerMenu(hamburgerMenu), {passive:true});
