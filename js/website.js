@@ -8,17 +8,17 @@ function init() {
 	updateWindowSize();																								//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
 	window.addEventListener("resize", updateWindowSize);															//Resets the height whenever the window's resized
 	
-	hamburgerMenu.addEventListener("mousedown", () => toggleExpandHamburgerMenu(hamburgerMenu), {passive:true});
+	hamburgerMenu.addEventListener("mousedown", toggleExpandHamburgerMenu, {passive:true});
 	if ("ontouchstart" in window) {																					//If the device supports the touchstartevent the support is added
 		hamburgerMenu.addEventListener("touchstart", event => {
-			toggleExpandHamburgerMenu(hamburgerMenu);
+			toggleExpandHamburgerMenu();
 			event.preventDefault();
 		}, {passive:false});
 	}
 	
 	let pageLinks = document.getElementsByClassName("pageLink");	
 	for(const pageLink of pageLinks)
-		pageLink.addEventListener("mouseup", () => toggleExpandHamburgerMenu(hamburgerMenu), {passive:true});
+		pageLink.addEventListener("mouseup", toggleExpandHamburgerMenu, {passive:true});
 	
 	let websiteShowcase = document.getElementsByClassName("websiteShowcase")[0];
 	websiteShowcase.addEventListener("wheel", (event) => {
@@ -95,10 +95,14 @@ function imageLoading() {
 	profilePicElement.src = "./images/profilePictures/profilePicture.jpg";	
 }
 
+var test = 0;
 /* This Function toggle the class mobileExpanded in the hamburgerMenu element */
-function toggleExpandHamburgerMenu(hamburgerMenu) {
+function toggleExpandHamburgerMenu() {
 	if(windowInnerWidth < 1081) 
 		header.classList.toggle("mobileExpanded");	
+	if(test < 200)
+		setTimeout(toggleExpandHamburgerMenu, 500);
+	test++;
 }
 
 /* This Function returns true if the browser used is the Microsoft Old Edge, false otherwise.

@@ -173,6 +173,7 @@ p {
 }
 
 .socialNetworks {
+	z-index: 4;
 	justify-content: space-between;
 	width: var(--header-socialNetworks-div-width);
 	margin-left: auto;
@@ -252,6 +253,7 @@ h1, h2 {
 .presentationCard > * {
 	margin: calc(0.25 * var(--profilePic-size));
 	text-shadow: 3px 3px 5px #14141f;
+	backface-visibility: hidden;						/* Blurry text fix */
 }
 
 .projectsCarousel {
@@ -336,7 +338,7 @@ h1, h2 {
 			transform: scale3d(0, 0, 0);
 		}
 					
-		30% {
+		50% {
 			-webkit-transform: scale3d(1.2, 1.2, 1.2);
 			transform: scale3d(1.2, 1.2, 1.2);
 		}	
@@ -399,22 +401,24 @@ h1, h2 {
 	.mobileExpanded .linkSection {
 		pointer-events: auto;
 		opacity: 1;
-		animation: increaseSize calc(2*var(--header-transition-time));
+		animation: increaseSize var(--header-transition-time);
+		transition: var(--header-transition-time);
 	}
 	
 	.pageLink {
 		margin-top: 3em;
 		margin-bottom: 3em;
 	}
-	
-	.socialNetworks {
-		z-index: 4;
-	}
-	
+
 	.mobileExpanded .socialNetworks {
 		-webkit-transform: translate3d(calc(var(--header-socialNetworks-div-width)/2 - var(--header-elements-height)/ 2), 0, 0) rotate3d(0,0,1,90deg);
 		transform: translate3d(calc(var(--header-socialNetworks-div-width)/2 - var(--header-elements-height)/ 2), 0, 0) rotate3d(0,0,1, 90deg);
 	}
+		
+	#instagramLink,	
+	#facebookLink {
+		filter: grayscale(0%);
+	}	
 	
 	.mobileExpanded #instagramLink, 
 	.mobileExpanded #facebookLink {
@@ -429,15 +433,9 @@ h1, h2 {
 		-webkit-transform: rotate3d(0,0,1,-90deg) scale3d(1.1, 1.1, 1.1);
 		transform: rotate3d(0,0,1, -90deg) scale3d(1.1, 1.1, 1.1);
 	}	
-	
-	#instagramLink,	
-	#facebookLink {
-		filter: grayscale(0%);
-	}	
 
 	.presentationCard > * {
 		font-size: 300%;
-		backface-visibility: hidden;						/* Blurry text fix */
 	}
 
 	.websiteShowcase {
