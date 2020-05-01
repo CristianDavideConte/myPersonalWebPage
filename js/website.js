@@ -5,14 +5,16 @@ var windowInnerWidth;
 
 function init() {	
 	variableInitialization();
-	updateWindowSize();																							//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
-	window.addEventListener("resize", updateWindowSize);														//Resets the height whenever the window's resized
+	updateWindowSize();																								//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
+	window.addEventListener("resize", updateWindowSize);															//Resets the height whenever the window's resized
 	
 	hamburgerMenu.addEventListener("mousedown", () => toggleExpandHamburgerMenu(hamburgerMenu), {passive:true});
-	hamburgerMenu.addEventListener("touchstart", event => {
-		toggleExpandHamburgerMenu(hamburgerMenu);
-		event.preventDefault();
-	}, {passive:false});
+	if ("ontouchstart" in window) {																					//If the device supports the touchstartevent the support is added
+		hamburgerMenu.addEventListener("touchstart", event => {
+			toggleExpandHamburgerMenu(hamburgerMenu);
+			event.preventDefault();
+		}, {passive:false});
+	}
 	
 	let pageLinks = document.getElementsByClassName("pageLink");	
 	for(const pageLink of pageLinks)

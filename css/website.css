@@ -25,6 +25,8 @@
 	--profilePic-size: 17vmin;
 	--presentationCard-height: 60vmin;
 	--presentationCard-width: 55vmin;
+	
+	--boxShapedElement-border-radius: 1em;
 }
 
 * {
@@ -126,7 +128,7 @@ p {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: rgba(0,0,0,0.7); 
+	background: rgba(0,0,0,0.8); 
 	transition: var(--header-transition-time);
 	-webkit-backdrop-filter: blur(10px);
 	backdrop-filter: blur(10px);
@@ -178,7 +180,8 @@ p {
 	transition: 0.3s;
 }
 
-.socialNetworks > * {
+#instagramLink, 
+#facebookLink {
 	width: var(--header-elements-height);
 	height: var(--header-elements-height);
 	border-radius: 100%; 
@@ -187,7 +190,8 @@ p {
 	transition: 0.3s;
 }
 	
-.socialNetworks > *:hover {	
+#instagramLink:hover,
+#facebookLink:hover {	
 	-webkit-transform: scale3d(1.1, 1.1, 1.1);
 	transform: scale3d(1.1, 1.1, 1.1);
 	filter: grayscale(0%);
@@ -261,7 +265,7 @@ h1, h2 {
 .websiteShowcase {
 	display: flex;
 	max-width: 70%;
-	border-radius: 10px;
+	border-radius: var(--boxShapedElement-border-radius);
 	overflow-x: scroll;
 	overflow-y: hidden;
 	overscroll-behavior: none;
@@ -293,31 +297,21 @@ h1, h2 {
 	width: 15em;
 	height: 15em;
 	text-align:center;	
-	border-radius: 5%;
+	border-radius: var(--boxShapedElement-border-radius);
 	transition: 0.3s;
 	background: rgba(0,0,0,0.5); 
 }
 
 .websitePreview:hover {
-	-webkit-transform:  scale3d(1.1, 1.1, 1.1);
+	-webkit-transform: scale3d(1.1, 1.1, 1.1);
 	transform: scale3d(1.1, 1.1, 1.1);
 }
 
 .websitePreviewImage {
-	display: flex;	 
-	justify-content: center;
-	align-items: center;
-	height: 100%;
-	width: 100%;
-	padding-top: 10px;
-	padding-left: 10px;
-	padding-right: 10px;
-	border: none;
-}
-
-.websitePreviewImage > *{	
-	border-radius: 100%;	
+	border-radius: 50%;	
 	width: 60%;
+	height: 60%;
+	border: none;
 }
 
 .carouselButton {	
@@ -369,8 +363,6 @@ h1, h2 {
 	
 	#header.mobileExpanded {
 		height: 100%;
-		background: rgba(0,0,0,0.9); 
-		justify-content: center;
 	}
 	
 	#hamburgerMenu {
@@ -387,12 +379,12 @@ h1, h2 {
 		transition: var(--header-transition-time);
 	}	
 	
-	.mobileExpanded .bar1 {
+	.mobileExpanded #hamburgerMenuUpperBar {
 		-webkit-transform: translate3d(0, var(--bar-offset-translate3d), 0) rotate3d(0,0,1,45deg);
 		transform: translate3d(0, var(--bar-offset-translate3d), 0) rotate3d(0,0,1,45deg);
 	}
 
-	.mobileExpanded .bar2 {
+	.mobileExpanded #hamburgerMenuLowerBar {
 		-webkit-transform: translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate3d(0,0,1,-45deg);
 		transform: translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate3d(0,0,1,-45deg);
 	}	
@@ -423,19 +415,22 @@ h1, h2 {
 		transform: translate3d(calc(var(--header-socialNetworks-div-width)/2 - var(--header-elements-height)/ 2), 0, 0) rotate3d(0,0,1, 90deg);
 	}
 	
-	.mobileExpanded .socialNetworks > * {
+	.mobileExpanded #instagramLink, 
+	.mobileExpanded #facebookLink {
 		filter: grayscale(100%);	
 		-webkit-transform: rotate3d(0,0,1,-90deg);
 		transform: rotate3d(0,0,1, -90deg);
 	}
 	
-	.mobileExpanded .socialNetworks > *:hover {
+	.mobileExpanded #instagramLink:hover, 
+	.mobileExpanded #facebookLink:hover {
 		filter: grayscale(0%);
 		-webkit-transform: rotate3d(0,0,1,-90deg) scale3d(1.1, 1.1, 1.1);
 		transform: rotate3d(0,0,1, -90deg) scale3d(1.1, 1.1, 1.1);
 	}	
-		
-	.socialNetworks > * {
+	
+	#instagramLink,	
+	#facebookLink {
 		filter: grayscale(0%);
 	}	
 
@@ -452,7 +447,6 @@ h1, h2 {
 		display: none;
 	}
 }
-
 
 @media only screen and (max-height: 600px) {
 	.pageSeparator {
