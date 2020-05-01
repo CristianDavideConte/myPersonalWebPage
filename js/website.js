@@ -1,12 +1,13 @@
 var header;
 var hamburgerMen;
+var documentBodyElement;
+var windowInnerWidth;
 
 function init() {	
-	resetHeight();																						//Initially sets the height (fixes mobile top search bar behavior)
-	window.addEventListener("resize", resetHeight);														//Resets the height whenever the window's resized
+	variableInitialization();
+	updateWindowSize();																							//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
+	window.addEventListener("resize", updateWindowSize);														//Resets the height whenever the window's resized
 	
-	header = document.getElementById("header");
-	hamburgerMenu = document.getElementById("hamburgerMenu");	
 	hamburgerMenu.addEventListener("mousedown", () => toggleExpandHamburgerMenu(hamburgerMenu), {passive:true});
 	let pageLinks = document.getElementsByClassName("pageLink");	
 	for(const pageLink of pageLinks)
@@ -18,7 +19,7 @@ function init() {
 		event.preventDefault();
 	}, {passive:false});
 	
-	var carouselButtonMouseDownInterval;
+	let carouselButtonMouseDownInterval;
 	function carouselButtonMouseDownIntervalSet(carouselButtons) {
 		carouselButtons.dispatchEvent(new MouseEvent("mousedown"));
 	}
@@ -53,6 +54,13 @@ function init() {
 	imageLoading();	
 }
 
+function variableInitialization() {
+	windowInnerWidth = window.innerWidth;
+	documentBodyElement = document.body;
+	header = document.getElementById("header");
+	hamburgerMenu = document.getElementById("hamburgerMenu");	
+}
+
 function imageLoading() {
 	let backgroundImage = new Image();
 	backgroundImage.onload = () => { 
@@ -82,8 +90,8 @@ function imageLoading() {
 
 /* This Function toggle the class mobileExpanded in the hamburgerMenu element */
 function toggleExpandHamburgerMenu(hamburgerMenu) {
-	if(window.innerWidth <= 1080) 
-		header.classList.toggle("mobileExpanded");
+	if(windowInnerWidth < 1081) 
+		header.classList.toggle("mobileExpanded");	
 }
 
 /* This Function returns true if the browser used is the Microsoft Old Edge, false otherwise.
@@ -97,6 +105,7 @@ function isBrowserEdge() {
 /* This Function resets the body height to that of the inner browser
  * This is used to fix the different height behaviour of the mobile browsers' navigation bars 
  */
-function resetHeight(){
-	document.body.style.height = window.innerHeight + "px";
+function updateWindowSize(){
+	documentBodyElement.style.height = window.innerHeight + "px";
+	windowInnerWidth = window.innerWidth;
 }
