@@ -95,14 +95,10 @@ function imageLoading() {
 	profilePicElement.src = "./images/profilePictures/profilePicture.jpg";	
 }
 
-var test = 0;
 /* This Function toggle the class mobileExpanded in the hamburgerMenu element */
 function toggleExpandHamburgerMenu() {
 	if(windowInnerWidth < 1081) 
 		header.classList.toggle("mobileExpanded");	
-	if(test < 200)
-		setTimeout(toggleExpandHamburgerMenu, 500);
-	test++;
 }
 
 /* This Function returns true if the browser used is the Microsoft Old Edge, false otherwise.
