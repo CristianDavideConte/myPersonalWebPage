@@ -27,6 +27,12 @@
 	--presentationCard-width: 55vmin;
 	
 	--boxShapedElement-border-radius: 1em;
+	--boxshadow-radius: 0.5em;
+	--textshadow-offset: 0.08em;
+	--textshadow-radius: 0.1em;
+	
+	--backdrop-filter-blur-radius: 1em;
+	--backdrop-filter-blur-radius-reduced: 0.3em;
 }
 
 * {
@@ -68,7 +74,7 @@ body {
 
 #background {    
 	position: fixed;
-	margin: -1px;
+	margin: -0.5em;
     width: 101%;
     height: 101%;
 	background-image: url("../images/backgroundImages/LakeAndMountains_Compressed.jpg");
@@ -93,8 +99,8 @@ body {
 	width: 20%;
 	margin: auto auto 0 auto;
 	background: rgba(0,0,0,0.7); 
-	-webkit-backdrop-filter: blur(3px);
-	backdrop-filter: blur(3px);
+	-webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius-reduced));
+	backdrop-filter: blur(var(--backdrop-filter-blur-radius-reduced));
 	transition: 0.3s;
 }
 
@@ -130,8 +136,8 @@ p {
 	justify-content: center;
 	background: rgba(0,0,0,0.8); 
 	transition: var(--header-transition-time);
-	-webkit-backdrop-filter: blur(10px);
-	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius));
+	backdrop-filter: blur(var(--backdrop-filter-blur-radius));
 	overscroll-behavior: none;
 }
 
@@ -201,7 +207,6 @@ p {
 .title {
 	width:100%;
 	text-align:center;
-	text-overflow: clip; 
 	margin-top: auto;				/* Centers the title*/
 }
 
@@ -215,13 +220,13 @@ h2 {
 
 h1, h2 {
 	margin: 0;
-	text-shadow: 5px 5px 5px #14141f;
+	text-shadow: var(--textshadow-offset) var(--textshadow-offset) var(--textshadow-radius) #14141f;
 }
 
 #profilePic {
 	z-index: 1;
 	border-radius: 100%; 
-	box-shadow: 0 0 10px #14141f;
+	box-shadow: 0 0 var(--boxshadow-radius) #14141f;
 	height: var(--profilePic-size);
 	width: var(--profilePic-size);
 	-webkit-transform: translate3d(0, calc(50vh - var(--profilePic-size)*0.75 - var(--presentationCard-height)/2 + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
@@ -231,13 +236,13 @@ h1, h2 {
 .presentationCard {
 	height: var(--presentationCard-height);
 	width: var(--presentationCard-width);
-	box-shadow: 0 0 10px #14141f;
+	box-shadow: 0 0 var(--boxshadow-radius) #14141f;
 	overflow-x: hidden;
 	overflow-y: scroll;	
 	border-radius: 5%;
 	background: rgba(0,0,0,0.3); 
-	-webkit-backdrop-filter: blur(10px);
-	backdrop-filter: blur(10px);	
+	-webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius));
+	backdrop-filter: blur(var(--backdrop-filter-blur-radius));	
 	-webkit-transform: translate3d(0, calc(50vh - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
 	transform: translate3d(0, calc(50vh - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
 	
@@ -252,7 +257,7 @@ h1, h2 {
 
 .presentationCard > * {
 	margin: calc(0.25 * var(--profilePic-size));
-	text-shadow: 3px 3px 5px #14141f;
+	text-shadow: var(--textshadow-offset) var(--textshadow-offset) var(--textshadow-radius) #14141f;
 	backface-visibility: hidden;						/* Blurry text fix */
 }
 
@@ -271,10 +276,10 @@ h1, h2 {
 	overflow-x: scroll;
 	overflow-y: hidden;
 	overscroll-behavior: none;
-	box-shadow: 0 0 10px #14141f;
+	box-shadow: 0 0 var(--boxshadow-radius) #14141f;
 	background: rgba(0,0,0,0.3); 
-	-webkit-backdrop-filter: blur(10px);
-	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius));
+	backdrop-filter: blur(var(--backdrop-filter-blur-radius));
 	-ms-overflow-style: none !important;								/* Edge */
 	scrollbar-width: none !important;									/* Firefox */	
 }
@@ -317,27 +322,35 @@ h1, h2 {
 }
 
 .carouselButton {	
-	height: 5em;
-	width: 5em;
-	padding: 0;
+	font-size: 3em;
+	padding: 0.5em;
 	margin: auto;
 	cursor: pointer;
 	border-radius: 100%;
 	outline: none;
 	border: none;
-	box-shadow: 0 0 10px #14141f;
+	box-shadow: 0 0 var(--boxshadow-radius) #14141f;
 	background: rgba(0,0,0,0.2);
-	-webkit-backdrop-filter: blur(10px);
-	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius));
+	backdrop-filter: blur(var(--backdrop-filter-blur-radius));
+}
+
+.carouselButtonText {
+	font-size: 5em;
 }
 
 @media only screen and (max-width: 1080px) {
 	@keyframes increaseSize{
 		from {
+			opacity: 0;
 			-webkit-transform: scale3d(0, 0, 0);
 			transform: scale3d(0, 0, 0);
 		}
 					
+		30%	{
+			opacity: 0;
+		}
+		
 		50% {
 			-webkit-transform: scale3d(1.2, 1.2, 1.2);
 			transform: scale3d(1.2, 1.2, 1.2);
@@ -402,12 +415,10 @@ h1, h2 {
 		pointer-events: auto;
 		opacity: 1;
 		animation: increaseSize var(--header-transition-time);
-		transition: var(--header-transition-time);
 	}
 	
 	.pageLink {
-		margin-top: 3em;
-		margin-bottom: 3em;
+		margin: 20% 0 20% 0;
 	}
 
 	.mobileExpanded .socialNetworks {

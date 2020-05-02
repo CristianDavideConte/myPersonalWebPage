@@ -1,28 +1,41 @@
-var header;
-var hamburgerMen;
-var documentBodyElement;
-var windowInnerWidth;
+var windowInnerWidth;															//A shortcut for the DOM element window.innerWidth
+var documentBodyElement;														//A shortcut for the HTML element document.body 
+var header;																		//The HTML element with the id "header", used as the site navbar 
+var hamburgerMenu;																//The HTML element with the	id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px 								
+var pageLinks; 																	//All HTML element with the class "pageLink", shown in the header to navigate through the website' sections
 
+/* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {	
-	variableInitialization();
-	updateWindowSize();																								//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
-	window.addEventListener("resize", updateWindowSize);															//Resets the height whenever the window's resized
+	variableInitialization();													//Binds the js variables to the corresponding HTML elements
+	desktopEventListenerInitialization();										//Initializes all the mouse and keyboard eventHandlers 
+		
+	//if ("ontouchstart" in window) 												//If the device is touch capable the support to the touchstartEvent is added
+		//mobileEventListenerInitialization();									//Initializes all the touch related eventHandlers 
+
+	imageLoading();																//Initializes all the HTML img elements' contents  
+	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
+}
+
+/* This Function initializes all the javascript file's public variables */
+function variableInitialization() {
+	windowInnerWidth = window.innerWidth;
+	documentBodyElement = document.body;
+	header = document.getElementById("header");
+	hamburgerMenu = document.getElementById("hamburgerMenu");	
+	pageLinks = document.getElementsByClassName("pageLink");													
+}
+
+/* This function binds all the HTML elements that can be interacted to their mouse and keyboard eventHandlers */
+function desktopEventListenerInitialization() {
+	window.addEventListener("resize", updateWindowSize);															//Updates the height and the width whenever the window's resized
+	hamburgerMenu.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});							//When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function 
 	
-	hamburgerMenu.addEventListener("mousedown", toggleExpandHamburgerMenu, {passive:true});
-	if ("ontouchstart" in window) {																					//If the device supports the touchstartevent the support is added
-		hamburgerMenu.addEventListener("touchstart", event => {
-			toggleExpandHamburgerMenu();
-			event.preventDefault();
-		}, {passive:false});
-	}
-	
-	let pageLinks = document.getElementsByClassName("pageLink");	
-	for(const pageLink of pageLinks)
-		pageLink.addEventListener("mouseup", toggleExpandHamburgerMenu, {passive:true});
+	for(const pageLink of pageLinks)															
+		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});							//Whenever a HTML element with the class "pageLink" is pressed the DOM is scrolled to the corresponding section 
 	
 	let websiteShowcase = document.getElementsByClassName("websiteShowcase")[0];
 	websiteShowcase.addEventListener("wheel", (event) => {
-		websiteShowcase.scrollLeft -= (-event.deltaY/3);
+		websiteShowcase.scrollLeft += Math.sign(event.deltaY)*windowInnerWidth*50/1920								//The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth and so that at 1920px the scroll is 50px
 		event.preventDefault();
 	}, {passive:false});
 	
@@ -37,11 +50,9 @@ function init() {
 		this.removeEventListener("mouseup", carouselButtonMouseDownIntervalReset, {passive:true});				/* There's no need for the window to keep listening to this event after the user stops interacting with the carouselButton */
 	}
 	
-	let carouselButtons = document.getElementsByClassName("carouselButton");
+	let carouselButtons = document.getElementsByClassName("carouselButton");														
 	carouselButtons[0].addEventListener("mousedown", () => {
-		websiteShowcase.dispatchEvent(new WheelEvent("wheel", {
-			deltaY: -30
-		}));
+		websiteShowcase.scrollLeft -= windowInnerWidth*30/1920												//The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth and so that at 1920px the scroll is 30px
 		
 		if(carouselButtonMouseDownInterval == null)
 			carouselButtonMouseDownInterval = setInterval(() => carouselButtonMouseDownIntervalSet(carouselButtons[0]), 10);
@@ -49,25 +60,27 @@ function init() {
 	}, {passive:true});
 	
 	carouselButtons[1].addEventListener("mousedown", () => {
-		websiteShowcase.dispatchEvent(new WheelEvent("wheel", {
-			deltaY: 30	
-		}));
+		websiteShowcase.scrollLeft += windowInnerWidth*30/1920												//The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth and so that at 1920px the scroll is -30px
 		
 		if(carouselButtonMouseDownInterval == null)
 			carouselButtonMouseDownInterval = setInterval(() => carouselButtonMouseDownIntervalSet(carouselButtons[1]), 10);
 		window.addEventListener("mouseup", carouselButtonMouseDownIntervalReset);	
 	}, {passive:true});
+}
+
+/* This function binds all the HTML elements that can be interacted to their touch related eventHandlers /
+function mobileEventListenerInitialization() {
+	hamburgerMenu.addEventListener("touchend", event => {
+		toggleExpandHamburgerMenu();
+		event.preventDefault();
+	}, {passive:false});
 	
-	imageLoading();	
+	for(const pageLink of pageLinks)															
+		pageLink.addEventListener("touchend", toggleExpandHamburgerMenu, {passive:true});							
 }
+*/
 
-function variableInitialization() {
-	windowInnerWidth = window.innerWidth;
-	documentBodyElement = document.body;
-	header = document.getElementById("header");
-	hamburgerMenu = document.getElementById("hamburgerMenu");	
-}
-
+/* This Function asyncronusly load the content of the DOM img elements */
 function imageLoading() {
 	let backgroundImage = new Image();
 	backgroundImage.onload = () => { 
@@ -96,9 +109,8 @@ function imageLoading() {
 }
 
 /* This Function toggle the class mobileExpanded in the hamburgerMenu element */
-function toggleExpandHamburgerMenu() {
-	if(windowInnerWidth < 1081) 
-		header.classList.toggle("mobileExpanded");	
+function toggleExpandHamburgerMenu() {										
+	header.classList.toggle("mobileExpanded");	
 }
 
 /* This Function returns true if the browser used is the Microsoft Old Edge, false otherwise.
