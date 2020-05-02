@@ -20,7 +20,7 @@
 	--header-elements-height: 4em;
 	--header-elements-padding: 1em;	
 	--header-transition-time: 0.5s;
-	--header-socialNetworks-div-width :calc(2*var(--header-elements-height) + var(--header-elements-padding));
+	--header-socialNetworks-div-width :calc(3*var(--header-elements-height) + 2*var(--header-elements-padding));
 	
 	--profilePic-size: 17vmin;
 	--presentationCard-height: 60vmin;
@@ -187,6 +187,7 @@ p {
 	transition: 0.3s;
 }
 
+#githubLink,
 #instagramLink, 
 #facebookLink {
 	width: var(--header-elements-height);
@@ -197,6 +198,7 @@ p {
 	transition: 0.3s;
 }
 	
+#githubLink:hover,
 #instagramLink:hover,
 #facebookLink:hover {	
 	-webkit-transform: scale3d(1.1, 1.1, 1.1);
@@ -426,11 +428,13 @@ h1, h2 {
 		transform: translate3d(calc(var(--header-socialNetworks-div-width)/2 - var(--header-elements-height)/ 2), 0, 0) rotate3d(0,0,1, 90deg);
 	}
 		
+	#githubLink,
 	#instagramLink,	
 	#facebookLink {
 		filter: grayscale(0%);
 	}	
 	
+	.mobileExpanded #githubLink, 
 	.mobileExpanded #instagramLink, 
 	.mobileExpanded #facebookLink {
 		filter: grayscale(100%);	
@@ -438,6 +442,7 @@ h1, h2 {
 		transform: rotate3d(0,0,1, -90deg);
 	}
 	
+	.mobileExpanded #githubLink:hover, 
 	.mobileExpanded #instagramLink:hover, 
 	.mobileExpanded #facebookLink:hover {
 		filter: grayscale(0%);

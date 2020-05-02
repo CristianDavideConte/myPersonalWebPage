@@ -95,6 +95,10 @@ function imageLoading() {
 	}
 	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
 	
+	let githubLinkElement = document.getElementById("githubLink");
+	githubLinkElement.src = "./images/socialNetworksLinks/githubLink.jpg";
+	githubLinkElement.addEventListener("click", () => window.open("https://github.com/CristianDavideConte"));
+	
 	let instagramLinkElement = document.getElementById("instagramLink");
 	instagramLinkElement.src = "./images/socialNetworksLinks/instagramLink.jpg";
 	instagramLinkElement.addEventListener("click", () => window.open("https://www.instagram.com/cristian_davide_conte/?hl=it"));
