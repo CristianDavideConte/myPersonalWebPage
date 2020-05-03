@@ -335,6 +335,17 @@ h1, h2 {
 	background: rgba(0,0,0,0.2);
 	-webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius));
 	backdrop-filter: blur(var(--backdrop-filter-blur-radius));
+	transition: 0.2s;
+}
+
+.carouselButton:hover {
+	-webkit-transform: scale3d(1.1, 1.1, 1.1);
+	transform: scale3d(1.1, 1.1, 1.1);
+}
+
+.carouselButton:active {
+	-webkit-transform: scale3d(1, 1, 1);
+	transform: scale3d(1, 1, 1);
 }
 
 @media only screen and (max-width: 1080px) {
