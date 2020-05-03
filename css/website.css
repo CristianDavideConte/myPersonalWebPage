@@ -145,14 +145,14 @@ p {
 	height: var(--header-elements-height);
 }
 
-.linkSection {
+#linkSection {
 	position: absolute;	
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
-.linkSection > * {
+#linkSection > * {
 	text-decoration: none;	
 }
 
@@ -178,7 +178,7 @@ p {
 	background-color: #f2f2f2;
 }
 
-.socialNetworks {
+#socialNetworks {
 	z-index: 4;
 	justify-content: space-between;
 	width: var(--header-socialNetworks-div-width);
@@ -235,7 +235,7 @@ h1, h2 {
 	transform: translate3d(0, calc(50vh - var(--profilePic-size)*0.75 - var(--presentationCard-height)/2 + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
 }
 
-.presentationCard {
+#presentationCard {
 	height: var(--presentationCard-height);
 	width: var(--presentationCard-width);
 	box-shadow: 0 0 var(--boxshadow-radius) #14141f;
@@ -253,11 +253,11 @@ h1, h2 {
 	overscroll-behavior: none;
 }
 
-.presentationCard::-webkit-scrollbar {
+#presentationCard::-webkit-scrollbar {
 	display: none;
 }
 
-.presentationCard > * {
+#presentationCard p {
 	margin: calc(0.25 * var(--profilePic-size));
 	text-shadow: var(--textshadow-offset) var(--textshadow-offset) var(--textshadow-radius) #14141f;
 	backface-visibility: hidden;						/* Blurry text fix */
@@ -352,8 +352,6 @@ h1, h2 {
 	@keyframes increaseSize{
 		from {
 			opacity: 0;
-			-webkit-transform: scale3d(0, 0, 0);
-			transform: scale3d(0, 0, 0);
 		}
 					
 		30%	{
@@ -364,11 +362,6 @@ h1, h2 {
 			-webkit-transform: scale3d(1.2, 1.2, 1.2);
 			transform: scale3d(1.2, 1.2, 1.2);
 		}	
-		
-		to {
-			-webkit-transform: scale3d(1, 1, 1);
-			transform: scale3d(1, 1, 1);
-		}	
 	}
 	
 	:root {	
@@ -377,9 +370,11 @@ h1, h2 {
 		--bar-margin: 15px;
 		--bar-width: 40px;
 		--bar-height: 4px;
-		--bar-offset-translate3d: calc(var(--bar-height)/2 + var(--bar-margin)/2);
+		--bar-offset-translate3d: calc((var(--bar-height) + var(--bar-margin))/2);
 		--bar-offset-inverted-translate3d: calc(-1 * var(--bar-offset-translate3d));
 
+		--socialNetworks-offsetY-translate3d: calc((var(--header-socialNetworks-div-width) - var(--header-elements-height))/2);
+		
 		--profilePic-size: 23vmin;
 		--presentationCard-height: 80vmin;
 		--presentationCard-width: 75vmin;
@@ -394,7 +389,8 @@ h1, h2 {
 		cursor: pointer;
 	}
 
-	#hamburgerMenu > * {
+	#hamburgerMenuUpperBar,
+	#hamburgerMenuLowerBar {
 		width: var(--bar-width);
 		height: var(--bar-height);
 		margin: var(--bar-margin) 0 var(--bar-margin) 0;
@@ -403,7 +399,7 @@ h1, h2 {
 		transition: var(--header-transition-time);
 	}	
 	
-	.mobileExpanded #hamburgerMenuUpperBar {
+	.mobileExpanded #hamburgerMenuUpperBar  {
 		-webkit-transform: translate3d(0, var(--bar-offset-translate3d), 0) rotate3d(0,0,1,45deg);
 		transform: translate3d(0, var(--bar-offset-translate3d), 0) rotate3d(0,0,1,45deg);
 	}
@@ -413,14 +409,14 @@ h1, h2 {
 		transform: translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate3d(0,0,1,-45deg);
 	}	
 
-	.linkSection {
+	#linkSection {
 		pointer-events: none;
 		flex-direction: column;
 		font-size: 2.5em;
 		opacity: 0;
 	}
 
-	.mobileExpanded .linkSection {
+	.mobileExpanded #linkSection {
 		pointer-events: auto;
 		opacity: 1;
 		animation: increaseSize var(--header-transition-time);
@@ -430,9 +426,9 @@ h1, h2 {
 		margin: 20% 0 20% 0;
 	}
 
-	.mobileExpanded .socialNetworks {
-		-webkit-transform: translate3d(calc(var(--header-socialNetworks-div-width)/2 - var(--header-elements-height)/ 2), 0, 0) rotate3d(0,0,1,90deg);
-		transform: translate3d(calc(var(--header-socialNetworks-div-width)/2 - var(--header-elements-height)/ 2), 0, 0) rotate3d(0,0,1, 90deg);
+	.mobileExpanded #socialNetworks {
+		-webkit-transform: translate3d(var(--socialNetworks-offsetY-translate3d), 0, 0) rotate3d(0,0,1,90deg);
+		transform: translate3d(var(--socialNetworks-offsetY-translate3d), 0, 0) rotate3d(0,0,1, 90deg);
 	}
 		
 	#githubLink,
@@ -444,20 +440,24 @@ h1, h2 {
 	.mobileExpanded #githubLink, 
 	.mobileExpanded #instagramLink, 
 	.mobileExpanded #facebookLink {
-		filter: grayscale(100%);	
 		-webkit-transform: rotate3d(0,0,1,-90deg);
 		transform: rotate3d(0,0,1, -90deg);
+	}
+	
+	.mobileExpanded #githubLink:not(:hover), 
+	.mobileExpanded #instagramLink:not(:hover), 
+	.mobileExpanded #facebookLink:not(:hover) {
+		filter: grayscale(100%);	
 	}
 	
 	.mobileExpanded #githubLink:hover, 
 	.mobileExpanded #instagramLink:hover, 
 	.mobileExpanded #facebookLink:hover {
-		filter: grayscale(0%);
 		-webkit-transform: rotate3d(0,0,1,-90deg) scale3d(1.1, 1.1, 1.1);
 		transform: rotate3d(0,0,1, -90deg) scale3d(1.1, 1.1, 1.1);
 	}	
 
-	.presentationCard > * {
+	#presentationCard p {
 		font-size: 300%;
 	}
 

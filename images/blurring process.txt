@@ -1,5 +1,6 @@
 Thanks to:
-https://www.websiteplanet.com/it/webtools/imagecompressor/			(Used for compressing the image)
-https://compressjpeg.com/it/							(Used for compressing the image)
-https://resizeimage.net/							(Used for resizing the image)
-https://www.befunky.com/create/blur-image/					(Used for blurring the image)
+https://www.websiteplanet.com/it/webtools/imagecompressor/			(Used for compressing the images)
+https://compressjpeg.com/it/							(Used for compressing the images)
+https://tinypng.com/								(Used for compressing the images)
+https://resizeimage.net/							(Used for resizing the images)
+https://www.befunky.com/create/blur-image/					(Used for blurring the images)
