@@ -337,10 +337,6 @@ h1, h2 {
 	backdrop-filter: blur(var(--backdrop-filter-blur-radius));
 }
 
-.carouselButtonText {
-	font-size: 5em;
-}
-
 @media only screen and (max-width: 1080px) {
 	@keyframes increaseSize{
 		from {
@@ -467,7 +463,9 @@ h1, h2 {
 	.pageSeparator {
 		opacity: 0;
 	}
-	
+}
+
+@media only screen and (max-height: 600px) and (max-width: 1080) {
 	.pageLink {
 		margin: 10% 0 10% 0;
 	}

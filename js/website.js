@@ -105,6 +105,11 @@ function mobileEventListenerInitialization() {
 /* This Function asyncronusly load the content of the DOM img elements */
 function imageLoading() {
 	let backgroundImage = new Image();
+	/* The full background image is loaded when ready and not at the initial page loading.
+	 * Instead a lower resolution and blurry version of the background image is loaded in the css file.
+	 * This allows the user to interact much quicker with the page and lesser the probability of a page crash.
+	 * Whenever the full image is ready the two images are swapped with a transition in between.
+	 */
 	backgroundImage.onload = () => { 
 		let backgroundElement = document.getElementById("background");
 		let backgroundElementLoaded = backgroundElement.cloneNode(true);
