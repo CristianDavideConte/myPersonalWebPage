@@ -35,8 +35,22 @@ function desktopEventListenerInitialization() {
 	
 	let websiteShowcase = document.getElementsByClassName("websiteShowcase")[0];
 	websiteShowcase.addEventListener("wheel", (event) => {
-		websiteShowcase.scrollLeft += Math.sign(event.deltaY)*windowInnerWidth*50/1920								//The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth and so that at 1920px the scroll is 50px
-		event.preventDefault();
+		/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
+		 * and so that is 1/20th of the window's innerWidth at any given resolution.
+		 * If the wheel is scrolled from top to bottom the scroll direction will be from right to left, will be inverted otherwise.
+		 */
+		let scrollDirection = Math.sign(event.deltaY);
+		let totalScrollAmmount = windowInnerWidth/20;
+		let scrollDistance = windowInnerWidth/100;
+		let partialScrollAmmount = 0;
+		
+		smoothScroll(); 
+		function smoothScroll() {
+			websiteShowcase.scrollLeft += scrollDirection*scrollDistance;		
+			partialScrollAmmount += scrollDistance;
+			if(partialScrollAmmount < totalScrollAmmount)
+				setTimeout(smoothScroll, 10);
+		}
 	}, {passive:false});
 	
 	let carouselButtonMouseDownInterval;
@@ -52,7 +66,11 @@ function desktopEventListenerInitialization() {
 	
 	let carouselButtons = document.getElementsByClassName("carouselButton");														
 	carouselButtons[0].addEventListener("mousedown", () => {
-		websiteShowcase.scrollLeft -= windowInnerWidth*30/1920												//The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth and so that at 1920px the scroll is 30px
+		/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
+		 * and so that is +1/100th of the window's innerWidth at any given resolution.
+		 * The + sign means the scroll direction is from left to right. 
+		 */
+		websiteShowcase.scrollLeft -= windowInnerWidth/100														
 		
 		if(carouselButtonMouseDownInterval == null)
 			carouselButtonMouseDownInterval = setInterval(() => carouselButtonMouseDownIntervalSet(carouselButtons[0]), 10);
@@ -60,7 +78,11 @@ function desktopEventListenerInitialization() {
 	}, {passive:true});
 	
 	carouselButtons[1].addEventListener("mousedown", () => {
-		websiteShowcase.scrollLeft += windowInnerWidth*30/1920												//The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth and so that at 1920px the scroll is -30px
+		/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
+		 * and so that is -1/100th of the window's innerWidth at any given resolution
+		 * The - sign means the scroll direction is from right to left. 
+		 */
+		websiteShowcase.scrollLeft += windowInnerWidth/100														
 		
 		if(carouselButtonMouseDownInterval == null)
 			carouselButtonMouseDownInterval = setInterval(() => carouselButtonMouseDownIntervalSet(carouselButtons[1]), 10);

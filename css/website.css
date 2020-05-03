@@ -467,4 +467,8 @@ h1, h2 {
 	.pageSeparator {
 		opacity: 0;
 	}
+	
+	.pageLink {
+		margin: 10% 0 10% 0;
+	}
 }
