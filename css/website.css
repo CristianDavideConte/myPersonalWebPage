@@ -476,7 +476,7 @@ h1, h2 {
 	}
 }
 
-@media only screen and (max-height: 600px) and (max-width: 1080) {
+@media only screen and (max-height: 600px) and (orientation: landscape) {
 	.pageLink {
 		margin: 10% 0 10% 0;
 	}
