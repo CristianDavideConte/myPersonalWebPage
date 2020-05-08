@@ -15,7 +15,7 @@ function init() {
 
 	imageLoading();																//Initializes all the HTML img elements' contents  
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
-	setTimeout(lagTest, 10000);
+	//setTimeout(lagTest, 10000);
 }
 
 /* This Function initializes all the javascript file's public variables */
