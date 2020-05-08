@@ -19,12 +19,13 @@
 :root {	
 	--header-elements-height: 4em;
 	--header-elements-padding: 1em;	
-	--header-transition-time: 0.5s;
-	--header-socialNetworks-div-width :calc(3*var(--header-elements-height) + 2*var(--header-elements-padding));
+	--header-socialNetworks-div-width: calc(3*var(--header-elements-height) + 2*var(--header-elements-padding));
 	
 	--profilePic-size: 17vmin;
 	--presentationCard-height: 60vmin;
 	--presentationCard-width: 55vmin;
+	
+	--websitePreview-size: 15em;
 	
 	--boxShapedElement-border-radius: 1em;
 	--boxshadow-radius: 0.5em;
@@ -32,7 +33,12 @@
 	--textshadow-radius: 0.1em;
 	
 	--backdrop-filter-blur-radius: 1em;
+	--backdrop-filter-blur-radius-wide: 2em;
 	--backdrop-filter-blur-radius-reduced: 0.3em;
+	
+	--transition-time: 0.5s;
+	--transition-time-medium: 0.4s;
+	--transition-time-quick: 0.2s;
 }
 
 * {
@@ -109,7 +115,7 @@ p {
 	font-size: 190%;
 }
 
-.content {
+#content {
 	width: 100%;
 	height: 100%;
 	overflow-x: hidden;
@@ -119,7 +125,7 @@ p {
 	scrollbar-width: none !important;									/* Firefox */
 }
 
-.content::-webkit-scrollbar {
+#content::-webkit-scrollbar {
 	display: none;
 }
 
@@ -135,7 +141,7 @@ p {
 	align-items: center;
 	justify-content: center;
 	background: rgba(0,0,0,0.8); 
-	transition: var(--header-transition-time);
+	transition: var(--transition-time);
 	-webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius));
 	backdrop-filter: blur(var(--backdrop-filter-blur-radius));
 	overscroll-behavior: none;
@@ -194,10 +200,14 @@ p {
 	height: var(--header-elements-height);
 	border-radius: 100%; 
 	cursor: pointer;
-	filter: grayscale(100%);
 	transition: 0.3s;
 }
 	
+#instagramLink,
+#facebookLink {
+	filter: grayscale(100%);	/* The github icon is already black and white */
+}
+
 #githubLink:hover,
 #instagramLink:hover,
 #facebookLink:hover {	
@@ -284,27 +294,24 @@ h1, h2 {
 	backdrop-filter: blur(var(--backdrop-filter-blur-radius));
 	-ms-overflow-style: none !important;								/* Edge */
 	scrollbar-width: none !important;									/* Firefox */	
+	transition: 0.3s;
 }
 
 .websiteShowcase::-webkit-scrollbar {
 	display: none;
 }
-
 .websiteShowcase > *{
 	padding: 1em;	
 }
 
-.websiteGoToButton {
-	text-decoration: none;
-}
-
 .websitePreview {
+	cursor: pointer;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	width: 15em;
-	height: 15em;
+	width: var(--websitePreview-size);
+	height: var(--websitePreview-size);
 	text-align:center;	
 	border-radius: var(--boxShapedElement-border-radius);
 	transition: 0.3s;
@@ -323,6 +330,105 @@ h1, h2 {
 	border: none;
 }
 
+#websitePreviewExpanded {
+	cursor: default;
+	position: fixed;
+	height: var(--websitePreview-size);
+	width: var(--websitePreview-size);
+	top: var(--websitePreview-original-top-position);
+	left: var(--websitePreview-original-left-position);
+	display: flex; 
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+	box-shadow: 0 0 var(--boxshadow-radius) #14141f;
+	overflow: hidden;
+	border-radius: 5%;
+	background: rgba(0,0,0,0.5); 
+	-webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius-wide));
+	backdrop-filter: blur(var(--backdrop-filter-blur-radius-wide));
+	transition: var(--transition-time-medium);
+}
+
+#websitePreviewExpanded.expandedState {
+	height: var(--presentationCard-height);
+	width: var(--presentationCard-width);
+	top: calc(50vh - var(--presentationCard-height)/2);
+	left: calc(50vw - var(--presentationCard-width)/2);
+}
+
+.websitePreviewExpandedTitleSection {
+	text-align: center;
+	outline: none;
+	font-size: 0;
+	border: none;
+	width: 90%;
+	margin: auto;
+	border-radius: var(--boxShapedElement-border-radius);
+	opacity: 0;
+	transition: var(--transition-time-medium);
+}
+
+.expandedState .websitePreviewExpandedTitleSection {
+	opacity: 1;
+	font-size: 2.5em;
+}
+
+.websitePreviewExpandedTitleSectionContent {
+	height: 65%;
+	opacity: 0;
+	margin: auto;
+	border-radius: 100%;
+	transition: var(--transition-time-medium);
+}
+
+.expandedState .websitePreviewExpandedTitleSectionContent {
+	height: 50%;
+	opacity: 1;
+}
+
+#websitePreviewExpandedButtonSection {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 30%;
+	margin: auto 0 0 0;
+}
+
+
+.websitePreviewExpandedButton {
+	background: rgba(0,0,0,0.5); 
+	outline: none;
+	border: none;
+	width: 45%;
+	height: 80%;
+	white-space: nowrap; 
+	text-overflow: clip;
+	margin: 5% auto 5% auto;
+	cursor: pointer;
+	opacity: 0;
+	font-size: 0;
+	border-radius: var(--boxShapedElement-border-radius);
+	transition: var(--transition-time-medium);
+}
+
+.expandedState .websitePreviewExpandedButton {
+	opacity: 1;
+	font-size: 3em;
+}
+
+#websitePreviewExpandedBackgroundContent {
+	z-index: 3;
+	position: fixed; 
+	width: 100%; 
+	height: 100%; 
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	cursor: pointer;
+}
+
 .carouselButton {	
 	font-size: 3em;
 	padding: 0.5em;
@@ -335,17 +441,12 @@ h1, h2 {
 	background: rgba(0,0,0,0.2);
 	-webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius));
 	backdrop-filter: blur(var(--backdrop-filter-blur-radius));
-	transition: 0.2s;
-}
-
-.carouselButton:hover {
-	-webkit-transform: scale3d(1.1, 1.1, 1.1);
-	transform: scale3d(1.1, 1.1, 1.1);
+	transition: var(--transition-time-quick);
 }
 
 .carouselButton:active {
-	-webkit-transform: scale3d(1, 1, 1);
-	transform: scale3d(1, 1, 1);
+	-webkit-transform: scale3d(0.9, 0.9, 0.9);
+	transform: scale3d(0.9, 0.9, 0.9);
 }
 
 @media only screen and (max-width: 1080px) {
@@ -380,6 +481,10 @@ h1, h2 {
 		--presentationCard-width: 75vmin;
 	}
 	
+	#header {
+		will-change: height;
+	}
+	
 	#header.mobileExpanded {
 		height: 100%;
 	}
@@ -396,7 +501,7 @@ h1, h2 {
 		margin: var(--bar-margin) 0 var(--bar-margin) 0;
 		border-radius: var(--boxShapedElement-border-radius);
 		background-color: #f2f2f2;
-		transition: var(--header-transition-time);
+		transition: var(--transition-time);
 	}	
 	
 	.mobileExpanded #hamburgerMenuUpperBar  {
@@ -419,7 +524,7 @@ h1, h2 {
 	.mobileExpanded #linkSection {
 		pointer-events: auto;
 		opacity: 1;
-		animation: increaseSize var(--header-transition-time);
+		animation: increaseSize var(--transition-time);
 	}
 	
 	.pageLink {
@@ -431,7 +536,6 @@ h1, h2 {
 		transform: translate3d(var(--socialNetworks-offsetY-translate3d), 0, 0) rotate3d(0,0,1, 90deg);
 	}
 		
-	#githubLink,
 	#instagramLink,	
 	#facebookLink {
 		filter: grayscale(0%);
@@ -444,7 +548,6 @@ h1, h2 {
 		transform: rotate3d(0,0,1, -90deg);
 	}
 	
-	.mobileExpanded #githubLink:not(:hover), 
 	.mobileExpanded #instagramLink:not(:hover), 
 	.mobileExpanded #facebookLink:not(:hover) {
 		filter: grayscale(100%);	
@@ -468,6 +571,12 @@ h1, h2 {
 	.carouselButton {
 		display: none;
 	}
+		
+	.expandedState #websitePreviewExpandedButtonSection {
+		opacity: 1;
+		font-size: 110%;
+	}
+
 }
 
 @media only screen and (max-height: 600px) {

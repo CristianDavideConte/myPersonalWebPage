@@ -3,6 +3,7 @@ var documentBodyElement;														//A shortcut for the HTML element document
 var header;																		//The HTML element with the id "header", used as the site navbar 
 var hamburgerMenu;																//The HTML element with the	id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px 								
 var pageLinks; 																	//All HTML element with the class "pageLink", shown in the header to navigate through the website' sections
+var transitionTimeQuick;														//The --transition-time-quick css variable
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {	
@@ -22,7 +23,8 @@ function variableInitialization() {
 	documentBodyElement = document.body;
 	header = document.getElementById("header");
 	hamburgerMenu = document.getElementById("hamburgerMenu");	
-	pageLinks = document.getElementsByClassName("pageLink");													
+	pageLinks = document.getElementsByClassName("pageLink");	
+	transitionTimeQuick	= getComputedStyle(documentBodyElement).getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
 }
 
 /* This function binds all the HTML elements that can be interacted to their mouse and keyboard eventHandlers */
@@ -88,6 +90,82 @@ function desktopEventListenerInitialization() {
 			carouselButtonMouseDownInterval = setInterval(() => carouselButtonMouseDownIntervalSet(carouselButtons[1]), 10);
 		window.addEventListener("mouseup", carouselButtonMouseDownIntervalReset);	
 	}, {passive:true});
+	
+	websitePreviews = document.getElementsByClassName("websitePreview");
+	for(const websitePreview of websitePreviews)
+		websitePreview.addEventListener("click", () => {
+			event.stopPropagation();																				//Prevents the click to instantly remove the previewExpanded element that is going to be created next
+			let projectPage = document.getElementById("projects");
+			/* The websitePreview is scaled while hovered.
+			 * The top and left offset have to take the scaling into consideration otherwise 
+			 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor
+			 */
+			let websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
+			let websitePreviewTopOffset = websitePreviewBoundingRectangle.top + (websitePreviewBoundingRectangle.height*1.1 - websitePreviewBoundingRectangle.height) / 2;				
+			let websitePreviewLeftOffset = websitePreviewBoundingRectangle.left + (websitePreviewBoundingRectangle.width*1.1 - websitePreviewBoundingRectangle.width) / 2;
+			documentBodyElement.style.setProperty("--websitePreview-original-top-position", websitePreviewTopOffset + "px");
+			documentBodyElement.style.setProperty("--websitePreview-original-left-position", websitePreviewLeftOffset + "px");
+			
+			let websitePreviewExpanded = document.createElement("div");
+			websitePreviewExpanded.id = "websitePreviewExpanded";
+			
+			
+			let websitePreviewExpandedTitleSectionContent = websitePreview.firstElementChild.cloneNode(true);
+			websitePreviewExpandedTitleSectionContent.className = "websitePreviewExpandedTitleSectionContent";
+			websitePreviewExpanded.appendChild(websitePreviewExpandedTitleSectionContent);
+			
+			let websitePreviewExpandedTitleSection = document.createElement("div");
+			websitePreviewExpandedTitleSection.className = "websitePreviewExpandedTitleSection";
+			websitePreviewExpandedTitleSection.innerHTML = websitePreview.getAttribute("data-title");			
+			websitePreviewExpanded.appendChild(websitePreviewExpandedTitleSection);
+			
+			let viewCodeButton = document.createElement("button");
+			viewCodeButton.innerHTML = "View Code";
+			viewCodeButton.className = "websitePreviewExpandedButton";
+			
+			let viewDemoButton = document.createElement("button");
+			viewDemoButton.innerHTML = "View Demo";
+			viewDemoButton.className = "websitePreviewExpandedButton";
+			
+			let viewButtonsSection = document.createElement("div");
+			viewButtonsSection.id = "websitePreviewExpandedButtonSection";
+			viewButtonsSection.appendChild(viewCodeButton);
+			viewButtonsSection.appendChild(viewDemoButton);
+			
+			websitePreviewExpanded.appendChild(viewButtonsSection);
+			websitePreviewExpanded.addEventListener("click", event => event.stopPropagation());
+			
+			let backgroundContent = document.createElement("div");
+			backgroundContent.id = "websitePreviewExpandedBackgroundContent";
+			backgroundContent.className = "page";		
+			documentBodyElement.insertBefore(backgroundContent, documentBodyElement.firstChild);
+			backgroundContent.appendChild(websitePreviewExpanded);
+			
+			let transitionDuration = 0;
+			let transitionDurationIntervalFrequency = 20;
+			let checkAnimationDuration = function () {
+				if(transitionDuration < transitionTimeQuick)
+					transitionDuration += transitionDurationIntervalFrequency;
+				else 
+					clearInterval(transitionDurationInterval);
+			}
+			let transitionDurationInterval = setInterval(checkAnimationDuration, transitionDurationIntervalFrequency);
+			
+			setTimeout(() => websitePreviewExpanded.className = "expandedState", transitionDurationIntervalFrequency);	
+			setTimeout(function() {
+				viewCodeButton.addEventListener("click", () => window.open(websitePreview.getAttribute("data-code")));
+				viewDemoButton.addEventListener("click", () => window.open(websitePreview.getAttribute("data-demo")));
+			}, transitionTimeQuick + transitionDurationIntervalFrequency);
+			
+			backgroundContent.addEventListener("click", function removePreviewExpanded(event) {
+				event.preventDefault();
+				event.stopPropagation();
+				clearInterval(transitionDurationInterval);
+				backgroundContent.removeEventListener("click", removePreviewExpanded, {passive: false});
+				websitePreviewExpanded.className = "";
+				setTimeout(() => documentBodyElement.removeChild(backgroundContent), transitionDuration);
+			}, {passive: false});
+		});
 }
 
 /* This function binds all the HTML elements that can be interacted to their touch related eventHandlers /
@@ -140,7 +218,7 @@ function imageLoading() {
 }
 
 /* This Function toggle the class mobileExpanded in the hamburgerMenu element */
-function toggleExpandHamburgerMenu() {										
+function toggleExpandHamburgerMenu() {		
 	header.classList.toggle("mobileExpanded");	
 }
 
