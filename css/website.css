@@ -33,7 +33,7 @@
 	--textshadow-radius: 0.1em;
 	
 	--backdrop-filter-blur-radius: 1em;
-	--backdrop-filter-blur-radius-wide: 2em;
+	--backdrop-filter-blur-radius-wide: 1.6em;
 	--backdrop-filter-blur-radius-reduced: 0.3em;
 	
 	--transition-time: 0.5s;
@@ -351,10 +351,6 @@ h1, h2 {
 	left: var(--websitePreview-original-left-position);
 	display: flex; 
 	flex-direction: column;
-	align-items: center;
-	justify-content: space-around;
-	box-shadow: 0 0 var(--boxshadow-radius) #14141f;
-	overflow: hidden;
 	border-radius: 5%;
 	background: rgba(0,0,0,0.5); 
 	-webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius-wide));
@@ -371,12 +367,8 @@ h1, h2 {
 
 .websitePreviewExpandedTitleSection {
 	text-align: center;
-	outline: none;
 	font-size: 0;
-	border: none;
-	width: 90%;
 	margin: auto;
-	border-radius: var(--boxShapedElement-border-radius);
 	opacity: 0;
 	transition: var(--transition-time-medium);
 }
@@ -402,20 +394,14 @@ h1, h2 {
 #websitePreviewExpandedButtonSection {
 	display: flex;
 	align-items: center;
-	width: 100%;
 	height: 30%;
-	margin: auto 0 0 0;
 }
 
-
 .websitePreviewExpandedButton {
-	background: rgba(0,0,0,0.5); 
-	outline: none;
+	background: rgba(0,0,0,0.4); 
 	border: none;
 	width: 45%;
 	height: 80%;
-	white-space: nowrap; 
-	text-overflow: clip;
 	margin: 5% auto 5% auto;
 	cursor: pointer;
 	opacity: 0;
@@ -432,12 +418,6 @@ h1, h2 {
 #websitePreviewExpandedBackgroundContent {
 	z-index: 3;
 	position: fixed; 
-	width: 100%; 
-	height: 100%; 
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
 	cursor: pointer;
 }
 

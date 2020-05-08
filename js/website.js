@@ -15,6 +15,7 @@ function init() {
 
 	imageLoading();																//Initializes all the HTML img elements' contents  
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
+	setTimeout(lagTest, 10000);
 }
 
 /* This Function initializes all the javascript file's public variables */
@@ -102,14 +103,13 @@ function desktopEventListenerInitialization() {
 			 */
 			let websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
 			let scalingFactor = getComputedStyle(documentBodyElement).getPropertyValue("--scaling-factor-increase");
-			let websitePreviewTopOffset = websitePreviewBoundingRectangle.top + (websitePreviewBoundingRectangle.height*scalingFactor - websitePreviewBoundingRectangle.height) / 2;				
-			let websitePreviewLeftOffset = websitePreviewBoundingRectangle.left + (websitePreviewBoundingRectangle.width*scalingFactor - websitePreviewBoundingRectangle.width) / 2;
+			let websitePreviewTopOffset = websitePreviewBoundingRectangle.top + (websitePreviewBoundingRectangle.height * scalingFactor - websitePreviewBoundingRectangle.height) / 2;				
+			let websitePreviewLeftOffset = websitePreviewBoundingRectangle.left + (websitePreviewBoundingRectangle.width * scalingFactor - websitePreviewBoundingRectangle.width) / 2;
 			documentBodyElement.style.setProperty("--websitePreview-original-top-position", websitePreviewTopOffset + "px");
 			documentBodyElement.style.setProperty("--websitePreview-original-left-position", websitePreviewLeftOffset + "px");
 			
 			let websitePreviewExpanded = document.createElement("div");
-			websitePreviewExpanded.id = "websitePreviewExpanded";
-			
+			websitePreviewExpanded.id = "websitePreviewExpanded";	
 			
 			let websitePreviewExpandedTitleSectionContent = websitePreview.firstElementChild.cloneNode(true);
 			websitePreviewExpandedTitleSectionContent.className = "websitePreviewExpandedTitleSectionContent";
@@ -167,6 +167,22 @@ function desktopEventListenerInitialization() {
 				setTimeout(() => documentBodyElement.removeChild(backgroundContent), transitionDuration);
 			}, {passive: false});
 		});
+}
+
+var test = 0;
+function lagTest() {
+	websitePreview = document.getElementsByClassName("websitePreview")[0];
+    var event = document.createEvent('Events');
+    event.initEvent("click", true, false);
+	if(test < 200) {
+		if(test % 2 == 0) 
+			websitePreview.dispatchEvent(event);
+		else 
+			documentBodyElement.firstChild.dispatchEvent(event);
+		
+		setTimeout(lagTest, transitionTimeQuick);
+		test++;
+	}
 }
 
 /* This function binds all the HTML elements that can be interacted to their touch related eventHandlers /
