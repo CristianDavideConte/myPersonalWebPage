@@ -101,8 +101,9 @@ function desktopEventListenerInitialization() {
 			 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor
 			 */
 			let websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
-			let websitePreviewTopOffset = websitePreviewBoundingRectangle.top + (websitePreviewBoundingRectangle.height*1.1 - websitePreviewBoundingRectangle.height) / 2;				
-			let websitePreviewLeftOffset = websitePreviewBoundingRectangle.left + (websitePreviewBoundingRectangle.width*1.1 - websitePreviewBoundingRectangle.width) / 2;
+			let scalingFactor = getComputedStyle(documentBodyElement).getPropertyValue("--scaling-factor-increase");
+			let websitePreviewTopOffset = websitePreviewBoundingRectangle.top + (websitePreviewBoundingRectangle.height*scalingFactor - websitePreviewBoundingRectangle.height) / 2;				
+			let websitePreviewLeftOffset = websitePreviewBoundingRectangle.left + (websitePreviewBoundingRectangle.width*scalingFactor - websitePreviewBoundingRectangle.width) / 2;
 			documentBodyElement.style.setProperty("--websitePreview-original-top-position", websitePreviewTopOffset + "px");
 			documentBodyElement.style.setProperty("--websitePreview-original-left-position", websitePreviewLeftOffset + "px");
 			

@@ -39,6 +39,17 @@
 	--transition-time: 0.5s;
 	--transition-time-medium: 0.4s;
 	--transition-time-quick: 0.2s;
+		
+	--scaling-factor-increase: 1;
+	--scaling-factor-decrease: 1;
+	
+}
+
+@media (hover: hover) {
+	:root {	
+		--scaling-factor-increase: 1.1;
+		--scaling-factor-decrease: 0.9;
+	}
 }
 
 * {
@@ -211,8 +222,8 @@ p {
 #githubLink:hover,
 #instagramLink:hover,
 #facebookLink:hover {	
-	-webkit-transform: scale3d(1.1, 1.1, 1.1);
-	transform: scale3d(1.1, 1.1, 1.1);
+	-webkit-transform: scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
+	transform: scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
 	filter: grayscale(0%);
 }
 
@@ -318,11 +329,12 @@ h1, h2 {
 	background: rgba(0,0,0,0.5); 
 }
 
-.websitePreview:hover {
-	-webkit-transform: scale3d(1.1, 1.1, 1.1);
-	transform: scale3d(1.1, 1.1, 1.1);
-}
 
+.websitePreview:hover {
+	-webkit-transform: scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
+	transform: scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
+}
+	
 .websitePreviewImage {
 	border-radius: 50%;	
 	width: 60%;
@@ -445,8 +457,8 @@ h1, h2 {
 }
 
 .carouselButton:active {
-	-webkit-transform: scale3d(0.9, 0.9, 0.9);
-	transform: scale3d(0.9, 0.9, 0.9);
+	-webkit-transform: scale3d(var(--scaling-factor-decrease), var(--scaling-factor-decrease), var(--scaling-factor-decrease));
+	transform: scale3d(var(--scaling-factor-decrease), var(--scaling-factor-decrease), var(--scaling-factor-decrease));
 }
 
 @media only screen and (max-width: 1080px) {
@@ -556,8 +568,8 @@ h1, h2 {
 	.mobileExpanded #githubLink:hover, 
 	.mobileExpanded #instagramLink:hover, 
 	.mobileExpanded #facebookLink:hover {
-		-webkit-transform: rotate3d(0,0,1,-90deg) scale3d(1.1, 1.1, 1.1);
-		transform: rotate3d(0,0,1, -90deg) scale3d(1.1, 1.1, 1.1);
+		-webkit-transform: rotate3d(0,0,1,-90deg) scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
+		transform: rotate3d(0,0,1, -90deg) scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
 	}	
 
 	#presentationCard p {
