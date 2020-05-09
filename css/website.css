@@ -399,6 +399,7 @@ h1, h2 {
 
 .websitePreviewExpandedButton {
 	background: rgba(0,0,0,0.4); 
+	outline: none;
 	border: none;
 	width: 45%;
 	height: 80%;
