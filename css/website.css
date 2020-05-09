@@ -336,7 +336,6 @@ h1, h2 {
 
 .websitePreview.expandedState {
 	opacity: 0;
-	transition: 0s;
 }
 
 .websitePreviewImage {
