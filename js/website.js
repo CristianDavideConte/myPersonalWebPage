@@ -184,7 +184,10 @@ function desktopEventListenerInitialization() {
 			documentBodyElement.insertBefore(backgroundContent, documentBodyElement.firstChild);
 	
 			checkAnimationDuration();
-			setTimeout(() => websitePreviewExpanded.className = "expandedState", transitionDurationTimeoutFrequency);	
+			setTimeout(() => {
+				websitePreviewExpanded.className = "expandedState";
+				websitePreview.classList.add("expandedState");
+			}, transitionDurationTimeoutFrequency);	
 			
 			backgroundContent.addEventListener("click", function removePreviewExpanded(event) {
 				event.stopPropagation();
@@ -193,9 +196,11 @@ function desktopEventListenerInitialization() {
 					clearTimeout(transitionDurationTimeout);
 						
 				websitePreviewExpanded.className = "";
-				setTimeout(() => documentBodyElement.removeChild(backgroundContent), transitionDuration);
-				transitionDuration = 0;
-				backgroundContent.removeEventListener("click", removePreviewExpanded, {passive: true});
+				setTimeout(() => {
+					websitePreview.classList.remove("expandedState");
+					documentBodyElement.removeChild(backgroundContent);
+				}, transitionDuration);
+				backgroundContent.removeEventListener("click", removePreviewExpanded, {passive:true});
 			}, {passive:true});
 		}, {passive:true});
 }

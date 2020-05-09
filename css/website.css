@@ -287,7 +287,6 @@ h1, h2 {
 .projectsCarousel {
 	width: 100%;
 	display: flex;
-	flex-direction: row;
 	justify-content: center;
 	align-items: center;
 }
@@ -305,12 +304,13 @@ h1, h2 {
 	backdrop-filter: blur(var(--backdrop-filter-blur-radius));
 	-ms-overflow-style: none !important;								/* Edge */
 	scrollbar-width: none !important;									/* Firefox */	
-	transition: 0.3s;
+	transition: var(--transition-time-quick);
 }
 
 .websiteShowcase::-webkit-scrollbar {
 	display: none;
 }
+
 .websiteShowcase > *{
 	padding: 1em;	
 }
@@ -323,18 +323,22 @@ h1, h2 {
 	align-items: center;
 	width: var(--websitePreview-size);
 	height: var(--websitePreview-size);
-	text-align:center;	
+	text-align: center;	
 	border-radius: var(--boxShapedElement-border-radius);
-	transition: 0.3s;
 	background: rgba(0,0,0,0.5); 
+	transition: var(--transition-time-quick);
 }
-
 
 .websitePreview:hover {
 	-webkit-transform: scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
 	transform: scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
 }
-	
+
+.websitePreview.expandedState {
+	opacity: 0;
+	transition: 0s;
+}
+
 .websitePreviewImage {
 	border-radius: 50%;	
 	width: 60%;
@@ -343,15 +347,17 @@ h1, h2 {
 }
 
 #websitePreviewExpanded {
-	cursor: default;
 	position: fixed;
+	cursor: default;
+	display: flex; 
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
 	height: var(--websitePreview-size);
 	width: var(--websitePreview-size);
 	top: var(--websitePreview-original-top-position);
 	left: var(--websitePreview-original-left-position);
-	display: flex; 
-	flex-direction: column;
-	border-radius: 5%;
+	border-radius: var(--boxShapedElement-border-radius);
 	background: rgba(0,0,0,0.5); 
 	-webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius-wide));
 	backdrop-filter: blur(var(--backdrop-filter-blur-radius-wide));
@@ -363,12 +369,12 @@ h1, h2 {
 	width: var(--presentationCard-width);
 	top: calc(50vh - var(--presentationCard-height)/2);
 	left: calc(50vw - var(--presentationCard-width)/2);
+	border-radius: 5%;
 }
 
 .websitePreviewExpandedTitleSection {
 	text-align: center;
 	font-size: 0;
-	margin: auto;
 	opacity: 0;
 	transition: var(--transition-time-medium);
 }
@@ -379,32 +385,28 @@ h1, h2 {
 }
 
 .websitePreviewExpandedTitleSectionContent {
-	height: 65%;
-	opacity: 0;
-	margin: auto;
+	height: 60%;
 	border-radius: 100%;
 	transition: var(--transition-time-medium);
 }
 
 .expandedState .websitePreviewExpandedTitleSectionContent {
 	height: 50%;
-	opacity: 1;
 }
 
 #websitePreviewExpandedButtonSection {
 	display: flex;
 	align-items: center;
-	height: 30%;
+	width: 100%;
 }
 
 .websitePreviewExpandedButton {
 	background: rgba(0,0,0,0.4); 
 	outline: none;
-	border: none;
-	width: 45%;
-	height: 80%;
-	margin: 5% auto 5% auto;
+	border: none; 	
 	cursor: pointer;
+	margin: 0 auto 0 auto;
+	padding: 0.7em;
 	opacity: 0;
 	font-size: 0;
 	border-radius: var(--boxShapedElement-border-radius);
@@ -570,6 +572,9 @@ h1, h2 {
 		font-size: 110%;
 	}
 
+	.websitePreviewExpandedButton {
+		padding: 1em;
+	}
 }
 
 @media only screen and (max-height: 600px) {
