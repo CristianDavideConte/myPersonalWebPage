@@ -146,7 +146,7 @@ function desktopEventListenerInitialization() {
 				if(dataTitle != null) {
 					let websitePreviewExpandedTitleSection = document.createElement("div");
 					websitePreviewExpandedTitleSection.className = "websitePreviewExpandedTitleSection";
-					websitePreviewExpandedTitleSection.innerHTML = websitePreview.getAttribute("data-title");			
+					websitePreviewExpandedTitleSection.innerHTML = dataTitle;			
 					websitePreviewExpanded.appendChild(websitePreviewExpandedTitleSection);
 				}
 				
@@ -197,8 +197,10 @@ function desktopEventListenerInitialization() {
 						
 				websitePreviewExpanded.className = "";
 				setTimeout(() => {
+					websitePreview.style.transition = "0s";											//This is done in order to make the original 
 					websitePreview.classList.remove("expandedState");
 					documentBodyElement.removeChild(backgroundContent);
+					setTimeout(() => websitePreview.style = null, 20);
 				}, transitionDuration);
 				backgroundContent.removeEventListener("click", removePreviewExpanded, {passive:true});
 			}, {passive:true});
