@@ -198,7 +198,10 @@ function desktopEventListenerInitialization() {
 							listenersAlreadyTriggered = false;
 							websitePreview.classList.remove("expandedState");
 							documentBodyElement.removeChild(backgroundContent);
-							setTimeout(() => websitePreview.style = null, 20);
+							setTimeout(() => {
+								websitePreview.style = null;
+								header.style = null; 
+							}, 20);
 						}, transitionDuration);
 					}
 				}, {passive:true});
@@ -206,11 +209,12 @@ function desktopEventListenerInitialization() {
 				websitePreviewExpandedMap.set(websitePreview, backgroundContent);
 			}
 				
+			header.style.pointerEvents = "none";
+			websitePreview.style.transition = "0s";	
 			documentBodyElement.insertBefore(backgroundContent, documentBodyElement.firstChild);
 			
 			checkAnimationDuration();
-			setTimeout(() => {
-				websitePreview.style.transition = "0s";											//This is done in order to make the original 
+			setTimeout(() => {										//This is done in order to make the original 
 				websitePreviewExpanded.className = "expandedState";
 				websitePreview.classList.add("expandedState");
 			}, transitionDurationTimeoutFrequency);				
