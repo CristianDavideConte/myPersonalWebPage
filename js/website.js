@@ -101,9 +101,9 @@ function desktopEventListenerInitialization() {
 	 * Used to calculate how much time a closing animation should last if the opening animation was interrupted. 
 	 * This way the opening and closing animation of an element last the same ammount of milliseconds.
 	 */
+	let transitionDurationTimeout;
 	let transitionDuration = 0;
 	let transitionDurationTimeoutFrequency = 20;
-	let transitionDurationTimeout;
 	function checkAnimationDuration () {
 		if(transitionDuration < transitionTimeQuick) {
 			transitionDuration += transitionDurationTimeoutFrequency;
@@ -178,32 +178,42 @@ function desktopEventListenerInitialization() {
 				backgroundContent.id = "websitePreviewExpandedBackgroundContent";
 				backgroundContent.className = "page";		
 				backgroundContent.appendChild(websitePreviewExpanded);
+				
+				/*This variable is used to prevent the user to execute the backgroundContent eventListener 
+				 * more than one time while the animation is still happening.
+				 * Otherwise the document.body would try to remove the backgroundContent multiple times generating errors in the browser console.
+				 * Note that this bug wouldn't cause the page to instantly crash.
+				 */
+				let listenersAlreadyTriggered = false;																	
+				
+				backgroundContent.addEventListener("click", function removePreviewExpanded(event) {
+					event.stopPropagation();
+					if(!listenersAlreadyTriggered) {
+						listenersAlreadyTriggered = true;
+						if(transitionDuration < transitionTimeQuick) 
+							clearTimeout(transitionDurationTimeout);
+								
+						websitePreviewExpanded.className = "";
+						setTimeout(() => {
+							listenersAlreadyTriggered = false;
+							websitePreview.classList.remove("expandedState");
+							documentBodyElement.removeChild(backgroundContent);
+							setTimeout(() => websitePreview.style = null, 20);
+						}, transitionDuration);
+					}
+				}, {passive:true});
+			
 				websitePreviewExpandedMap.set(websitePreview, backgroundContent);
 			}
-			
+				
 			documentBodyElement.insertBefore(backgroundContent, documentBodyElement.firstChild);
-	
+			
 			checkAnimationDuration();
 			setTimeout(() => {
 				websitePreview.style.transition = "0s";											//This is done in order to make the original 
 				websitePreviewExpanded.className = "expandedState";
 				websitePreview.classList.add("expandedState");
-			}, transitionDurationTimeoutFrequency);	
-			
-			backgroundContent.addEventListener("click", function removePreviewExpanded(event) {
-				event.stopPropagation();
-				
-				if(transitionDuration < transitionTimeQuick) 
-					clearTimeout(transitionDurationTimeout);
-						
-				websitePreviewExpanded.className = "";
-				setTimeout(() => {
-					websitePreview.classList.remove("expandedState");
-					documentBodyElement.removeChild(backgroundContent);
-					setTimeout(() => websitePreview.style = null, 20);
-				}, transitionDuration);
-				backgroundContent.removeEventListener("click", removePreviewExpanded, {passive:true});
-			}, {passive:true});
+			}, transitionDurationTimeoutFrequency);				
 		}, {passive:true});
 }
 
