@@ -4,30 +4,35 @@ var documentBodyElement;														//A shortcut for the HTML element document
 var header;																		//The HTML element with the id "header", used as the site navbar 
 var hamburgerMenu;																//The HTML element with the	id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px 								
 var pageLinks; 																	//All HTML element with the class "pageLink", shown in the header to navigate through the website' sections
-var transitionTimeQuick;														//The --transition-time-quick css variable
 var websitePreviewExpandedMap; 													//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
+var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
+var mobileDevice; 																//The --mobile-device css variable, used to know if the css styling for mobile is currently applied
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {	
 	variableInitialization();													//Binds the js variables to the corresponding HTML elements
 	desktopEventListenerInitialization();										//Initializes all the mouse and keyboard eventHandlers 
 		
-	//if ("ontouchstart" in window) 												//If the device is touch capable the support to the touchstartEvent is added
+	//if ("ontouchstart" in window) 											//If the device is touch capable the support to the touchstartEvent is added
 		//mobileEventListenerInitialization();									//Initializes all the touch related eventHandlers 
 
 	imageLoading();																//Initializes all the HTML img elements' contents  
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
-	//setTimeout(lagTest, 10000);
+	setTimeout(lagTest, 10000);
 }
 
 /* This Function initializes all the javascript file's public variables */
 function variableInitialization() {
 	windowInnerWidth = window.innerWidth;
 	documentBodyElement = document.body;
+	
 	header = document.getElementById("header");
 	hamburgerMenu = document.getElementById("hamburgerMenu");	
 	pageLinks = document.getElementsByClassName("pageLink");	
-	transitionTimeQuick	= getComputedStyle(documentBodyElement).getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
+	
+	transitionTimeMedium = getComputedStyle(documentBodyElement).getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
+	mobileDevice = getComputedStyle(documentBodyElement).getPropertyValue("--mobile-device");
+	
 	websitePreviewExpandedMap = new Map();
 }
 
@@ -97,7 +102,7 @@ function desktopEventListenerInitialization() {
 	
 				
 	/* This Function tracks an animation duration.
-	 * It updates every transitionDurationTimeoutFrequency milliseconds and when the transitionTimeQuick milliseconds ammount is reached it stops updating.
+	 * It updates every transitionDurationTimeoutFrequency milliseconds and when the transitionTimeMedium milliseconds ammount is reached it stops updating.
 	 * Used to calculate how much time a closing animation should last if the opening animation was interrupted. 
 	 * This way the opening and closing animation of an element last the same ammount of milliseconds.
 	 */
@@ -105,7 +110,7 @@ function desktopEventListenerInitialization() {
 	let transitionDuration = 0;
 	let transitionDurationTimeoutFrequency = 20;
 	function checkAnimationDuration () {
-		if(transitionDuration < transitionTimeQuick) {
+		if(transitionDuration < transitionTimeMedium) {
 			transitionDuration += transitionDurationTimeoutFrequency;
 			transitionDurationTimeout = setTimeout(checkAnimationDuration, transitionDurationTimeoutFrequency);
 		}
@@ -190,7 +195,7 @@ function desktopEventListenerInitialization() {
 					event.stopPropagation();
 					if(!listenersAlreadyTriggered) {
 						listenersAlreadyTriggered = true;
-						if(transitionDuration < transitionTimeQuick) 
+						if(transitionDuration < transitionTimeMedium) 
 							clearTimeout(transitionDurationTimeout);
 								
 						websitePreviewExpanded.className = "";
@@ -232,7 +237,7 @@ function lagTest() {
 		else 
 			documentBodyElement.firstChild.dispatchEvent(event);
 		
-		setTimeout(lagTest, transitionTimeQuick);
+		setTimeout(lagTest, transitionTimeMedium);
 		test++;
 	}
 }
@@ -288,7 +293,8 @@ function imageLoading() {
 
 /* This Function toggle the class mobileExpanded in the hamburgerMenu element */
 function toggleExpandHamburgerMenu() {		
-	header.classList.toggle("mobileExpanded");	
+	if(mobileDevice == "1")
+		header.classList.toggle("mobileExpanded");	
 }
 
 /* This Function returns true if the browser used is the Microsoft Old Edge, false otherwise.
@@ -305,4 +311,5 @@ function isBrowserEdge() {
 function updateWindowSize(){
 	documentBodyElement.style.height = window.innerHeight + "px";
 	windowInnerWidth = window.innerWidth;
+	mobileDevice = getComputedStyle(documentBodyElement).getPropertyValue("--mobile-device");
 }
