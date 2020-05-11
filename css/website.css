@@ -354,8 +354,8 @@ h1, h2 {
 	flex-direction:column;
 	justify-content:space-around;
 	align-items:center;
-	height:var(--websitePreview-size);
-	width:var(--websitePreview-size);
+	height:var(--websitePreview-current-size);
+	width:var(--websitePreview-current-size);
 	top:var(--websitePreview-original-top-position);
 	left:var(--websitePreview-original-left-position);
 	border-radius:var(--boxShapedElement-border-radius);

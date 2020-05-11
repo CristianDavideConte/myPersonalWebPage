@@ -100,24 +100,6 @@ function desktopEventListenerInitialization() {
 		window.addEventListener("mouseup", carouselButtonMouseDownIntervalReset);	
 	}, {passive:true});
 	
-				
-	/* This Function tracks an animation duration.
-	 * It updates every transitionDurationTimeoutFrequency milliseconds and when the transitionTimeMedium milliseconds ammount is reached it stops updating.
-	 * Used to calculate how much time a closing animation should last if the opening animation was interrupted. 
-	 * This way the opening and closing animation of an element last the same ammount of milliseconds.
-	 */
-	let transitionDurationTimeout;
-	let transitionDuration = 0;
-	let transitionDurationTimeoutFrequency = 20;
-	function checkAnimationDuration () {
-		if(transitionDuration < transitionTimeMedium) {
-			transitionDuration += transitionDurationTimeoutFrequency;
-			transitionDurationTimeout = setTimeout(checkAnimationDuration, transitionDurationTimeoutFrequency);
-		}
-		else 
-			clearTimeout(transitionDurationTimeout);
-	}
-	
 	websitePreviews = document.getElementsByClassName("websitePreview");
 	for(const websitePreview of websitePreviews)
 		websitePreview.addEventListener("click", () => {
@@ -125,14 +107,20 @@ function desktopEventListenerInitialization() {
 			
 			/* The websitePreview is scaled while hovered.
 			 * The top and left offset have to take the scaling into consideration otherwise 
-			 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor
+			 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
+			 * The initial position is instead calculated adding the hover effect's expansion.
 			 */
+			//let scalingFactor = getComputedStyle(documentBodyElement).getPropertyValue("--scaling-factor-increase");
+			//let websitePreviewTopPosition = websitePreviewBoundingRectangle.top;				
+			//let websitePreviewLeftPosition = websitePreviewBoundingRectangle.left;
+			//let websitePreviewTopOffset = (websitePreviewBoundingRectangle.height * scalingFactor - websitePreviewBoundingRectangle.height) / 2;
+			//let websitePreviewLeftOffset = (websitePreviewBoundingRectangle.width * scalingFactor - websitePreviewBoundingRectangle.width) / 2;
+			
 			let websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
-			let scalingFactor = getComputedStyle(documentBodyElement).getPropertyValue("--scaling-factor-increase");
-			let websitePreviewTopOffset = websitePreviewBoundingRectangle.top + (websitePreviewBoundingRectangle.height * scalingFactor - websitePreviewBoundingRectangle.height) / 2;				
-			let websitePreviewLeftOffset = websitePreviewBoundingRectangle.left + (websitePreviewBoundingRectangle.width * scalingFactor - websitePreviewBoundingRectangle.width) / 2;
-			documentBodyElement.style.setProperty("--websitePreview-original-top-position", websitePreviewTopOffset + "px");
-			documentBodyElement.style.setProperty("--websitePreview-original-left-position", websitePreviewLeftOffset + "px");
+			let documentBodyElementStyle = documentBodyElement.style;
+			documentBodyElementStyle.setProperty("--websitePreview-original-top-position", websitePreviewBoundingRectangle.top + "px");
+			documentBodyElementStyle.setProperty("--websitePreview-original-left-position", websitePreviewBoundingRectangle.left + "px");
+			documentBodyElementStyle.setProperty("--websitePreview-current-size", websitePreviewBoundingRectangle.height + "px");
 			
 			let backgroundContent;
 			let storedBackgroundContent = websitePreviewExpandedMap.get(websitePreview);
@@ -195,19 +183,26 @@ function desktopEventListenerInitialization() {
 					event.stopPropagation();
 					if(!listenersAlreadyTriggered) {
 						listenersAlreadyTriggered = true;
-						if(transitionDuration < transitionTimeMedium) 
-							clearTimeout(transitionDurationTimeout);
-								
+						/* The websitePreview is scaled while hovered.
+						 * The top and left offset have to take the scaling into consideration otherwise 
+						 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
+						 * The initial position is instead calculated adding the hover effect's expansion.
+						 */
+						websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();						
+						documentBodyElementStyle.setProperty("--websitePreview-original-top-position", websitePreviewBoundingRectangle.top + "px");
+						documentBodyElementStyle.setProperty("--websitePreview-original-left-position", websitePreviewBoundingRectangle.left + "px");
+						documentBodyElementStyle.setProperty("--websitePreview-current-size", websitePreviewBoundingRectangle.height + "px");
+									
 						websitePreviewExpanded.className = "";
 						setTimeout(() => {
 							listenersAlreadyTriggered = false;
+							header.style = null; 
 							websitePreview.classList.remove("expandedState");
 							documentBodyElement.removeChild(backgroundContent);
 							setTimeout(() => {
 								websitePreview.style = null;
-								header.style = null; 
 							}, 20);
-						}, transitionDuration);
+						}, transitionTimeMedium);
 					}
 				}, {passive:true});
 			
@@ -218,11 +213,10 @@ function desktopEventListenerInitialization() {
 			websitePreview.style.transition = "0s";	
 			documentBodyElement.insertBefore(backgroundContent, documentBodyElement.firstChild);
 			
-			checkAnimationDuration();
 			setTimeout(() => {										//This is done in order to make the original 
 				websitePreviewExpanded.className = "expandedState";
 				websitePreview.classList.add("expandedState");
-			}, transitionDurationTimeoutFrequency);				
+			}, 20);				
 		}, {passive:true});
 }
 
