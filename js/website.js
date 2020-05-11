@@ -31,7 +31,6 @@ function variableInitialization() {
 	pageLinks = document.getElementsByClassName("pageLink");	
 	
 	transitionTimeMedium = getComputedStyle(documentBodyElement).getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
-	mobileDevice = getComputedStyle(documentBodyElement).getPropertyValue("--mobile-device");
 	
 	websitePreviewExpandedMap = new Map();
 }
@@ -250,23 +249,21 @@ function mobileEventListenerInitialization() {
 
 /* This Function asyncronusly load the content of the DOM img elements */
 function imageLoading() {
-	let backgroundImage = new Image();
 	/* The full background image is loaded when ready and not at the initial page loading.
 	 * Instead a lower resolution and blurry version of the background image is loaded in the css file.
 	 * This allows the user to interact much quicker with the page and lesser the probability of a page crash.
 	 * Whenever the full image is ready the two images are swapped with a transition in between.
 	 */
-	backgroundImage.onload = () => { 
+	let backgroundImage = new Image();
+	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
+	backgroundImage.addEventListener("load", function() { 
 		let backgroundElement = document.getElementById("background");
 		let backgroundElementLoaded = backgroundElement.cloneNode(true);
-		backgroundElementLoaded.style.backgroundImage = "url(" + backgroundImage.src + ")";
+		backgroundElementLoaded.style.backgroundImage = "url(" + backgroundImage.src + ")"; //Setting the src wouldn't allow the new image to use the css style already calculated
 		backgroundElement.before(backgroundElementLoaded);
 		backgroundElement.classList.add("contentLoaded");
-		setTimeout(() => {
-			backgroundElement.parentElement.removeChild(backgroundElement);
-		}, 500); 
-	}
-	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
+		setTimeout(() => documentBodyElement.removeChild(backgroundElement), transitionTimeMedium); 
+	}, {passive:true});
 	
 	let githubLinkElement = document.getElementById("githubLink");
 	githubLinkElement.src = "./images/socialNetworksLinks/githubLink.jpg";
@@ -287,7 +284,7 @@ function imageLoading() {
 
 /* This Function toggle the class mobileExpanded in the hamburgerMenu element */
 function toggleExpandHamburgerMenu() {		
-	if(mobileDevice == "1")
+	if(mobileDevice)
 		header.classList.toggle("mobileExpanded");	
 }
 
@@ -305,5 +302,8 @@ function isBrowserEdge() {
 function updateWindowSize(){
 	documentBodyElement.style.height = window.innerHeight + "px";
 	windowInnerWidth = window.innerWidth;
-	mobileDevice = getComputedStyle(documentBodyElement).getPropertyValue("--mobile-device");
+	if(windowInnerWidth < 1081)
+		mobileDevice = 1
+	else 
+		mobileDevice = 0;
 }
