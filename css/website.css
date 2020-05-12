@@ -32,8 +32,6 @@
 		
 	--scaling-factor-increase:1;
 	--scaling-factor-decrease:1;
-	
-	--mobile-device:0;
 }
 
 @media (hover:hover) {
@@ -492,8 +490,6 @@ h1, h2 {
 		--profilePic-size:23vmin;
 		--presentationCard-height:80vmin;
 		--presentationCard-width:75vmin;		
-			
-		--mobile-device:1;
 	}
 	
 	#header {

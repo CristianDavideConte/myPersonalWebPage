@@ -217,6 +217,15 @@ function desktopEventListenerInitialization() {
 				websitePreview.classList.add("expandedState");
 			}, 20);				
 		}, {passive:true});
+			
+		let githubLinkElement = document.getElementById("githubLink");
+		githubLinkElement.addEventListener("click", () => window.open("https://github.com/CristianDavideConte"));
+		
+		let instagramLinkElement = document.getElementById("instagramLink");
+		instagramLinkElement.addEventListener("click", () => window.open("https://www.instagram.com/cristian_davide_conte/?hl=it"));
+			
+		let facebookLinkElement = document.getElementById("facebookLink");
+		facebookLinkElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));		
 }
 
 var test = 0;
@@ -264,16 +273,6 @@ function imageLoading() {
 		backgroundElement.classList.add("contentLoaded");
 		setTimeout(() => documentBodyElement.removeChild(backgroundElement), transitionTimeMedium); 
 	}, {passive:true});
-	
-	let githubLinkElement = document.getElementById("githubLink");
-	githubLinkElement.addEventListener("click", () => window.open("https://github.com/CristianDavideConte"));
-	
-	let instagramLinkElement = document.getElementById("instagramLink");
-	instagramLinkElement.addEventListener("click", () => window.open("https://www.instagram.com/cristian_davide_conte/?hl=it"));
-	
-	
-	let facebookLinkElement = document.getElementById("facebookLink");
-	facebookLinkElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));		
 	
 	let profilePicElement = document.getElementById("profilePic");
 	profilePicElement.src = "./images/profilePictures/profilePicture.jpg";	
