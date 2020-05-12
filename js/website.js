@@ -61,7 +61,7 @@ function desktopEventListenerInitialization() {
 			if(partialScrollAmmount < totalScrollAmmount)
 				setTimeout(smoothScroll, 10);
 		}
-	}, {passive:false});
+	}, {passive:true});
 	
 	let carouselButtonMouseDownInterval;
 	function carouselButtonMouseDownIntervalSet(carouselButtons) {
@@ -130,23 +130,23 @@ function desktopEventListenerInitialization() {
 				let websitePreviewExpanded = document.createElement("div");
 				websitePreviewExpanded.id = "websitePreviewExpanded";	
 				
-				let websitePreviewExpandedTitleSectionContent = websitePreview.firstElementChild.cloneNode(true);
-				websitePreviewExpandedTitleSectionContent.className = "websitePreviewExpandedTitleSectionContent";
-				websitePreviewExpanded.appendChild(websitePreviewExpandedTitleSectionContent);
+				let websitePreviewExpandedImage = websitePreview.firstElementChild.cloneNode(true);
+				websitePreviewExpandedImage.className = "websitePreviewExpandedImage";
+				websitePreviewExpanded.appendChild(websitePreviewExpandedImage);
 				
 				let dataTitle = websitePreview.getAttribute("data-title");
 				if(dataTitle != null) {
-					let websitePreviewExpandedTitleSection = document.createElement("div");
-					websitePreviewExpandedTitleSection.className = "websitePreviewExpandedTitleSection";
-					websitePreviewExpandedTitleSection.innerHTML = dataTitle;			
-					websitePreviewExpanded.appendChild(websitePreviewExpandedTitleSection);
+					let websitePreviewExpandedTitle = document.createElement("div");
+					websitePreviewExpandedTitle.className = "websitePreviewExpandedTitle";
+					websitePreviewExpandedTitle.innerHTML = dataTitle;			
+					websitePreviewExpanded.appendChild(websitePreviewExpandedTitle);
 				}
 				
 				let viewButtonsSection = document.createElement("div");
 				viewButtonsSection.id = "websitePreviewExpandedButtonSection";
 				
 				let dataCode = websitePreview.getAttribute("data-code");
-				if(dataCode != null) {
+				if(dataCode != null) {													//There could be a project that isn't open-source
 					let viewCodeButton = document.createElement("button");
 					viewCodeButton.innerHTML = "View Code";
 					viewCodeButton.className = "websitePreviewExpandedButton";
@@ -155,7 +155,7 @@ function desktopEventListenerInitialization() {
 				}
 				
 				let dataDemo = websitePreview.getAttribute("data-demo");
-				if(dataDemo != null) {
+				if(dataDemo != null) {													//There could be a project that hasn't got a demo ready yet
 					let viewDemoButton = document.createElement("button");
 					viewDemoButton.innerHTML = "View Demo";
 					viewDemoButton.className = "websitePreviewExpandedButton";
