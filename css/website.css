@@ -4,6 +4,7 @@
   font-style:normal;
   font-weight:400;
   src:url("../fonts/BalooBhaina2/BalooBhaina2-Regular.ttf");
+  font-display: swap;												/* Allow the default font to be visible while this one is loading */
 }
 
 :root {	
@@ -428,8 +429,8 @@ h1, h2 {
 	font-size:0;
 	border-radius:var(--boxShapedElement-border-radius);
 	transition:var(--transition-time-medium);
-	background:rgba(0,0,0,0.5);
-	box-shadow:  0 0 1rem rgba(50,50,50,0.5); 
+	background:rgba(100,100,100,0.2);
+	box-shadow:  0 0 2rem rgba(0,0,0,1); 
 }
 
 .expandedState .websitePreviewExpandedButton {
