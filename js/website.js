@@ -263,19 +263,26 @@ function imageLoading() {
 	 * This allows the user to interact much quicker with the page and lesser the probability of a page crash.
 	 * Whenever the full image is ready the two images are swapped with a transition in between.
 	 */
+	let backgroundElement = document.getElementById("background");
+	let backgroundElementLoaded = backgroundElement.cloneNode(true);
 	let backgroundImage = new Image();
 	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
 	backgroundImage.addEventListener("load", function() { 
-		let backgroundElement = document.getElementById("background");
-		let backgroundElementLoaded = backgroundElement.cloneNode(true);
 		backgroundElementLoaded.style.backgroundImage = "url(" + backgroundImage.src + ")"; //Setting the src wouldn't allow the new image to use the css style already calculated
 		backgroundElement.before(backgroundElementLoaded);
 		backgroundElement.classList.add("contentLoaded");
 		setTimeout(() => documentBodyElement.removeChild(backgroundElement), transitionTimeMedium); 
 	}, {passive:true});
 	
+	/* The full profile image is loaded when ready and not at the initial page loading.
+	 * Instead a lower resolution and blurry version of the image is loaded in the html file.
+	 * This allows the user to interact much quicker with the page and lesser the probability of a page crash.
+	 * Whenever the full image is ready the two images are swapped with no transition in between.
+	 */
 	let profilePicElement = document.getElementById("profilePic");
-	profilePicElement.src = "./images/profilePictures/profilePicture.jpg";	
+	let profileImageLoaded = new Image();
+	profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";	
+	profileImageLoaded.addEventListener("load", () => profilePicElement.src = profileImageLoaded.src, {passive:true});
 }
 
 /* This Function toggle the class mobileExpanded in the hamburgerMenu element */
