@@ -229,7 +229,7 @@ p {
 }
  
 #githubLink:after {
-	background: radial-gradient(circle, rgba(72,73,80,1) 0%, rgba(29,28,28,1) 100%);
+	background: radial-gradient(circle, rgba(30,30,30,1) 61%, rgba(57,57,57,1) 62%);
 }
 
 #facebookLink:after {

@@ -6,7 +6,7 @@ var hamburgerMenu;																//The HTML element with the	id "hamburgerMenu"
 var pageLinks; 																	//All HTML element with the class "pageLink", shown in the header to navigate through the website' sections
 var websitePreviewExpandedMap; 													//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
 var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
-var mobileDevice; 																//The --mobile-device css variable, used to know if the css styling for mobile is currently applied
+var mobileMode; 																//Indicates if the css for mobile is currently beign applied
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {	
@@ -280,7 +280,7 @@ function imageLoading() {
 
 /* This Function toggle the class mobileExpanded in the hamburgerMenu element */
 function toggleExpandHamburgerMenu() {		
-	if(mobileDevice)
+	if(mobileMode)
 		header.classList.toggle("mobileExpanded");	
 }
 
@@ -299,7 +299,7 @@ function updateWindowSize(){
 	documentBodyElement.style.height = window.innerHeight + "px";
 	windowInnerWidth = window.innerWidth;
 	if(windowInnerWidth < 1081)
-		mobileDevice = 1
+		mobileMode = 1
 	else 
-		mobileDevice = 0;
+		mobileMode = 0;
 }
