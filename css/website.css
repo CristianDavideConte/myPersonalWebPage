@@ -453,17 +453,15 @@ h1, h2 {
 	border-radius:100%;
 	outline:none;
 	border:none;
+	box-shadow:0 0 1rem rgba(0,0,0,1);  
 	background:rgba(0,0,0,0.3);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 	transition:var(--transition-time-quick);
 }
 
-.carouselButton:focus {
-	background:rgba(0,0,0,0.5);
-}
-
 .carouselButton:active {
+	box-shadow:0 0 0.5rem rgba(0,0,0,1); 
 	-webkit-transform:scale3d(var(--scaling-factor-decrease), var(--scaling-factor-decrease), var(--scaling-factor-decrease));
 	transform:scale3d(var(--scaling-factor-decrease), var(--scaling-factor-decrease), var(--scaling-factor-decrease));
 }
