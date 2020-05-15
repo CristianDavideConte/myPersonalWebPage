@@ -46,11 +46,7 @@
 	color:white; 
 	-webkit-tap-highlight-color:rgba(0,0,0,0);		
 	user-drag:none !important; 
-	user-select:none !important;
-	-moz-user-select:none !important;
 	-webkit-user-drag:none !important;
-	-webkit-user-select:none !important;
-	-ms-user-select:none !important;
 }
 
 html {				
@@ -68,11 +64,6 @@ html {
 
 body {
 	margin:0;
-	width:100%;
-	position:fixed;
-	overflow:hidden;	
-	overscroll-behavior-y:none;
-	-webkit-overflow-scrolling:touch;								/* Safari */
 }
 
 .contentLoaded {

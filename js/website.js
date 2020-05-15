@@ -43,7 +43,6 @@ function desktopEventListenerInitialization() {
 	for(const pageLink of pageLinks)															
 		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});							//Whenever a HTML element with the class "pageLink" is pressed the DOM is scrolled to the corresponding section 
 	
-	onClick="javascript:window.open('mailto:mail@domain.com', 'mail');event.preventDefault()";
 	let websiteShowcase = document.getElementsByClassName("websiteShowcase")[0];
 	websiteShowcase.addEventListener("wheel", (event) => {
 		/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
@@ -52,7 +51,7 @@ function desktopEventListenerInitialization() {
 		 */
 		let scrollDirection = Math.sign(event.deltaY);
 		let totalScrollAmmount = windowInnerWidth/20;
-		let scrollDistance = windowInnerWidth/100;
+		let scrollDistance = windowInnerWidth/200;
 		let partialScrollAmmount = 0;
 		
 		smoothScroll(); 
