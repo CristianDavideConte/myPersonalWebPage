@@ -6,9 +6,9 @@
 		<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
 		<title>Cristian Davide Conte</title>		
 		<link rel = "icon" type = "image/jpg" href = "./images/favicon.jpg" />
-		<link rel = "stylesheet" type = "text/css" href = "./css/website.css">   
+		<link rel = "stylesheet" type = "text/css" href = "./css/website.css"> 
 		<script src = "./js/website.js" async></script>
-		<script src="https://kit.fontawesome.com/f48b5d4594.js" crossorigin="anonymous" async></script>
+		<script src="https://kit.fontawesome.com/f48b5d4594.js" crossorigin="anonymous" async></script>  
 	</head>
 	
 	<body onload = "init()">
@@ -37,10 +37,10 @@
 				</a>
 			</div>
 			<div id = "socialNetworks">
-				<a id = "githubContact" class="fab fa-github"></a>
-				<a id = "facebookContact" class="fab fa-facebook-f"></a>
-				<a id = "instagramContact" class="fab fa-instagram"></a>
-				<a id = "mailContact" class="fas fa-envelope"></a>
+				<a id = "githubContact" class = "fab fa-github"></a>
+				<a id = "facebookContact" class = "fab fa-facebook-f"></a>
+				<a id = "instagramContact" class = "fab fa-instagram"></a>
+				<a id = "mailContact" class = "fas fa-envelope"></a>
 			</div>
 		</nav>
 		<div id = "content">
@@ -104,10 +104,15 @@
 				<div class = "pageSeparator"></div>
 			</div>
 			<div id = "contactMe" class = "page">
-				<div class = "title">
-					<h2>Contact me at: cristiandavideconte@gmail.com</h2>
-				</div>
-				<div class = "pageSeparator"></div>
+				<form id = "contactMeForm" autocomplete="off">
+					<label>Name</label>
+					<input id = "contactMeFormName"></input>
+					<label>Subject</label>
+					<input id = "contactMeFormSubject"></input>
+					<label>Message</label>
+					<textarea id = "contactMeFormBody"></textarea>
+					<button  id = "contactMeFormSendButton">Send</button>
+				</form>
 			</div>	
 		</div>
 	</body>

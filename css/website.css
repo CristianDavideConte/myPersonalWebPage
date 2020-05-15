@@ -49,6 +49,10 @@
 	-webkit-user-drag:none !important;
 }
 
+*::-webkit-scrollbar {
+	display:none;
+}
+
 html {				
 	width:100vw;
 	height:100vh;
@@ -116,10 +120,6 @@ p {
 	scroll-behavior:smooth;
 	-ms-overflow-style:none !important;								/* Edge */
 	scrollbar-width:none !important;									/* Firefox */
-}
-
-#content::-webkit-scrollbar {
-	display:none;
 }
 
 #header {	
@@ -456,6 +456,82 @@ h1, h2 {
 	transform:scale3d(var(--scaling-factor-decrease), var(--scaling-factor-decrease), var(--scaling-factor-decrease));
 }
 
+#contactMeForm {
+	display:flex;
+	flex-direction:column;
+	width: 50%;
+	height: calc(100% - var(--header-elements-height) - 2 * var(--header-elements-padding));
+	margin-top:auto;
+}
+
+#contactMeForm > label {
+	z-index:1;
+	box-sizing: border-box;
+	display:flex;
+	align-items:center;
+	font-size: 3em;
+	margin: auto auto 0 auto;
+	padding: 0 10% 0 10%;
+	border-radius:1rem;
+	text-shadow:var(--textshadow-offset) var(--textshadow-offset) var(--textshadow-radius) #14141f;
+	backface-visibility:hidden;						/* Blurry text fix */
+	background:rgba(0,0,0,0.7);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
+}
+
+#contactMeFormName,
+#contactMeFormSubject, 
+#contactMeFormBody,
+#contactMeFormSendButton {
+	cursor:pointer;
+	box-sizing: border-box;
+	font-size: 2em;
+	padding: 2%;
+	border:none;
+	outline: none;
+	border-radius:1rem;
+	box-shadow:0 0 0.3rem rgba(0,0,0,1);  
+}
+
+#contactMeFormName:focus,
+#contactMeFormSubject:focus, 
+#contactMeFormBody:focus {
+	cursor:auto;
+}
+
+#contactMeFormName,
+#contactMeFormSubject, 
+#contactMeFormBody {
+	overflow: auto;
+	background:rgba(0,0,0,0.4);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius));
+}
+
+#contactMeFormName,
+#contactMeFormSubject {
+	text-align:center;
+	font-size: 3em;
+	font-family:"Baloo Bhaina 2"; 
+	height: 10%;
+}
+
+#contactMeFormBody {
+	height: 30%;
+	margin: 0 0 5% 0;
+}
+
+#contactMeFormSendButton {
+	width: 50%;
+	height: 10%;
+	font-size: 3em;
+	background:rgba(0,0,0,0.7);
+	margin:auto;
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
+}
+
 @media only screen and (max-width:1080px) {
 	@keyframes increaseSize{
 		from {
@@ -595,6 +671,10 @@ h1, h2 {
 
 	.websitePreviewExpandedButton {
 		padding:1em;
+	}
+	
+	#contactMeForm {
+		width: 75%;
 	}
 }
 
