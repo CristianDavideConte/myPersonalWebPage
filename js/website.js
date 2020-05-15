@@ -37,12 +37,13 @@ function variableInitialization() {
 
 /* This function binds all the HTML elements that can be interacted to their mouse and keyboard eventHandlers */
 function desktopEventListenerInitialization() {
-	window.addEventListener("resize", updateWindowSize);															//Updates the height and the width whenever the window's resized
+	window.addEventListener("resize", updateWindowSize, {passive:true});										//Updates the height and the width whenever the window's resized
 	hamburgerMenu.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});							//When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function 
 	
 	for(const pageLink of pageLinks)															
 		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});							//Whenever a HTML element with the class "pageLink" is pressed the DOM is scrolled to the corresponding section 
 	
+	onClick="javascript:window.open('mailto:mail@domain.com', 'mail');event.preventDefault()";
 	let websiteShowcase = document.getElementsByClassName("websiteShowcase")[0];
 	websiteShowcase.addEventListener("wheel", (event) => {
 		/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
@@ -84,7 +85,7 @@ function desktopEventListenerInitialization() {
 		
 		if(carouselButtonMouseDownInterval == null)
 			carouselButtonMouseDownInterval = setInterval(() => carouselButtonMouseDownIntervalSet(carouselButtons[0]), 10);
-		window.addEventListener("mouseup", carouselButtonMouseDownIntervalReset);	
+		window.addEventListener("mouseup", carouselButtonMouseDownIntervalReset, {passive:true});	
 	}, {passive:true});
 	
 	carouselButtons[1].addEventListener("mousedown", () => {
@@ -96,7 +97,7 @@ function desktopEventListenerInitialization() {
 		
 		if(carouselButtonMouseDownInterval == null)
 			carouselButtonMouseDownInterval = setInterval(() => carouselButtonMouseDownIntervalSet(carouselButtons[1]), 10);
-		window.addEventListener("mouseup", carouselButtonMouseDownIntervalReset);	
+		window.addEventListener("mouseup", carouselButtonMouseDownIntervalReset, {passive:true});	
 	}, {passive:true});
 	
 	websitePreviews = document.getElementsByClassName("websitePreview");
@@ -218,14 +219,17 @@ function desktopEventListenerInitialization() {
 			}, 20);				
 		}, {passive:true});
 			
-		let githubLinkElement = document.getElementById("githubLink");
-		githubLinkElement.addEventListener("click", () => window.open("https://github.com/CristianDavideConte"));
+		let githubContactElement = document.getElementById("githubContact");
+		githubContactElement.addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
 		
-		let instagramLinkElement = document.getElementById("instagramLink");
-		instagramLinkElement.addEventListener("click", () => window.open("https://www.instagram.com/cristian_davide_conte/?hl=it"));
+		let instagramContactElement = document.getElementById("instagramContact");
+		instagramContactElement.addEventListener("click", () => window.open("https://www.instagram.com/cristian_davide_conte/?hl=it"), {passive:true});
 			
-		let facebookLinkElement = document.getElementById("facebookLink");
-		facebookLinkElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"));		
+		let facebookContactElement = document.getElementById("facebookContact");
+		facebookContactElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"), {passive:true});		
+		
+		let mailContactElement = document.getElementById("mailContact");
+		mailContactElement.addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 }
 
 var test = 0;
@@ -289,14 +293,6 @@ function imageLoading() {
 function toggleExpandHamburgerMenu() {		
 	if(mobileMode)
 		header.classList.toggle("mobileExpanded");	
-}
-
-/* This Function returns true if the browser used is the Microsoft Old Edge, false otherwise.
- * The result is determined by looking at the browser's user agent
- */
-function isBrowserEdge() {
-	let chrome = navigator.userAgent.search("Chrome") == 81;
-	return chrome && navigator.userAgent.search("Edge") == 116;
 }
 
 /* This Function resets the body height to that of the inner browser

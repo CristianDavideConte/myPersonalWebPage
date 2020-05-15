@@ -10,7 +10,7 @@
 :root {	
 	--header-elements-height:4rem;
 	--header-elements-padding:1rem;	
-	--header-socialNetworks-div-width:calc(3*var(--header-elements-height) + 2*var(--header-elements-padding));
+	--header-socialNetworks-div-width:calc(4*var(--header-elements-height) + 3*var(--header-elements-padding));
 	
 	--profilePic-size:17vmin;
 	--presentationCard-height:60vmin;
@@ -197,28 +197,20 @@ p {
 	display:flex;
 }
 
-#githubLink,
-#facebookLink,
-#instagramLink { 
+#socialNetworks > a { 
 	display:flex;
 	justify-content:center;
 	align-items:center;
 	position: relative;
 	text-decoration: none;
 	font-size: 3.5em;
-	width:var(--header-elements-height);
-	height:var(--header-elements-height);
+	min-width:var(--header-elements-height);
+	min-height:var(--header-elements-height);
 	cursor:pointer;
 	-webkit-backface-visibility: hidden;			/* Safari Fix*/
 }
 
-#facebookLink {
-	font-size: 3em;
-}
-
-#githubLink:after, 
-#facebookLink:after,
-#instagramLink:after {
+#socialNetworks > a:after{
 	z-index:-1;
 	position: absolute; 
 	content: "";
@@ -226,26 +218,33 @@ p {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	border-radius:100%; 
+	border-radius:50%; 
 	opacity: 0;
 	transition:var(--transition-time-quick) ease-out;
 }
- 
-#githubLink:after {
+
+#socialNetworks > #mailContact,
+#socialNetworks > #facebookContact {
+	font-size: 3em;
+}
+
+#mailContact:after {
+background: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
+}
+
+#githubContact:after {
 	background: radial-gradient(circle, rgba(30,30,30,1) 61%, rgba(57,57,57,1) 62%);
 }
 
-#facebookLink:after {
+#facebookContact:after {
 	background: linear-gradient(0deg, rgba(0,48,255,1) 0%, rgba(9,187,255,1) 100%);
 }
 
-#instagramLink:after {
+#instagramContact:after {
 	background: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
 }
 
-#githubLink:hover:after, 
-#facebookLink:hover:after, 
-#instagramLink:hover:after { 
+#socialNetworks > a:hover:after { 
   opacity: 1;
 }
 
@@ -484,6 +483,7 @@ h1, h2 {
 	
 	:root {	
 		--header-elements-height:50px;
+		--header-elements-height-reduced:36px;
 		--header-elements-padding:10px;		
 		--bar-margin:15px;
 		--bar-width:40px;
@@ -553,16 +553,17 @@ h1, h2 {
 		transition: var(--transition-time);
 	}
 	
-	#githubLink,
-	#facebookLink,
-	#instagramLink { 
+	#socialNetworks > a { 
 		font-size: 40px;
 		transition: var(--transition-time);
 	}
-	
-	#githubLink:after, 
-	#facebookLink:after,
-	#instagramLink:after { 
+		
+	#socialNetworks > #mailContact,
+	#socialNetworks > #facebookContact {
+		font-size: var(--header-elements-height-reduced);
+	}
+
+	#socialNetworks > a:after { 
 		opacity: 1;
 	}
 	
@@ -571,22 +572,16 @@ h1, h2 {
 		transform:translate3d(var(--socialNetworks-offsetY-translate3d), 0, 0) rotate3d(0,0,1, 90deg);
 	}
 	
-	.mobileExpanded #githubLink, 
-	.mobileExpanded #facebookLink,
-	.mobileExpanded #instagramLink { 
+	.mobileExpanded #socialNetworks > a { 
 		-webkit-transform:rotate3d(0,0,1,-90deg);
 		transform:rotate3d(0,0,1, -90deg);
 	}	
 	
-	.mobileExpanded #githubLink:after, 
-	.mobileExpanded #facebookLink:after,
-	.mobileExpanded #instagramLink:after { 
+	.mobileExpanded #socialNetworks > a:after { 
 		opacity: 0;
 	}
 	
-	.mobileExpanded #githubLink:hover:after, 
-	.mobileExpanded #facebookLink:hover:after,
-	.mobileExpanded #instagramLink:hover:after { 
+	.mobileExpanded #socialNetworks > a:hover:after { 
 		opacity: 1;
 	}
 	
