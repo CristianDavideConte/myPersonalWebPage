@@ -74,10 +74,8 @@ function desktopEventListenerInitialization() {
 		let eventTargetClassName = eventTarget.className;
 		let eventTargetParentClassName = eventTarget.parentElement.className;
 		if(eventTargetID != "presentationCard" && eventTargetID != "contactMeFormBody" && eventTargetID != "presentationCardText" &&  
-			eventTargetParentClassName != "websiteShowcase" && eventTargetParentClassName != "websitePreview" && eventTargetClassName != "websiteShowcase") {
+			eventTargetParentClassName != "websiteShowcase" && eventTargetParentClassName != "websitePreview" && eventTargetClassName != "websiteShowcase") 
 				smoothPageScroll(Math.sign(firstTouchYPosition - event.changedTouches[0].clientY));
-				event.preventDefault();
-		}
 	}, {passive:false});
 	
 	contentElement.addEventListener("wheel", event => {	
