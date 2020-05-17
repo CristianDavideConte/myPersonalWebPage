@@ -220,7 +220,7 @@ p {
 }
 
 #mailContact:after {
-background: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
+	background: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
 }
 
 #githubContact:after {

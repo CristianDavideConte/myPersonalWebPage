@@ -41,12 +41,43 @@ function desktopEventListenerInitialization() {
 	window.addEventListener("resize", updateWindowSize, {passive:true});										//Updates the height and the width whenever the window's resized
 	headerElement.addEventListener("wheel", event => event.stopPropagation(), {passive:false});
 			
+	documentBodyElement.addEventListener("keydown", event => {
+		if(event.target.tagName == "BODY") {
+			let keyName = event.key;
+			if(keyName == "ArrowUp" || keyName == "ArrowLeft") {
+				smoothPageScroll(-1);
+				event.preventDefault();
+				return;
+			}else if(keyName == "ArrowDown" || keyName == "ArrowRight") {
+				smoothPageScroll(1);
+				event.preventDefault();
+				return;
+			}
+		}
+	}, {passive:false});
+
+	let firstTouchYPosition;
+	contentElement.addEventListener("touchstart", event => firstTouchYPosition = event.targetTouches[0].clientY, {passive: false});
+	contentElement.addEventListener("touchmove", event => {	
+		if(event.target.className == "page") 
+			event.preventDefault();
+	}, {passive:false});
+	contentElement.addEventListener("touchend", event => {	
+		if(event.target.className == "page") {
+			smoothPageScroll(Math.sign(firstTouchYPosition - event.changedTouches[0].clientY));
+			event.preventDefault();
+		}
+	}, {passive:false});
+	
 	contentElement.addEventListener("wheel", event => {	
 		if(event.target.className == "page") {
 			smoothPageScroll(Math.sign(event.deltaY));
 			event.preventDefault();
 		}
 	}, {passive:false});
+	
+
+	
 	hamburgerMenuElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});					//When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function 
 	
 	for(const pageLinkElement of pageLinksElements)															
