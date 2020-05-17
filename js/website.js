@@ -57,22 +57,38 @@ function desktopEventListenerInitialization() {
 	}, {passive:false});
 
 	let firstTouchYPosition;
-	contentElement.addEventListener("touchstart", event => firstTouchYPosition = event.targetTouches[0].clientY, {passive: false});
+	contentElement.addEventListener("touchstart", event => firstTouchYPosition = event.targetTouches[0].clientY, {passive: false});	
 	contentElement.addEventListener("touchmove", event => {	
-		if(event.target.className == "page") 
-			event.preventDefault();
+		let eventTarget = event.target;
+		let eventTargetID = eventTarget.id;
+		let eventTargetClassName = eventTarget.className;
+		let eventTargetParentClassName = eventTarget.parentElement.className;
+		if(eventTargetID != "presentationCard" && eventTargetID != "contactMeFormBody" && eventTargetID != "presentationCardText" &&  
+			eventTargetParentClassName != "websiteShowcase" && eventTargetParentClassName != "websitePreview" && eventTargetClassName != "websiteShowcase")
+				event.preventDefault();
 	}, {passive:false});
-	contentElement.addEventListener("touchend", event => {	
-		if(event.target.className == "page") {
-			smoothPageScroll(Math.sign(firstTouchYPosition - event.changedTouches[0].clientY));
-			event.preventDefault();
+	
+	contentElement.addEventListener("touchend", event => {
+		let eventTarget = event.target;
+		let eventTargetID = eventTarget.id;
+		let eventTargetClassName = eventTarget.className;
+		let eventTargetParentClassName = eventTarget.parentElement.className;
+		if(eventTargetID != "presentationCard" && eventTargetID != "contactMeFormBody" && eventTargetID != "presentationCardText" &&  
+			eventTargetParentClassName != "websiteShowcase" && eventTargetParentClassName != "websitePreview" && eventTargetClassName != "websiteShowcase") {
+				smoothPageScroll(Math.sign(firstTouchYPosition - event.changedTouches[0].clientY));
+				event.preventDefault();
 		}
 	}, {passive:false});
 	
 	contentElement.addEventListener("wheel", event => {	
-		if(event.target.className == "page") {
-			smoothPageScroll(Math.sign(event.deltaY));
-			event.preventDefault();
+		let eventTarget = event.target;
+		let eventTargetID = eventTarget.id;
+		let eventTargetClassName = eventTarget.className;
+		let eventTargetParentClassName = eventTarget.parentElement.className;
+		if(eventTargetID != "presentationCard" && eventTargetID != "contactMeFormBody" && eventTargetID != "presentationCardText" &&  
+			eventTargetParentClassName != "websiteShowcase" && eventTargetParentClassName != "websitePreview" && eventTargetClassName != "websiteShowcase") {
+				smoothPageScroll(Math.sign(event.deltaY));
+				event.preventDefault();
 		}
 	}, {passive:false});
 	
