@@ -1,9 +1,12 @@
 var windowInnerWidth;															//A shortcut for the DOM element window.innerWidth
+var windowInnerHeight;															//A shortcut for the DOM element window.innerHeight
 var windowPosition;																//The scrollTop value of the window, used to prevent the DOM from scrolling after a screen orientation change 						
 var documentBodyElement;														//A shortcut for the HTML element document.body 
-var header;																		//The HTML element with the id "header", used as the site navbar 
-var hamburgerMenu;																//The HTML element with the	id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px 								
-var pageLinks; 																	//All HTML element with the class "pageLink", shown in the header to navigate through the website' sections
+var headerElement;																//The HTML element with the id "header", used as the website navbar 
+var hamburgerMenuElement;														//The HTML element with the	id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px 								
+var pageLinksElements; 															//All HTML element with the class "pageLink", shown in the header to navigate through the website' sections
+var contentElement;																//The HTML element with the id "content", used as the website main container
+var currentPageIndex;															//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
 var websitePreviewExpandedMap; 													//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
 var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
 var mobileMode; 																//Indicates if the css for mobile is currently beign applied
@@ -12,9 +15,6 @@ var mobileMode; 																//Indicates if the css for mobile is currently b
 function init() {	
 	variableInitialization();													//Binds the js variables to the corresponding HTML elements
 	desktopEventListenerInitialization();										//Initializes all the mouse and keyboard eventHandlers 
-		
-	//if ("ontouchstart" in window) 											//If the device is touch capable the support to the touchstartEvent is added
-		//mobileEventListenerInitialization();									//Initializes all the touch related eventHandlers 
 
 	imageLoading();																//Initializes all the HTML img elements' contents  
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
@@ -26,9 +26,10 @@ function variableInitialization() {
 	windowInnerWidth = window.innerWidth;
 	documentBodyElement = document.body;
 	
-	header = document.getElementById("header");
-	hamburgerMenu = document.getElementById("hamburgerMenu");	
-	pageLinks = document.getElementsByClassName("pageLink");	
+	headerElement = document.getElementById("header");
+	hamburgerMenuElement = document.getElementById("hamburgerMenu");	
+	pageLinksElements = document.getElementsByClassName("pageLink");	
+	contentElement = document.getElementById("content");
 	
 	transitionTimeMedium = getComputedStyle(documentBodyElement).getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
 	
@@ -38,10 +39,18 @@ function variableInitialization() {
 /* This function binds all the HTML elements that can be interacted to their mouse and keyboard eventHandlers */
 function desktopEventListenerInitialization() {
 	window.addEventListener("resize", updateWindowSize, {passive:true});										//Updates the height and the width whenever the window's resized
-	hamburgerMenu.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});							//When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function 
+	headerElement.addEventListener("wheel", event => event.stopPropagation(), {passive:false});
+			
+	contentElement.addEventListener("wheel", event => {	
+		if(event.target.className == "page") {
+			smoothPageScroll(Math.sign(event.deltaY));
+			event.preventDefault();
+		}
+	}, {passive:false});
+	hamburgerMenuElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});					//When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function 
 	
-	for(const pageLink of pageLinks)															
-		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});							//Whenever a HTML element with the class "pageLink" is pressed the DOM is scrolled to the corresponding section 
+	for(const pageLinkElement of pageLinksElements)															
+		pageLinkElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});				//Whenever a HTML element with the class "pageLink" is pressed the DOM is scrolled to the corresponding section 						
 	
 	let websiteShowcase = document.getElementsByClassName("websiteShowcase")[0];
 	websiteShowcase.addEventListener("wheel", (event) => {
@@ -108,13 +117,7 @@ function desktopEventListenerInitialization() {
 			 * The top and left offset have to take the scaling into consideration otherwise 
 			 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
 			 * The initial position is instead calculated adding the hover effect's expansion.
-			 */
-			//let scalingFactor = getComputedStyle(documentBodyElement).getPropertyValue("--scaling-factor-increase");
-			//let websitePreviewTopPosition = websitePreviewBoundingRectangle.top;				
-			//let websitePreviewLeftPosition = websitePreviewBoundingRectangle.left;
-			//let websitePreviewTopOffset = (websitePreviewBoundingRectangle.height * scalingFactor - websitePreviewBoundingRectangle.height) / 2;
-			//let websitePreviewLeftOffset = (websitePreviewBoundingRectangle.width * scalingFactor - websitePreviewBoundingRectangle.width) / 2;
-			
+			 */			
 			let websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
 			let documentBodyElementStyle = documentBodyElement.style;
 			documentBodyElementStyle.setProperty("--websitePreview-original-top-position", websitePreviewBoundingRectangle.top + "px");
@@ -195,7 +198,7 @@ function desktopEventListenerInitialization() {
 						websitePreviewExpanded.className = "";
 						setTimeout(() => {
 							listenersAlreadyTriggered = false;
-							header.style = null; 
+							headerElement.style = null; 
 							websitePreview.classList.remove("expandedState");
 							documentBodyElement.removeChild(backgroundContent);
 							setTimeout(() => {
@@ -208,7 +211,7 @@ function desktopEventListenerInitialization() {
 				websitePreviewExpandedMap.set(websitePreview, backgroundContent);
 			}
 				
-			header.style.pointerEvents = "none";
+			headerElement.style.pointerEvents = "none";
 			websitePreview.style.transition = "0s";	
 			documentBodyElement.insertBefore(backgroundContent, documentBodyElement.firstChild);
 			
@@ -247,18 +250,6 @@ function lagTest() {
 	}
 }
 
-/* This function binds all the HTML elements that can be interacted to their touch related eventHandlers /
-function mobileEventListenerInitialization() {
-	hamburgerMenu.addEventListener("touchend", event => {
-		toggleExpandHamburgerMenu();
-		event.preventDefault();
-	}, {passive:false});
-	
-	for(const pageLink of pageLinks)															
-		pageLink.addEventListener("touchend", toggleExpandHamburgerMenu, {passive:true});							
-}
-*/
-
 /* This Function asyncronusly load the content of the DOM img elements */
 function imageLoading() {
 	/* The full background image is loaded when ready and not at the initial page loading.
@@ -291,15 +282,44 @@ function imageLoading() {
 /* This Function toggle the class mobileExpanded in the hamburgerMenu element */
 function toggleExpandHamburgerMenu() {		
 	if(mobileMode)
-		header.classList.toggle("mobileExpanded");	
+		headerElement.classList.toggle("mobileExpanded");	
 }
 
-/* This Function resets the body height to that of the inner browser
- * This is used to fix the different height behaviour of the mobile browsers' navigation bars 
+/* This Function emulates the smooth scroll behaviour provided by css 
+ * taking into consideration the current page position.
+ * If the page is perfectly alligned with the screen 
+ * the scroll will change the displayed page.
+ * Otherwise the scroll will allign the page so that 
+ * the next scroll will be a page change.
+ * This is done to prevent the user to scroll on elements, change the offset of the page and then 
+ * keep that offset throughout the pages scrolling.
+ */
+function smoothPageScroll(direction) {
+	let contentElementscrollTop = contentElement.scrollTop;
+	currentPageIndex = Math.round(contentElementscrollTop / windowInnerHeight);
+	let pageOffset = currentPageIndex * windowInnerHeight - contentElementscrollTop;			//The offset measure by how much the page is not alligned with the screen
+
+	if(pageOffset == 0) 																		//Case 1: the page is already alligned with the screen height
+		contentElement.scrollTop += direction * windowInnerHeight;								//Then the page is changed with the previous or next one according to the scroll direction
+	else 																						//Case 2: a previous scroll has changed the current page offset and the page isn't alligned yet
+		if(direction * pageOffset > 0)															//Case 2/a: part of the next page is in the screen
+			contentElement.scrollTop += pageOffset;			
+		else 																					//Case 2/b: part of the previous page is in the screen
+			contentElement.scrollTop += direction * (windowInnerHeight + direction * pageOffset);
+}
+
+/* This Function:
+ * scrolls the contentElement if needed to avoid pages offset creation during resizing
+ * udates the windowInnerHeight and windowInnerWidth variables with the new window' values.
+ * resets the body height to that of the inner browser: this is used to fix the different height behaviour of the mobile browsers' navigation bars 
+ * check if the page can go to the mobileMode and activate the javascript related functions
  */
 function updateWindowSize(){
-	documentBodyElement.style.height = window.innerHeight + "px";
+	//contentElement.scrollTop += window.innerHeight - windowInnerHeight;				//Here windowInnerHeight hasn't been updated yet so it contains the old height value
+		
 	windowInnerWidth = window.innerWidth;
+	windowInnerHeight = window.innerHeight;
+	documentBodyElement.style.height = windowInnerHeight + "px";
 	if(windowInnerWidth < 1081)
 		mobileMode = 1
 	else 
