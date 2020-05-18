@@ -10,6 +10,7 @@ var currentPageIndex;															//The index of the HTML element with class "
 var websitePreviewExpandedMap; 													//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
 var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
 var mobileMode; 																//Indicates if the css for mobile is currently beign applied
+var supportsTouch;
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {	
@@ -32,7 +33,7 @@ function variableInitialization() {
 	contentElement = document.getElementById("content");
 	
 	transitionTimeMedium = getComputedStyle(documentBodyElement).getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
-	
+	supportsTouch = "ontouchstart" in window || navigator.msMaxTouchPoints;
 	websitePreviewExpandedMap = new Map();
 }
 
@@ -56,35 +57,36 @@ function desktopEventListenerInitialization() {
 		}
 	}, {passive:false});
 
-	let firstTouchYPosition = null;
-	let lastTouchYPosition = null;
 	let smoothScrollTimeout;
-	let pageIsScrolling = false;
 	
-	contentElement.addEventListener("wheel", event => {	
-		clearTimeout(smoothScrollTimeout);
-		smoothScrollTimeout = setTimeout( () => {
-			smoothPageScroll(Math.sign(event.deltaY));
-		}, 200);
-	}, {passive:true});
-	
-	contentElement.addEventListener("scroll", event => {
-		if(!pageIsScrolling) {
-			if(firstTouchYPosition != null) 
-				lastTouchYPosition = firstTouchYPosition;
-			
-			firstTouchYPosition = contentElement.scrollTop;
-			console.log("first",firstTouchYPosition,"last",lastTouchYPosition);
-			
+	if(supportsTouch) {
+		let firstTouchYPosition = null;
+		let lastTouchYPosition = null;
+		let pageIsScrolling = false;
+		contentElement.addEventListener("scroll", event => {
+			if(!pageIsScrolling) {
+				if(firstTouchYPosition != null) 
+					lastTouchYPosition = firstTouchYPosition;
+				
+				firstTouchYPosition = contentElement.scrollTop;
+				
+				clearTimeout(smoothScrollTimeout);
+				smoothScrollTimeout = setTimeout(() => {
+					pageIsScrolling = true;
+					smoothPageScroll(Math.sign(firstTouchYPosition - lastTouchYPosition));
+					setTimeout(() => pageIsScrolling = false, 1000);
+				},300);
+			}
+		}, {passive:false});
+	} else {	
+		contentElement.addEventListener("wheel", event => {	
 			clearTimeout(smoothScrollTimeout);
-			smoothScrollTimeout = setTimeout(() => {
-				pageIsScrolling = true;
-				smoothPageScroll(Math.sign(firstTouchYPosition - lastTouchYPosition));
-				setTimeout(() => pageIsScrolling = false, 1000);
-			},300);
-		}
-	}, {passive:false});
-
+			smoothScrollTimeout = setTimeout( () => {
+				smoothPageScroll(Math.sign(event.deltaY));
+			}, 300);
+		}, {passive:true});
+	}
+	
 	hamburgerMenuElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});					//When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function 
 	
 	for(const pageLinkElement of pageLinksElements)															
@@ -340,7 +342,7 @@ function smoothPageScroll(direction) {
 	if(pageOffset == 0) 																		//Case 1: the page is already alligned with the screen height
 		contentElement.scrollTop += direction * windowInnerHeight;								//Then the page is changed with the previous or next one according to the scroll direction
 	else 																						//Case 2: a previous scroll has changed the current page offset and the page isn't alligned yet
-		if(direction * pageOffset > 0)															//Case 2/a: part of the next page is in the screen
+		if(direction * pageOffset > 0 || pageOffset <= windowInnerHeight / 5)					//Case 2/a: part of the next page is in the screen or the user scroll too little
 			contentElement.scrollTop += pageOffset;			
 		else 																					//Case 2/b: part of the previous page is in the screen
 			contentElement.scrollTop += direction * (windowInnerHeight + direction * pageOffset);
