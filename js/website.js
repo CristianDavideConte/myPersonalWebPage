@@ -10,7 +10,6 @@ var currentPageIndex;															//The index of the HTML element with class "
 var websitePreviewExpandedMap; 													//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
 var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
 var mobileMode; 																//Indicates if the css for mobile is currently beign applied
-var supportsTouch;
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {	
@@ -33,64 +32,41 @@ function variableInitialization() {
 	contentElement = document.getElementById("content");
 	
 	transitionTimeMedium = getComputedStyle(documentBodyElement).getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
-	supportsTouch = "ontouchstart" in window || navigator.msMaxTouchPoints;
 	websitePreviewExpandedMap = new Map();
 }
 
 /* This function binds all the HTML elements that can be interacted to their mouse and keyboard eventHandlers */
 function desktopEventListenerInitialization() {
 	window.addEventListener("resize", updateWindowSize, {passive:true});										//Updates the height and the width whenever the window's resized
-	headerElement.addEventListener("wheel", event => event.stopPropagation(), {passive:false});
-			
 	documentBodyElement.addEventListener("keydown", event => {
 		if(event.target.tagName == "BODY") {
 			let keyName = event.key;
 			if(keyName == "ArrowUp" || keyName == "ArrowLeft") {
-				smoothPageScroll(-1);
+				contentElement.scrollTop -= windowInnerHeight;
 				event.preventDefault();
-				return;
-			}else if(keyName == "ArrowDown" || keyName == "ArrowRight") {
-				smoothPageScroll(1);
+			} else if(keyName == "ArrowDown" || keyName == "ArrowRight") {
+				contentElement.scrollTop += windowInnerHeight;
 				event.preventDefault();
-				return;
 			}
 		}
 	}, {passive:false});
 
-	let smoothScrollTimeout;
-	
-	if(supportsTouch) {
-		let firstTouchYPosition = null;
-		let lastTouchYPosition = null;
-		let pageIsScrolling = false;
-		contentElement.addEventListener("scroll", event => {
-			if(!pageIsScrolling) {
-				if(firstTouchYPosition != null) 
-					lastTouchYPosition = firstTouchYPosition;
-				
-				firstTouchYPosition = contentElement.scrollTop;
-				
-				clearTimeout(smoothScrollTimeout);
-				smoothScrollTimeout = setTimeout(() => {
-					pageIsScrolling = true;
-					smoothPageScroll(Math.sign(firstTouchYPosition - lastTouchYPosition));
-					setTimeout(() => pageIsScrolling = false, 1000);
-				},300);
-			}
-		}, {passive:false});
-	} else {	
-		contentElement.addEventListener("wheel", event => {	
-			clearTimeout(smoothScrollTimeout);
-			smoothScrollTimeout = setTimeout( () => {
-				smoothPageScroll(Math.sign(event.deltaY));
-			}, 300);
-		}, {passive:true});
-	}
-	
+	headerElement.addEventListener("wheel", event => event.stopPropagation(), {passive:false});			
 	hamburgerMenuElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});					//When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function 
 	
 	for(const pageLinkElement of pageLinksElements)															
 		pageLinkElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});				//Whenever a HTML element with the class "pageLink" is pressed the DOM is scrolled to the corresponding section 						
+
+	let smoothScrollTimeout;
+	let firstScrollYPosition = null;
+	let lastScrollYPosition = null;	
+	contentElement.addEventListener("scroll", event => {
+			clearTimeout(smoothScrollTimeout);
+			lastScrollYPosition = firstScrollYPosition;			
+			firstScrollYPosition = contentElement.scrollTop;
+			smoothScrollTimeout = setTimeout(() => smoothPageScroll(Math.sign(firstScrollYPosition - lastScrollYPosition)), 200);
+	}, {passive:true});
+	
 	
 	let websiteShowcase = document.getElementsByClassName("websiteShowcase")[0];
 	websiteShowcase.addEventListener("wheel", (event) => {
@@ -337,15 +313,12 @@ function toggleExpandHamburgerMenu() {
 function smoothPageScroll(direction) {
 	let contentElementscrollTop = contentElement.scrollTop;
 	currentPageIndex = Math.round(contentElementscrollTop / windowInnerHeight);
-	let pageOffset = currentPageIndex * windowInnerHeight - contentElementscrollTop;			//The offset measure by how much the page is not alligned with the screen
-	console.log(pageOffset);
-	if(pageOffset == 0) 																		//Case 1: the page is already alligned with the screen height
-		contentElement.scrollTop += direction * windowInnerHeight;								//Then the page is changed with the previous or next one according to the scroll direction
-	else 																						//Case 2: a previous scroll has changed the current page offset and the page isn't alligned yet
-		if(direction * pageOffset > 0 || Math.abs(pageOffset) <= windowInnerHeight / 4)					//Case 2/a: part of the next page is in the screen or the user scroll too little
-			contentElement.scrollTop += pageOffset;			
-		else 																					//Case 2/b: part of the previous page is in the screen
-			contentElement.scrollTop += direction * (windowInnerHeight + direction * pageOffset);
+	let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementscrollTop);	//The offset measure by how much the page is not alligned with the screen
+
+	if(pageOffset > 0 || pageOffset <= windowInnerHeight / 4)										//Case 1: part of the next page is in the screen or the user scroll too little
+		contentElement.scrollTop += direction * pageOffset;			
+	else 																							//Case 2: part of the previous page is in the screen
+		contentElement.scrollTop += direction * (windowInnerHeight + pageOffset);
 }
 
 /* This Function:
