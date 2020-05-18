@@ -136,8 +136,8 @@ p {
 	justify-content:center;
 	background:rgba(0,0,0,0.8); 
 	transition:var(--transition-time);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius));
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 	overscroll-behavior:none;
 }
 
@@ -567,7 +567,9 @@ h1, h2 {
 	}
 	
 	#header {
-		will-change:height;
+		will-change:height;	
+		-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
+		backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 	}
 	
 	#header.mobileExpanded {

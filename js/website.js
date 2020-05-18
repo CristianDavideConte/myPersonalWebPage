@@ -56,42 +56,35 @@ function desktopEventListenerInitialization() {
 		}
 	}, {passive:false});
 
-	let firstTouchYPosition;
-	contentElement.addEventListener("touchstart", event => firstTouchYPosition = event.targetTouches[0].clientY, {passive: false});	
-	contentElement.addEventListener("touchmove", event => {	
-		let eventTarget = event.target;
-		let eventTargetID = eventTarget.id;
-		let eventTargetClassName = eventTarget.className;
-		let eventTargetParentClassName = eventTarget.parentElement.className;
-		if(eventTargetID != "presentationCard" && eventTargetID != "contactMeFormBody" && eventTargetID != "presentationCardText" &&  
-			eventTargetParentClassName != "websiteShowcase" && eventTargetParentClassName != "websitePreview" && eventTargetClassName != "websiteShowcase")
-				event.preventDefault();
-	}, {passive:false});
-	
-	contentElement.addEventListener("touchend", event => {
-		let eventTarget = event.target;
-		let eventTargetID = eventTarget.id;
-		let eventTargetClassName = eventTarget.className;
-		let eventTargetParentClassName = eventTarget.parentElement.className;
-		if(eventTargetID != "presentationCard" && eventTargetID != "contactMeFormBody" && eventTargetID != "presentationCardText" &&  
-			eventTargetParentClassName != "websiteShowcase" && eventTargetParentClassName != "websitePreview" && eventTargetClassName != "websiteShowcase") 
-				smoothPageScroll(Math.sign(firstTouchYPosition - event.changedTouches[0].clientY));
-	}, {passive:false});
+	let firstTouchYPosition = null;
+	let lastTouchYPosition = null;
+	let smoothScrollTimeout;
+	let pageIsScrolling = false;
 	
 	contentElement.addEventListener("wheel", event => {	
-		let eventTarget = event.target;
-		let eventTargetID = eventTarget.id;
-		let eventTargetClassName = eventTarget.className;
-		let eventTargetParentClassName = eventTarget.parentElement.className;
-		if(eventTargetID != "presentationCard" && eventTargetID != "contactMeFormBody" && eventTargetID != "presentationCardText" &&  
-			eventTargetParentClassName != "websiteShowcase" && eventTargetParentClassName != "websitePreview" && eventTargetClassName != "websiteShowcase") {
-				smoothPageScroll(Math.sign(event.deltaY));
-				event.preventDefault();
+		clearTimeout(smoothScrollTimeout);
+		smoothScrollTimeout = setTimeout( () => {
+			smoothPageScroll(Math.sign(event.deltaY));
+		}, 200);
+	}, {passive:true});
+	
+	contentElement.addEventListener("scroll", event => {
+		if(!pageIsScrolling) {
+			if(firstTouchYPosition != null) 
+				lastTouchYPosition = firstTouchYPosition;
+			
+			firstTouchYPosition = contentElement.scrollTop;
+			console.log("first",firstTouchYPosition,"last",lastTouchYPosition);
+			
+			clearTimeout(smoothScrollTimeout);
+			smoothScrollTimeout = setTimeout(() => {
+				pageIsScrolling = true;
+				smoothPageScroll(Math.sign(firstTouchYPosition - lastTouchYPosition));
+				setTimeout(() => pageIsScrolling = false, 1000);
+			},300);
 		}
 	}, {passive:false});
-	
 
-	
 	hamburgerMenuElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});					//When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function 
 	
 	for(const pageLinkElement of pageLinksElements)															
