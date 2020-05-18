@@ -338,11 +338,11 @@ function smoothPageScroll(direction) {
 	let contentElementscrollTop = contentElement.scrollTop;
 	currentPageIndex = Math.round(contentElementscrollTop / windowInnerHeight);
 	let pageOffset = currentPageIndex * windowInnerHeight - contentElementscrollTop;			//The offset measure by how much the page is not alligned with the screen
-
+	console.log(pageOffset);
 	if(pageOffset == 0) 																		//Case 1: the page is already alligned with the screen height
 		contentElement.scrollTop += direction * windowInnerHeight;								//Then the page is changed with the previous or next one according to the scroll direction
 	else 																						//Case 2: a previous scroll has changed the current page offset and the page isn't alligned yet
-		if(direction * pageOffset > 0 || pageOffset <= windowInnerHeight / 5)					//Case 2/a: part of the next page is in the screen or the user scroll too little
+		if(direction * pageOffset > 0 || Math.abs(pageOffset) <= windowInnerHeight / 4)					//Case 2/a: part of the next page is in the screen or the user scroll too little
 			contentElement.scrollTop += pageOffset;			
 		else 																					//Case 2/b: part of the previous page is in the screen
 			contentElement.scrollTop += direction * (windowInnerHeight + direction * pageOffset);
