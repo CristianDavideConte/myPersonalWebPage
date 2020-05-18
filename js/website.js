@@ -64,7 +64,7 @@ function desktopEventListenerInitialization() {
 			clearTimeout(smoothScrollTimeout);
 			lastScrollYPosition = firstScrollYPosition;			
 			firstScrollYPosition = contentElement.scrollTop;
-			smoothScrollTimeout = setTimeout(() => smoothPageScroll(Math.sign(firstScrollYPosition - lastScrollYPosition)), 200);
+			smoothScrollTimeout = setTimeout(() => smoothPageScroll(Math.sign(firstScrollYPosition - lastScrollYPosition)), 100);
 	}, {passive:true});
 	
 	
