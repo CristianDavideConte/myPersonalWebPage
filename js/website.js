@@ -23,7 +23,6 @@ function init() {
 
 /* This Function initializes all the javascript file's public variables */
 function variableInitialization() {
-	windowInnerWidth = window.innerWidth;
 	documentBodyElement = document.body;
 	
 	headerElement = document.getElementById("header");
@@ -333,6 +332,7 @@ function updateWindowSize(){
 	windowInnerWidth = window.innerWidth;
 	windowInnerHeight = window.innerHeight;
 	documentBodyElement.style.height = windowInnerHeight + "px";
+	document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
 	if(windowInnerWidth < 1081)
 		mobileMode = 1
 	else 

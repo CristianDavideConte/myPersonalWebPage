@@ -33,6 +33,10 @@
 		
 	--scaling-factor-increase:1;
 	--scaling-factor-decrease:1;
+	
+	--vh:1vh;
+	--50vh:calc(var(--vh, 1vh) * 50);
+	--100vh:calc(var(--vh, 1vh) * 100);
 }
 
 @media (hover:hover) {
@@ -373,9 +377,9 @@ h1, h2 {
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide));
 	transition:var(--transition-time-medium);
 	-webkit-transform: translate3d(calc(var(--websitePreview-original-left-position) - 50vw + var(--websitePreview-current-size) / 2), 
-							calc(var(--websitePreview-original-top-position) - 50vh + var(--websitePreview-current-size) / 2), 0);
+							calc(var(--websitePreview-original-top-position) - var(--50vh) + var(--websitePreview-current-size) / 2), 0);
 	transform: translate3d(calc(var(--websitePreview-original-left-position) - 50vw + var(--websitePreview-current-size) / 2), 
-							calc(var(--websitePreview-original-top-position) - 50vh + var(--websitePreview-current-size) / 2), 0);
+							calc(var(--websitePreview-original-top-position) - var(--50vh) + var(--websitePreview-current-size) / 2), 0);
 }
 
 #websitePreviewExpanded.expandedState {
