@@ -255,7 +255,7 @@ function lagTest() {
 	websitePreview = document.getElementsByClassName("websitePreview")[0];
     var event = document.createEvent('Events');
     event.initEvent("click", true, false);
-	if(test < 200) {
+	if(test < 100) {
 		if(test % 2 == 0) 
 			websitePreview.dispatchEvent(event);
 		else 

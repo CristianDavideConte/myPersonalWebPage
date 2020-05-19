@@ -365,32 +365,32 @@ h1, h2 {
 	align-items:center;
 	height:var(--websitePreview-current-size);
 	width:var(--websitePreview-current-size);
-	top:var(--websitePreview-original-top-position);
-	left:var(--websitePreview-original-left-position);
 	border-radius:var(--boxShapedElement-border-radius);
 	background:rgba(0,0,0,0.5); 
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide));
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide));
 	transition:var(--transition-time-medium);
+	-webkit-transform: translate3d(calc(var(--websitePreview-original-left-position) - 50vw + var(--websitePreview-current-size) / 2), 
+							calc(var(--websitePreview-original-top-position) - 50vh + var(--websitePreview-current-size) / 2), 0);
+	transform: translate3d(calc(var(--websitePreview-original-left-position) - 50vw + var(--websitePreview-current-size) / 2), 
+							calc(var(--websitePreview-original-top-position) - 50vh + var(--websitePreview-current-size) / 2), 0);
 }
 
 #websitePreviewExpanded.expandedState {
 	height:var(--presentationCard-height);
 	width:var(--presentationCard-width);
-	top:calc(50vh - var(--presentationCard-height)/2);
-	left:calc(50vw - var(--presentationCard-width)/2);
 	border-radius:5%;
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
 }
 
 .websitePreviewExpandedTitle {
 	text-align:center;
 	font-size:0;
-	opacity:0;
 	transition:var(--transition-time-medium);
 }
 
 .expandedState .websitePreviewExpandedTitle {
-	opacity:1;
 	font-size:2.5em;
 }
 
@@ -416,7 +416,6 @@ h1, h2 {
 	cursor:pointer;
 	margin:0 auto 0 auto;
 	padding:0.7em;
-	opacity:0;
 	font-size:0;
 	border-radius:var(--boxShapedElement-border-radius);
 	transition:var(--transition-time-medium);
@@ -425,7 +424,6 @@ h1, h2 {
 }
 
 .expandedState .websitePreviewExpandedButton {
-	opacity:1;
 	font-size:3em;
 }
 
@@ -567,6 +565,7 @@ h1, h2 {
 	}
 	
 	#header {
+		background:rgba(0,0,0,0.9); 
 		will-change:height;	
 		-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 		backdrop-filter:blur(var(--backdrop-filter-blur-radius));
@@ -668,7 +667,6 @@ h1, h2 {
 	}
 		
 	.expandedState #websitePreviewExpandedButtonSection {
-		opacity:1;
 		font-size:110%;
 	}
 
