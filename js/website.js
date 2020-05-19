@@ -331,7 +331,6 @@ function updateWindowSize(){
 		
 	windowInnerWidth = window.innerWidth;
 	windowInnerHeight = window.innerHeight;
-	documentBodyElement.style.height = windowInnerHeight + "px";
 	document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
 	if(windowInnerWidth < 1081)
 		mobileMode = 1
