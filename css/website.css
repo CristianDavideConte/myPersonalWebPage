@@ -53,9 +53,9 @@
 	display:none;
 }
 
-html {				
-	width:100vw;
-	height:100vh;
+html {		
+	width:100%;
+	height:100%;		
 	font-family:"Baloo Bhaina 2"; 
 	font-size:1.3vmin;
 	-webkit-touch-callout:none !important; /* iOS Safari */
@@ -68,6 +68,8 @@ html {
 
 body {
 	margin:0;
+	width:100%;
+	height:100%;
 }
 
 .contentLoaded {
