@@ -241,7 +241,7 @@ function desktopEventListenerInitialization() {
 		githubContactElement.addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
 		
 		let instagramContactElement = document.getElementById("instagramContact");
-		instagramContactElement.addEventListener("click", () => window.open("https://www.instagram.com/cristian_davide_conte/?hl=it"), {passive:true});
+		instagramContactElement.addEventListener("click", () => window.open("https://www.instagram.com/cristiandavideconte/?hl=it"), {passive:true});
 			
 		let facebookContactElement = document.getElementById("facebookContact");
 		facebookContactElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"), {passive:true});		
@@ -311,9 +311,9 @@ function toggleExpandHamburgerMenu() {
  * keep that offset throughout the pages scrolling.
  */
 function smoothPageScroll(direction) {
-	let contentElementscrollTop = contentElement.scrollTop;
-	currentPageIndex = Math.round(contentElementscrollTop / windowInnerHeight);
-	let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementscrollTop);	//The offset measure by how much the page is not alligned with the screen
+	let contentElementScrollTop = contentElement.scrollTop;
+	currentPageIndex = Math.round(contentElementScrollTop / windowInnerHeight);
+	let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementScrollTop);	//The offset measure by how much the page is not alligned with the screen
 
 	if(pageOffset > 0 || pageOffset <= windowInnerHeight / 4)										//Case 1: part of the next page is in the screen or the user scroll too little
 		contentElement.scrollTop += direction * pageOffset;			
