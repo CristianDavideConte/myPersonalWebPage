@@ -397,7 +397,7 @@ h1, h2 {
 .websitePreviewExpandedTitle {
 	text-align:center;
 	font-size:0;
-	transition: font-size var(--transition-time-medium);
+	transition:all var(--transition-time-medium);
 }
 
 .expandedState .websitePreviewExpandedTitle {
@@ -407,7 +407,7 @@ h1, h2 {
 .websitePreviewExpandedImage {
 	height:60%;
 	border-radius:100%;
-	transition:height var(--transition-time-medium);
+	transition:all var(--transition-time-medium);
 }
 
 .expandedState .websitePreviewExpandedImage {
@@ -430,7 +430,7 @@ h1, h2 {
 	box-shadow: 0 0 2rem rgba(0,0,0,1); 
 	border-radius:var(--boxShapedElement-border-radius);
 	font-size:0;
-	transition:font-size var(--transition-time-medium);
+	transition:all var(--transition-time-medium);
 }
 
 .expandedState .websitePreviewExpandedButton {
