@@ -128,7 +128,6 @@ function desktopEventListenerInitialization() {
 		/* First all the websitePreviewExpanded basic components are created */
 		let websitePreviewExpanded = document.createElement("div");
 		websitePreviewExpanded.id = "websitePreviewExpanded";	
-		websitePreviewExpanded.addEventListener("click", event => event.stopPropagation(), {passive:true});
 		
 		let websitePreviewExpandedImage = websitePreview.firstElementChild.cloneNode(true);
 		websitePreviewExpandedImage.className = "websitePreviewExpandedImage";

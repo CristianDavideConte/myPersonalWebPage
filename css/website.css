@@ -360,10 +360,10 @@ h1, h2 {
 	border:none;
 }
 
-#websitePreviewExpanded {
-	--transform-translateX: calc(var(--websitePreview-original-left-position) - 50vw + var(--websitePreview-current-size) / 2);
-	--transform-translateY: calc(var(--websitePreview-original-top-position) - var(--50vh) + var(--websitePreview-current-size) / 2);
-	/*position:fixed;*/
+#websitePreviewExpanded {	
+	/*top: var(--websitePreview-original-top-position);
+	left: var(--websitePreview-original-left-position);	*/
+	position:fixed;
 	cursor:default;
 	display:flex; 
 	flex-direction:column;
@@ -375,21 +375,20 @@ h1, h2 {
 	background:rgba(0,0,0,0.5); 
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide));
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide));
-	/*top: var(--websitePreview-original-top-position);
-	left: var(--websitePreview-original-left-position);
-	*/
 	transition:all var(--transition-time-medium);
 	-webkit-transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0);
 	transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0);
-	/*will-change:transform, height, width;*/
+	
+	--transform-translateX: calc(var(--websitePreview-original-left-position) - 50vw + var(--websitePreview-current-size) / 2);
+	--transform-translateY: calc(var(--websitePreview-original-top-position) - var(--50vh) + var(--websitePreview-current-size) / 2);
 }
 
 #websitePreviewExpanded.expandedState {
+	/*top: calc(50vh - var(--presentationCard-height) / 2);
+	left: calc(50vw - var(--presentationCard-width) / 2);*/
 	height:var(--presentationCard-height);
 	width:var(--presentationCard-width);
 	border-radius:5%;
-	/*top: calc(50vh - var(--presentationCard-height) / 2);
-	left: calc(50vw - var(--presentationCard-width) / 2);*/
 	-webkit-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
 }
@@ -562,7 +561,6 @@ h1, h2 {
 	#header {
 		background:rgba(0,0,0,0.9); 
 		will-change:height;	
-		transform: translateZ(0);
 		-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 		backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 	}
