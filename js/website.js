@@ -124,9 +124,88 @@ function desktopEventListenerInitialization() {
 	}, {passive:true});
 	
 	websitePreviews = document.getElementsByClassName("websitePreview");
-	for(const websitePreview of websitePreviews)
+	for(const websitePreview of websitePreviews) {
+		/* First all the websitePreviewExpanded basic components are created */
+		let websitePreviewExpanded = document.createElement("div");
+		websitePreviewExpanded.id = "websitePreviewExpanded";	
+		websitePreviewExpanded.addEventListener("click", event => event.stopPropagation(), {passive:true});
+		
+		let websitePreviewExpandedImage = websitePreview.firstElementChild.cloneNode(true);
+		websitePreviewExpandedImage.className = "websitePreviewExpandedImage";
+		websitePreviewExpanded.appendChild(websitePreviewExpandedImage);
+		
+		let dataTitle = websitePreview.getAttribute("data-title");
+		if(dataTitle != null) {
+			let websitePreviewExpandedTitle = document.createElement("div");
+			websitePreviewExpandedTitle.className = "websitePreviewExpandedTitle";
+			websitePreviewExpandedTitle.innerHTML = dataTitle;			
+			websitePreviewExpanded.appendChild(websitePreviewExpandedTitle);
+		}
+		
+		let viewButtonsSection = document.createElement("div");
+		viewButtonsSection.id = "websitePreviewExpandedButtonSection";
+		
+		let dataCode = websitePreview.getAttribute("data-code");
+		if(dataCode != null) {													//There could be a project that isn't open-source
+			let viewCodeButton = document.createElement("button");
+			viewCodeButton.innerHTML = "View Code";
+			viewCodeButton.className = "websitePreviewExpandedButton";
+			viewCodeButton.addEventListener("click", () => window.open(dataCode), {passive:true});
+			viewButtonsSection.appendChild(viewCodeButton);
+		}
+		
+		let dataDemo = websitePreview.getAttribute("data-demo");
+		if(dataDemo != null) {													//There could be a project that hasn't got a demo ready yet
+			let viewDemoButton = document.createElement("button");
+			viewDemoButton.innerHTML = "View Demo";
+			viewDemoButton.className = "websitePreviewExpandedButton";
+			viewDemoButton.addEventListener("click", () => window.open(dataDemo), {passive:true});
+			viewButtonsSection.appendChild(viewDemoButton);
+		}	
+		
+		websitePreviewExpanded.appendChild(viewButtonsSection);
+		
+		let backgroundContent = document.createElement("div");
+		backgroundContent.id = "websitePreviewExpandedBackgroundContent";
+		backgroundContent.className = "page";		
+		backgroundContent.appendChild(websitePreviewExpanded);
+		
+		/*This variable is used to prevent the user to execute the backgroundContent eventListener 
+		 * more than one time while the animation is still happening.
+		 * Otherwise the document.body would try to remove the backgroundContent multiple times generating errors in the browser console.
+		 * Note that this bug wouldn't cause the page to instantly crash.
+		 */
+		let listenersAlreadyTriggered = false;																			
+		backgroundContent.addEventListener("click", function removePreviewExpanded(event) {
+			event.stopPropagation();
+			if(!listenersAlreadyTriggered) {
+				listenersAlreadyTriggered = true;
+				/* The websitePreview is scaled while hovered.
+				 * The top and left offset have to take the scaling into consideration otherwise 
+				 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
+				 * The initial position is instead calculated adding the hover effect's expansion.
+				 */
+				let websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
+				let documentBodyElementStyle = documentBodyElement.style;					
+				documentBodyElementStyle.setProperty("--websitePreview-original-top-position", websitePreviewBoundingRectangle.top + "px");
+				documentBodyElementStyle.setProperty("--websitePreview-original-left-position", websitePreviewBoundingRectangle.left + "px");
+				documentBodyElementStyle.setProperty("--websitePreview-current-size", websitePreviewBoundingRectangle.height + "px");
+							
+				websitePreviewExpanded.className = "";
+				setTimeout(() => {
+					listenersAlreadyTriggered = false;
+					headerElement.style = ""; 
+					websitePreview.classList.remove("expandedState");
+					documentBodyElement.removeChild(backgroundContent);
+				}, transitionTimeMedium);
+			}
+		}, {passive:true});
+		
+		websitePreviewExpandedMap.set(websitePreview, backgroundContent);
+		
 		websitePreview.addEventListener("click", () => {
-			event.stopPropagation();																				//Prevents the click to instantly remove the previewExpanded element that is going to be created next
+			event.stopPropagation();																				//Prevents the click to instantly remove the previewExpanded element that is going to be created next		
+			headerElement.style.pointerEvents = "none";
 			
 			/* The websitePreview is scaled while hovered.
 			 * The top and left offset have to take the scaling into consideration otherwise 
@@ -138,115 +217,26 @@ function desktopEventListenerInitialization() {
 			documentBodyElementStyle.setProperty("--websitePreview-original-top-position", websitePreviewBoundingRectangle.top + "px");
 			documentBodyElementStyle.setProperty("--websitePreview-original-left-position", websitePreviewBoundingRectangle.left + "px");
 			documentBodyElementStyle.setProperty("--websitePreview-current-size", websitePreviewBoundingRectangle.height + "px");
+			documentBodyElement.insertBefore(websitePreviewExpandedMap.get(websitePreview), documentBodyElement.firstChild);
 			
-			let backgroundContent;
-			let storedBackgroundContent = websitePreviewExpandedMap.get(websitePreview);
-			
-			if(storedBackgroundContent != null) {
-				backgroundContent = storedBackgroundContent;
-			} else {
-				let websitePreviewExpanded = document.createElement("div");
-				websitePreviewExpanded.id = "websitePreviewExpanded";	
-				
-				let websitePreviewExpandedImage = websitePreview.firstElementChild.cloneNode(true);
-				websitePreviewExpandedImage.className = "websitePreviewExpandedImage";
-				websitePreviewExpanded.appendChild(websitePreviewExpandedImage);
-				
-				let dataTitle = websitePreview.getAttribute("data-title");
-				if(dataTitle != null) {
-					let websitePreviewExpandedTitle = document.createElement("div");
-					websitePreviewExpandedTitle.className = "websitePreviewExpandedTitle";
-					websitePreviewExpandedTitle.innerHTML = dataTitle;			
-					websitePreviewExpanded.appendChild(websitePreviewExpandedTitle);
-				}
-				
-				let viewButtonsSection = document.createElement("div");
-				viewButtonsSection.id = "websitePreviewExpandedButtonSection";
-				
-				let dataCode = websitePreview.getAttribute("data-code");
-				if(dataCode != null) {													//There could be a project that isn't open-source
-					let viewCodeButton = document.createElement("button");
-					viewCodeButton.innerHTML = "View Code";
-					viewCodeButton.className = "websitePreviewExpandedButton";
-					viewCodeButton.addEventListener("click", () => window.open(dataCode), {passive:true});
-					viewButtonsSection.appendChild(viewCodeButton);
-				}
-				
-				let dataDemo = websitePreview.getAttribute("data-demo");
-				if(dataDemo != null) {													//There could be a project that hasn't got a demo ready yet
-					let viewDemoButton = document.createElement("button");
-					viewDemoButton.innerHTML = "View Demo";
-					viewDemoButton.className = "websitePreviewExpandedButton";
-					viewDemoButton.addEventListener("click", () => window.open(dataDemo), {passive:true});
-					viewButtonsSection.appendChild(viewDemoButton);
-				}	
-				
-				websitePreviewExpanded.appendChild(viewButtonsSection);
-				websitePreviewExpanded.addEventListener("click", event => event.stopPropagation(), {passive:true});
-				
-				backgroundContent = document.createElement("div");
-				backgroundContent.id = "websitePreviewExpandedBackgroundContent";
-				backgroundContent.className = "page";		
-				backgroundContent.appendChild(websitePreviewExpanded);
-				
-				/*This variable is used to prevent the user to execute the backgroundContent eventListener 
-				 * more than one time while the animation is still happening.
-				 * Otherwise the document.body would try to remove the backgroundContent multiple times generating errors in the browser console.
-				 * Note that this bug wouldn't cause the page to instantly crash.
-				 */
-				let listenersAlreadyTriggered = false;																	
-				
-				backgroundContent.addEventListener("click", function removePreviewExpanded(event) {
-					event.stopPropagation();
-					if(!listenersAlreadyTriggered) {
-						listenersAlreadyTriggered = true;
-						/* The websitePreview is scaled while hovered.
-						 * The top and left offset have to take the scaling into consideration otherwise 
-						 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
-						 * The initial position is instead calculated adding the hover effect's expansion.
-						 */
-						websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();						
-						documentBodyElementStyle.setProperty("--websitePreview-original-top-position", websitePreviewBoundingRectangle.top + "px");
-						documentBodyElementStyle.setProperty("--websitePreview-original-left-position", websitePreviewBoundingRectangle.left + "px");
-						documentBodyElementStyle.setProperty("--websitePreview-current-size", websitePreviewBoundingRectangle.height + "px");
-									
-						websitePreviewExpanded.className = "";
-						setTimeout(() => {
-							listenersAlreadyTriggered = false;
-							headerElement.style = null; 
-							websitePreview.classList.remove("expandedState");
-							documentBodyElement.removeChild(backgroundContent);
-							setTimeout(() => {
-								websitePreview.style = null;
-							}, 20);
-						}, transitionTimeMedium);
-					}
-				}, {passive:true});
-			
-				websitePreviewExpandedMap.set(websitePreview, backgroundContent);
-			}
-				
-			headerElement.style.pointerEvents = "none";
-			websitePreview.style.transition = "0s";	
-			documentBodyElement.insertBefore(backgroundContent, documentBodyElement.firstChild);
-			
-			setTimeout(() => {										//This is done in order to make the original 
+			setTimeout(() => {
 				websitePreviewExpanded.className = "expandedState";
 				websitePreview.classList.add("expandedState");
-			}, 20);				
+			}, 20);
 		}, {passive:true});
-			
-		let githubContactElement = document.getElementById("githubContact");
-		githubContactElement.addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
+	}		
+	
+	let githubContactElement = document.getElementById("githubContact");
+	githubContactElement.addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
+	
+	let instagramContactElement = document.getElementById("instagramContact");
+	instagramContactElement.addEventListener("click", () => window.open("https://www.instagram.com/cristiandavideconte/?hl=it"), {passive:true});
 		
-		let instagramContactElement = document.getElementById("instagramContact");
-		instagramContactElement.addEventListener("click", () => window.open("https://www.instagram.com/cristiandavideconte/?hl=it"), {passive:true});
-			
-		let facebookContactElement = document.getElementById("facebookContact");
-		facebookContactElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"), {passive:true});		
-		
-		let mailContactElement = document.getElementById("mailContact");
-		mailContactElement.addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
+	let facebookContactElement = document.getElementById("facebookContact");
+	facebookContactElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"), {passive:true});		
+	
+	let mailContactElement = document.getElementById("mailContact");
+	mailContactElement.addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 }
 
 var test = 0;
