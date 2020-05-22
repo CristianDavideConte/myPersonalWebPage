@@ -281,7 +281,7 @@ h1, h2 {
 	border-radius:5%;
 	background:rgba(0,0,0,0.3); 
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide));
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide));	
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide));
 	-webkit-transform:translate3d(0, calc(50vh - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
 	transform:translate3d(0, calc(50vh - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
 	
@@ -307,7 +307,7 @@ h1, h2 {
 	align-items:center;
 }
 
-.websiteShowcase {
+#websiteShowcase {
 	display:flex;
 	max-width:70%;
 	border-radius:var(--boxShapedElement-border-radius);
@@ -323,7 +323,7 @@ h1, h2 {
 	transition:var(--transition-time-quick);
 }
 
-.websiteShowcase::-webkit-scrollbar {
+#websiteShowcase::-webkit-scrollbar {
 	display:none;
 }
 
@@ -497,8 +497,7 @@ h1, h2 {
 	padding: 2%;
 	border:none;
 	outline: none;
-	border-radius:1rem;
-	box-shadow:0 0 0.3rem rgba(0,0,0,1);  
+	border-radius:1rem; 
 }
 
 #contactMeFormName:focus,
@@ -512,6 +511,7 @@ h1, h2 {
 #contactMeFormBody {
 	overflow: auto;
 	background:rgba(0,0,0,0.4);
+	box-shadow:0 0 0.4rem rgba(0,0,0,1);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 }
@@ -535,7 +535,7 @@ h1, h2 {
 	height: 10%;
 	font-size: 3em;
 	background:rgba(0,0,0,0.7);
-	margin:auto;
+	margin:auto; 
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 }
@@ -654,7 +654,7 @@ h1, h2 {
 		font-size:300%;
 	}
 
-	.websiteShowcase {
+	#websiteShowcase {
 		max-width:85%;
 	}
 	
