@@ -19,6 +19,7 @@ function init() {
 	imageLoading();																//Initializes all the HTML img elements' contents  
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
 	//setTimeout(lagTest, 10000);
+	//setTimeout(() => scrollTest(directionScroll), 5000);
 }
 
 /* This Function initializes all the javascript file's public variables */
@@ -55,18 +56,35 @@ function desktopEventListenerInitialization() {
 	
 	for(const pageLinkElement of pageLinksElements)															
 		pageLinkElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});				//Whenever a HTML element with the class "pageLink" is pressed the DOM is scrolled to the corresponding section 						
-
-	let smoothScrollTimeout;
+	
+	let githubContactElement = document.getElementById("githubContact");
+	githubContactElement.addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
+	
+	let instagramContactElement = document.getElementById("instagramContact");
+	instagramContactElement.addEventListener("click", () => window.open("https://www.instagram.com/cristiandavideconte/?hl=it"), {passive:true});
+		
+	let facebookContactElement = document.getElementById("facebookContact");
+	facebookContactElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"), {passive:true});		
+	
+	let mailContactElement = document.getElementById("mailContact");
+	mailContactElement.addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
+	
 	let firstScrollYPosition = null;
-	let lastScrollYPosition = null;	
+	let lastScrollYPosition; 	
+	let smoothScrollTimeout;
 	contentElement.addEventListener("scroll", event => {
-			clearTimeout(smoothScrollTimeout);
-			lastScrollYPosition = firstScrollYPosition;			
-			firstScrollYPosition = contentElement.scrollTop;
-			smoothScrollTimeout = setTimeout(() => smoothPageScroll(Math.sign(firstScrollYPosition - lastScrollYPosition)), 100);
+			if(firstScrollYPosition == null)
+				firstScrollYPosition = contentElement.scrollTop;	
+			else 		
+				clearTimeout(smoothScrollTimeout);	
+			
+			smoothScrollTimeout = setTimeout(() => {
+				lastScrollYPosition = contentElement.scrollTop;
+				smoothPageScroll(Math.sign(lastScrollYPosition - firstScrollYPosition), lastScrollYPosition);
+				firstScrollYPosition = null;
+			}, 100);
 	}, {passive:true});
-	
-	
+
 	let websiteShowcase = document.getElementsByClassName("websiteShowcase")[0];
 	websiteShowcase.addEventListener("wheel", (event) => {
 		/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
@@ -75,53 +93,53 @@ function desktopEventListenerInitialization() {
 		 */
 		let scrollDirection = Math.sign(event.deltaY);
 		let totalScrollAmmount = windowInnerWidth/20;
-		let scrollDistance = windowInnerWidth/200;
+		let scrollDistance = windowInnerWidth/150;
 		let partialScrollAmmount = 0;
 		
-		smoothScroll(); 
 		function smoothScroll() {
-			websiteShowcase.scrollLeft += scrollDirection*scrollDistance;		
+			websiteShowcase.scrollLeft += scrollDirection * scrollDistance;		
 			partialScrollAmmount += scrollDistance;
 			if(partialScrollAmmount < totalScrollAmmount)
-				setTimeout(smoothScroll, 10);
+				window.requestAnimationFrame(smoothScroll);
 		}
+		
+		window.requestAnimationFrame(smoothScroll);
 	}, {passive:true});
 	
-	let carouselButtonMouseDownInterval;
-	function carouselButtonMouseDownIntervalSet(carouselButtons) {
-		carouselButtons.dispatchEvent(new MouseEvent("mousedown"));
-	}
-	
-	function carouselButtonMouseDownIntervalReset() {
-		clearInterval(carouselButtonMouseDownInterval);
-		carouselButtonMouseDownInterval = null;
-		this.removeEventListener("mouseup", carouselButtonMouseDownIntervalReset, {passive:true});				/* There's no need for the window to keep listening to this event after the user stops interacting with the carouselButton */
-	}
-	
 	let carouselButtons = document.getElementsByClassName("carouselButton");														
+	let carouselButtonScrollEnabled = false;
+	/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
+	 * and so that is +1/100th of the window's innerWidth at any given resolution.
+	 * The + sign means the scroll direction is from left to right. 
+	 */
+	function scrollFromRightToLeft() {
+		websiteShowcase.scrollLeft -= windowInnerWidth/100;
+		if(carouselButtonScrollEnabled)
+			window.requestAnimationFrame(scrollFromRightToLeft);
+	}
+	
+	/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
+	 * and so that is +1/100th of the window's innerWidth at any given resolution.
+	 * The + sign means the scroll direction is from left to right. 
+	 */
+	function scrollFromLeftToRight() {
+		websiteShowcase.scrollLeft += windowInnerWidth/100;
+		if(carouselButtonScrollEnabled)
+			window.requestAnimationFrame(scrollFromLeftToRight);
+	}
+	
 	carouselButtons[0].addEventListener("mousedown", () => {
-		/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
-		 * and so that is +1/100th of the window's innerWidth at any given resolution.
-		 * The + sign means the scroll direction is from left to right. 
-		 */
-		websiteShowcase.scrollLeft -= windowInnerWidth/100														
-		
-		if(carouselButtonMouseDownInterval == null)
-			carouselButtonMouseDownInterval = setInterval(() => carouselButtonMouseDownIntervalSet(carouselButtons[0]), 10);
-		window.addEventListener("mouseup", carouselButtonMouseDownIntervalReset, {passive:true});	
+		carouselButtonScrollEnabled = true;
+		window.requestAnimationFrame(scrollFromRightToLeft);
 	}, {passive:true});
 	
 	carouselButtons[1].addEventListener("mousedown", () => {
-		/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
-		 * and so that is -1/100th of the window's innerWidth at any given resolution
-		 * The - sign means the scroll direction is from right to left. 
-		 */
-		websiteShowcase.scrollLeft += windowInnerWidth/100														
-		
-		if(carouselButtonMouseDownInterval == null)
-			carouselButtonMouseDownInterval = setInterval(() => carouselButtonMouseDownIntervalSet(carouselButtons[1]), 10);
-		window.addEventListener("mouseup", carouselButtonMouseDownIntervalReset, {passive:true});	
+		carouselButtonScrollEnabled = true;
+		window.requestAnimationFrame(scrollFromLeftToRight);
 	}, {passive:true});
+	
+	carouselButtons[0].addEventListener("mouseup", () => carouselButtonScrollEnabled = false, {passive:true});
+	carouselButtons[1].addEventListener("mouseup", () => carouselButtonScrollEnabled = false, {passive:true});
 	
 	websitePreviews = document.getElementsByClassName("websitePreview");
 	for(const websitePreview of websitePreviews) {
@@ -175,10 +193,16 @@ function desktopEventListenerInitialization() {
 		 * Note that this bug wouldn't cause the page to instantly crash.
 		 */
 		let listenersAlreadyTriggered = false;																			
-		backgroundContent.addEventListener("click", function removePreviewExpanded(event) {
+		backgroundContent.addEventListener("click", () => {
 			event.stopPropagation();
 			if(!listenersAlreadyTriggered) {
-				listenersAlreadyTriggered = true;
+				listenersAlreadyTriggered = true;				
+				setTimeout(() => {
+					listenersAlreadyTriggered = false;
+					headerElement.style = ""; 
+					websitePreview.classList.remove("expandedState");
+					documentBodyElement.removeChild(backgroundContent);
+				}, transitionTimeMedium);
 				/* The websitePreview is scaled while hovered.
 				 * The top and left offset have to take the scaling into consideration otherwise 
 				 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
@@ -188,15 +212,9 @@ function desktopEventListenerInitialization() {
 				let documentBodyElementStyle = documentBodyElement.style;					
 				documentBodyElementStyle.setProperty("--websitePreview-original-top-position", websitePreviewBoundingRectangle.top + "px");
 				documentBodyElementStyle.setProperty("--websitePreview-original-left-position", websitePreviewBoundingRectangle.left + "px");
-				documentBodyElementStyle.setProperty("--websitePreview-current-size", websitePreviewBoundingRectangle.height + "px");
-							
+				documentBodyElementStyle.setProperty("--websitePreview-current-size", websitePreviewBoundingRectangle.height + "px");	
+				
 				websitePreviewExpanded.className = "";
-				setTimeout(() => {
-					listenersAlreadyTriggered = false;
-					headerElement.style = ""; 
-					websitePreview.classList.remove("expandedState");
-					documentBodyElement.removeChild(backgroundContent);
-				}, transitionTimeMedium);
 			}
 		}, {passive:true});
 		
@@ -204,38 +222,27 @@ function desktopEventListenerInitialization() {
 		
 		websitePreview.addEventListener("click", () => {
 			event.stopPropagation();																				//Prevents the click to instantly remove the previewExpanded element that is going to be created next		
-			headerElement.style.pointerEvents = "none";
-			
+			setTimeout(() => {
+				websitePreviewExpanded.className = "expandedState";
+				websitePreview.classList.add("expandedState");
+			}, 20);
+				
 			/* The websitePreview is scaled while hovered.
 			 * The top and left offset have to take the scaling into consideration otherwise 
 			 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
 			 * The initial position is instead calculated adding the hover effect's expansion.
 			 */			
 			let websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
-			let documentBodyElementStyle = documentBodyElement.style;
+			let documentBodyElementStyle = documentBodyElement.style;		
+			documentBodyElement.insertBefore(websitePreviewExpandedMap.get(websitePreview), documentBodyElement.firstChild);
+
 			documentBodyElementStyle.setProperty("--websitePreview-original-top-position", websitePreviewBoundingRectangle.top + "px");
 			documentBodyElementStyle.setProperty("--websitePreview-original-left-position", websitePreviewBoundingRectangle.left + "px");
 			documentBodyElementStyle.setProperty("--websitePreview-current-size", websitePreviewBoundingRectangle.height + "px");
-			documentBodyElement.insertBefore(websitePreviewExpandedMap.get(websitePreview), documentBodyElement.firstChild);
 			
-			setTimeout(() => {
-				websitePreviewExpanded.className = "expandedState";
-				websitePreview.classList.add("expandedState");
-			}, 20);
+			headerElement.style.pointerEvents = "none";	
 		}, {passive:true});
 	}		
-	
-	let githubContactElement = document.getElementById("githubContact");
-	githubContactElement.addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
-	
-	let instagramContactElement = document.getElementById("instagramContact");
-	instagramContactElement.addEventListener("click", () => window.open("https://www.instagram.com/cristiandavideconte/?hl=it"), {passive:true});
-		
-	let facebookContactElement = document.getElementById("facebookContact");
-	facebookContactElement.addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"), {passive:true});		
-	
-	let mailContactElement = document.getElementById("mailContact");
-	mailContactElement.addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 }
 
 var test = 0;
@@ -253,6 +260,17 @@ function lagTest() {
 		test++;
 	}
 }
+/*
+var scroll = 0;
+var directionScroll = 1;
+function scrollTest(directionScroll) {
+	if(scroll < 10){
+		contentElement.scrollTop += directionScroll * windowInnerHeight / 4 + directionScroll;
+		scroll++;
+		setTimeout(() => scrollTest(-directionScroll), 2000);
+	}
+}
+*/
 
 /* This Function asyncronusly load the content of the DOM img elements */
 function imageLoading() {
@@ -283,7 +301,9 @@ function imageLoading() {
 	profileImageLoaded.addEventListener("load", () => profilePicElement.src = profileImageLoaded.src, {passive:true});
 }
 
-/* This Function toggle the class mobileExpanded in the hamburgerMenu element */
+/* This Function toggle the class mobileExpanded in the hamburgerMenu element if the page is in mobileMode.
+ * Mobile mode is triggered on the window's resize event.
+ */
 function toggleExpandHamburgerMenu() {		
 	if(mobileMode)
 		headerElement.classList.toggle("mobileExpanded");	
@@ -291,21 +311,18 @@ function toggleExpandHamburgerMenu() {
 
 /* This Function emulates the smooth scroll behaviour provided by css 
  * taking into consideration the current page position.
- * If the page is perfectly alligned with the screen 
- * the scroll will change the displayed page.
- * Otherwise the scroll will allign the page so that 
- * the next scroll will be a page change.
- * This is done to prevent the user to scroll on elements, change the offset of the page and then 
- * keep that offset throughout the pages scrolling.
+ * It triggers after a scroll is completed.
+ * If at the end of the scroll, the current page is not alligned, it gets:
+ * - alligned if it covers 3/4 of the windowInnerHeight or more
+ * - scrolled following the original user's scroll direction, otherwise 
  */
-function smoothPageScroll(direction) {
-	let contentElementScrollTop = contentElement.scrollTop;
+function smoothPageScroll(direction, contentElementScrollTop) {
 	currentPageIndex = Math.round(contentElementScrollTop / windowInnerHeight);
-	let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementScrollTop);	//The offset measure by how much the page is not alligned with the screen
+	let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementScrollTop);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative 
 
-	if(pageOffset > 0 || pageOffset <= windowInnerHeight / 4)										//Case 1: part of the next page is in the screen or the user scroll too little
+	if(-pageOffset < windowInnerHeight / 4)															//Case 1: The user scroll too little
 		contentElement.scrollTop += direction * pageOffset;			
-	else 																							//Case 2: part of the previous page is in the screen
+	else 																							//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
 		contentElement.scrollTop += direction * (windowInnerHeight + pageOffset);
 }
 

@@ -363,7 +363,7 @@ h1, h2 {
 #websitePreviewExpanded {	
 	/*top: var(--websitePreview-original-top-position);
 	left: var(--websitePreview-original-left-position);	*/
-	position:fixed;
+	position:absolute;
 	cursor:default;
 	display:flex; 
 	flex-direction:column;
@@ -438,7 +438,7 @@ h1, h2 {
 
 #websitePreviewExpandedBackgroundContent {
 	z-index:1;
-	position:fixed; 
+	position:absolute; 
 	cursor:pointer;
 }
 
