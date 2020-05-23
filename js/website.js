@@ -78,6 +78,10 @@ function desktopEventListenerInitialization() {
 	document.getElementById("facebookContact").addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"), {passive:true});		
 	document.getElementById("mailContact").addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 	
+	let isFingerDown = false;
+	contentElement.addEventListener("touchstart", () => isFingerDown = true, {passive:true});
+	contentElement.addEventListener("touchend", () => isFingerDown = false, {passive:true});
+	
 	let firstScrollYPosition = null;
 	let lastScrollYPosition; 	
 	let smoothScrollTimeout;
@@ -85,12 +89,16 @@ function desktopEventListenerInitialization() {
 			if(firstScrollYPosition == null)
 				firstScrollYPosition = contentElement.scrollTop;	
 			else 		
-				clearTimeout(smoothScrollTimeout);	
+				clearTimeout(smoothScrollTimeout);	 
 			
-			smoothScrollTimeout = setTimeout(() => {
-				lastScrollYPosition = contentElement.scrollTop;
-				smoothPageScroll(Math.sign(lastScrollYPosition - firstScrollYPosition), lastScrollYPosition);
-				firstScrollYPosition = null;
+			smoothScrollTimeout = setTimeout(function checkFingerDown() {
+				if(isFingerDown) 
+					smoothScrollTimeout = setTimeout(checkFingerDown, 100);
+				else {
+					lastScrollYPosition = contentElement.scrollTop;
+					smoothPageScroll(Math.sign(lastScrollYPosition - firstScrollYPosition), lastScrollYPosition);
+					firstScrollYPosition = null;
+				}
 			}, 100);
 	}, {passive:true});
 
@@ -325,11 +333,12 @@ function toggleExpandHamburgerMenu() {
 function smoothPageScroll(direction, contentElementScrollTop) {
 	currentPageIndex = Math.round(contentElementScrollTop / windowInnerHeight);
 	let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementScrollTop);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative 
-
-	if(-pageOffset < windowInnerHeight / 4)															//Case 1: The user scroll too little
-		contentElement.scrollTop += direction * pageOffset;			
-	else 																							//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
-		contentElement.scrollTop += direction * (windowInnerHeight + pageOffset);
+	
+	if(pageOffset != 0)
+		if(-pageOffset < windowInnerHeight / 4)															//Case 1: The user scroll too little
+			contentElement.scrollTop += direction * pageOffset;			
+		else 																							//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
+			contentElement.scrollTop += direction * (windowInnerHeight + pageOffset);
 }
 
 /* This Function:
