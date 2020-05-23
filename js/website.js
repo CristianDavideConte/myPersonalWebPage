@@ -333,19 +333,26 @@ function smoothPageScroll(direction, contentElementScrollTop) {
 }
 
 /* This Function:
- * scrolls the contentElement if needed to avoid pages offset creation during resizing
- * udates the windowInnerHeight and windowInnerWidth variables with the new window' values.
- * resets the body height to that of the inner browser: this is used to fix the different height behaviour of the mobile browsers' navigation bars 
- * check if the page can go to the mobileMode and activate the javascript related functions
+ * - scrolls the contentElement if needed to avoid pages offset creation during resizing
+ * - udates the windowInnerHeight and windowInnerWidth variables with the new window' values.
+ * - resets the body height to that of the inner browser: this is used to fix the different height behaviour of the mobile browsers' navigation bars 
+ * - check if the page can go to the mobileMode and set the javascript mobileMode variable.
+ * - doesn't trigger any style recalulation nor activate any of the previously described updates until the resize is finished and 1s is passed 
  */
+let windowResizeTimeout = null;															
 function updateWindowSize(){
 	//contentElement.scrollTop += window.innerHeight - windowInnerHeight;				//Here windowInnerHeight hasn't been updated yet so it contains the old height value
-		
-	windowInnerWidth = window.innerWidth;
-	windowInnerHeight = window.innerHeight;
-	document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
-	if(windowInnerWidth < 1081)
-		mobileMode = 1
-	else 
-		mobileMode = 0;
+	
+	if(windowResizeTimeout != null)  
+		clearTimeout(windowResizeTimeout);
+
+	windowResizeTimeout = setTimeout(() => {
+		windowInnerWidth = window.innerWidth;
+		windowInnerHeight = window.innerHeight;
+		document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+		if(windowInnerWidth < 1081)
+			mobileMode = 1
+		else 
+			mobileMode = 0;
+	}, 1000);
 }

@@ -72,6 +72,7 @@ body {
 	margin:0;
 	width:100vw;
 	height:var(--100vh);
+	background-color: rgba(0,0,0,1);
 }
 
 .contentLoaded {
