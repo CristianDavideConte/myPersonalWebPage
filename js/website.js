@@ -350,12 +350,11 @@ function smoothPageScroll(direction, contentElementScrollTop) {
  */
 let windowResizeTimeout = null;															
 function updateWindowSize(){
-	//contentElement.scrollTop += window.innerHeight - windowInnerHeight;				//Here windowInnerHeight hasn't been updated yet so it contains the old height value
-	
 	if(windowResizeTimeout != null)  
 		clearTimeout(windowResizeTimeout);
 
 	windowResizeTimeout = setTimeout(() => {
+		//contentElement.scrollTop += windowInnerHeight - window.innerHeight;							//Here windowInnerHeight hasn't been updated yet so it contains the old height value	
 		windowInnerWidth = window.innerWidth;
 		windowInnerHeight = window.innerHeight;
 		document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
@@ -363,5 +362,5 @@ function updateWindowSize(){
 			mobileMode = 1
 		else 
 			mobileMode = 0;
-	}, 1000);
+	}, 100);
 }
