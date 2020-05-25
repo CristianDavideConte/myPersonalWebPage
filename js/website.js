@@ -181,7 +181,10 @@ function desktopEventListenerInitialization() {
 			let viewCodeButton = document.createElement("button");
 			viewCodeButton.innerHTML = "View Code";
 			viewCodeButton.className = "websitePreviewExpandedButton";
-			viewCodeButton.addEventListener("click", () => window.open(dataCode), {passive:true});
+			viewCodeButton.addEventListener("click", event => {
+				event.stopPropagation();
+				window.open(dataCode);
+			}, {passive:true});
 			viewButtonsSection.appendChild(viewCodeButton);
 		}
 		
@@ -190,7 +193,10 @@ function desktopEventListenerInitialization() {
 			let viewDemoButton = document.createElement("button");
 			viewDemoButton.innerHTML = "View Demo";
 			viewDemoButton.className = "websitePreviewExpandedButton";
-			viewDemoButton.addEventListener("click", () => window.open(dataDemo), {passive:true});
+			viewDemoButton.addEventListener("click", event => {
+				event.stopPropagation();
+				window.open(dataDemo);
+			}, {passive:true});
 			viewButtonsSection.appendChild(viewDemoButton);
 		}	
 		
