@@ -5,6 +5,7 @@ var documentBodyElement;														//A shortcut for the HTML element document
 var currentPageIndex;															//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
 var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
 var mobileMode; 																//Indicates if the css for mobile is currently beign applied
+var headerBackgroundElement;													//The HTML element with the id "headerBackground", used as the website's navbar background
 var headerElement;																//The HTML element with the id "header", used as the website navbar 
 var hamburgerMenuElement;														//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px 								
 var pageLinksElements; 															//All HTML elements with the class "pageLink", shown in the header to navigate through the website' sections
@@ -22,6 +23,7 @@ function init() {
 	imageLoading();																//Initializes all the HTML img elements' contents  
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
 	//setTimeout(lagTest, 10000);
+	//setTimeout(lagTestHeader, 10000);
 	//setTimeout(() => scrollTest(directionScroll), 5000);
 }
 
@@ -29,6 +31,7 @@ function init() {
 function variableInitialization() {
 	documentBodyElement = document.body;
 	
+	headerBackgroundElement = document.getElementById("headerBackground");
 	headerElement = document.getElementById("header");
 	hamburgerMenuElement = document.getElementById("hamburgerMenu");	
 	pageLinksElements = document.getElementsByClassName("pageLink");	
@@ -38,6 +41,7 @@ function variableInitialization() {
 	websitePreviews = document.getElementsByClassName("websitePreview");
 	
 	transitionTimeMedium = getComputedStyle(documentBodyElement).getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
+	transitionTime = getComputedStyle(documentBodyElement).getPropertyValue("--transition-time").replace("s", "") * 1000;
 	websitePreviewExpandedMap = new Map();
 }
 
@@ -280,6 +284,18 @@ function lagTest() {
 		test++;
 	}
 }
+
+var test2 = 0;
+function lagTestHeader() {
+	var event = document.createEvent('Events');
+    event.initEvent("click", true, false);
+	if(test2 < 100) {
+		hamburgerMenuElement.dispatchEvent(event);	
+		setTimeout(lagTestHeader, transitionTime);
+		test2++;
+	}
+}
+
 /*
 var scroll = 0;
 var directionScroll = 1;
@@ -325,8 +341,10 @@ function imageLoading() {
  * Mobile mode is triggered on the window's resize event.
  */
 function toggleExpandHamburgerMenu() {		
-	if(mobileMode)
+	if(mobileMode) {
+		headerBackgroundElement.classList.toggle("mobileExpanded");	
 		headerElement.classList.toggle("mobileExpanded");	
+	}
 }
 
 /* This Function emulates the smooth scroll behaviour provided by css 
