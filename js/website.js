@@ -22,6 +22,14 @@ function init() {
 
 	imageLoading();																//Initializes all the HTML img elements' contents  
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
+	
+	setTimeout(() => {
+		let meta = document.createElement("meta");
+		meta.name = "viewport";
+		meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, height=" + windowInnerHeight;
+		document.getElementsByTagName("head")[0].appendChild(meta);
+	}, 200);
+	
 	//setTimeout(lagTest, 10000);
 	//setTimeout(lagTestHeader, 10000);
 	//setTimeout(() => scrollTest(directionScroll), 5000);
@@ -381,7 +389,7 @@ function updateWindowSize(){
 		//contentElement.scrollTop += windowInnerHeight - window.innerHeight;							//Here windowInnerHeight hasn't been updated yet so it contains the old height value	
 		windowInnerWidth = window.innerWidth;
 		windowInnerHeight = window.innerHeight;
-		document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+		//document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
 		if(windowInnerWidth < 1081)
 			mobileMode = 1
 		else 
