@@ -295,7 +295,7 @@ h1, h2 {
 	-webkit-transform:translate3d(0, calc(50vh - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
 	transform:translate3d(0, calc(50vh - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
 	
-	-ms-overflow-style:none !important;								/* Edge */
+	-ms-overflow-style:none !important;									/* Edge */
 	scrollbar-width:none !important;									/* Firefox */	
 	overscroll-behavior:none;
 }
@@ -624,7 +624,7 @@ h1, h2 {
 	}
 	
 	.pageLink {
-		margin:20% 0 20% 0;
+		padding:20% 0 20% 0;
 	}
 	
 	#socialNetworks {
@@ -694,6 +694,6 @@ h1, h2 {
 	}
 	
 	.mobileExpanded .pageLink {
-		margin:10% 0 10% 0;
+		padding:10% 0 10% 0;
 	}
 }
