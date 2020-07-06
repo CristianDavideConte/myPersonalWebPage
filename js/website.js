@@ -389,7 +389,7 @@ function updateWindowSize(){
 		//contentElement.scrollTop += windowInnerHeight - window.innerHeight;							//Here windowInnerHeight hasn't been updated yet so it contains the old height value	
 		windowInnerWidth = window.innerWidth;
 		windowInnerHeight = window.innerHeight;
-		//document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+		document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
 		if(windowInnerWidth < 1081)
 			mobileMode = 1
 		else 
