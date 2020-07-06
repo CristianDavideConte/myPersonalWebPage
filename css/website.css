@@ -552,7 +552,6 @@ h1, h2 {
 #contactMeFormBody {
 	overscroll-behavior:none;
 	height: 30%;
-	margin: 0 0 5% 0;
 }
 
 #contactMeFormSendButton {
