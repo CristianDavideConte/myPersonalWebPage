@@ -108,7 +108,7 @@ function desktopEventListenerInitialization() {
 					smoothScrollTimeout = setTimeout(checkFingerDown, 100);
 				else {
 					lastScrollYPosition = contentElement.scrollTop;
-					smoothPageScroll(Math.sign(lastScrollYPosition - firstScrollYPosition), lastScrollYPosition);
+					smoothPageScroll(firstScrollYPosition, lastScrollYPosition, lastScrollYPosition);
 					firstScrollYPosition = null;
 				}
 			}, 100);
@@ -363,15 +363,19 @@ function toggleExpandHamburgerMenu() {
  * - alligned if it covers 3/4 of the windowInnerHeight or more
  * - scrolled, following the original user's scroll direction, otherwise 
  */
-function smoothPageScroll(direction, contentElementScrollTop) {
+function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, contentElementScrollTop) {
 	currentPageIndex = Math.round(contentElementScrollTop / windowInnerHeight);
-	let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementScrollTop);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative 
-	
-	if(pageOffset != 0)
-		if(-pageOffset < windowInnerHeight / 4)															//Case 1: The user scroll too little (less than 1/4 of the page height)
-			contentElement.scrollTop += direction * pageOffset;			
-		else 																							//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
-			contentElement.scrollTop += direction * (windowInnerHeight + pageOffset);
+	let scrollYAmmount = lastScrollYPosition - firstScrollYPosition;										//How much the y position has changed due to the user's scroll
+	if(scrollYAmmount > windowInnerHeight / 2 || scrollYAmmount < -windowInnerHeight / 2) {					//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
+		let direction = Math.sign(scrollYAmmount);
+		let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementScrollTop);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative 
+		
+		if(pageOffset != 0)
+			if(-pageOffset < windowInnerHeight / 4)															//Case 1: The user scroll too little (less than 1/4 of the page height)
+				contentElement.scrollTop += direction * pageOffset;			
+			else 																							//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
+				contentElement.scrollTop += direction * (windowInnerHeight + pageOffset);
+	}
 }
 
 /* This Function:
