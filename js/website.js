@@ -371,7 +371,7 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, contentElem
 		let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementScrollTop);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative 
 		
 		if(pageOffset != 0)
-			if(-pageOffset < windowInnerHeight / 4)															//Case 1: The user scroll too little (less than 1/4 of the page height)
+			if(-pageOffset < windowInnerHeight / 3)															//Case 1: The user scroll too little (less than 1/4 of the page height)
 				contentElement.scrollTop += direction * pageOffset;			
 			else 																							//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
 				contentElement.scrollTop += direction * (windowInnerHeight + pageOffset);
