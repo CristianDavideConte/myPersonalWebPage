@@ -389,9 +389,14 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, contentElem
 function updateWindowSize(){
 	//console.log(window.innerHeight, window.screen.height);
 	window.requestAnimationFrame(() => {
-		if(window.innerHeight > windowInnerHeight)
+		if(window.innerHeight > windowInnerHeight) {
 			windowInnerHeight = window.innerHeight;
-		document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+		} else if(window.innerWidth > windowInnerWidth) {		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode	
+			windowInnerHeight = window.innerHeight;
+			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+		}
+		
 		windowInnerWidth = window.innerWidth;
 		mobileMode = (windowInnerWidth < 1081) ? 1 : 0;
 	});
