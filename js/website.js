@@ -22,14 +22,14 @@ function init() {
 
 	imageLoading();																//Initializes all the HTML img elements' contents  
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
-	
+	/*
 	setTimeout(() => {
 		let meta = document.createElement("meta");
 		meta.name = "viewport";
 		meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, height=" + windowInnerHeight;
 		document.getElementsByTagName("head")[0].appendChild(meta);
 	}, 200);
-	
+	*/
 	//setTimeout(lagTest, 10000);
 	//setTimeout(lagTestHeader, 10000);
 	//setTimeout(() => scrollTest(directionScroll), 5000);
@@ -169,7 +169,7 @@ function desktopEventListenerInitialization() {
 	carouselButtons[1].addEventListener("mouseup", () => carouselButtonScrollEnabled = false, {passive:true});
 	
 	for(const websitePreview of websitePreviews) {
-		/* First all the websitePreviewExpanded basic components are created */
+		/* First, all the websitePreviewExpanded basic components are created */
 		let websitePreviewExpanded = document.createElement("div");
 		websitePreviewExpanded.id = "websitePreviewExpanded";	
 		
@@ -219,7 +219,8 @@ function desktopEventListenerInitialization() {
 		backgroundContent.className = "page";		
 		backgroundContent.appendChild(websitePreviewExpanded);
 		
-		/*The listenersAlreadyTriggered variable is used to prevent the user to execute the backgroundContent eventListener 
+		/*
+		 * The listenersAlreadyTriggered variable is used to prevent the user to execute the backgroundContent eventListener 
 		 * more than one time while the animation is still happening.
 		 * Otherwise the document.body would try to remove the backgroundContent multiple times generating errors in the browser console.
 		 * Note that this bug wouldn't cause the page to instantly crash.
@@ -367,7 +368,7 @@ function smoothPageScroll(direction, contentElementScrollTop) {
 	let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementScrollTop);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative 
 	
 	if(pageOffset != 0)
-		if(-pageOffset < windowInnerHeight / 4)															//Case 1: The user scroll too little
+		if(-pageOffset < windowInnerHeight / 4)															//Case 1: The user scroll too little (less than 1/4 of the page height)
 			contentElement.scrollTop += direction * pageOffset;			
 		else 																							//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
 			contentElement.scrollTop += direction * (windowInnerHeight + pageOffset);
@@ -379,20 +380,13 @@ function smoothPageScroll(direction, contentElementScrollTop) {
  * - resets the body height to that of the inner browser: this is used to fix the different height behaviour of the mobile browsers' navigation bars 
  * - check if the page can go to the mobileMode and set the javascript mobileMode variable.
  * - doesn't trigger any style recalulation nor activate any of the previously described updates until the resize is finished and 1s is passed 
- */
-let windowResizeTimeout = null;															
+ */														
 function updateWindowSize(){
-	if(windowResizeTimeout != null)  
-		clearTimeout(windowResizeTimeout);
-	
-	windowInnerWidth = window.innerWidth;
-	windowInnerHeight = window.innerHeight;
-	windowResizeTimeout = setTimeout(() => {
-		//contentElement.scrollTop += windowInnerHeight - window.innerHeight;							//Here windowInnerHeight hasn't been updated yet so it contains the old height value	
+	//console.log(window.innerHeight, window.screen.height);
+	window.requestAnimationFrame(() => {
+		windowInnerWidth = window.innerWidth;
+		windowInnerHeight = window.screen.height;
 		document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
-		if(windowInnerWidth < 1081)
-			mobileMode = 1
-		else 
-			mobileMode = 0;
-	}, 100);
+		mobileMode = (windowInnerWidth < 1081) ? 1 : 0;
+	});
 }
