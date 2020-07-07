@@ -83,8 +83,8 @@ body {
 #background {    
 	position:fixed;
 	margin:-0.5em;
-    width:101%;
-    height:101%;
+    width:101vw;
+    height:calc(var(--vh, 1vh) * 101);
 	background-image:url("../images/backgroundImages/LakeAndMountains_Compressed.jpg");
 	background-repeat:no-repeat;
 	background-size:cover;
@@ -500,7 +500,7 @@ h1, h2 {
 	box-sizing: border-box;
 	display:flex;
 	align-items:center;
-	font-size: 3em;
+	font-size: calc(var(--vh, 1vh) * 3.5);
 	margin: auto auto 0 auto;
 	padding: 0 10% 0 10%;
 	border-radius:1rem;
@@ -517,7 +517,7 @@ h1, h2 {
 #contactMeFormSendButton {
 	cursor:pointer;
 	box-sizing: border-box;
-	font-size: 2em;
+	font-size: calc(var(--vh, 1vh) * 3);
 	padding: 2%;
 	border:none;
 	outline: none;
@@ -543,7 +543,6 @@ h1, h2 {
 #contactMeFormName,
 #contactMeFormSubject {
 	text-align:center;
-	font-size: 3em;
 	font-family:"Baloo Bhaina 2"; 
 	height: 10%;
 }
@@ -556,7 +555,6 @@ h1, h2 {
 #contactMeFormSendButton {
 	width: 50%;
 	height: 10%;
-	font-size: 3em;
 	background:rgba(0,0,0,0.7);
 	margin:auto; 
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
