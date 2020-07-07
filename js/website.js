@@ -51,6 +51,7 @@ function variableInitialization() {
 	transitionTimeMedium = getComputedStyle(documentBodyElement).getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
 	transitionTime = getComputedStyle(documentBodyElement).getPropertyValue("--transition-time").replace("s", "") * 1000;
 	websitePreviewExpandedMap = new Map();
+	windowInnerHeight = 0;
 }
 
 /* This function binds all the HTML elements that can be interacted to their mouse and keyboard eventHandlers */
@@ -388,9 +389,10 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, contentElem
 function updateWindowSize(){
 	//console.log(window.innerHeight, window.screen.height);
 	window.requestAnimationFrame(() => {
-		windowInnerWidth = window.innerWidth;
-		windowInnerHeight = window.screen.height;
+		if(window.innerHeight > windowInnerHeight)
+			windowInnerHeight = window.innerHeight;
 		document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+		windowInnerWidth = window.innerWidth;
 		mobileMode = (windowInnerWidth < 1081) ? 1 : 0;
 	});
 }
