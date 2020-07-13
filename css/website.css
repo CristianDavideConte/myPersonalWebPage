@@ -635,6 +635,7 @@ h1, h2 {
 	}
 	
 	.pageLink {
+		-webkit-appearance: initial;			/* Safari padding fix */
 		padding:20% 0 20% 0;
 	}
 	
