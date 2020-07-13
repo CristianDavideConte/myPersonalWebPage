@@ -590,7 +590,7 @@ h1, h2 {
 	}
 	
 	#header.mobileExpanded {
-		transform: translate3d(0, calc(var(--50vh) - var(--header-elements-height) - 2*var(--header-elements-padding)), 0);
+		transform: translate3d(0, calc(var(--50vh) - var(--header-elements-height)), 0);
 	}
 	
 	#hamburgerMenu {
