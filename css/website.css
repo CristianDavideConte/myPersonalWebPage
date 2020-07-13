@@ -132,6 +132,7 @@ p {
 	position:fixed;
 	height: 100%;
 	width: 100%;
+	-webkit-transform: translate3d(0, calc(var(--header-elements-height) + 2*var(--header-elements-padding) - 100%), 0);
 	transform: translate3d(0, calc(var(--header-elements-height) + 2*var(--header-elements-padding) - 100%), 0);
 	background:rgba(0,0,0,0.8); 
 	transition:var(--transition-time);
@@ -171,8 +172,9 @@ p {
 
 .pageLink {
 	outline:none;
-	display:flex;
-	flex-direction:column;
+	display:block;
+	text-align:center;
+	//flex-direction:column;
 	align-items:center;
 	margin:0px 1em 0px 1em;
 }
@@ -208,7 +210,7 @@ p {
 	min-width:var(--header-elements-height);
 	min-height:var(--header-elements-height);
 	cursor:pointer;
-	-webkit-backface-visibility: hidden;			/* Safari Fix*/
+	-webkit-backface-visibility: hidden;			/* Safari Fix */
 }
 
 #socialNetworks > a:after{
@@ -252,7 +254,7 @@ p {
 .title {
 	width:100%;
 	text-align:center;
-	margin-top:auto;				/* Centers the title*/
+	margin-top:auto;				/* Centers the title */
 }
 
 h1 {

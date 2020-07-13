@@ -279,45 +279,6 @@ function desktopEventListenerInitialization() {
 	}		
 }
 
-var test = 0;
-function lagTest() {
-	websitePreview = document.getElementsByClassName("websitePreview")[0];
-    var event = document.createEvent('Events');
-    event.initEvent("click", true, false);
-	if(test < 100) {
-		if(test % 2 == 0) 
-			websitePreview.dispatchEvent(event);
-		else 
-			documentBodyElement.firstChild.dispatchEvent(event);
-		
-		setTimeout(lagTest, transitionTimeMedium);
-		test++;
-	}
-}
-
-var test2 = 0;
-function lagTestHeader() {
-	var event = document.createEvent('Events');
-    event.initEvent("click", true, false);
-	if(test2 < 100) {
-		hamburgerMenuElement.dispatchEvent(event);	
-		setTimeout(lagTestHeader, transitionTime);
-		test2++;
-	}
-}
-
-/*
-var scroll = 0;
-var directionScroll = 1;
-function scrollTest(directionScroll) {
-	if(scroll < 10){
-		contentElement.scrollTop += directionScroll * windowInnerHeight / 4 + directionScroll;
-		scroll++;
-		setTimeout(() => scrollTest(-directionScroll), 2000);
-	}
-}
-*/
-
 /* This Function asyncronusly load the content of the DOM img elements */
 function imageLoading() {
 	/* The full background image is loaded when ready and not at the initial page loading.
@@ -401,3 +362,43 @@ function updateWindowSize(){
 		mobileMode = (windowInnerWidth < 1081) ? 1 : 0;
 	});
 }
+
+/*---------------------TEST CODE SECTION----------------------*/
+var test = 0;
+function lagTest() {
+	websitePreview = document.getElementsByClassName("websitePreview")[0];
+    var event = document.createEvent('Events');
+    event.initEvent("click", true, false);
+	if(test < 100) {
+		if(test % 2 == 0) 
+			websitePreview.dispatchEvent(event);
+		else 
+			documentBodyElement.firstChild.dispatchEvent(event);
+		
+		setTimeout(lagTest, transitionTimeMedium);
+		test++;
+	}
+}
+
+var test2 = 0;
+function lagTestHeader() {
+	var event = document.createEvent('Events');
+    event.initEvent("click", true, false);
+	if(test2 < 100) {
+		hamburgerMenuElement.dispatchEvent(event);	
+		setTimeout(lagTestHeader, transitionTime);
+		test2++;
+	}
+}
+
+/*
+var scroll = 0;
+var directionScroll = 1;
+function scrollTest(directionScroll) {
+	if(scroll < 10){
+		contentElement.scrollTop += directionScroll * windowInnerHeight / 4 + directionScroll;
+		scroll++;
+		setTimeout(() => scrollTest(-directionScroll), 2000);
+	}
+}
+*/
