@@ -181,6 +181,7 @@ p {
 .pageLinkBarOnHover {
 	width:0em;
 	height:0.3em;
+	margin:auto;
 	border-radius:1em;
 	transition:0.3s;
 }
