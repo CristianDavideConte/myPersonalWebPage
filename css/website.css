@@ -163,7 +163,6 @@ p {
 	position:absolute;	
 	display:flex;
 	justify-content:center;
-	align-items:center;
 }
 
 #linkSection > * {
@@ -174,16 +173,13 @@ p {
 	outline:none;
 	display:flex;
 	flex-direction:column;
-	justify-content:center;
 	align-items:center;
-	margin-left:1em;
-	margin-right:1em;	
+	margin:0px 1em 0px 1em;
 }
 
 .pageLinkBarOnHover {
 	width:0em;
 	height:0.3em;
-	padding:0px;
 	border-radius:1em;
 	transition:0.3s;
 }
@@ -635,8 +631,7 @@ h1, h2 {
 	}
 	
 	.pageLink {
-		-webkit-appearance: initial;			/* Safari padding fix */
-		padding:20% 0 20% 0;
+		margin:20% 0 20% 0;
 	}
 	
 	#socialNetworks {
@@ -705,7 +700,7 @@ h1, h2 {
 		opacity:0;
 	}
 	
-	.mobileExpanded .pageLink {
-		padding:10% 0 10% 0;
+	.pageLink {
+		margin:9% 0 9% 0;
 	}
 }
