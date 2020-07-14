@@ -334,14 +334,15 @@ h1, h2 {
 }
 
 .websitePreview {
-	margin:1em;	
+	margin:1em;
 	cursor:pointer;
 	display:flex;
 	flex-direction:column;
 	justify-content:center;
 	align-items:center;
-	min-width:var(--websitePreview-size);
-	min-height:var(--websitePreview-size);
+	flex:none;
+	width:var(--websitePreview-size);
+	height:var(--websitePreview-size);
 	border-radius:var(--boxShapedElement-border-radius);
 	background:rgba(0,0,0,0.5); 
 	transition:opacity 0s, transform var(--transition-time-quick);
