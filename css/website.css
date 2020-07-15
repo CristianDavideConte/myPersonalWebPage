@@ -110,6 +110,7 @@
 }
 
 html {				
+	overflow:hidden;		/* Safari fix for elastic overflow scrolling */
 	font-family:"Baloo Bhaina 2"; 
 	font-size:1.3vmin;
 	-webkit-touch-callout:none !important; /* iOS Safari */
