@@ -360,7 +360,7 @@ if(!browserIsSafari()) {
 	 * totalScrollAmmount is the total ammount of pixel vertically scrolled by the smoothScrollVertically function 
 	 */
 	function smoothScrollVertically(scrollDirection, totalScrollAmmount) {
-		let scrollDistance = totalScrollAmmount/20;									//The ammount of pixel scrolled at each safariSmoothPageScroll call
+		let scrollDistance = totalScrollAmmount/10;									//The ammount of pixel scrolled at each safariSmoothPageScroll call
 		let partialScrollAmmount = 0;												//scrollDistance * number of safariSmoothPageScroll function calls
 		
 		/* 
