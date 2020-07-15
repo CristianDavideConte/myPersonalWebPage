@@ -85,7 +85,7 @@ function desktopEventListenerInitialization() {
 	for(const pageLinkElement of pageLinksElements)															
 		pageLinkElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});											
 	
-	/* All the */
+	/* All the social networks icons are linked to the corresponding website */
 	document.getElementById("githubContact").addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
 	document.getElementById("instagramContact").addEventListener("click", () => window.open("https://www.instagram.com/cristiandavideconte/?hl=it"), {passive:true});
 	document.getElementById("facebookContact").addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"), {passive:true});		
@@ -286,7 +286,7 @@ function imageLoading() {
 	 * This allows the user to interact much quicker with the page and lesser the probability of a page crash.
 	 * Whenever the full image is ready the two images are swapped with a transition in between.
 	 */
-	let backgroundElement = document.getElementById("background");
+	let backgroundElement = document.getElementById("bodyBackground");
 	let backgroundElementLoaded = backgroundElement.cloneNode(true);
 	let backgroundImage = new Image();
 	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
@@ -363,7 +363,7 @@ function updateWindowSize(){
 	});
 }
 
-/*---------------------TEST CODE SECTION----------------------*/
+/*---------------------TESTING CODE SECTION----------------------*/
 var test = 0;
 function lagTest() {
 	websitePreview = document.getElementsByClassName("websitePreview")[0];

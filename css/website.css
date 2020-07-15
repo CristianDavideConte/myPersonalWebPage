@@ -1,4 +1,7 @@
-/* latin-ext */
+/*
+ * The CSS style's elements are ordered from the most generic one (*) to the most specific one.
+ * The CSS style's elements are also ordered from the ones you encounter first in the debugger view to the ones that are more nested/you encounter later.
+ */
 @font-face {
   font-family:"Baloo Bhaina 2";
   font-style:normal;
@@ -37,9 +40,57 @@
 	--vh:1vh;
 	--50vh:calc(var(--vh, 1vh) * 50);
 	--100vh:calc(var(--vh, 1vh) * 100);
+	
+	--light-theme-blur-background-color-Black: rgba(0,0,0,1);
+	--light-theme-blur-background-color-White: rgba(255,255,255,0.5);
+	--light-theme-blur-background-color-Darkest: rgba(255,255,255,0.75);
+	--light-theme-blur-background-color-Dark: rgba(255,255,255,0.7);
+	--light-theme-blur-background-color-Average: rgba(255,255,255, 0.5);
+	--light-theme-blur-background-color-Brightest: rgba(200,200,200,0.4);	
+	--light-theme-color-box-shadow: rgba(50,50,50,1);
+	--light-theme-text-color-shadow: rgba(255,255,255,0.7);
+	--light-theme-text-color: rgba(0,0,0,1);
+	--light-theme-githubContact-background-color: radial-gradient(circle, rgba(255,255,255,1) 58%, rgba(145,145,145,1) 60%);
+	
+	--dark-theme-blur-background-color-Black: rgba(0,0,0,1);
+	--dark-theme-blur-background-color-White: rgba(100,100,100,0.2);
+	--dark-theme-blur-background-color-Darkest: rgba(0,0,0,0.85);
+	--dark-theme-blur-background-color-Dark: rgba(0,0,0,0.8);
+	--dark-theme-blur-background-color-Average: rgba(0,0,0,0.5);
+	--dark-theme-blur-background-color-Brightest: rgba(0,0,0,0.3);	
+	--dark-theme-color-box-shadow: rgba(0,0,0,0);
+	--dark-theme-text-color-shadow: rgba(0,0,0,0.8);
+	--dark-theme-text-color: rgba(255,255,255,1);
+	--dark-theme-githubContact-background-color: radial-gradient(circle, rgba(30,30,30,1) 61%, rgba(57,57,57,1) 62%);
+	
+	--theme-blur-background-color-Black: var(--light-theme-blur-background-color-Black);
+	--theme-blur-background-color-White: var(--light-theme-blur-background-color-White);
+	--theme-blur-background-color-Darkest: var(--light-theme-blur-background-color-Darkest);
+	--theme-blur-background-color-Dark: var(--light-theme-blur-background-color-Dark);
+	--theme-blur-background-color-Average: var(--light-theme-blur-background-color-Average);
+	--theme-blur-background-color-Brightest: var(--light-theme-blur-background-color-Brightest);
+	--theme-color-box-shadow: var(--light-theme-color-box-shadow);
+	--theme-text-color-shadow: var(--light-theme-text-color-shadow);
+	--theme-text-color: var(--light-theme-text-color);
+	--theme-githubContact-background-color: var(--light-theme-githubContact-background-color);
 }
 
-@media (hover:hover) {
+@media (prefers-color-scheme:dark) {
+	:root {	
+		--theme-blur-background-color-Black: var(--dark-theme-blur-background-color-Black);
+		--theme-blur-background-color-White: var(--dark-theme-blur-background-color-White);
+		--theme-blur-background-color-Darkest: var(--dark-theme-blur-background-color-Darkest);
+		--theme-blur-background-color-Dark: var(--dark-theme-blur-background-color-Dark);
+		--theme-blur-background-color-Average: var(--dark-theme-blur-background-color-Average);
+		--theme-blur-background-color-Brightest: var(--dark-theme-blur-background-color-Brightest);
+		--theme-color-box-shadow: var(--dark-theme-color-box-shadow);
+		--theme-text-color-shadow: var(--dark-theme-text-color-shadow);
+		--theme-text-color: var(--dark-theme-text-color);
+		--theme-githubContact-background-color: var(--dark-theme-githubContact-background-color);
+	}
+}
+
+@media (hover:hover) {					/* Prevents touch devices to trigger the fake hover behaviour */
 	:root {	
 		--scaling-factor-increase:1.1;
 		--scaling-factor-decrease:0.9;
@@ -47,10 +98,11 @@
 }
 
 * {
-	color:white; 
+	color:var(--theme-text-color); 
 	-webkit-tap-highlight-color:rgba(0,0,0,0);		
-	user-drag:none !important; 
 	-webkit-user-drag:none !important;
+	user-drag:none !important; 
+	
 }
 
 *::-webkit-scrollbar {
@@ -72,15 +124,15 @@ body {
 	margin:0;
 	width:100vw;
 	height:var(--100vh);
-	background-color: rgba(0,0,0,1);
+	background-color: var(--theme-blur-background-color-Black);
 }
 
-.contentLoaded {
-	opacity:0;
-	transition:var(--transition-time-medium);
+p {
+	margin:0;
+	font-size:190%;
 }
 
-#background {    
+#bodyBackground {    
 	position:fixed;
 	margin:-0.5em;
     width:101vw;
@@ -92,29 +144,9 @@ body {
     z-index:-1;
 }
 
-.page {
-	width:100%;
-	height:100%;
-	display:flex;
-	flex-direction:column;
-	align-items:center;
-	justify-content:center;
-}
-
-.pageSeparator {
-	border-radius:10px;
-	height:0.7%;
-	width:20%;
-	margin:auto auto 0 auto;
-	background:rgba(0,0,0,0.7); 
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
-	transition:0.3s;
-}
-
-p {
-	margin:0;
-	font-size:190%;
+.contentLoaded {
+	opacity:0;
+	transition:var(--transition-time-medium);
 }
 
 #content {
@@ -134,7 +166,8 @@ p {
 	width: 100%;
 	-webkit-transform: translate3d(0, calc(var(--header-elements-height) + 2*var(--header-elements-padding) - 100%), 0);
 	transform: translate3d(0, calc(var(--header-elements-height) + 2*var(--header-elements-padding) - 100%), 0);
-	background:rgba(0,0,0,0.8); 
+	background:var(--theme-blur-background-color-Dark); 
+	box-shadow:0 0 0.4rem var(--theme-color-box-shadow);
 	transition:var(--transition-time);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
@@ -183,13 +216,13 @@ p {
 	height:0.3em;
 	margin:auto;
 	border-radius:1em;
+	background-color: var(--theme-text-color);
 	transition:0.3s;
 }
 
 .pageLink:focus .pageLinkBarOnHover,
 .pageLink:hover .pageLinkBarOnHover {
 	width:100%;
-	background-color:#f2f2f2;
 }
 
 #socialNetworks {
@@ -236,7 +269,7 @@ p {
 }
 
 #githubContact:after {
-	background: radial-gradient(circle, rgba(30,30,30,1) 61%, rgba(57,57,57,1) 62%);
+	background: var(--theme-githubContact-background-color);
 }
 
 #facebookContact:after {
@@ -249,6 +282,27 @@ p {
 
 #socialNetworks > a:hover:after { 
   opacity: 1;
+}
+
+.page {
+	width:100%;
+	height:100%;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content:center;
+}
+
+.pageSeparator {
+	border-radius:10px;
+	height:0.7%;
+	width:20%;
+	margin:auto auto 0 auto;
+	background:var(--theme-blur-background-color-Dark); 
+	box-shadow:0 0 0.4rem var(--theme-color-box-shadow);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
+	transition:0.3s;
 }
 
 .title {
@@ -266,14 +320,15 @@ h2 {
 }
 
 h1, h2 {
+	color: var(--dark-theme-text-color);
 	margin:0;
-	text-shadow:var(--textshadow-offset) var(--textshadow-offset) var(--textshadow-radius) #14141f;
+	text-shadow:var(--textshadow-offset) var(--textshadow-offset) var(--textshadow-radius) var(--dark-theme-text-color-shadow);
 }
 
 #profilePic {
 	z-index:1;
 	border-radius:100%; 
-	box-shadow:0 0 var(--boxshadow-radius) #14141f;
+	box-shadow:0 0 var(--boxshadow-radius) var(--theme-blur-background-color-Black);
 	height:var(--profilePic-size);
 	width:var(--profilePic-size);
 	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size)*0.75 - var(--presentationCard-height)/2 + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
@@ -283,11 +338,11 @@ h1, h2 {
 #presentationCard {
 	height:var(--presentationCard-height);
 	width:var(--presentationCard-width);
-	box-shadow:0 0 var(--boxshadow-radius) #14141f;
+	box-shadow:0 0 var(--boxshadow-radius) var(--theme-blur-background-color-Black);
 	overflow-x:hidden;
 	overflow-y:scroll;	
 	border-radius:5%;
-	background:rgba(0,0,0,0.3); 
+	background:var(--theme-blur-background-color-Brightest);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(130%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(130%);
 	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
@@ -304,7 +359,7 @@ h1, h2 {
 
 #presentationCard p {
 	margin:calc(0.25 * var(--profilePic-size));
-	text-shadow:var(--textshadow-offset) var(--textshadow-offset) var(--textshadow-radius) #14141f;
+	//text-shadow:var(--textshadow-offset) var(--textshadow-offset) var(--textshadow-radius) var(--theme-text-color-shadow);
 	backface-visibility:hidden;						/* Blurry text fix */
 }
 
@@ -320,8 +375,8 @@ h1, h2 {
 	border-radius:var(--boxShapedElement-border-radius);
 	overflow-y:hidden;
 	overscroll-behavior:none;
-	background:rgba(0,0,0,0.3);
-	box-shadow:0 0 1rem rgba(0,0,0,1);  
+	background:var(--theme-blur-background-color-Brightest);
+	box-shadow:0 0 1rem var(--theme-blur-background-color-Black);  
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 	-ms-overflow-style:none !important;								/* Edge */
@@ -344,7 +399,8 @@ h1, h2 {
 	width:var(--websitePreview-size);
 	height:var(--websitePreview-size);
 	border-radius:var(--boxShapedElement-border-radius);
-	background:rgba(0,0,0,0.5); 
+	background:var(--theme-blur-background-color-Average); 
+	box-shadow:0 0 0.4rem var(--theme-color-box-shadow);
 	transition:opacity 0s, transform var(--transition-time-quick);
 }
 
@@ -381,7 +437,8 @@ h1, h2 {
 	height:var(--websitePreview-current-size);
 	width:var(--websitePreview-current-size);
 	border-radius:var(--boxShapedElement-border-radius);
-	background:rgba(0,0,0,0.5); 
+	background:var(--theme-blur-background-color-Average); 
+	box-shadow:0 0 0.4rem var(--theme-color-box-shadow);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(130%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(130%);
 	transition:all var(--transition-time-medium);
@@ -434,8 +491,8 @@ h1, h2 {
 	cursor:pointer;
 	margin:0 auto 0 auto;
 	padding:0.7em;
-	background:rgba(100,100,100,0.2);
-	box-shadow: 0 0 2rem rgba(0,0,0,1); 
+	background:var(--theme-blur-background-color-White);
+	box-shadow: 0 0 2rem var(--theme-blur-background-color-Black); 
 	border-radius:var(--boxShapedElement-border-radius);
 	font-size:0;
 	transition:all var(--transition-time-medium);
@@ -446,7 +503,7 @@ h1, h2 {
 }
 
 #websitePreviewExpandedBackgroundContent {
-	z-index:1;
+	z-index:4;
 	position:absolute; 
 	cursor:pointer;
 }
@@ -459,7 +516,7 @@ h1, h2 {
 	border-radius:100%;
 	outline:none;
 	border:none;
-	background:rgba(0,0,0,0.3);
+	background:var(--theme-blur-background-color-Brightest);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 	transition:transform var(--transition-time-quick);
@@ -473,7 +530,7 @@ h1, h2 {
 	width: 100%;
 	height: 100%;
 	border-radius:100%;
-	box-shadow:0 0 1rem rgba(0,0,0,1);  
+	box-shadow:0 0 1rem var(--theme-blur-background-color-Black);  
 	transition:var(--transition-time-quick);
 }
 
@@ -503,9 +560,10 @@ h1, h2 {
 	margin: auto auto 0 auto;
 	padding: 0 10% 0 10%;
 	border-radius:1rem;
-	text-shadow:var(--textshadow-offset) var(--textshadow-offset) var(--textshadow-radius) #14141f;
+	box-shadow:0 0 0.4rem var(--theme-color-box-shadow);
+	//text-shadow:var(--textshadow-offset) var(--textshadow-offset) var(--textshadow-radius) var(--theme-text-color-shadow);
 	backface-visibility:hidden;						/* Blurry text fix */
-	background:rgba(0,0,0,0.7);
+	background:var(--theme-blur-background-color-Dark);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(130%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(130%);
 }
@@ -533,8 +591,8 @@ h1, h2 {
 #contactMeFormBody {
 	cursor: text;
 	overflow: auto;
-	background:rgba(0,0,0,0.4);
-	box-shadow:0 0 0.4rem rgba(0,0,0,1);
+	background:var(--theme-blur-background-color-Brightest);
+	box-shadow:0 0 0.4rem var(--theme-blur-background-color-Black);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 }
@@ -553,10 +611,11 @@ h1, h2 {
 
 #contactMeFormSendButton {
 	cursor: pointer;
+	margin:auto; 
 	width: 50%;
 	height: 10%;
-	background:rgba(0,0,0,0.7);
-	margin:auto; 
+	background:var(--theme-blur-background-color-Dark);
+	box-shadow:0 0 0.4rem var(--theme-color-box-shadow);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 }
@@ -580,7 +639,7 @@ h1, h2 {
 	}
 	
 	#headerBackground {
-		background:rgba(0,0,0,0.85); 
+		background:var(--theme-blur-background-color-Darkest); 
 	}
 	
 	#headerBackground.mobileExpanded {
@@ -602,7 +661,7 @@ h1, h2 {
 		height:var(--bar-height);
 		margin:var(--bar-margin) 0 var(--bar-margin) 0;
 		border-radius:var(--boxShapedElement-border-radius);
-		background-color:#f2f2f2;
+		background-color:var(--theme-text-color);
 		transition:var(--transition-time);
 	}	
 	
