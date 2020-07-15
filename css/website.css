@@ -122,6 +122,7 @@ html {
 
 body {
 	overflow:hidden;		/* Safari fix for elastic overflow scrolling */
+	position:fixed;
 	margin:0;
 	width:100vw;
 	height:var(--100vh);
