@@ -97,16 +97,16 @@ function desktopEventListenerInitialization() {
 	
 	let firstScrollYPosition = null;
 	let lastScrollYPosition; 	
-	let smoothScrollTimeout;
+	let smoothWebsiteShowcaseWheelScrollTimeout;
 	contentElement.addEventListener("scroll", event => {
 			if(firstScrollYPosition == null)
 				firstScrollYPosition = contentElement.scrollTop;	
 			else 		
-				clearTimeout(smoothScrollTimeout);	 
+				clearTimeout(smoothWebsiteShowcaseWheelScrollTimeout);	 
 			
-			smoothScrollTimeout = setTimeout(function checkFingerDown() {
+			smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(function checkFingerDown() {
 				if(isFingerDown) 
-					smoothScrollTimeout = setTimeout(checkFingerDown, 100);
+					smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(checkFingerDown, 100);
 				else {
 					lastScrollYPosition = contentElement.scrollTop;
 					smoothPageScroll(firstScrollYPosition, lastScrollYPosition, lastScrollYPosition);
@@ -117,53 +117,43 @@ function desktopEventListenerInitialization() {
 
 	websiteShowcase.addEventListener("wheel", (event) => {
 		let scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
-		let totalScrollAmmount = windowInnerWidth/20;					//The total ammount of pixel horizontally scrolled by the smoothScroll function 
-		let scrollDistance = windowInnerWidth/150;						//The ammount of pixel scrolled at each smoothScroll call
-		let partialScrollAmmount = 0;									//scrollDistance * number of smoothScroll function calls
+		let totalScrollAmmount = windowInnerWidth/20;					//The total ammount of pixel horizontally scrolled by the smoothWebsiteShowcaseWheelScroll function 
+		let scrollDistance = windowInnerWidth/150;						//The ammount of pixel scrolled at each smoothWebsiteShowcaseWheelScroll call
+		let partialScrollAmmount = 0;									//scrollDistance * number of smoothWebsiteShowcaseWheelScroll function calls
 		
 		/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
 		 * and so that is 1/20th of the window's innerWidth at any given resolution.
 		 * If the wheel is scrolled from top to bottom the scroll direction will be from right to left, it will be inverted otherwise.
 		 */
-		function smoothScroll() {
+		function smoothWebsiteShowcaseWheelScroll() {
 			websiteShowcase.scrollLeft += scrollDirection * scrollDistance;		
 			partialScrollAmmount += scrollDistance;
 			if(partialScrollAmmount < totalScrollAmmount)
-				window.requestAnimationFrame(smoothScroll);
+				window.requestAnimationFrame(smoothWebsiteShowcaseWheelScroll);
 		}
 		
-		window.requestAnimationFrame(smoothScroll);
+		window.requestAnimationFrame(smoothWebsiteShowcaseWheelScroll);
 	}, {passive:true});
-														
+
+	/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
+	 * and so that is +1/100th of the window's innerWidth at any given resolution.
+	 * If the direction is > 0  the scroll direction is from left to right, it's from right to left otherwise. 
+	 */		
 	let carouselButtonScrollEnabled = false;
-	/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
-	 * and so that is +1/100th of the window's innerWidth at any given resolution.
-	 * The + sign means the scroll direction is from left to right. 
-	 */
-	function scrollFromRightToLeft() {
-		websiteShowcase.scrollLeft -= windowInnerWidth/100;
+	function smoothWebsiteShowcaseWheelScrollHorizzontally(direction) {
+		websiteShowcase.scrollLeft += direction*windowInnerWidth/100;
 		if(carouselButtonScrollEnabled)
-			window.requestAnimationFrame(scrollFromRightToLeft);
-	}
-	
-	/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth 
-	 * and so that is +1/100th of the window's innerWidth at any given resolution.
-	 * The + sign means the scroll direction is from left to right. 
-	 */
-	function scrollFromLeftToRight() {
-		websiteShowcase.scrollLeft += windowInnerWidth/100;
-		if(carouselButtonScrollEnabled)
-			window.requestAnimationFrame(scrollFromLeftToRight);
+			window.requestAnimationFrame(() => smoothWebsiteShowcaseWheelScrollHorizzontally(direction));
 	}
 	
 	carouselButtons[0].addEventListener("mousedown", () => {
 		carouselButtonScrollEnabled = true;
-		window.requestAnimationFrame(scrollFromRightToLeft);
+		window.requestAnimationFrame(() => smoothWebsiteShowcaseWheelScrollHorizzontally(-1));
 	}, {passive:true});
 	
 	carouselButtons[1].addEventListener("mousedown", () => {
 		carouselButtonScrollEnabled = true;
-		window.requestAnimationFrame(scrollFromLeftToRight);
+		window.requestAnimationFrame(() => smoothWebsiteShowcaseWheelScrollHorizzontally(1));
 	}, {passive:true});
 	
 	carouselButtons[0].addEventListener("mouseup", () => carouselButtonScrollEnabled = false, {passive:true});
@@ -318,6 +308,14 @@ function toggleExpandHamburgerMenu() {
 	}
 }
 
+/* Returns true if the user's browser is Safari, false otherwise */
+function browserIsSafari() {
+	return navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
+		   navigator.userAgent &&
+		   navigator.userAgent.indexOf("CriOS") == -1 &&
+		   navigator.userAgent.indexOf("FxiOS") == -1;
+}
+
 /* This Function emulates the smooth scroll behaviour provided by css 
  * taking into consideration the current page position.
  * It triggers after a scroll is completed.
@@ -325,18 +323,58 @@ function toggleExpandHamburgerMenu() {
  * - alligned if it covers 3/4 of the windowInnerHeight or more
  * - scrolled, following the original user's scroll direction, otherwise 
  */
-function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, contentElementScrollTop) {
-	currentPageIndex = Math.round(contentElementScrollTop / windowInnerHeight);
-	let scrollYAmmount = lastScrollYPosition - firstScrollYPosition;										//How much the y position has changed due to the user's scroll
-	if(scrollYAmmount > windowInnerHeight / 2 || scrollYAmmount < -windowInnerHeight / 2) {					//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
-		let direction = Math.sign(scrollYAmmount);
-		let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementScrollTop);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative 
+if(!browserIsSafari()) {
+	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, contentElementScrollTop) {
+		currentPageIndex = Math.round(contentElementScrollTop / windowInnerHeight);
+		let scrollYAmmount = lastScrollYPosition - firstScrollYPosition;										//How much the y position has changed due to the user's scroll
+		if(scrollYAmmount > windowInnerHeight / 2 || scrollYAmmount < -windowInnerHeight / 2) {					//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
+			let direction = Math.sign(scrollYAmmount);
+			let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementScrollTop);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative 
+			
+			if(pageOffset != 0)
+				if(-pageOffset < windowInnerHeight / 3)															//Case 1: The user scroll too little (less than 1/4 of the page height)
+					contentElement.scrollTop += direction * pageOffset;			
+				else 																							//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
+					contentElement.scrollTop += direction * (windowInnerHeight + pageOffset);
+		}
+	} 
+} else { //If the browser used is safari, which doesn't support css scroll-behavior:smooth, js is applied
+	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, contentElementScrollTop) {
+		currentPageIndex = Math.round(contentElementScrollTop / windowInnerHeight);
+		let scrollYAmmount = lastScrollYPosition - firstScrollYPosition;										//How much the y position has changed due to the user's scroll
+		if(scrollYAmmount > windowInnerHeight / 2 || scrollYAmmount < -windowInnerHeight / 2) {					//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
+			let direction = Math.sign(scrollYAmmount);
+			let pageOffset = direction * (currentPageIndex * windowInnerHeight - contentElementScrollTop);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative 
+			
+			if(pageOffset != 0)
+				if(-pageOffset < windowInnerHeight / 3)															//Case 1: The user scroll too little (less than 1/4 of the page height)
+					smoothScrollVertically(direction, pageOffset);			
+				else  																							//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
+					smoothScrollVertically(direction, windowInnerHeight + pageOffset);
+		}
+	}
+	
+	/*
+	 * This funcion replaces the scroll-behavior:smooth css rules for the safari browser that doesn't support it.
+	 * scrollDirection is 1 if the scrolling is going downwards -1 otherwise.
+	 * totalScrollAmmount is the total ammount of pixel vertically scrolled by the smoothScrollVertically function 
+	 */
+	function smoothScrollVertically(scrollDirection, totalScrollAmmount) {
+		let scrollDistance = totalScrollAmmount/10;									//The ammount of pixel scrolled at each safariSmoothPageScroll call
+		let partialScrollAmmount = 0;												//scrollDistance * number of safariSmoothPageScroll function calls
 		
-		if(pageOffset != 0)
-			if(-pageOffset < windowInnerHeight / 3)															//Case 1: The user scroll too little (less than 1/4 of the page height)
-				contentElement.scrollTop += direction * pageOffset;			
-			else 																							//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
-				contentElement.scrollTop += direction * (windowInnerHeight + pageOffset);
+		/* 
+		 * The number of the pixel scrolled on the y-axis, it's calculated dynamically
+		 * based on the page position at the end of a user's page scroll.
+		 */
+		function safariSmoothPageScroll() {
+			contentElement.scrollTop += scrollDirection * scrollDistance;	
+			partialScrollAmmount += scrollDistance;
+			if(scrollDistance*partialScrollAmmount < scrollDistance*totalScrollAmmount)	//Mulitplying by scrollDistance allows to always have the abs values of the two numbers
+				window.requestAnimationFrame(safariSmoothPageScroll);
+		}
+		
+		window.requestAnimationFrame(safariSmoothPageScroll);
 	}
 }
 
