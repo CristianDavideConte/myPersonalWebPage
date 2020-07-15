@@ -121,6 +121,7 @@ html {
 }
 
 body {
+	//overflow:hidden;		/* Safari fix for elastic overflow scrolling */
 	margin:0;
 	width:100vw;
 	height:var(--100vh);
@@ -154,7 +155,8 @@ p {
 	height:100%;
 	overflow-x:hidden;
 	overflow-y:scroll;	
-	scroll-behavior:smooth;
+	scroll-behavior:smooth; 
+	-webkit-overflow-scrolling: auto;							/* Fix for Safari momentum scroll */
 	-ms-overflow-style:none !important;									/* Edge */
 	scrollbar-width:none !important;									/* Firefox */
 }
