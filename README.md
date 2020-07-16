@@ -9,9 +9,9 @@ Hope to hear you soon !</p>
 <h2>Skills you can learn from it</h2>
 <ul>
   <li>Basic UI/UX for modern design components and positioning</li>
+  <li>Animations and how to make them target 60FPS</li>
   <li>Browsers' layers stacking system</li>
-  <li>Javascript optimizations for managing large HTML collections</li>
   <li>Form Validation</li>
   <li>Overriding the browser's default behaviour with event handlers</li>
-  <li>Animations and how to make them target 60FPS</li>
+  <li>Javascript optimizations for managing large HTML collections</li>
 </ul>
