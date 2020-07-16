@@ -51,6 +51,9 @@
 	--light-theme-text-color-shadow: rgba(255,255,255,0.7);
 	--light-theme-text-color: rgba(0,0,0,1);
 	--light-theme-githubContact-background-color: radial-gradient(circle, rgba(255,255,255,1) 58%, rgba(145,145,145,1) 60%);
+	--light-theme-facebookContact-background-color: linear-gradient(0deg, rgba(0,111,255,1) 26%, rgba(94,201,255,1) 100%);
+	--light-theme-instagramContact-background-color: linear-gradient(340deg, rgba(244,255,0,1) 0%, rgba(255,39,218,1) 58%, rgba(255,39,218,1) 72%, rgba(0,83,255,1) 99%);
+	--light-theme-mailContact-background-color: linear-gradient(35deg, rgba(255,248,0,1) 0%, rgba(255,99,0,1) 67%);
 	
 	--dark-theme-blur-background-color-Black: rgba(0,0,0,1);
 	--dark-theme-blur-background-color-White: rgba(100,100,100,0.2);
@@ -62,6 +65,9 @@
 	--dark-theme-text-color-shadow: rgba(0,0,0,0.8);
 	--dark-theme-text-color: rgba(255,255,255,1);
 	--dark-theme-githubContact-background-color: radial-gradient(circle, rgba(30,30,30,1) 61%, rgba(57,57,57,1) 62%);
+	--dark-theme-facebookContact-background-color: linear-gradient(0deg, rgba(0,48,255,1) 0%, rgba(9,187,255,1) 100%);
+	--dark-theme-instagramContact-background-color: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
+	--dark-theme-mailContact-background-color: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
 	
 	--theme-blur-background-color-Black: var(--light-theme-blur-background-color-Black);
 	--theme-blur-background-color-White: var(--light-theme-blur-background-color-White);
@@ -73,6 +79,9 @@
 	--theme-text-color-shadow: var(--light-theme-text-color-shadow);
 	--theme-text-color: var(--light-theme-text-color);
 	--theme-githubContact-background-color: var(--light-theme-githubContact-background-color);
+	--theme-facebookContact-background-color: var(--light-theme-facebookContact-background-color);
+	--theme-instagramContact-background-color: var(--light-theme-instagramContact-background-color);
+	--theme-mailContact-background-color: var(--light-theme-mailContact-background-color);
 }
 
 @media (prefers-color-scheme:dark) {
@@ -87,6 +96,9 @@
 		--theme-text-color-shadow: var(--dark-theme-text-color-shadow);
 		--theme-text-color: var(--dark-theme-text-color);
 		--theme-githubContact-background-color: var(--dark-theme-githubContact-background-color);
+		--theme-facebookContact-background-color: var(--dark-theme-facebookContact-background-color);
+		--theme-instagramContact-background-color: var(--dark-theme-instagramContact-background-color);
+		--theme-mailContact-background-color: var(--dark-theme-mailContact-background-color);
 	}
 }
 
@@ -263,20 +275,20 @@ p {
 	font-size: 3em;
 }
 
-#mailContact:after {
-	background: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
-}
-
 #githubContact:after {
 	background: var(--theme-githubContact-background-color);
 }
 
 #facebookContact:after {
-	background: linear-gradient(0deg, rgba(0,48,255,1) 0%, rgba(9,187,255,1) 100%);
+	background: var(--theme-facebookContact-background-color);
 }
 
 #instagramContact:after {
-	background: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
+	background: var(--theme-instagramContact-background-color);
+}
+
+#mailContact:after {
+	background: var(--theme-mailContact-background-color);
 }
 
 #socialNetworks > a:hover:after { 
