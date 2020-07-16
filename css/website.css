@@ -122,9 +122,7 @@
 	display:none;
 }
 
-html {	
-	position: fixed;
-	overflow: hidden;			
+html {		
 	font-family:"Baloo Bhaina 2"; 
 	font-size:1.3vmin;
 	-webkit-touch-callout:none !important; /* iOS Safari */
@@ -136,8 +134,6 @@ html {
 }
 
 body {
-	position: fixed;
-	overflow: hidden;
 	margin:0;
 	width:100vw;
 	height:var(--100vh);
