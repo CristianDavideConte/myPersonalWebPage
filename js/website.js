@@ -376,27 +376,6 @@ if(!browserIsSafari()) {
 		
 		window.requestAnimationFrame(safariSmoothPageScroll);
 	}
-	
-	/* Fix for Safari overscroll bouncy effect */
-	contentElement.addEventListener("scroll", async handleScroll() {
-		await new Promise(resolve => window.requestAnimationFrame(resolve));
-		const {
-			scrollTop,
-			scrollLeft,
-			scrollHeight,
-			clientHeight
-		} = this;
-		const atTop = scrollTop === 0;
-		const beforeTop = 1;
-		const atBottom = scrollTop === scrollHeight - clientHeight;
-		const beforeBottom = scrollHeight - clientHeight - 1;
-
-		if (atTop) {
-			this.scrollTo(scrollLeft, beforeTop); 
-		} else if (atBottom) {
-			this.scrollTo(scrollLeft, beforeBottom);
-		}
-	}
 }
 
 /* This Function:
