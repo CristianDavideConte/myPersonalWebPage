@@ -397,7 +397,7 @@ function updateWindowSize(){
 		}
 		
 		windowInnerWidth = window.innerWidth;
-		mobileMode = (windowInnerWidth < 1081) ? 1 : 0;
+		mobileMode = (windowInnerWidth < 1081 || windowInnerHeight < 601) ? 1 : 0;
 	});
 }
 
