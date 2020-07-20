@@ -10,6 +10,7 @@ Hope to hear you soon !</p>
 <ul>
   <li>Basic UI/UX for modern design components and positioning</li>
   <li>Animations and how to make them target 60FPS</li>
+  <li>Real time White/Dark Theme based on OS system preferences</li>
   <li>Browsers' layers stacking system</li>
   <li>Form Validation</li>
   <li>Overriding the browser's default behaviour with event handlers</li>
