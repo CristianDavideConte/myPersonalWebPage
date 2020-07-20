@@ -116,7 +116,6 @@ function desktopEventListenerInitialization() {
 	}, {passive:true});
 
 	websiteShowcase.addEventListener("wheel", (event) => {
-		event.stopPropagation();
 		let scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
 		let totalScrollAmmount = windowInnerWidth/20;					//The total ammount of pixel horizontally scrolled by the smoothWebsiteShowcaseWheelScroll function 
 		let scrollDistance = windowInnerWidth/150;						//The ammount of pixel scrolled at each smoothWebsiteShowcaseWheelScroll call
@@ -361,7 +360,7 @@ if(!browserIsSafari()) {
 	 * totalScrollAmmount is the total ammount of pixel vertically scrolled by the smoothScrollVertically function 
 	 */
 	function smoothScrollVertically(scrollDirection, totalScrollAmmount) {
-		let scrollDistance = totalScrollAmmount/10;									//The ammount of pixel scrolled at each safariSmoothPageScroll call
+		let scrollDistance = totalScrollAmmount/16;									//The ammount of pixel scrolled at each safariSmoothPageScroll call
 		let partialScrollAmmount = 0;												//scrollDistance * number of safariSmoothPageScroll function calls
 		
 		/* 
