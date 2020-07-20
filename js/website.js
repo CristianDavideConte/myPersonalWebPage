@@ -116,7 +116,7 @@ function desktopEventListenerInitialization() {
 	}, {passive:true});
 
 	websiteShowcase.addEventListener("wheel", (event) => {
-		event.preventDefault();
+		event.stopPropagation();
 		let scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
 		let totalScrollAmmount = windowInnerWidth/20;					//The total ammount of pixel horizontally scrolled by the smoothWebsiteShowcaseWheelScroll function 
 		let scrollDistance = windowInnerWidth/150;						//The ammount of pixel scrolled at each smoothWebsiteShowcaseWheelScroll call
