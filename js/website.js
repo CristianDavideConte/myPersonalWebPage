@@ -84,7 +84,7 @@ function desktopEventListenerInitialization() {
 	 * This is done the same way the hamburgerMenu expands when clicked directly (see above in the comment).
 	 * Plus, if safari needs a manual implementation for the smoothScroll CSS attribute.
 	 */
-  if(!safariBrowserUsed)
+  if(safariBrowserUsed)
 		 for(const pageLink of pageLinksElements) {
 		 		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
 	 			pageLink.addEventListener("click", () => pageLinksSmoothScroll(pageLink));
@@ -330,7 +330,7 @@ function browserIsSafari() {
  * - alligned if it covers 3/4 of the windowInnerHeight or more
  * - scrolled, following the original user's scroll direction, otherwise
  */
-if(browserIsSafari()) {
+if(!browserIsSafari()) {
 	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 		currentPageIndex = Math.round(lastScrollYPosition / windowInnerHeight);
 		let scrollYAmmount = lastScrollYPosition - firstScrollYPosition;										//How much the y position has changed due to the user's scroll
@@ -385,7 +385,7 @@ if(browserIsSafari()) {
 		let scrollDistance = totalScrollAmmount / maxAnimationFramesNumber;	//The ammount of pixel scrolled at each safariSmoothPageScroll call
 		let currentPagesGapNumber = Math.abs(contentElement.scrollTop / windowInnerHeight - (contentElement.scrollTop + totalScrollAmmount) / windowInnerHeight);		//CORRECT IT
 		let speedIncrease = MAX_SPEED_INCREASE - (currentPagesGapNumber * (MAX_SPEED_INCREASE - MIN_SPEED_INCREASE) / MAX_PAGES_GAP_NUMBER); //Between MAX_SPEED_INCREASE and MIN_SPEED_INCREASE
-		console.log(currentPagesGapNumber, speedIncrease);
+		//console.log(currentPagesGapNumber, speedIncrease);
 		/*
 		 * The number of the pixel scrolled on the y-axis, it's calculated dynamically
 		 * based on the page position at the end of a user's page scroll.
