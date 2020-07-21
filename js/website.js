@@ -84,7 +84,7 @@ function desktopEventListenerInitialization() {
 	 * This is done the same way the hamburgerMenu expands when clicked directly (see above in the comment).
 	 * Plus, if safari needs a manual implementation for the smoothScroll CSS attribute.
 	 */
-  if(safariBrowserUsed)
+  if(!safariBrowserUsed)
 		 for(const pageLink of pageLinksElements) {
 		 		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
 	 			pageLink.addEventListener("click", () => pageLinksSmoothScroll(pageLink));
@@ -330,7 +330,7 @@ function browserIsSafari() {
  * - alligned if it covers 3/4 of the windowInnerHeight or more
  * - scrolled, following the original user's scroll direction, otherwise
  */
-if(!browserIsSafari()) {
+if(browserIsSafari()) {
 	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 		currentPageIndex = Math.round(lastScrollYPosition / windowInnerHeight);
 		let scrollYAmmount = lastScrollYPosition - firstScrollYPosition;										//How much the y position has changed due to the user's scroll
@@ -366,10 +366,26 @@ if(!browserIsSafari()) {
 	 * scrollDirection is 1 if the scrolling is going downwards -1 otherwise.
 	 * totalScrollAmmount is the total ammount of pixel vertically scrolled by the smoothScrollVertically function
 	 */
+	const MAX_SCROLLING_ANIMATION_FRAMES = 35;
+ 	const MIN_SCROLLING_ANIMATION_FRAMES = 10;
+	const MIN_SPEED_INCREASE = 1;
+	const MAX_SPEED_INCREASE = 2;
+	const MAX_PAGES_GAP_NUMBER = 3;				//Max number of pages of the contentElement
 	function smoothScrollVertically(scrollDirection, totalScrollAmmount) {
-		let scrollDistance = totalScrollAmmount/16;									//The ammount of pixel scrolled at each safariSmoothPageScroll call
+		/*
+		 * The velocity of the scrolling (scrollDistance) is calculated by following this formula:
+		 * scrollDistance = totalScrollAmmount / maxAnimationFramesNumber
+		 * Where:
+		 * windowInnerHeight = the inner Height of the browser window
+		 * totalScrollAmmount = the offset the contentElement has to scroll vertically
+		 * maxAnimationFramesNumber = the highest number of frame the scrolling animation can use
+		 */
+		let maxAnimationFramesNumber = MAX_SCROLLING_ANIMATION_FRAMES;
 		let partialScrollAmmount = 0;												//scrollDistance * number of safariSmoothPageScroll function calls
-
+		let scrollDistance = totalScrollAmmount / maxAnimationFramesNumber;	//The ammount of pixel scrolled at each safariSmoothPageScroll call
+		let currentPagesGapNumber = Math.abs(contentElement.scrollTop / windowInnerHeight - (contentElement.scrollTop + totalScrollAmmount) / windowInnerHeight);		//CORRECT IT
+		let speedIncrease = MAX_SPEED_INCREASE - (currentPagesGapNumber * (MAX_SPEED_INCREASE - MIN_SPEED_INCREASE) / MAX_PAGES_GAP_NUMBER); //Between MAX_SPEED_INCREASE and MIN_SPEED_INCREASE
+		console.log(currentPagesGapNumber, speedIncrease);
 		/*
 		 * The number of the pixel scrolled on the y-axis, it's calculated dynamically
 		 * based on the page position at the end of a user's page scroll.
@@ -377,8 +393,22 @@ if(!browserIsSafari()) {
 		function _safariSmoothPageScroll() {
 			contentElement.scrollTop += scrollDirection * scrollDistance;
 			partialScrollAmmount += scrollDistance;
-			if(scrollDistance*partialScrollAmmount < scrollDistance*totalScrollAmmount)	//Mulitplying by scrollDistance allows to always have the abs values of the two numbers
+			/*
+			 * Mulitplying by scrollDistance allows to always have the absolute values
+			 * of the two partialScrollAmmount and totalScrollAmmount
+			 */
+			if(scrollDistance * partialScrollAmmount < scrollDistance * totalScrollAmmount) {
+				if(maxAnimationFramesNumber - speedIncrease > MIN_SCROLLING_ANIMATION_FRAMES)
+					maxAnimationFramesNumber -= speedIncrease;
+				else
+					maxAnimationFramesNumber = MIN_SCROLLING_ANIMATION_FRAMES;
+
+				scrollDistance = totalScrollAmmount / maxAnimationFramesNumber;
+				speedIncrease *= speedIncrease;
 				window.requestAnimationFrame(_safariSmoothPageScroll);
+			} else {
+				console.log("END");
+			}
 		}
 
 		window.requestAnimationFrame(_safariSmoothPageScroll);
@@ -389,10 +419,10 @@ if(!browserIsSafari()) {
 			event.preventDefault();
 			let contentElementScrollTop = contentElement.scrollTop;
 			currentPageIndex = Math.round(contentElementScrollTop / windowInnerHeight);
-			let targetPageIndex = pageLink.dataset.pageNumber;
+			let targetPageIndex = pageLink.dataset.pageNumber;																						//The index of the page the passed pageLink refers
 			let totalScrollAmmount = contentElementScrollTop - targetPageIndex * windowInnerHeight;
 			let scrollDirection = (currentPageIndex > targetPageIndex && totalScrollAmmount < 0) ? 1 : -1;//1 = scroll downwards, -1 = scroll upwards
-			smoothScrollVertically(scrollDirection, totalScrollAmmount);		// Only defined if the browser used is Safari
+			smoothScrollVertically(scrollDirection, totalScrollAmmount);																	// Only defined if the browser used is Safari
 	}
 }
 
