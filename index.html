@@ -4,35 +4,35 @@
 		<meta name = "Description" content = "Hi, i'm Cristian Davide Conte and this is my portfolio. You will find my projects, my resume and you can contact me if you're interested in knowing what i can do.">
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Cristian Davide Conte</title>		
+		<title>Cristian Davide Conte</title>
 		<link rel = "icon" type = "image/jpg" href = "./images/favicon.jpg" />
-		<link rel = "stylesheet" type = "text/css" href = "./css/website.css"> 
+		<link rel = "stylesheet" type = "text/css" href = "./css/website.css">
 		<script src = "./js/website.js" async></script>
-		<script src="https://kit.fontawesome.com/f48b5d4594.js" crossorigin="anonymous" async></script>  
+		<script src="https://kit.fontawesome.com/f48b5d4594.js" crossorigin="anonymous" async></script>
 	</head>
-	
+
 	<body onload = "init()">
 		<div id = "bodyBackground"></div>
 		<div id = "headerBackground"></div>
-		<nav id = "header">		
+		<nav id = "header">
 			<div id ="hamburgerMenu">
 				<div id = "hamburgerMenuUpperBar"></div>
 				<div id = "hamburgerMenuLowerBar"></div>
 			</div>
-			<div id = "linkSection"> 
-				<a class = "pageLink" href = "#home">
+			<div id = "linkSection">
+				<a class = "pageLink" href = "#home" data-page-number = "0">
 					<p>HOME</p>
 					<div class = "pageLinkBarOnHover"></div>
 				</a>
-				<a class = "pageLink" href = "#aboutMe">
+				<a class = "pageLink" href = "#aboutMe" data-page-number = "1">
 					<p>ABOUT ME</p>
 					<div class = "pageLinkBarOnHover"></div>
 				</a>
-				<a class = "pageLink" href = "#projects">
+				<a class = "pageLink" href = "#projects" data-page-number = "2">
 					<p>PROJECTS</p>
 					<div class = "pageLinkBarOnHover"></div>
-				</a>		
-				<a class = "pageLink" href = "#contactMe">
+				</a>
+				<a class = "pageLink" href = "#contactMe" data-page-number = "3">
 					<p>CONTACT ME</p>
 					<div class = "pageLinkBarOnHover"></div>
 				</a>
@@ -51,7 +51,7 @@
 					<h2>Software Developer</h2>
 				</div>
 				<div class = "pageSeparator"></div>
-			</div>	
+			</div>
 			<div id = "aboutMe" class = "page">
 				<img id = "profilePic" alt = "profilePic" src = "./images/profilePictures/profilePicture_Compressed.jpg"/>
 				<div id = "presentationCard">
@@ -59,13 +59,13 @@
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat nunc lorem, quis commodo elit interdum vitae. Aliquam malesuada erat at dictum pretium. Donec pellentesque sed metus id commodo. Vivamus luctus erat non dui consequat, a tincidunt eros luctus. Vestibulum vel imperdiet risus, congue vehicula massa. Proin non iaculis nisl. Nam iaculis, libero ac accumsan bibendum, augue ante blandit mi, quis ullamcorper lacus metus eget risus. Duis in pretium sem.
 						Sed suscipit porttitor odio, ac auctor quam. Praesent gravida vulputate tortor id cursus. Nulla imperdiet luctus purus, vel suscipit ante lacinia vitae. Cras in quam dignissim, lacinia diam non, tristique purus. Curabitur sit amet risus a augue gravida accumsan ac vel massa. Nulla semper magna felis, ut malesuada ex semper quis. Suspendisse venenatis interdum turpis eget facilisis. Donec tincidunt, purus pharetra convallis volutpat, ante ex venenatis erat, et ultricies justo magna a tortor. Pellentesque commodo nisi mi, non lobortis velit cursus id. Praesent venenatis, tortor quis gravida gravida, tellus metus consectetur massa, non fermentum nisl massa nec nunc. Etiam sapien tortor, aliquam sed diam non, bibendum pellentesque neque. Curabitur facilisis sapien vel mollis viverra. Phasellus at aliquet eros. Curabitur suscipit, lorem in pellentesque consectetur, quam nulla hendrerit sem, quis congue odio elit vitae nulla. Sed viverra mauris eget elit elementum fringilla.
 					</p>
-				</div>	
+				</div>
 				<div class = "pageSeparator"></div>
 			</div>
 			<div id = "projects" class = "page">
 				<h1 class = "title">Peek at my Projects</h1>
 				<div class = "projectsCarousel">
-					<button class = "carouselButton">&lt;_</button> 
+					<button class = "carouselButton">&lt;_</button>
 					<div id = "websiteShowcase">
 						<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/myPersonalWebPage" data-title = "This exact website">
 							<img class = "websitePreviewImage" alt = "websitePreviewImage" src = "./images/favicon.jpg" loading = "lazy"/>
@@ -100,7 +100,7 @@
 							<p>Show More</p>
 						</div>
 					</div>
-					<button class = "carouselButton">_&gt;</button> 
+					<button class = "carouselButton">_&gt;</button>
 				</div>
 				<div class = "pageSeparator"></div>
 			</div>
@@ -114,7 +114,7 @@
 					<textarea id = "contactMeFormBody"></textarea>
 					<button  id = "contactMeFormSendButton">Send</button>
 				</form>
-			</div>	
+			</div>
 		</div>
 	</body>
 </html>
