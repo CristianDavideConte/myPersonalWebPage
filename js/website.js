@@ -1,3 +1,9 @@
+const MAX_SCROLLING_ANIMATION_FRAMES = 35;
+const MIN_SCROLLING_ANIMATION_FRAMES = 10;
+const MIN_SPEED_INCREASE = 1;
+const MAX_SPEED_INCREASE = 2;
+const MAX_PAGES_GAP_NUMBER = 3;							//Max number of pages of the contentElement
+
 var windowInnerWidth;															//A shortcut for the DOM element window.innerWidth
 var windowInnerHeight;															//A shortcut for the DOM element window.innerHeight
 //var windowPosition;																//The scrollTop value of the window, used to prevent the DOM from scrolling after a screen orientation change
@@ -366,11 +372,6 @@ if(!browserIsSafari()) {
 	 * scrollDirection is 1 if the scrolling is going downwards -1 otherwise.
 	 * totalScrollAmmount is the total ammount of pixel vertically scrolled by the smoothScrollVertically function
 	 */
-	const MAX_SCROLLING_ANIMATION_FRAMES = 35;
- 	const MIN_SCROLLING_ANIMATION_FRAMES = 10;
-	const MIN_SPEED_INCREASE = 1;
-	const MAX_SPEED_INCREASE = 2;
-	const MAX_PAGES_GAP_NUMBER = 3;				//Max number of pages of the contentElement
 	function smoothScrollVertically(scrollDirection, totalScrollAmmount) {
 		/*
 		 * The velocity of the scrolling (scrollDistance) is calculated by following this formula:
