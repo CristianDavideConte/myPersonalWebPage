@@ -1,4 +1,4 @@
-const MAX_SCROLLING_ANIMATION_FRAMES = 35;
+const MAX_SCROLLING_ANIMATION_FRAMES = 37;
 const MIN_SCROLLING_ANIMATION_FRAMES = 10;
 const MIN_SPEED_INCREASE = 1;
 const MAX_SPEED_INCREASE = 2;
@@ -320,6 +320,26 @@ function toggleExpandHamburgerMenu() {
 	}
 }
 
+/* This Function:
+ * - udates the windowInnerHeight and windowInnerWidth variables with the new window' values
+ * - resets the body height to that of the inner browser: this is used to fix the different height behaviour of the mobile browsers' navigation bars
+ * - check if the page can go to the mobileMode and set the javascript mobileMode variable accordingly
+ */
+function updateWindowSize(){
+	window.requestAnimationFrame(() => {
+		if(window.innerHeight > windowInnerHeight) {
+			windowInnerHeight = window.innerHeight;
+			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+		} else if(window.innerWidth > windowInnerWidth) {		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
+			windowInnerHeight = window.innerHeight;
+			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+		}
+
+		windowInnerWidth = window.innerWidth;
+		mobileMode = (windowInnerWidth < 1081 || windowInnerHeight < 601) ? 1 : 0;
+	});
+}
+
 /* Returns true if the user's browser is Safari, false otherwise */
 function browserIsSafari() {
 	safariBrowserUsed = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
@@ -339,30 +359,36 @@ function browserIsSafari() {
 if(!browserIsSafari()) {
 	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 		currentPageIndex = Math.round(lastScrollYPosition / windowInnerHeight);
-		let scrollYAmmount = lastScrollYPosition - firstScrollYPosition;										//How much the y position has changed due to the user's scroll
-		if(scrollYAmmount > windowInnerHeight / 2 || scrollYAmmount < -windowInnerHeight / 2) {					//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
-			let scrollDirection = Math.sign(scrollYAmmount);
+		let scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
+		if(scrollYAmmount > windowInnerHeight / 2 || scrollYAmmount < -windowInnerHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
+			let scrollDirection = Math.sign(scrollYAmmount);																										//1 if the scrolling is going downwards -1 otherwise.
 			let pageOffset = scrollDirection * (currentPageIndex * windowInnerHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
 			if(pageOffset != 0)
-				if(-pageOffset < windowInnerHeight / 3)															//Case 1: The user scroll too little (less than 1/4 of the page height)
+				if(-pageOffset < windowInnerHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
 					contentElement.scrollTop += scrollDirection * pageOffset;
-				else 																							//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
+				else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
 					contentElement.scrollTop += scrollDirection * (windowInnerHeight + pageOffset);
 		}
 	}
-} else { //If the browser used is safari, which doesn't support css scroll-behavior:smooth, js is applied
+} else {
+	/*
+	 * If the browser used is Safari, which doesn't support the CSS3 scroll-behavior:smooth getAttribute
+	 * the smoothPageScroll function is redifined and the smooth scrolling is done by using:
+	 * - smoothScrollVertically for a generic smooth scroll of the contentElement
+	 * - pageLinksSmoothScroll for the specific case of a pageLink clicked
+	 */
 	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 		currentPageIndex = Math.round(lastScrollYPosition / windowInnerHeight);
-		let scrollYAmmount = lastScrollYPosition - firstScrollYPosition;										//How much the y position has changed due to the user's scroll
-		if(scrollYAmmount > windowInnerHeight / 2 || scrollYAmmount < -windowInnerHeight / 2) {					//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
-			let scrollDirection = Math.sign(scrollYAmmount);
+		let scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
+		if(scrollYAmmount > windowInnerHeight / 2 || scrollYAmmount < -windowInnerHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
+			let scrollDirection = Math.sign(scrollYAmmount);																										//1 if the scrolling is going downwards -1 otherwise.
 			let pageOffset = scrollDirection * (currentPageIndex * windowInnerHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
 			if(pageOffset != 0)
-				if(-pageOffset < windowInnerHeight / 3)															//Case 1: The user scroll too little (less than 1/4 of the page height)
+				if(-pageOffset < windowInnerHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
 					smoothScrollVertically(Math.sign(scrollDirection * pageOffset), Math.abs(pageOffset));
-				else  																							//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
+				else  																																														//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
 					smoothScrollVertically(Math.sign(scrollDirection * (windowInnerHeight + pageOffset)), windowInnerHeight + pageOffset);
 		}
 	}
@@ -382,19 +408,18 @@ if(!browserIsSafari()) {
 		 * totalScrollAmmount = the absolute value of the offset the contentElement has to scroll vertically
 		 * maxAnimationFramesNumber = the highest number of frame the scrolling animation can use
 		 * speedIncrease = a number which grows exponentially (speedIcrease(n) = speedIcrease(n-1)^2): it's value is contained between MIN_SPEED_INCREASE and MAX_SPEED_INCREASE
-		 *
 		 */
 		let maxAnimationFramesNumber = MAX_SCROLLING_ANIMATION_FRAMES;
-		let partialScrollAmmount = 0;												//scrollDistance * number of safariSmoothPageScroll function calls
-		let scrollDistance = totalScrollAmmount / maxAnimationFramesNumber;	//The ammount of pixel scrolled at each safariSmoothPageScroll call
-		let currentPagesGapNumber = scrollDirection * totalScrollAmmount / windowInnerHeight;
-		let speedIncrease = MAX_SPEED_INCREASE - (currentPagesGapNumber * (MAX_SPEED_INCREASE - MIN_SPEED_INCREASE) / MAX_PAGES_GAP_NUMBER); //Between MAX_SPEED_INCREASE and MIN_SPEED_INCREASE
+		let partialScrollAmmount = 0;																									//The ammount of pixed scrolled from the first _safariSmoothPageScroll call
+		let scrollDistance = totalScrollAmmount / maxAnimationFramesNumber;						//The ammount of pixel scrolled at each _safariSmoothPageScroll call
+		let currentPagesGapNumber = totalScrollAmmount / windowInnerHeight;						//How many pages there are between the current page and the one the user wants to land on
+		let speedIncrease = MAX_SPEED_INCREASE - (currentPagesGapNumber * (MAX_SPEED_INCREASE - MIN_SPEED_INCREASE) / MAX_PAGES_GAP_NUMBER);
+
 		/*
-		 * The number of the pixel scrolled on the y-axis, it's calculated dynamically
-		 * based on the page position at the end of a user's page scroll.
+		 * This function should only be called inside the smoothScrollVertically function.
+		 * It physically scrolls the contentElement by scrollDistance in the given scrollDirection at each function call.
 		 */
 		function _safariSmoothPageScroll() {
-			speedIncrease *= speedIncrease;
 			contentElement.scrollTop += scrollDirection * scrollDistance;
 			partialScrollAmmount += scrollDistance;
 
@@ -405,6 +430,7 @@ if(!browserIsSafari()) {
 				else
 					maxAnimationFramesNumber = MIN_SCROLLING_ANIMATION_FRAMES;
 
+				speedIncrease *= speedIncrease;
 				scrollDistance = totalScrollAmmount / maxAnimationFramesNumber;
 				/*
    			 * If the next -_safariSmoothPageScroll will set the content.scrollTop beyond the target scrollDistance
@@ -419,43 +445,23 @@ if(!browserIsSafari()) {
 		window.requestAnimationFrame(_safariSmoothPageScroll);
 	}
 
-	/* Adding the smooth scrolling for the href pageLinks HTML elements */
+	/*
+	 * This function adds the smooth scroll for the href pageLinks HTML elements
+	 * It's done by comparing the current page's index and the
+	 * page index of the page the user wants to land to.
+	 * The actual scrolling is delegated to the smoothScrollVertically function.
+	 */
 	function pageLinksSmoothScroll(pageLink) {
-			event.preventDefault();
-			let contentElementScrollTop = contentElement.scrollTop;
-			currentPageIndex = Math.round(contentElementScrollTop / windowInnerHeight);
-			let targetPageIndex = pageLink.dataset.pageNumber;																													//The index of the page the passed pageLink refers
-			let totalScrollAmmount = targetPageIndex * windowInnerHeight - contentElementScrollTop;
-			smoothScrollVertically(Math.sign(totalScrollAmmount), Math.abs(totalScrollAmmount));																	 // Only defined if the browser used is Safari
+		event.preventDefault();
+		let contentElementScrollTop = contentElement.scrollTop;
+		currentPageIndex = Math.round(contentElementScrollTop / windowInnerHeight);
+		let targetPageIndex = pageLink.dataset.pageNumber;																							//The index of the page the passed pageLink refers
+		let totalScrollAmmount = targetPageIndex * windowInnerHeight - contentElementScrollTop;
+		smoothScrollVertically(Math.sign(totalScrollAmmount), Math.abs(totalScrollAmmount));						// Only defined if the browser used is Safari
 	}
 }
 
-
-
-/* This Function:
- * - scrolls the contentElement if needed to avoid pages offset creation during resizing
- * - udates the windowInnerHeight and windowInnerWidth variables with the new window' values.
- * - resets the body height to that of the inner browser: this is used to fix the different height behaviour of the mobile browsers' navigation bars
- * - check if the page can go to the mobileMode and set the javascript mobileMode variable.
- * - doesn't trigger any style recalulation nor activate any of the previously described updates until the resize is finished and 1s is passed
- */
-function updateWindowSize(){
-	//console.log(window.innerHeight, window.screen.height);
-	window.requestAnimationFrame(() => {
-		if(window.innerHeight > windowInnerHeight) {
-			windowInnerHeight = window.innerHeight;
-			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
-		} else if(window.innerWidth > windowInnerWidth) {		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
-			windowInnerHeight = window.innerHeight;
-			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
-		}
-
-		windowInnerWidth = window.innerWidth;
-		mobileMode = (windowInnerWidth < 1081 || windowInnerHeight < 601) ? 1 : 0;
-	});
-}
-
-/*---------------------TESTING CODE SECTION----------------------*/
+/* -------------------------------------------------------- 						TESTING CODE SECTION     					------------------------------------------------------------------*/
 var test = 0;
 function lagTest() {
 	websitePreview = document.getElementsByClassName("websitePreview")[0];
