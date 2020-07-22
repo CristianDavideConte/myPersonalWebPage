@@ -1,42 +1,38 @@
-const MAX_SCROLLING_ANIMATION_FRAMES = 37;
-const MIN_SCROLLING_ANIMATION_FRAMES = 10;
+const STANDARD_WINDOW_INNER_HEIGHT = 937;							//The standard browser height, usually about 937px at 1920x1080
+const MAX_SCROLLING_ANIMATION_FRAMES_DIVIDER = 70;		//The maximum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
+const MIN_SCROLLING_ANIMATION_FRAMES_DIVIDER = 10;		//The minumum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
 const MIN_SPEED_INCREASE = 1;
 const MAX_SPEED_INCREASE = 2;
-const MAX_PAGES_GAP_NUMBER = 3;							//Max number of pages of the contentElement
+const MAX_PAGES_GAP_NUMBER = 3;												//Max number of pages of the contentElement
+var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that the smoothScrollVertically function can use to scroll the contentElement for the current windowInnerHeight value
+var MIN_SCROLLING_ANIMATION_FRAMES;										//The minumum number of frames that the smoothScrollVertically function can use to scroll the contentElement for the current windowInnerHeight value
 
 var windowInnerWidth;															//A shortcut for the DOM element window.innerWidth
-var windowInnerHeight;															//A shortcut for the DOM element window.innerHeight
+var windowInnerHeight;														//A shortcut for the DOM element window.innerHeight
 //var windowPosition;																//The scrollTop value of the window, used to prevent the DOM from scrolling after a screen orientation change
-var documentBodyElement;														//A shortcut for the HTML element document.body
+var documentBodyElement;													//A shortcut for the HTML element document.body
 var currentPageIndex;															//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
-var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
-var mobileMode; 																//Indicates if the css for mobile is currently beign applied
-var headerBackgroundElement;													//The HTML element with the id "headerBackground", used as the website's navbar background
+var transitionTimeMedium;													//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
+var mobileMode; 																	//Indicates if the css for mobile is currently beign applied
+var headerBackgroundElement;											//The HTML element with the id "headerBackground", used as the website's navbar background
 var headerElement;																//The HTML element with the id "header", used as the website navbar
-var hamburgerMenuElement;														//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px
-var pageLinksElements; 															//All HTML elements with the class "pageLink", shown in the header to navigate through the website' sections
+var hamburgerMenuElement;													//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px
+var pageLinksElements; 														//All HTML elements with the class "pageLink", shown in the header to navigate through the website' sections
 var contentElement;																//The HTML element with the id "content", used as the website main container
 var carouselButtons;															//All HTML elements with the class "carouselButton", used to scroll the websitePreview carousel
 var websiteShowcase;															//The HTML element with the id "websiteShowcase", children of the websitePreviewCarousel HTML element and used as container for all the websitePreviews
 var websitePreviews;															//All HTML elements with the class "websitePreview", used as a clickable previews for all the projects inside the websitePreviewShowcase
-var websitePreviewExpandedMap; 													//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
+var websitePreviewExpandedMap; 										//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
 var safariBrowserUsed;														//Boolean, true if the browser used is Safari, false otherwise
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {
-	variableInitialization();													//Binds the js variables to the corresponding HTML elements
-	desktopEventListenerInitialization();										//Initializes all the mouse and keyboard eventHandlers
+	variableInitialization();												//Binds the js variables to the corresponding HTML elements
+	desktopEventListenerInitialization();						//Initializes all the mouse and keyboard eventHandlers
 
-	imageLoading();																//Initializes all the HTML img elements' contents
+	imageLoading();																	//Initializes all the HTML img elements' contents
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
-	/*
-	setTimeout(() => {
-		let meta = document.createElement("meta");
-		meta.name = "viewport";
-		meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, height=" + windowInnerHeight;
-		document.getElementsByTagName("head")[0].appendChild(meta);
-	}, 200);
-	*/
+
 	//setTimeout(lagTest, 10000);
 	//setTimeout(lagTestHeader, 10000);
 	//setTimeout(() => scrollTest(directionScroll), 5000);
@@ -55,8 +51,9 @@ function variableInitialization() {
 	websiteShowcase = document.getElementById("websiteShowcase");
 	websitePreviews = document.getElementsByClassName("websitePreview");
 
-	transitionTimeMedium = getComputedStyle(documentBodyElement).getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
-	transitionTime = getComputedStyle(documentBodyElement).getPropertyValue("--transition-time").replace("s", "") * 1000;
+	let computedStyle = getComputedStyle(documentBodyElement);
+	transitionTimeMedium = computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
+	transitionTime = computedStyle.getPropertyValue("--transition-time").replace("s", "") * 1000;
 	websitePreviewExpandedMap = new Map();
 	windowInnerHeight = 0;
 }
@@ -129,22 +126,24 @@ function desktopEventListenerInitialization() {
 
 	websiteShowcase.addEventListener("wheel", (event) => {
 		let scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
-		let totalScrollAmmount = windowInnerWidth/20;					//The total ammount of pixel horizontally scrolled by the smoothWebsiteShowcaseWheelScroll function
-		let scrollDistance = windowInnerWidth/150;						//The ammount of pixel scrolled at each smoothWebsiteShowcaseWheelScroll call
-		let partialScrollAmmount = 0;									//scrollDistance * number of smoothWebsiteShowcaseWheelScroll function calls
+		let totalScrollAmmount = windowInnerWidth/20;						//The total ammount of pixel horizontally scrolled by the _smoothWebsiteShowcaseWheelScroll function
+		let scrollDistance = windowInnerWidth/150;							//The ammount of pixel scrolled at each _smoothWebsiteShowcaseWheelScroll call
+		let partialScrollAmmount = 0;														//scrollDistance * number of _smoothWebsiteShowcaseWheelScroll function calls
 
-		/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth
+		/*
+		 * This function should only be called inside the websiteShowcases wheelEvent listeners.
+		 * The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth
 		 * and so that is 1/20th of the window's innerWidth at any given resolution.
 		 * If the wheel is scrolled from top to bottom the scroll direction will be from right to left, it will be inverted otherwise.
 		 */
-		function smoothWebsiteShowcaseWheelScroll() {
+		function _smoothWebsiteShowcaseWheelScroll() {
 			websiteShowcase.scrollLeft += scrollDirection * scrollDistance;
 			partialScrollAmmount += scrollDistance;
 			if(partialScrollAmmount < totalScrollAmmount)
-				window.requestAnimationFrame(smoothWebsiteShowcaseWheelScroll);
+				window.requestAnimationFrame(_smoothWebsiteShowcaseWheelScroll);
 		}
 
-		window.requestAnimationFrame(smoothWebsiteShowcaseWheelScroll);
+		window.requestAnimationFrame(_smoothWebsiteShowcaseWheelScroll);
 	}, {passive:true});
 
 	/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth
@@ -330,9 +329,13 @@ function updateWindowSize(){
 		if(window.innerHeight > windowInnerHeight) {
 			windowInnerHeight = window.innerHeight;
 			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+			MAX_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MAX_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
+			MIN_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MIN_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
 		} else if(window.innerWidth > windowInnerWidth) {		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
 			windowInnerHeight = window.innerHeight;
 			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+			MAX_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MAX_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
+			MIN_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MIN_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
 		}
 
 		windowInnerWidth = window.innerWidth;
@@ -407,7 +410,7 @@ if(!browserIsSafari()) {
 		 * Where:
 		 * totalScrollAmmount = the absolute value of the offset the contentElement has to scroll vertically
 		 * maxAnimationFramesNumber = the highest number of frame the scrolling animation can use
-		 * speedIncrease = a number which grows exponentially (speedIcrease(n) = speedIcrease(n-1)^2): it's value is contained between MIN_SPEED_INCREASE and MAX_SPEED_INCREASE
+		 * speedIncrease = a number which grows exponentially (speedIncrease(n) = speedIncrease(n-1)^2): it's value is contained between MIN_SPEED_INCREASE and MAX_SPEED_INCREASE
 		 */
 		let maxAnimationFramesNumber = MAX_SCROLLING_ANIMATION_FRAMES;
 		let partialScrollAmmount = 0;																									//The ammount of pixed scrolled from the first _safariSmoothPageScroll call
@@ -430,7 +433,9 @@ if(!browserIsSafari()) {
 				else
 					maxAnimationFramesNumber = MIN_SCROLLING_ANIMATION_FRAMES;
 
-				speedIncrease *= speedIncrease;
+				if(speedIncrease < MAX_SPEED_INCREASE)
+					speedIncrease *= speedIncrease;
+
 				scrollDistance = totalScrollAmmount / maxAnimationFramesNumber;
 				/*
    			 * If the next -_safariSmoothPageScroll will set the content.scrollTop beyond the target scrollDistance
