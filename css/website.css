@@ -10,46 +10,46 @@
   font-display: swap;												/* Allow the default font to be visible while this one is loading */
 }
 
-:root {	
+:root {
 	--header-elements-height:4rem;
-	--header-elements-padding:1rem;	
+	--header-elements-padding:1rem;
 	--header-socialNetworks-div-width:calc(4*var(--header-elements-height) + 3*var(--header-elements-padding));
-	
+
 	--profilePic-size:17vmin;
 	--presentationCard-height:60vmin;
 	--presentationCard-width:55vmin;
-	
+
 	--websitePreview-size:15rem;
-	
+
 	--boxShapedElement-border-radius:1rem;
 	--boxShapedElement-border-radius-wide:2.5rem;
-	
+
 	--box-shadow-radius:0.5rem;
 	--text-shadow-offset:0.08em;
 	--text-shadow-radius:0.1em;
-	
+
 	--backdrop-filter-blur-radius-reduced:1rem;
 	--backdrop-filter-blur-radius:1.5rem;
 	--backdrop-filter-blur-radius-wide:2rem;
 	--backdrop-filter-blur-radius-ultra-wide:4rem;
-	
+
 	--transition-time:0.5s;
 	--transition-time-medium:0.4s;
 	--transition-time-quick:0.2s;
-		
+
 	--scaling-factor-increase:1;
 	--scaling-factor-decrease:1;
-	
+
 	--vh:1vh;
 	--50vh:calc(var(--vh, 1vh) * 50);
 	--100vh:calc(var(--vh, 1vh) * 100);
-	
+
 	--light-theme-blur-background-color-Black: rgba(0,0,0,1);
 	--light-theme-blur-background-color-White: rgba(255,255,255,0.5);
 	--light-theme-blur-background-color-Darkest: rgba(255,255,255,0.75);
 	--light-theme-blur-background-color-Dark: rgba(255,255,255,0.7);
 	--light-theme-blur-background-color-Average: rgba(255,255,255, 0.5);
-	--light-theme-blur-background-color-Brightest: rgba(200,200,200,0.4);	
+	--light-theme-blur-background-color-Brightest: rgba(200,200,200,0.4);
 	--light-theme-box-shadow:0 0 var(--box-shadow-radius) 0 rgba(50,50,50,1);
 	--light-theme-text-color-shadow: rgba(255,255,255,0.7);
 	--light-theme-text-color: rgba(0,0,0,1);
@@ -57,13 +57,13 @@
 	--light-theme-facebookContact-background-color: linear-gradient(0deg, rgba(0,111,255,1) 26%, rgba(94,201,255,1) 100%);
 	--light-theme-instagramContact-background-color: linear-gradient(340deg, rgba(244,255,0,1) 0%, rgba(255,39,218,1) 58%, rgba(255,39,218,1) 72%, rgba(0,83,255,1) 99%);
 	--light-theme-mailContact-background-color: linear-gradient(35deg, rgba(255,248,0,1) 0%, rgba(255,99,0,1) 67%);
-	
+
 	--dark-theme-blur-background-color-Black: rgba(0,0,0,1);
 	--dark-theme-blur-background-color-White: rgba(100,100,100,0.2);
 	--dark-theme-blur-background-color-Darkest: rgba(0,0,0,0.85);
 	--dark-theme-blur-background-color-Dark: rgba(0,0,0,0.8);
 	--dark-theme-blur-background-color-Average: rgba(0,0,0,0.5);
-	--dark-theme-blur-background-color-Brightest: rgba(0,0,0,0.3);	
+	--dark-theme-blur-background-color-Brightest: rgba(0,0,0,0.3);
 	--dark-theme-box-shadow: none;
 	--dark-theme-text-color-shadow: rgba(0,0,0,0.8);
 	--dark-theme-text-color: rgba(255,255,255,1);
@@ -71,7 +71,7 @@
 	--dark-theme-facebookContact-background-color: linear-gradient(0deg, rgba(0,48,255,1) 0%, rgba(9,187,255,1) 100%);
 	--dark-theme-instagramContact-background-color: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
 	--dark-theme-mailContact-background-color: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
-	
+
 	--theme-blur-background-color-Black: var(--light-theme-blur-background-color-Black);
 	--theme-blur-background-color-White: var(--light-theme-blur-background-color-White);
 	--theme-blur-background-color-Darkest: var(--light-theme-blur-background-color-Darkest);
@@ -88,7 +88,7 @@
 }
 
 @media (prefers-color-scheme:dark) {
-	:root {	
+	:root {
 		--theme-blur-background-color-Black: var(--dark-theme-blur-background-color-Black);
 		--theme-blur-background-color-White: var(--dark-theme-blur-background-color-White);
 		--theme-blur-background-color-Darkest: var(--dark-theme-blur-background-color-Darkest);
@@ -106,23 +106,23 @@
 }
 
 @media (hover:hover) {					/* Prevents touch devices to trigger the fake hover behaviour */
-	:root {	
+	:root {
 		--scaling-factor-increase:1.1;
 		--scaling-factor-decrease:0.9;
 	}
 }
 
 * {
-	color:var(--theme-text-color); 
-	-webkit-tap-highlight-color:rgba(0,0,0,0);	
+	color:var(--theme-text-color);
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
 	-webkit-appearance: none;						/* Fix for box-shadows on Safari */
 	-webkit-user-drag:none !important;
-	user-drag:none !important; 
-	
+	user-drag:none !important;
+
 }
 
-html {		
-	font-family:"Baloo Bhaina 2"; 
+html {
+	font-family:"Baloo Bhaina 2";
 	font-size:1.3vmin;
 	-webkit-touch-callout:none !important; /* iOS Safari */
 	-webkit-user-select:none !important; /* Safari */
@@ -144,7 +144,7 @@ p {
 	font-size:190%;
 }
 
-#bodyBackground {    
+#bodyBackground {
 	position:fixed;
 	margin:-0.5em;
     width:101vw;
@@ -164,8 +164,8 @@ p {
 #content {
 	width:100%;
 	height:100%;
-	overflow:auto;		
-	scroll-behavior:smooth; 
+	overflow:auto;
+	scroll-behavior:smooth;
 	-ms-overflow-style:none !important;									/* Edge */
 	scrollbar-width:none !important;									/* Firefox */
 }
@@ -181,7 +181,7 @@ p {
 	width: 100%;
 	-webkit-transform: translate3d(0, calc(var(--header-elements-height) + 2*var(--header-elements-padding) - 100%), 0);
 	transform: translate3d(0, calc(var(--header-elements-height) + 2*var(--header-elements-padding) - 100%), 0);
-	background:var(--theme-blur-background-color-Dark); 
+	background:var(--theme-blur-background-color-Dark);
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
 	transition:var(--transition-time);
@@ -189,7 +189,7 @@ p {
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 }
 
-#header {	
+#header {
 	z-index:3;
 	position:fixed;
 	top:0%;
@@ -209,14 +209,14 @@ p {
 }
 
 #linkSection {
-	position:absolute;	
+	position:absolute;
 	display:flex;
 	justify-content:center;
 	align-items:center;
 }
 
 #linkSection > * {
-	text-decoration:none;	
+	text-decoration:none;
 }
 
 .pageLink {
@@ -249,7 +249,7 @@ p {
 	display:flex;
 }
 
-#socialNetworks > a { 
+#socialNetworks > a {
 	display:flex;
 	justify-content:center;
 	align-items:center;
@@ -264,13 +264,13 @@ p {
 
 #socialNetworks > a::after{
 	z-index:-1;
-	position: absolute; 
+	position: absolute;
 	content: "";
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	border-radius:50%; 
+	border-radius:50%;
 	opacity: 0;
 	transition:var(--transition-time-quick) ease-out;
 }
@@ -296,7 +296,7 @@ p {
 	background: var(--theme-mailContact-background-color);
 }
 
-#socialNetworks > a:hover::after { 
+#socialNetworks > a:hover::after {
   opacity: 1;
 }
 
@@ -314,7 +314,7 @@ p {
 	height:0.7%;
 	width:20%;
 	margin:auto auto 0 auto;
-	background:var(--theme-blur-background-color-Dark); 
+	background:var(--theme-blur-background-color-Dark);
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
@@ -344,7 +344,7 @@ h1, h2 {
 
 #profilePic {
 	z-index:1;
-	border-radius:100%; 
+	border-radius:100%;
 	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	height:var(--profilePic-size);
@@ -359,16 +359,16 @@ h1, h2 {
 	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	overflow-x:hidden;
-	overflow-y:scroll;	
+	overflow-y:scroll;
 	border-radius:5%;
 	background:var(--theme-blur-background-color-Brightest);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(130%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(130%);
 	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
 	transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
-	
+
 	-ms-overflow-style:none !important;									/* Edge */
-	scrollbar-width:none !important;									/* Firefox */	
+	scrollbar-width:none !important;									/* Firefox */
 	overscroll-behavior:none;
 }
 
@@ -395,12 +395,12 @@ h1, h2 {
 	overflow-y:hidden;
 	overscroll-behavior:none;
 	background:var(--theme-blur-background-color-Brightest);
-	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);  
-	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);  
+	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 	-ms-overflow-style:none !important;								/* Edge */
-	scrollbar-width:none !important;									/* Firefox */	
+	scrollbar-width:none !important;									/* Firefox */
 	transition:var(--transition-time-quick);
 }
 
@@ -419,7 +419,7 @@ h1, h2 {
 	width:var(--websitePreview-size);
 	height:var(--websitePreview-size);
 	border-radius:var(--boxShapedElement-border-radius);
-	background:var(--theme-blur-background-color-Average); 
+	background:var(--theme-blur-background-color-Average);
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
 	transition:opacity 0s, transform var(--transition-time-quick);
@@ -440,25 +440,25 @@ h1, h2 {
 }
 
 .websitePreviewImage {
-	border-radius:100%;	
+	border-radius:100%;
 	width:60%;
 	height:60%;
 	border:none;
 }
 
-#websitePreviewExpanded {	
+#websitePreviewExpanded {
 	/*top: var(--websitePreview-original-top-position);
 	left: var(--websitePreview-original-left-position);	*/
 	position:absolute;
 	cursor:default;
-	display:flex; 
+	display:flex;
 	flex-direction:column;
 	justify-content:space-around;
 	align-items:center;
 	height:var(--websitePreview-current-size);
 	width:var(--websitePreview-current-size);
 	border-radius:var(--boxShapedElement-border-radius);
-	background:var(--theme-blur-background-color-Average); 
+	background:var(--theme-blur-background-color-Average);
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(130%);
@@ -466,7 +466,7 @@ h1, h2 {
 	transition:all var(--transition-time-medium);
 	-webkit-transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0);
 	transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0);
-	
+
 	--transform-translateX: calc(var(--websitePreview-original-left-position) - 50vw + var(--websitePreview-current-size) / 2);
 	--transform-translateY: calc(var(--websitePreview-original-top-position) - var(--50vh) + var(--websitePreview-current-size) / 2);
 }
@@ -509,13 +509,13 @@ h1, h2 {
 
 .websitePreviewExpandedButton {
 	outline:none;
-	border:none; 	
+	border:none;
 	cursor:pointer;
 	margin:0 auto 0 auto;
 	padding:0.7em;
 	background:var(--theme-blur-background-color-White);
-	-webkit-box-shadow: 0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black); 
-	box-shadow: 0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black); 
+	-webkit-box-shadow: 0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+	box-shadow: 0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	border-radius:var(--boxShapedElement-border-radius-wide);
 	font-size:0;
 	transition:all var(--transition-time-medium);
@@ -527,11 +527,11 @@ h1, h2 {
 
 #websitePreviewExpandedBackgroundContent {
 	z-index:4;
-	position:absolute; 
+	position:absolute;
 	cursor:pointer;
 }
 
-.carouselButton {	
+.carouselButton {
 	font-size:3em;
 	padding:0.5em;
 	margin:auto;
@@ -579,27 +579,27 @@ h1, h2 {
 }
 
 #contactMeFormName,
-#contactMeFormSubject, 
+#contactMeFormSubject,
 #contactMeFormBody,
 #contactMeFormSendButton {
-	-webkit-box-sizing: border-box;	
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	font-size: calc(var(--vh, 1vh) * 3);
 	padding: 2%;
 	border:none;
 	outline: none;
-	border-radius:1rem; 
+	border-radius:1rem;
 	position:relative;
 }
 
 #contactMeFormName:focus,
-#contactMeFormSubject:focus, 
+#contactMeFormSubject:focus,
 #contactMeFormBody:focus {
 	cursor:auto;
 }
 
 #contactMeFormName,
-#contactMeFormSubject, 
+#contactMeFormSubject,
 #contactMeFormBody {
 	cursor: text;
 	overflow: auto;
@@ -613,7 +613,7 @@ h1, h2 {
 #contactMeFormName,
 #contactMeFormSubject {
 	text-align:center;
-	font-family:"Baloo Bhaina 2"; 
+	font-family:"Baloo Bhaina 2";
 	height: 10%;
 }
 
@@ -625,7 +625,7 @@ h1, h2 {
 
 #contactMeFormSendButton {
 	cursor: pointer;
-	margin:auto; 
+	margin:auto;
 	width: 50%;
 	height: 10%;
 	background:var(--theme-blur-background-color-Dark);
@@ -635,11 +635,11 @@ h1, h2 {
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 }
 
-@media only screen and (max-width:1080px) {	
-	:root {	
+@media only screen and (max-width:1080px) {
+	:root {
 		--header-elements-height:50px;
 		--header-elements-height-reduced:36px;
-		--header-elements-padding:10px;		
+		--header-elements-padding:10px;
 		--bar-margin:15px;
 		--bar-width:40px;
 		--bar-height:4px;
@@ -647,26 +647,26 @@ h1, h2 {
 		--bar-offset-inverted-translate3d:calc(-1 * var(--bar-offset-translate3d));
 
 		--socialNetworks-offsetY-translate3d:calc((var(--header-socialNetworks-div-width) - var(--header-elements-height))/2);
-		
+
 		--profilePic-size:23vmin;
 		--presentationCard-height:80vmin;
-		--presentationCard-width:75vmin;		
+		--presentationCard-width:75vmin;
 	}
-	
+
 	#headerBackground {
-		background:var(--theme-blur-background-color-Darkest); 
+		background:var(--theme-blur-background-color-Darkest);
 	}
-	
+
 	#headerBackground.mobileExpanded {
 		-webkit-box-shadow: none;
 		box-shadow: none;
 		transform: translate3d(0, calc(- var(--header-elements-height) - 2*var(--header-elements-padding)), 0);
 	}
-	
+
 	#header.mobileExpanded {
 		transform: translate3d(0, calc(var(--50vh) - var(--header-elements-height)), 0);
 	}
-	
+
 	#hamburgerMenu {
 		z-index:4;
 		cursor:pointer;
@@ -680,8 +680,8 @@ h1, h2 {
 		border-radius:var(--boxShapedElement-border-radius);
 		background-color:var(--theme-text-color);
 		transition:var(--transition-time);
-	}	
-	
+	}
+
 	.mobileExpanded #hamburgerMenuUpperBar  {
 		-webkit-transform:translate3d(0, var(--bar-offset-translate3d), 0) rotate3d(0,0,1,45deg);
 		transform:translate3d(0, var(--bar-offset-translate3d), 0) rotate3d(0,0,1,45deg);
@@ -690,7 +690,7 @@ h1, h2 {
 	.mobileExpanded #hamburgerMenuLowerBar {
 		-webkit-transform:translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate3d(0,0,1,-45deg);
 		transform:translate3d(0, var(--bar-offset-inverted-translate3d), 0) rotate3d(0,0,1,-45deg);
-	}	
+	}
 
 	#linkSection {
 		pointer-events:none;
@@ -699,51 +699,51 @@ h1, h2 {
 		-webkit-transform:scale3d(0, 0, 0);
 		transform:scale3d(0, 0, 0);
 	}
-	
+
 	.mobileExpanded #linkSection {
 		pointer-events:auto;
 		-webkit-transform:scale3d(1, 1, 1);
 		transform:scale3d(1, 1, 1);
 		transition: var(--transition-time-medium);
 	}
-	
+
 	.pageLink {
 		margin:20% 1em 20% 1em;
 	}
-	
+
 	#socialNetworks {
 		transition: var(--transition-time-medium);
 	}
-	
-	#socialNetworks > a { 
+
+	#socialNetworks > a {
 		font-size: 40px;
 		transition: var(--transition-time);
 	}
-		
+
 	#socialNetworks > #mailContact,
 	#socialNetworks > #facebookContact {
 		font-size: var(--header-elements-height-reduced);
 	}
 
-	#socialNetworks > a::after { 
+	#socialNetworks > a::after {
 		opacity: 1;
 	}
-	
+
 	.mobileExpanded #socialNetworks {
 		-webkit-transform:translate3d(var(--socialNetworks-offsetY-translate3d), 0, 0) rotate3d(0,0,1,90deg);
 		transform:translate3d(var(--socialNetworks-offsetY-translate3d), 0, 0) rotate3d(0,0,1, 90deg);
 	}
-	
-	.mobileExpanded #socialNetworks > a { 
+
+	.mobileExpanded #socialNetworks > a {
 		-webkit-transform:rotate3d(0,0,1,-90deg);
 		transform:rotate3d(0,0,1, -90deg);
-	}	
-	
-	.mobileExpanded #socialNetworks > a::after { 
+	}
+
+	.mobileExpanded #socialNetworks > a::after {
 		opacity: 0;
 	}
-	
-	.mobileExpanded #socialNetworks > a:hover::after { 
+
+	.mobileExpanded #socialNetworks > a:hover::after {
 		opacity: 1;
 	}
 
@@ -754,11 +754,11 @@ h1, h2 {
 	#websiteShowcase {
 		max-width:85%;
 	}
-	
+
 	.carouselButton {
 		display:none;
 	}
-		
+
 	.expandedState #websitePreviewExpandedButtonSection {
 		font-size:110%;
 	}
@@ -766,7 +766,7 @@ h1, h2 {
 	.websitePreviewExpandedButton {
 		padding:1em;
 	}
-	
+
 	#contactMeForm {
 		width: 75%;
 	}
@@ -776,7 +776,7 @@ h1, h2 {
 	.pageSeparator {
 		opacity:0;
 	}
-	
+
 	.pageLink {
 		margin:9% 1em 9% 1em;
 	}
