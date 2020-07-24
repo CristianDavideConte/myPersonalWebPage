@@ -147,18 +147,13 @@ p {
 #bodyBackground {
 	position:fixed;
 	margin:-0.5em;
-    width:101vw;
-    height:calc(var(--vh, 1vh) * 101);
+  width:101vw;
+  height:calc(var(--vh, 1vh) * 101);
 	background-image:url("../images/backgroundImages/LakeAndMountains_Compressed.jpg");
 	background-repeat:no-repeat;
 	background-size:cover;
 	background-position:50% 0%;
-    z-index:-1;
-}
-
-.contentLoaded {
-	opacity:0;
-	transition:var(--transition-time-medium);
+  z-index:-1;
 }
 
 #content {

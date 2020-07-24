@@ -23,6 +23,7 @@ var carouselButtons;															//All HTML elements with the class "carouselB
 var websiteShowcase;															//The HTML element with the id "websiteShowcase", children of the websitePreviewCarousel HTML element and used as container for all the websitePreviews
 var websitePreviews;															//All HTML elements with the class "websitePreview", used as a clickable previews for all the projects inside the websitePreviewShowcase
 var websitePreviewExpandedMap; 										//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
+var contactMeFormSendButtonElement;								//The HTML element with the id "contactMeFormSendButton", used to send an email request to the Madrill API
 var safariBrowserUsed;														//Boolean, true if the browser used is Safari, false otherwise
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
@@ -50,6 +51,7 @@ function variableInitialization() {
 	carouselButtons = document.getElementsByClassName("carouselButton");
 	websiteShowcase = document.getElementById("websiteShowcase");
 	websitePreviews = document.getElementsByClassName("websitePreview");
+	contactMeFormSendButtonElement = document.getElementById("contactMeFormSendButton");
 
 	let computedStyle = getComputedStyle(documentBodyElement);
 	transitionTimeMedium = computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
@@ -277,6 +279,49 @@ function desktopEventListenerInitialization() {
 			headerElement.style.pointerEvents = "none";
 		}, {passive:true});
 	}
+
+	/* ----------------------------ABORT------------------------------------
+	 * If clicked the contactMeFormSendButton sends a POST request to the Mandrill API
+	 * with the contactMeFormName, contactMeFormSubject and the contactMeFormBody as the request's data.
+	 * All the datas are first extracted from the form's fields.
+	 * A data object is then created using the just extracted datas.
+	 * A POST request is created. And the page asyncronusly waits for the server's response.
+	 * The server response is used to give a feedback to the user.
+	 /
+	contactMeFormSendButtonElement.addEventListener("click", () => {
+		let request = new XMLHttpRequest();
+		let data = {
+    "key": "KEY HERE",
+    "message": {
+      "subject": "Your copy of the message",
+      "from_email": "cristiandavideconte@gmail.com",
+      "to": [
+          {
+            "email": "cristiandavideconte@gmail.com",
+            "name": "Contact Request from myPersonalWebPage",
+            "type": "to"
+          },
+					{
+						"email": "SENDER MAIL",
+						"name": "",
+						"type": "to"
+					}
+        ],
+      "autotext": "true",
+      "subject": "SENDER SUBJECT",
+      "html": "MAIL BODY"
+    }
+  }
+		request.onreadystatechange = () => {
+				//Check if the request is compete and was successful
+				if(this.readyState === 4 && this.status === 200) {
+					console.log(this.responseText);
+				} else
+					console.log("ERRORE");
+		};
+		request.open("POST", "https://mandrillapp.com/api/1.0/messages/send.json", true);
+		request.send(data);
+	}, {passive:true});*/
 }
 
 /* This Function toggle the class mobileExpanded in the hamburgerMenu element if the page is in mobileMode.
@@ -287,55 +332,6 @@ function toggleExpandHamburgerMenu() {
 		headerBackgroundElement.classList.toggle("mobileExpanded");
 		headerElement.classList.toggle("mobileExpanded");
 	}
-}
-
-/*
- * This function asyncronusly load the content of the DOM img elements
- * The full image is loaded when ready and not at the initial page loading.
- * Instead a lower resolution and blurry version of the image is loaded in the css file.
- * This allows the user to interact much quicker with the page and lowers the probability of a page crash.
- * Whenever the full image is ready the two images are swapped with a transition in between.
- */
-function imageLoading() {
-	let backgroundElement = document.getElementById("bodyBackground");
-	let backgroundElementLoaded = backgroundElement.cloneNode(true);
-	let backgroundImage = new Image();
-	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
-	backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => {
-		backgroundElementLoaded.style.backgroundImage = "url(" + backgroundImage.src + ")"; //Setting the src wouldn't allow the new image to use the css style already calculated
-		backgroundElement.before(backgroundElementLoaded);
-		backgroundElement.classList.add("contentLoaded");
-		documentBodyElement.removeChild(backgroundElement);
-	}), {passive:true});
-
-	let profilePicElement = document.getElementById("profilePic");
-	let profileImageLoaded = new Image();
-	profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";
-	profileImageLoaded.addEventListener("load", () => window.requestAnimationFrame(() => profilePicElement.src = profileImageLoaded.src), {passive:true});
-}
-
-/* This Function:
- * - udates the windowInnerHeight and windowInnerWidth variables with the new window' values
- * - resets the body height to that of the inner browser: this is used to fix the different height behaviour of the mobile browsers' navigation bars
- * - check if the page can go to the mobileMode and set the javascript mobileMode variable accordingly
- */
-function updateWindowSize(){
-	window.requestAnimationFrame(() => {
-		if(window.innerHeight > windowInnerHeight) {
-			windowInnerHeight = window.innerHeight;
-			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
-			MAX_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MAX_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
-			MIN_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MIN_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
-		} else if(window.innerWidth > windowInnerWidth) {		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
-			windowInnerHeight = window.innerHeight;
-			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
-			MAX_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MAX_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
-			MIN_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MIN_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
-		}
-
-		windowInnerWidth = window.innerWidth;
-		mobileMode = (windowInnerWidth < 1081 || windowInnerHeight < 601) ? 1 : 0;
-	});
 }
 
 /* Returns true if the user's browser is Safari, false otherwise */
@@ -459,6 +455,54 @@ if(!browserIsSafari()) {
 		let totalScrollAmmount = targetPageIndex * windowInnerHeight - contentElementScrollTop;
 		smoothScrollVertically(Math.sign(totalScrollAmmount), Math.abs(totalScrollAmmount));						// Only defined if the browser used is Safari
 	}
+}
+
+/*
+ * This function asyncronusly load the content of the DOM img elements
+ * The full image is loaded when ready and not at the initial page loading.
+ * Instead a lower resolution and blurry version of the image is loaded in the css file.
+ * This allows the user to interact much quicker with the page and lowers the probability of a page crash.
+ * Whenever the full image is ready the two images are swapped with a transition in between.
+ */
+function imageLoading() {
+	let backgroundElement = document.getElementById("bodyBackground");
+	let backgroundElementLoaded = backgroundElement.cloneNode(true);
+	let backgroundImage = new Image();
+	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
+	backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => {
+		backgroundElementLoaded.style.backgroundImage = "url(" + backgroundImage.src + ")"; //Setting the src wouldn't allow the new image to use the css style already calculated
+		backgroundElement.before(backgroundElementLoaded);
+		documentBodyElement.removeChild(backgroundElement);
+	}), {passive:true});
+
+	let profilePicElement = document.getElementById("profilePic");
+	let profileImageLoaded = new Image();
+	profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";
+	profileImageLoaded.addEventListener("load", () => window.requestAnimationFrame(() => profilePicElement.src = profileImageLoaded.src), {passive:true});
+}
+
+/* This Function:
+ * - udates the windowInnerHeight and windowInnerWidth variables with the new window' values
+ * - resets the body height to that of the inner browser: this is used to fix the different height behaviour of the mobile browsers' navigation bars
+ * - check if the page can go to the mobileMode and set the javascript mobileMode variable accordingly
+ */
+function updateWindowSize(){
+	window.requestAnimationFrame(() => {
+		if(window.innerHeight > windowInnerHeight) {
+			windowInnerHeight = window.innerHeight;
+			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+			MAX_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MAX_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
+			MIN_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MIN_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
+		} else if(window.innerWidth > windowInnerWidth) {		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
+			windowInnerHeight = window.innerHeight;
+			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+			MAX_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MAX_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
+			MIN_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MIN_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
+		}
+
+		windowInnerWidth = window.innerWidth;
+		mobileMode = (windowInnerWidth < 1081 || windowInnerHeight < 601) ? 1 : 0;
+	});
 }
 
 /* -------------------------------------------------------- 						TESTING CODE SECTION     					------------------------------------------------------------------*/
