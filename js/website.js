@@ -89,7 +89,7 @@ function desktopEventListenerInitialization() {
   if(safariBrowserUsed)
 		 for(const pageLink of pageLinksElements) {
 		 		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
-	 			pageLink.addEventListener("click", () => pageLinksSmoothScroll(pageLink), {passive:true});
+	 			pageLink.addEventListener("click", () => pageLinksSmoothScroll(pageLink), {passive:false});
 			}
 	else
   	for(const pageLink of pageLinksElements)
