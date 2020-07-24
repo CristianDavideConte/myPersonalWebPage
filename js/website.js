@@ -53,7 +53,6 @@ function variableInitialization() {
 
 	let computedStyle = getComputedStyle(documentBodyElement);
 	transitionTimeMedium = computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
-	transitionTime = computedStyle.getPropertyValue("--transition-time").replace("s", "") * 1000;
 	websitePreviewExpandedMap = new Map();
 	windowInnerHeight = 0;
 }
@@ -90,7 +89,7 @@ function desktopEventListenerInitialization() {
   if(safariBrowserUsed)
 		 for(const pageLink of pageLinksElements) {
 		 		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
-	 			pageLink.addEventListener("click", () => pageLinksSmoothScroll(pageLink));
+	 			pageLink.addEventListener("click", () => pageLinksSmoothScroll(pageLink), {passive:true});
 			}
 	else
   	for(const pageLink of pageLinksElements)
@@ -280,35 +279,6 @@ function desktopEventListenerInitialization() {
 	}
 }
 
-/* This Function asyncronusly load the content of the DOM img elements */
-function imageLoading() {
-	/* The full background image is loaded when ready and not at the initial page loading.
-	 * Instead a lower resolution and blurry version of the background image is loaded in the css file.
-	 * This allows the user to interact much quicker with the page and lesser the probability of a page crash.
-	 * Whenever the full image is ready the two images are swapped with a transition in between.
-	 */
-	let backgroundElement = document.getElementById("bodyBackground");
-	let backgroundElementLoaded = backgroundElement.cloneNode(true);
-	let backgroundImage = new Image();
-	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
-	backgroundImage.addEventListener("load", function() {
-		backgroundElementLoaded.style.backgroundImage = "url(" + backgroundImage.src + ")"; //Setting the src wouldn't allow the new image to use the css style already calculated
-		backgroundElement.before(backgroundElementLoaded);
-		backgroundElement.classList.add("contentLoaded");
-		setTimeout(() => documentBodyElement.removeChild(backgroundElement), transitionTimeMedium);
-	}, {passive:true});
-
-	/* The full profile image is loaded when ready and not at the initial page loading.
-	 * Instead a lower resolution and blurry version of the image is loaded in the html file.
-	 * This allows the user to interact much quicker with the page and lesser the probability of a page crash.
-	 * Whenever the full image is ready the two images are swapped with no transition in between.
-	 */
-	let profilePicElement = document.getElementById("profilePic");
-	let profileImageLoaded = new Image();
-	profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";
-	profileImageLoaded.addEventListener("load", () => profilePicElement.src = profileImageLoaded.src, {passive:true});
-}
-
 /* This Function toggle the class mobileExpanded in the hamburgerMenu element if the page is in mobileMode.
  * Mobile mode is triggered on the window's resize event.
  */
@@ -317,6 +287,31 @@ function toggleExpandHamburgerMenu() {
 		headerBackgroundElement.classList.toggle("mobileExpanded");
 		headerElement.classList.toggle("mobileExpanded");
 	}
+}
+
+/*
+ * This function asyncronusly load the content of the DOM img elements
+ * The full image is loaded when ready and not at the initial page loading.
+ * Instead a lower resolution and blurry version of the image is loaded in the css file.
+ * This allows the user to interact much quicker with the page and lowers the probability of a page crash.
+ * Whenever the full image is ready the two images are swapped with a transition in between.
+ */
+function imageLoading() {
+	let backgroundElement = document.getElementById("bodyBackground");
+	let backgroundElementLoaded = backgroundElement.cloneNode(true);
+	let backgroundImage = new Image();
+	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
+	backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => {
+		backgroundElementLoaded.style.backgroundImage = "url(" + backgroundImage.src + ")"; //Setting the src wouldn't allow the new image to use the css style already calculated
+		backgroundElement.before(backgroundElementLoaded);
+		backgroundElement.classList.add("contentLoaded");
+		documentBodyElement.removeChild(backgroundElement);
+	}), {passive:true});
+
+	let profilePicElement = document.getElementById("profilePic");
+	let profileImageLoaded = new Image();
+	profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";
+	profileImageLoaded.addEventListener("load", () => window.requestAnimationFrame(() => profilePicElement.src = profileImageLoaded.src), {passive:true});
 }
 
 /* This Function:
@@ -489,7 +484,7 @@ function lagTestHeader() {
     event.initEvent("click", true, false);
 	if(test2 < 100) {
 		hamburgerMenuElement.dispatchEvent(event);
-		setTimeout(lagTestHeader, transitionTime);
+		setTimeout(lagTestHeader, transitionTimeMedium);
 		test2++;
 	}
 }
