@@ -1,15 +1,15 @@
-const STANDARD_WINDOW_INNER_HEIGHT = 937;							//The standard browser height, usually about 937px at 1920x1080
-const MAX_SCROLLING_ANIMATION_FRAMES_DIVIDER = 70;		//The maximum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
+const STANDARD_WINDOW_INNER_HEIGHT = 937;							//The standard browser inner height, usually about 937px at 1920x1080
 const MIN_SCROLLING_ANIMATION_FRAMES_DIVIDER = 10;		//The minumum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
-const MIN_SPEED_INCREASE = 1;
-const MAX_SPEED_INCREASE = 2;
-const MAX_PAGES_GAP_NUMBER = 3;												//Max number of pages of the contentElement
-var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that the smoothScrollVertically function can use to scroll the contentElement for the current windowInnerHeight value
+const MAX_SCROLLING_ANIMATION_FRAMES_DIVIDER = 60;		//The maximum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
+const MIN_SPEED_INCREASE = 1;													//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function
+const MAX_SPEED_INCREASE = 6;													//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function
+const MAX_PAGES_GAP_NUMBER = 3;												//The maximum number of pages of the contentElement
 var MIN_SCROLLING_ANIMATION_FRAMES;										//The minumum number of frames that the smoothScrollVertically function can use to scroll the contentElement for the current windowInnerHeight value
+var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that the smoothScrollVertically function can use to scroll the contentElement for the current windowInnerHeight value
 
 var windowInnerWidth;															//A shortcut for the DOM element window.innerWidth
 var windowInnerHeight;														//A shortcut for the DOM element window.innerHeight
-//var windowPosition;																//The scrollTop value of the window, used to prevent the DOM from scrolling after a screen orientation change
+//var windowPosition;															//The scrollTop value of the window, used to prevent the DOM from scrolling after a screen orientation change
 var documentBodyElement;													//A shortcut for the HTML element document.body
 var currentPageIndex;															//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
 var transitionTimeMedium;													//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
@@ -24,7 +24,7 @@ var websiteShowcase;															//The HTML element with the id "websiteShowca
 var websitePreviews;															//All HTML elements with the class "websitePreview", used as a clickable previews for all the projects inside the websitePreviewShowcase
 var websitePreviewExpandedMap; 										//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
 var contactMeFormSendButtonElement;								//The HTML element with the id "contactMeFormSendButton", used to send an email request to the Madrill API
-var safariBrowserUsed;														//Boolean, true if the browser used is Safari, false otherwise
+var safariBrowserUsed;														//A Boolean which is true if the browser used is Apple's Safari, false otherwise
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {
@@ -88,14 +88,14 @@ function desktopEventListenerInitialization() {
 	 * This is done the same way the hamburgerMenu expands when clicked directly (see above in the comment).
 	 * Plus, if safari needs a manual implementation for the smoothScroll CSS attribute.
 	 */
-  if(safariBrowserUsed)
-		 for(const pageLink of pageLinksElements) {
-		 		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
-	 			pageLink.addEventListener("click", () => pageLinksSmoothScroll(pageLink), {passive:false});
-			}
-	else
+  if(!safariBrowserUsed)
   	for(const pageLink of pageLinksElements)
 			 pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
+	else
+		for(const pageLink of pageLinksElements) {
+	 		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
+ 			pageLink.addEventListener("click", () => pageLinksSmoothScroll(pageLink), {passive:false});
+		}
 
 	/* All the social networks icons are linked to the corresponding website */
 	document.getElementById("githubContact").addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
@@ -337,9 +337,9 @@ function toggleExpandHamburgerMenu() {
 /* Returns true if the user's browser is Safari, false otherwise */
 function browserIsSafari() {
 	safariBrowserUsed = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
-		   navigator.userAgent &&
-		   navigator.userAgent.indexOf("CriOS") == -1 &&
-		   navigator.userAgent.indexOf("FxiOS") == -1;
+									   	navigator.userAgent &&
+									   	navigator.userAgent.indexOf("CriOS") == -1 &&
+									   	navigator.userAgent.indexOf("FxiOS") == -1;
 	return safariBrowserUsed;
 }
 
@@ -424,20 +424,14 @@ if(!browserIsSafari()) {
 				else
 					maxAnimationFramesNumber = MIN_SCROLLING_ANIMATION_FRAMES;
 
-				if(speedIncrease < MAX_SPEED_INCREASE)
-					speedIncrease *= speedIncrease;
+				speedIncrease = (speedIncrease * speedIncrease < MAX_SPEED_INCREASE) ? speedIncrease * speedIncrease : MAX_SPEED_INCREASE;
+				scrollDistance = Math.round(scrollRemaningDistance / maxAnimationFramesNumber);
 
-				scrollDistance = totalScrollAmmount / maxAnimationFramesNumber;
-				/*
-   			 * If the next -_safariSmoothPageScroll will set the content.scrollTop beyond the target scrollDistance
-				 * the scrollRemaningDistance to the contentElement.scrollTop is added instead of calling _safariSmoothPageScroll again
-				 */
-				if(scrollRemaningDistance <= scrollDistance)
-					window.requestAnimationFrame(() => contentElement.scrollTop += scrollDirection * scrollRemaningDistance);
-			 	else
+				if(scrollDistance > 0)
 					window.requestAnimationFrame(_safariSmoothPageScroll);
 			}
 		}
+
 		window.requestAnimationFrame(_safariSmoothPageScroll);
 	}
 
