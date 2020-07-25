@@ -36,7 +36,7 @@ function init() {
 
 	//setTimeout(lagTest, 10000);
 	//setTimeout(lagTestHeader, 10000);
-	//setTimeout(() => scrollTest(directionScroll), 5000);
+	//setTimeout(() => scrollTest(_scrollDirectionTest), 5000);
 }
 
 /* This Function initializes all the public variables */
@@ -53,8 +53,8 @@ function variableInitialization() {
 	websitePreviews = document.getElementsByClassName("websitePreview");
 	contactMeFormSendButtonElement = document.getElementById("contactMeFormSendButton");
 
-	let computedStyle = getComputedStyle(documentBodyElement);
-	transitionTimeMedium = computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
+	let _computedStyle = getComputedStyle(documentBodyElement);
+	transitionTimeMedium = _computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
 	websitePreviewExpandedMap = new Map();
 	windowInnerHeight = 0;
 }
@@ -62,26 +62,45 @@ function variableInitialization() {
 /* This function binds all the HTML elements that can be interacted to their mouse and keyboard eventHandlers */
 function desktopEventListenerInitialization() {
 	window.addEventListener("resize", updateWindowSize, {passive:true});										//Updates the height and the width whenever the window's resized
-	/* The user can use the arrow keys to navigate the website.
-	 * Controls for the original event keydown target are added to avoid accidental page scroll.
+	/*
+	 * The user can use the arrow keys to navigate the website.
+	 * Pressing the Arrow-up or the Arrow-left keys will trigger a scroll upwards by a scrollDistance of windowInnerHeight
+ 	 * Pressing the Arrow-down or the Arrow-right keys will trigger a scroll downwards by a scrollDistance of windowInnerHeight
+	 * Safari support is added by using the smoothScrollVertically function.
 	 */
-	documentBodyElement.addEventListener("keydown", event => {
-		if(event.target.tagName == "BODY") {
-			let keyName = event.key;
-			if(keyName == "ArrowUp" || keyName == "ArrowLeft") {
-				contentElement.scrollTop -= windowInnerHeight;
-				event.preventDefault();
-			} else if(keyName == "ArrowDown" || keyName == "ArrowRight") {
-				contentElement.scrollTop += windowInnerHeight;
-				event.preventDefault();
+	if(!safariBrowserUsed)
+		documentBodyElement.addEventListener("keydown", event => {
+			if(event.target.tagName == "BODY") {
+				let _keyName = event.key;
+				if(_keyName == "ArrowUp" || _keyName == "ArrowLeft") {
+					contentElement.scrollTop -= windowInnerHeight;
+					event.preventDefault();
+				} else if(_keyName == "ArrowDown" || _keyName == "ArrowRight") {
+					contentElement.scrollTop += windowInnerHeight;
+					event.preventDefault();
+				}
 			}
-		}
-	}, {passive:false});
+		}, {passive:false});
+	else
+		documentBodyElement.addEventListener("keydown", event => {
+			if(event.target.tagName == "BODY") {
+				let _keyName = event.key;
+				if(_keyName == "ArrowUp" || _keyName == "ArrowLeft") {
+					smoothScrollVertically(-1, windowInnerHeight);
+					event.preventDefault();
+				} else if(_keyName == "ArrowDown" || _keyName == "ArrowRight") {
+					smoothScrollVertically(1, windowInnerHeight);
+					event.preventDefault();
+				}
+			}
+		}, {passive:false});
 
-	headerElement.addEventListener("wheel", event => event.stopPropagation(), {passive:true});					//Scroll on the header is not allowed
-	hamburgerMenuElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});					//When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function
+	headerElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});										//Scroll on the header is not allowed
+	headerBackgroundElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});					//Scroll on the headerBackground is not allowed
+	hamburgerMenuElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});										//When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function
 
-	/* When the website is in mobile mode the page links are hidden under the hamburgerMenu
+	/*
+	 * When the website is in mobile mode the page links are hidden under the hamburgerMenu
 	 * which can be expanded by toggling the class "mobileExpanded" on the header.
 	 * Once it's expanded the pageLinks can be clicked to go to the relative website section.
 	 * Whenever a link is clicked and the contentElement is scrolled, it's convenient to hide all the links under the hamburgerMenu.
@@ -103,33 +122,33 @@ function desktopEventListenerInitialization() {
 	document.getElementById("facebookContact").addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"), {passive:true});
 	document.getElementById("mailContact").addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 
-	let isFingerDown = false;
-	contentElement.addEventListener("touchstart", () => isFingerDown = true, {passive:true});
-	contentElement.addEventListener("touchend", () => isFingerDown = false, {passive:true});
+	let _isFingerDown = false;
+	contentElement.addEventListener("touchstart", () => _isFingerDown = true, {passive:true});
+	contentElement.addEventListener("touchend", () => _isFingerDown = false, {passive:true});
 
-	let firstScrollYPosition = null;
-	let smoothWebsiteShowcaseWheelScrollTimeout;
+	let _firstScrollYPosition = null;
+	let _smoothWebsiteShowcaseWheelScrollTimeout;
 	contentElement.addEventListener("scroll", event => {
-			if(firstScrollYPosition == null)
-				firstScrollYPosition = contentElement.scrollTop;
+			if(_firstScrollYPosition == null)
+				_firstScrollYPosition = contentElement.scrollTop;
 			else
-				clearTimeout(smoothWebsiteShowcaseWheelScrollTimeout);
+				clearTimeout(_smoothWebsiteShowcaseWheelScrollTimeout);
 
-			smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(function checkFingerDown() {
-				if(isFingerDown)
-					smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(checkFingerDown, 100);
+			_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(function checkFingerDown() {
+				if(_isFingerDown)
+					_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(checkFingerDown, 100);
 				else {
-					smoothPageScroll(firstScrollYPosition, contentElement.scrollTop);
-					firstScrollYPosition = null;
+					smoothPageScroll(_firstScrollYPosition, contentElement.scrollTop);
+					_firstScrollYPosition = null;
 				}
 			}, 100);
 	}, {passive:true});
 
-	websiteShowcase.addEventListener("wheel", (event) => {
-		let scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
-		let totalScrollAmmount = windowInnerWidth/20;						//The total ammount of pixel horizontally scrolled by the _smoothWebsiteShowcaseWheelScroll function
-		let scrollDistance = windowInnerWidth/150;							//The ammount of pixel scrolled at each _smoothWebsiteShowcaseWheelScroll call
-		let partialScrollAmmount = 0;														//scrollDistance * number of _smoothWebsiteShowcaseWheelScroll function calls
+	websiteShowcase.addEventListener("wheel", event => {
+		let _scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
+		let _totalScrollAmmount = windowInnerWidth/20;						//The total ammount of pixel horizontally scrolled by the _smoothWebsiteShowcaseWheelScroll function
+		let _scrollDistance = windowInnerWidth/150;							//The ammount of pixel scrolled at each _smoothWebsiteShowcaseWheelScroll call
+		let _partialScrollAmmount = 0;														//scrollDistance * number of _smoothWebsiteShowcaseWheelScroll function calls
 
 		/*
 		 * This function should only be called inside the websiteShowcases wheelEvent listeners.
@@ -138,89 +157,90 @@ function desktopEventListenerInitialization() {
 		 * If the wheel is scrolled from top to bottom the scroll direction will be from right to left, it will be inverted otherwise.
 		 */
 		function _smoothWebsiteShowcaseWheelScroll() {
-			websiteShowcase.scrollLeft += scrollDirection * scrollDistance;
-			partialScrollAmmount += scrollDistance;
-			if(partialScrollAmmount < totalScrollAmmount)
+			websiteShowcase.scrollLeft += _scrollDirection * _scrollDistance;
+			_partialScrollAmmount += _scrollDistance;
+			if(_partialScrollAmmount < _totalScrollAmmount)
 				window.requestAnimationFrame(_smoothWebsiteShowcaseWheelScroll);
 		}
 
 		window.requestAnimationFrame(_smoothWebsiteShowcaseWheelScroll);
 	}, {passive:true});
 
-	/* The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth
+	/*
+	 * The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth
 	 * and so that is +1/100th of the window's innerWidth at any given resolution.
 	 * If the direction is > 0  the scroll direction is from left to right, it's from right to left otherwise.
 	 */
-	let carouselButtonScrollEnabled = false;
+	let _carouselButtonScrollEnabled = false;
 	function smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection) {
-		websiteShowcase.scrollLeft += scrollDirection*windowInnerWidth/100;
-		if(carouselButtonScrollEnabled)
+		websiteShowcase.scrollLeft += scrollDirection * windowInnerWidth / 100;
+		if(_carouselButtonScrollEnabled)
 			window.requestAnimationFrame(() => smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection));
 	}
 
 	carouselButtons[0].addEventListener("mousedown", () => {
-		carouselButtonScrollEnabled = true;
+		_carouselButtonScrollEnabled = true;
 		window.requestAnimationFrame(() => smoothWebsiteShowcaseWheelScrollHorizzontally(-1));
 	}, {passive:true});
 
 	carouselButtons[1].addEventListener("mousedown", () => {
-		carouselButtonScrollEnabled = true;
+		_carouselButtonScrollEnabled = true;
 		window.requestAnimationFrame(() => smoothWebsiteShowcaseWheelScrollHorizzontally(1));
 	}, {passive:true});
 
-	carouselButtons[0].addEventListener("mouseup", () => carouselButtonScrollEnabled = false, {passive:true});
-	carouselButtons[1].addEventListener("mouseup", () => carouselButtonScrollEnabled = false, {passive:true});
+	carouselButtons[0].addEventListener("mouseup", () => _carouselButtonScrollEnabled = false, {passive:true});
+	carouselButtons[1].addEventListener("mouseup", () => _carouselButtonScrollEnabled = false, {passive:true});
 
 	for(const websitePreview of websitePreviews) {
 		/* First, all the websitePreviewExpanded basic components are created */
-		let websitePreviewExpanded = document.createElement("div");
-		websitePreviewExpanded.id = "websitePreviewExpanded";
+		let _websitePreviewExpanded = document.createElement("div");
+		_websitePreviewExpanded.id = "websitePreviewExpanded";
 
-		let websitePreviewExpandedImage = websitePreview.firstElementChild.cloneNode(true);
-		websitePreviewExpandedImage.className = "websitePreviewExpandedImage";
-		websitePreviewExpanded.appendChild(websitePreviewExpandedImage);
+		let _websitePreviewExpandedImage = websitePreview.firstElementChild.cloneNode(true);
+		_websitePreviewExpandedImage.className = "websitePreviewExpandedImage";
+		_websitePreviewExpanded.appendChild(_websitePreviewExpandedImage);
 
-		let dataTitle = websitePreview.getAttribute("data-title");
-		if(dataTitle != null) {
-			let websitePreviewExpandedTitle = document.createElement("div");
-			websitePreviewExpandedTitle.className = "websitePreviewExpandedTitle";
-			websitePreviewExpandedTitle.innerHTML = dataTitle;
-			websitePreviewExpanded.appendChild(websitePreviewExpandedTitle);
+		let _dataTitle = websitePreview.getAttribute("data-title");
+		if(_dataTitle != null) {
+			let _websitePreviewExpandedTitle = document.createElement("div");
+			_websitePreviewExpandedTitle.className = "websitePreviewExpandedTitle";
+			_websitePreviewExpandedTitle.innerHTML = _dataTitle;
+			_websitePreviewExpanded.appendChild(_websitePreviewExpandedTitle);
 		}
 
-		let viewButtonsSection = document.createElement("div");
-		viewButtonsSection.id = "websitePreviewExpandedButtonSection";
+		let _viewButtonsSection = document.createElement("div");
+		_viewButtonsSection.id = "websitePreviewExpandedButtonSection";
 
-		let dataCode = websitePreview.getAttribute("data-code");
-		if(dataCode != null) {													//There could be a project that isn't open-source
-			let viewCodeButton = document.createElement("button");
-			viewCodeButton.innerHTML = "View Code";
-			viewCodeButton.className = "websitePreviewExpandedButton";
-			viewCodeButton.addEventListener("click", event => {
+		let _dataCode = websitePreview.getAttribute("data-code");
+		if(_dataCode != null) {													//There could be a project that isn't open-source
+			let _viewCodeButton = document.createElement("button");
+			_viewCodeButton.innerHTML = "View Code";
+			_viewCodeButton.className = "websitePreviewExpandedButton";
+			_viewCodeButton.addEventListener("click", event => {
 				event.stopPropagation();
-				window.open(dataCode);
+				window.open(_dataCode);
 			}, {passive:true});
-			viewButtonsSection.appendChild(viewCodeButton);
+			_viewButtonsSection.appendChild(_viewCodeButton);
 		}
 
-		let dataDemo = websitePreview.getAttribute("data-demo");
-		if(dataDemo != null) {													//There could be a project that hasn't got a demo ready yet
-			let viewDemoButton = document.createElement("button");
-			viewDemoButton.innerHTML = "View Demo";
-			viewDemoButton.className = "websitePreviewExpandedButton";
-			viewDemoButton.addEventListener("click", event => {
+		let _dataDemo = websitePreview.getAttribute("data-demo");
+		if(_dataDemo != null) {													//There could be a project that hasn't got a demo ready yet
+			let _viewDemoButton = document.createElement("button");
+			_viewDemoButton.innerHTML = "View Demo";
+			_viewDemoButton.className = "websitePreviewExpandedButton";
+			_viewDemoButton.addEventListener("click", event => {
 				event.stopPropagation();
-				window.open(dataDemo);
+				window.open(_dataDemo);
 			}, {passive:true});
-			viewButtonsSection.appendChild(viewDemoButton);
+			_viewButtonsSection.appendChild(_viewDemoButton);
 		}
 
-		websitePreviewExpanded.appendChild(viewButtonsSection);
+		_websitePreviewExpanded.appendChild(_viewButtonsSection);
 
-		let backgroundContent = document.createElement("div");
-		backgroundContent.id = "websitePreviewExpandedBackgroundContent";
-		backgroundContent.className = "page";
-		backgroundContent.appendChild(websitePreviewExpanded);
+		let _backgroundContent = document.createElement("div");
+		_backgroundContent.id = "websitePreviewExpandedBackgroundContent";
+		_backgroundContent.className = "page";
+		_backgroundContent.appendChild(_websitePreviewExpanded);
 
 		/*
 		 * The listenersAlreadyTriggered variable is used to prevent the user to execute the backgroundContent eventListener
@@ -228,53 +248,55 @@ function desktopEventListenerInitialization() {
 		 * Otherwise the document.body would try to remove the backgroundContent multiple times generating errors in the browser console.
 		 * Note that this bug wouldn't cause the page to instantly crash.
 		 */
-		let listenersAlreadyTriggered = false;
-		backgroundContent.addEventListener("click", () => {
+		let _listenersAlreadyTriggered = false;
+		_backgroundContent.addEventListener("click", () => {
 			event.stopPropagation();
-			if(!listenersAlreadyTriggered) {
-				listenersAlreadyTriggered = true;
+			if(!_listenersAlreadyTriggered) {
+				_listenersAlreadyTriggered = true;
 				setTimeout(() => {
-					listenersAlreadyTriggered = false;
+					_listenersAlreadyTriggered = false;
 					headerElement.style = "";
 					websitePreview.classList.remove("expandedState");
-					documentBodyElement.removeChild(backgroundContent);
+					documentBodyElement.removeChild(_backgroundContent);
 				}, transitionTimeMedium);
-				/* The websitePreview is scaled while hovered.
+				/*
+				 * The websitePreview is scaled while hovered.
 				 * The top and left offset have to take the scaling into consideration otherwise
 				 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
 				 * The initial position is instead calculated adding the hover effect's expansion.
 				 */
-				let websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
-				let documentBodyElementStyle = documentBodyElement.style;
-				documentBodyElementStyle.setProperty("--websitePreview-original-top-position", websitePreviewBoundingRectangle.top + "px");
-				documentBodyElementStyle.setProperty("--websitePreview-original-left-position", websitePreviewBoundingRectangle.left + "px");
-				documentBodyElementStyle.setProperty("--websitePreview-current-size", websitePreviewBoundingRectangle.height + "px");
+				let _websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
+				let _documentBodyElementStyle = documentBodyElement.style;
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewBoundingRectangle.height + "px");
 
-				websitePreviewExpanded.className = "";
+				_websitePreviewExpanded.className = "";
 			}
 		}, {passive:true});
 
-		websitePreviewExpandedMap.set(websitePreview, backgroundContent);
+		websitePreviewExpandedMap.set(websitePreview, _backgroundContent);
 
 		websitePreview.addEventListener("click", () => {
 			event.stopPropagation();																				//Prevents the click to instantly remove the previewExpanded element that is going to be created next
 			setTimeout(() => {
-				websitePreviewExpanded.className = "expandedState";
+				_websitePreviewExpanded.className = "expandedState";
 				websitePreview.classList.add("expandedState");
 			}, 20);
 
-			/* The websitePreview is scaled while hovered.
+			/*
+			 * The websitePreview is scaled while hovered.
 			 * The top and left offset have to take the scaling into consideration otherwise
 			 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
 			 * The initial position is instead calculated adding the hover effect's expansion.
 			 */
-			let websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
-			let documentBodyElementStyle = documentBodyElement.style;
+			let _websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
+			let _documentBodyElementStyle = documentBodyElement.style;
 			documentBodyElement.insertBefore(websitePreviewExpandedMap.get(websitePreview), documentBodyElement.firstChild);
 
-			documentBodyElementStyle.setProperty("--websitePreview-original-top-position", websitePreviewBoundingRectangle.top + "px");
-			documentBodyElementStyle.setProperty("--websitePreview-original-left-position", websitePreviewBoundingRectangle.left + "px");
-			documentBodyElementStyle.setProperty("--websitePreview-current-size", websitePreviewBoundingRectangle.height + "px");
+			_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
+			_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
+			_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewBoundingRectangle.height + "px");
 
 			headerElement.style.pointerEvents = "none";
 		}, {passive:true});
@@ -324,8 +346,9 @@ function desktopEventListenerInitialization() {
 	}, {passive:true});*/
 }
 
-/* This Function toggle the class mobileExpanded in the hamburgerMenu element if the page is in mobileMode.
- * Mobile mode is triggered on the window's resize event.
+/*
+ * This Function toggles the mobileExpanded class of the hamburgerMenu HTML element if the page is in mobileMode.
+ * Mobile mode is triggered by the window's resize event.
  */
 function toggleExpandHamburgerMenu() {
 	if(mobileMode) {
@@ -343,7 +366,8 @@ function browserIsSafari() {
 	return safariBrowserUsed;
 }
 
-/* This Function emulates the smooth scroll behaviour provided by css
+/*
+ * This Function emulates the smooth scroll behaviour provided by css
  * taking into consideration the current page position.
  * It triggers after a scroll is completed.
  * If at the end of the scroll, the current page is not alligned, it gets:
@@ -353,16 +377,16 @@ function browserIsSafari() {
 if(!browserIsSafari()) {
 	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 		currentPageIndex = Math.round(lastScrollYPosition / windowInnerHeight);
-		let scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
-		if(scrollYAmmount > windowInnerHeight / 2 || scrollYAmmount < -windowInnerHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
-			let scrollDirection = Math.sign(scrollYAmmount);																										//1 if the scrolling is going downwards -1 otherwise.
-			let pageOffset = scrollDirection * (currentPageIndex * windowInnerHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
+		let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
+		if(_scrollYAmmount > windowInnerHeight / 2 || _scrollYAmmount < -windowInnerHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
+			let _scrollDirection = Math.sign(_scrollYAmmount);																										//1 if the scrolling is going downwards -1 otherwise.
+			let _pageOffset = _scrollDirection * (currentPageIndex * windowInnerHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
-			if(pageOffset != 0)
-				if(-pageOffset < windowInnerHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
-					contentElement.scrollTop += scrollDirection * pageOffset;
+			if(_pageOffset != 0)
+				if(-_pageOffset < windowInnerHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
+					contentElement.scrollTop += _scrollDirection * _pageOffset;
 				else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
-					contentElement.scrollTop += scrollDirection * (windowInnerHeight + pageOffset);
+					contentElement.scrollTop += _scrollDirection * (windowInnerHeight + _pageOffset);
 		}
 	}
 } else {
@@ -374,16 +398,16 @@ if(!browserIsSafari()) {
 	 */
 	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 		currentPageIndex = Math.round(lastScrollYPosition / windowInnerHeight);
-		let scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
-		if(scrollYAmmount > windowInnerHeight / 2 || scrollYAmmount < -windowInnerHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
-			let scrollDirection = Math.sign(scrollYAmmount);																										//1 if the scrolling is going downwards -1 otherwise.
-			let pageOffset = scrollDirection * (currentPageIndex * windowInnerHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
+		let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
+		if(_scrollYAmmount > windowInnerHeight / 2 || _scrollYAmmount < -windowInnerHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
+			let _scrollDirection = Math.sign(_scrollYAmmount);																										//1 if the scrolling is going downwards -1 otherwise.
+			let _pageOffset = _scrollDirection * (currentPageIndex * windowInnerHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
-			if(pageOffset != 0)
-				if(-pageOffset < windowInnerHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
-					smoothScrollVertically(Math.sign(scrollDirection * pageOffset), Math.abs(pageOffset));
+			if(_pageOffset != 0)
+				if(-_pageOffset < windowInnerHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
+					smoothScrollVertically(Math.sign(_scrollDirection * _pageOffset), Math.abs(_pageOffset));
 				else  																																														//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
-					smoothScrollVertically(Math.sign(scrollDirection * (windowInnerHeight + pageOffset)), windowInnerHeight + pageOffset);
+					smoothScrollVertically(Math.sign(_scrollDirection * (windowInnerHeight + _pageOffset)), windowInnerHeight + _pageOffset);
 		}
 	}
 
@@ -403,31 +427,31 @@ if(!browserIsSafari()) {
 		 * maxAnimationFramesNumber = the highest number of frame the scrolling animation can use
 		 * speedIncrease = a number which grows exponentially (speedIncrease(n) = speedIncrease(n-1)^2): it's value is contained between MIN_SPEED_INCREASE and MAX_SPEED_INCREASE
 		 */
-		let maxAnimationFramesNumber = MAX_SCROLLING_ANIMATION_FRAMES;
-		let partialScrollAmmount = 0;																									//The ammount of pixed scrolled from the first _safariSmoothPageScroll call
-		let scrollDistance = totalScrollAmmount / maxAnimationFramesNumber;						//The ammount of pixel scrolled at each _safariSmoothPageScroll call
-		let currentPagesGapNumber = totalScrollAmmount / windowInnerHeight;						//How many pages there are between the current page and the one the user wants to land on
-		let speedIncrease = MAX_SPEED_INCREASE - (currentPagesGapNumber * (MAX_SPEED_INCREASE - MIN_SPEED_INCREASE) / MAX_PAGES_GAP_NUMBER);
+		let _maxAnimationFramesNumber = MAX_SCROLLING_ANIMATION_FRAMES;
+		let _partialScrollAmmount = 0;																									//The ammount of pixed scrolled from the first _safariSmoothPageScroll call
+		let _scrollDistance = totalScrollAmmount / _maxAnimationFramesNumber;						//The ammount of pixel scrolled at each _safariSmoothPageScroll call
+		let _currentPagesGapNumber = totalScrollAmmount / windowInnerHeight;						//How many pages there are between the current page and the one the user wants to land on
+		let _speedIncrease = MAX_SPEED_INCREASE - (_currentPagesGapNumber * (MAX_SPEED_INCREASE - MIN_SPEED_INCREASE) / MAX_PAGES_GAP_NUMBER);
 
 		/*
 		 * This function should only be called inside the smoothScrollVertically function.
 		 * It physically scrolls the contentElement by scrollDistance in the given scrollDirection at each function call.
 		 */
 		function _safariSmoothPageScroll() {
-			contentElement.scrollTop += scrollDirection * scrollDistance;
-			partialScrollAmmount += scrollDistance;
+			contentElement.scrollTop += scrollDirection * _scrollDistance;
+			_partialScrollAmmount += _scrollDistance;
 
-			let scrollRemaningDistance = totalScrollAmmount - partialScrollAmmount;		//Never negative because the totalScrollAmmount is given by its absolute value
-			if(scrollRemaningDistance > 0) {
-				if(maxAnimationFramesNumber - speedIncrease > MIN_SCROLLING_ANIMATION_FRAMES)
-					maxAnimationFramesNumber = Math.round(maxAnimationFramesNumber - speedIncrease);
+			let _scrollRemaningDistance = totalScrollAmmount - _partialScrollAmmount;		//Never negative because the totalScrollAmmount is given by its absolute value
+			if(_scrollRemaningDistance > 0) {
+				if(_maxAnimationFramesNumber - _speedIncrease > MIN_SCROLLING_ANIMATION_FRAMES)
+					_maxAnimationFramesNumber = Math.round(_maxAnimationFramesNumber - _speedIncrease);
 				else
-					maxAnimationFramesNumber = MIN_SCROLLING_ANIMATION_FRAMES;
+					_maxAnimationFramesNumber = MIN_SCROLLING_ANIMATION_FRAMES;
 
-				speedIncrease = (speedIncrease * speedIncrease < MAX_SPEED_INCREASE) ? speedIncrease * speedIncrease : MAX_SPEED_INCREASE;
-				scrollDistance = Math.round(scrollRemaningDistance / maxAnimationFramesNumber);
+				_speedIncrease = (_speedIncrease * _speedIncrease < MAX_SPEED_INCREASE) ? _speedIncrease * _speedIncrease : MAX_SPEED_INCREASE;
+				_scrollDistance = Math.round(_scrollRemaningDistance / _maxAnimationFramesNumber);
 
-				if(scrollDistance > 0)
+				if(_scrollDistance > 0)
 					window.requestAnimationFrame(_safariSmoothPageScroll);
 			}
 		}
@@ -443,11 +467,11 @@ if(!browserIsSafari()) {
 	 */
 	function pageLinksSmoothScroll(pageLink) {
 		event.preventDefault();
-		let contentElementScrollTop = contentElement.scrollTop;
-		currentPageIndex = Math.round(contentElementScrollTop / windowInnerHeight);
-		let targetPageIndex = pageLink.dataset.pageNumber;																							//The index of the page the passed pageLink refers
-		let totalScrollAmmount = targetPageIndex * windowInnerHeight - contentElementScrollTop;
-		smoothScrollVertically(Math.sign(totalScrollAmmount), Math.abs(totalScrollAmmount));						// Only defined if the browser used is Safari
+		let _contentElementScrollTop = contentElement.scrollTop;
+		currentPageIndex = Math.round(_contentElementScrollTop / windowInnerHeight);
+		let _targetPageIndex = pageLink.dataset.pageNumber;																							//The index of the page the passed pageLink refers
+		let _totalScrollAmmount = _targetPageIndex * windowInnerHeight - _contentElementScrollTop;
+		smoothScrollVertically(Math.sign(_totalScrollAmmount), Math.abs(_totalScrollAmmount));						// Only defined if the browser used is Safari
 	}
 }
 
@@ -475,7 +499,8 @@ function imageLoading() {
 	profileImageLoaded.addEventListener("load", () => window.requestAnimationFrame(() => profilePicElement.src = profileImageLoaded.src), {passive:true});
 }
 
-/* This Function:
+/*
+ * This Function:
  * - udates the windowInnerHeight and windowInnerWidth variables with the new window' values
  * - resets the body height to that of the inner browser: this is used to fix the different height behaviour of the mobile browsers' navigation bars
  * - check if the page can go to the mobileMode and set the javascript mobileMode variable accordingly
@@ -500,41 +525,39 @@ function updateWindowSize(){
 }
 
 /* -------------------------------------------------------- 						TESTING CODE SECTION     					------------------------------------------------------------------*/
-var test = 0;
+var _test = 0;
 function lagTest() {
 	websitePreview = document.getElementsByClassName("websitePreview")[0];
-    var event = document.createEvent('Events');
-    event.initEvent("click", true, false);
-	if(test < 100) {
-		if(test % 2 == 0)
-			websitePreview.dispatchEvent(event);
+    var _testEvent = document.createEvent('Events');
+    _testEvent.initEvent("click", true, false);
+	if(_test < 100) {
+		if(_test % 2 == 0)
+			websitePreview.dispatchEvent(_testEvent);
 		else
-			documentBodyElement.firstChild.dispatchEvent(event);
+			documentBodyElement.firstChild.dispatchEvent(_testEvent);
 
 		setTimeout(lagTest, transitionTimeMedium);
-		test++;
+		_test++;
 	}
 }
 
-var test2 = 0;
+var _test2 = 0;
 function lagTestHeader() {
-	var event = document.createEvent('Events');
-    event.initEvent("click", true, false);
-	if(test2 < 100) {
-		hamburgerMenuElement.dispatchEvent(event);
+	var _testEvent = document.createEvent('Events');
+    _testEvent.initEvent("click", true, false);
+	if(_test2 < 100) {
+		hamburgerMenuElement.dispatchEvent(_testEvent);
 		setTimeout(lagTestHeader, transitionTimeMedium);
-		test2++;
+		_test2++;
 	}
 }
 
-/*
-var scroll = 0;
-var directionScroll = 1;
-function scrollTest(directionScroll) {
-	if(scroll < 10){
-		contentElement.scrollTop += directionScroll * windowInnerHeight / 4 + directionScroll;
-		scroll++;
-		setTimeout(() => scrollTest(-directionScroll), 2000);
+var _scroll = 0;
+var _scrollDirectionTest = 1;
+function scrollTest(_scrollDirectionTest) {
+	if(_scroll < 10){
+		contentElement.scrollTop += _scrollDirectionTest * windowInnerHeight / 4 + _scrollDirectionTest;
+		_scroll++;
+		setTimeout(() => scrollTest(-_scrollDirectionTest), 2000);
 	}
 }
-*/
