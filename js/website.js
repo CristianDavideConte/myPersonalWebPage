@@ -95,11 +95,18 @@ function desktopEventListenerInitialization() {
 			}
 		}, {passive:false});
 
-	headerElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});										//Scroll on the header is not allowed
-	headerElement.addEventListener("touchmove", event => event.preventDefault(), {passive:false});										//Scroll on the header is not allowed
-	headerBackgroundElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});					//Scroll on the headerBackground is not allowed
-	headerBackgroundElement.addEventListener("touchmove", event => event.preventDefault(), {passive:false});					//Scroll on the headerBackground is not allowed
-	hamburgerMenuElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});										//When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function
+	/*
+	 * When a scroll triggered by mouse wheel, a trackpad or touch gesture is detected
+	 * on the header or its background it's immediatly stopped.
+	 * Any type of scroll-event is not allowed over the header section.
+	 */
+	headerBackgroundElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});
+	headerBackgroundElement.addEventListener("touchmove", event => event.preventDefault(), {passive:false});
+	headerElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});
+	headerElement.addEventListener("touchmove", event => event.preventDefault(), {passive:false});
+
+	/* When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function */
+	hamburgerMenuElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
 
 	/*
 	 * When the website is in mobile mode the page links are hidden under the hamburgerMenu
