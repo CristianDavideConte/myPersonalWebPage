@@ -11,11 +11,12 @@ var MAX_SPEED_INCREASE;																//The maximum number of frames that are s
 
 var windowInnerWidth;															//A shortcut for the DOM element window.innerWidth
 var windowInnerHeight;														//A shortcut for the DOM element window.innerHeight
-//var windowPosition;															//The scrollTop value of the window, used to prevent the DOM from scrolling after a screen orientation change
 var documentBodyElement;													//A shortcut for the HTML element document.body
+var computedStyle;																//All the computed styles for the document.body element
 var currentPageIndex;															//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
 var transitionTimeMedium;													//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
 var mobileMode; 																	//Indicates if the css for mobile is currently beign applied
+var backgroundElement;														//The HTML element with the id "backgroundElement", used as the website body background
 var headerBackgroundElement;											//The HTML element with the id "headerBackground", used as the website's navbar background
 var headerElement;																//The HTML element with the id "header", used as the website navbar
 var hamburgerMenuElement;													//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px
@@ -45,6 +46,7 @@ function init() {
 function variableInitialization() {
 	documentBodyElement = document.body;
 
+	backgroundElement = document.getElementById("bodyBackground");
 	headerBackgroundElement = document.getElementById("headerBackground");
 	headerElement = document.getElementById("header");
 	hamburgerMenuElement = document.getElementById("hamburgerMenu");
@@ -55,8 +57,8 @@ function variableInitialization() {
 	websitePreviews = document.getElementsByClassName("websitePreview");
 	contactMeFormSendButtonElement = document.getElementById("contactMeFormSendButton");
 
-	let _computedStyle = getComputedStyle(documentBodyElement);
-	transitionTimeMedium = _computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
+	computedStyle = getComputedStyle(documentBodyElement);
+	transitionTimeMedium = computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
 	websitePreviewExpandedMap = new Map();
 	windowInnerHeight = 0;
 }
@@ -504,15 +506,14 @@ if(!browserIsSafari()) {
  * Whenever the full image is ready the two images are swapped with a transition in between.
  */
 function imageLoading() {
-	let backgroundElement = document.getElementById("bodyBackground");
-	let backgroundElementLoaded = backgroundElement.cloneNode(true);
-	let backgroundImage = new Image();
-	backgroundImage.src = "./images/backgroundImages/LakeAndMountains.jpg";
-	backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => {
-		backgroundElementLoaded.style.backgroundImage = "url(" + backgroundImage.src + ")"; //Setting the src wouldn't allow the new image to use the css style already calculated
-		backgroundElement.before(backgroundElementLoaded);
-		documentBodyElement.removeChild(backgroundElement);
-	}), {passive:true});
+	function _changeWebsiteBackgroundTheme() {
+		let backgroundImage = new Image();
+		backgroundImage.src = computedStyle.getPropertyValue("--theme-background-image-url");
+		backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => backgroundElement.style.backgroundImage = "url(" + backgroundImage.src + ")"), {passive:true});
+	}
+
+	_changeWebsiteBackgroundTheme();
+	window.matchMedia("(prefers-color-scheme:dark)").addListener(_changeWebsiteBackgroundTheme);
 
 	let profilePicElement = document.getElementById("profilePic");
 	let profileImageLoaded = new Image();

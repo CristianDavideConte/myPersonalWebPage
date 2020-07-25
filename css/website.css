@@ -57,6 +57,8 @@
 	--light-theme-facebookContact-background-color: linear-gradient(0deg, rgba(0,111,255,1) 26%, rgba(94,201,255,1) 100%);
 	--light-theme-instagramContact-background-color: linear-gradient(340deg, rgba(244,255,0,1) 0%, rgba(255,39,218,1) 58%, rgba(255,39,218,1) 72%, rgba(0,83,255,1) 99%);
 	--light-theme-mailContact-background-color: linear-gradient(35deg, rgba(255,248,0,1) 0%, rgba(255,99,0,1) 67%);
+  --light-theme-background-preview-image-url: url("../images/backgroundImages/smoke_Light_Compressed.jpg");
+  --light-theme-background-image-url: ./images/backgroundImages/smoke_Light.jpg;
 
 	--dark-theme-blur-background-color-Black: rgba(0,0,0,1);
 	--dark-theme-blur-background-color-White: rgba(100,100,100,0.2);
@@ -71,6 +73,8 @@
 	--dark-theme-facebookContact-background-color: linear-gradient(0deg, rgba(0,48,255,1) 0%, rgba(9,187,255,1) 100%);
 	--dark-theme-instagramContact-background-color: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
 	--dark-theme-mailContact-background-color: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
+  --dark-theme-background-preview-image-url: url("../images/backgroundImages/smoke_Dark_Compressed.jpg");
+  --dark-theme-background-image-url: ./images/backgroundImages/smoke_Dark.jpg;
 
 	--theme-blur-background-color-Black: var(--light-theme-blur-background-color-Black);
 	--theme-blur-background-color-White: var(--light-theme-blur-background-color-White);
@@ -85,6 +89,8 @@
 	--theme-facebookContact-background-color: var(--light-theme-facebookContact-background-color);
 	--theme-instagramContact-background-color: var(--light-theme-instagramContact-background-color);
 	--theme-mailContact-background-color: var(--light-theme-mailContact-background-color);
+  --theme-background-preview-image-url: var(--light-theme-background-preview-image-url);
+  --theme-background-image-url: var(--light-theme-background-image-url);
 }
 
 @media (prefers-color-scheme:dark) {
@@ -102,6 +108,8 @@
 		--theme-facebookContact-background-color: var(--dark-theme-facebookContact-background-color);
 		--theme-instagramContact-background-color: var(--dark-theme-instagramContact-background-color);
 		--theme-mailContact-background-color: var(--dark-theme-mailContact-background-color);
+    --theme-background-preview-image-url: var(--dark-theme-background-preview-image-url);
+    --theme-background-image-url: var(--dark-theme-background-image-url);
 	}
 }
 
@@ -133,10 +141,15 @@ html {
 }
 
 body {
+  overflow:hidden;
 	margin:0;
 	width:100vw;
 	height:var(--100vh);
 	background-color: var(--theme-blur-background-color-Black);
+}
+
+body::-webkit-scrollbar {
+	display:none;
 }
 
 p {
@@ -149,7 +162,7 @@ p {
 	margin:-0.5em;
   width:101vw;
   height:calc(var(--vh, 1vh) * 101);
-	background-image:url("../images/backgroundImages/LakeAndMountains_Compressed.jpg");
+	background-image:var(--theme-background-preview-image-url);
 	background-repeat:no-repeat;
 	background-size:cover;
 	background-position:50% 0%;
@@ -647,6 +660,11 @@ h1, h2 {
 		--presentationCard-height:80vmin;
 		--presentationCard-width:75vmin;
 	}
+
+  #bodyBackground {
+    max-width:300%;
+    max-height:300%;
+  }
 
 	#headerBackground {
 		background:var(--theme-blur-background-color-Darkest);
