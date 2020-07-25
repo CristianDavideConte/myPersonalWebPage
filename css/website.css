@@ -31,7 +31,7 @@
 	--backdrop-filter-blur-radius-reduced:1rem;
 	--backdrop-filter-blur-radius:1.5rem;
 	--backdrop-filter-blur-radius-wide:2rem;
-	--backdrop-filter-blur-radius-ultra-wide:4rem;
+	--backdrop-filter-blur-radius-ultra-wide:3rem;
 
 	--transition-time:0.5s;
 	--transition-time-medium:0.4s;
@@ -58,7 +58,7 @@
 	--light-theme-instagramContact-background-color: linear-gradient(340deg, rgba(244,255,0,1) 0%, rgba(255,39,218,1) 58%, rgba(255,39,218,1) 72%, rgba(0,83,255,1) 99%);
 	--light-theme-mailContact-background-color: linear-gradient(35deg, rgba(255,248,0,1) 0%, rgba(255,99,0,1) 67%);
   --light-theme-background-preview-image-url: url("../images/backgroundImages/smoke_Light_Compressed.jpg");
-  --light-theme-background-image-url: ./images/backgroundImages/smoke_Light.jpg;
+  --light-theme-background-image-url: ./images/backgroundImages/smoke_Light_Blurred.jpg;
 
 	--dark-theme-blur-background-color-Black: rgba(0,0,0,1);
 	--dark-theme-blur-background-color-White: rgba(100,100,100,0.2);
@@ -74,7 +74,7 @@
 	--dark-theme-instagramContact-background-color: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
 	--dark-theme-mailContact-background-color: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
   --dark-theme-background-preview-image-url: url("../images/backgroundImages/smoke_Dark_Compressed.jpg");
-  --dark-theme-background-image-url: ./images/backgroundImages/smoke_Dark.jpg;
+  --dark-theme-background-image-url: ./images/backgroundImages/smoke_Dark_Blurred.jpg;
 
 	--theme-blur-background-color-Black: var(--light-theme-blur-background-color-Black);
 	--theme-blur-background-color-White: var(--light-theme-blur-background-color-White);
