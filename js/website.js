@@ -1,11 +1,13 @@
 const STANDARD_WINDOW_INNER_HEIGHT = 937;							//The standard browser inner height, usually about 937px at 1920x1080
-const MIN_SCROLLING_ANIMATION_FRAMES_DIVIDER = 10;		//The minumum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
-const MAX_SCROLLING_ANIMATION_FRAMES_DIVIDER = 60;		//The maximum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
-const MIN_SPEED_INCREASE = 1;													//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function
-const MAX_SPEED_INCREASE = 6;													//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function
+const MIN_SCROLLING_ANIMATION_FRAMES_STANDARD = 9;		//The minumum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
+const MAX_SCROLLING_ANIMATION_FRAMES_STANDARD = 25;		//The maximum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
+const MIN_SPEED_INCREASE_STANDARD = 1;								//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
+const MAX_SPEED_INCREASE_STANDARD = 4;								//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
 const MAX_PAGES_GAP_NUMBER = 3;												//The maximum number of pages of the contentElement
 var MIN_SCROLLING_ANIMATION_FRAMES;										//The minumum number of frames that the smoothScrollVertically function can use to scroll the contentElement for the current windowInnerHeight value
 var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that the smoothScrollVertically function can use to scroll the contentElement for the current windowInnerHeight value
+var MIN_SPEED_INCREASE;																//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
+var MAX_SPEED_INCREASE;																//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
 
 var windowInnerWidth;															//A shortcut for the DOM element window.innerWidth
 var windowInnerHeight;														//A shortcut for the DOM element window.innerHeight
@@ -122,7 +124,13 @@ function desktopEventListenerInitialization() {
 	else
 		for(const pageLink of pageLinksElements) {
 	 		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
- 			pageLink.addEventListener("click", () => pageLinksSmoothScroll(pageLink), {passive:false});
+ 			pageLink.addEventListener("click", event => {
+				event.preventDefault();
+				if(!pageLinkClicked) {
+					pageLinkClicked = true;
+					pageLinksSmoothScroll(pageLink);
+				}
+			}, {passive:false});
 		}
 
 	/* All the social networks icons are linked to the corresponding website */
@@ -428,41 +436,45 @@ if(!browserIsSafari()) {
 	function smoothScrollVertically(scrollDirection, totalScrollAmmount) {
 		/*
 		 * The velocity of the scrolling (scrollDistance) is calculated by following this formula:
-		 * scrollDistance = totalScrollAmmount / maxAnimationFramesNumber
-		 * maxAnimationFramesNumber = maxAnimationFramesNumber - speedIncrease -> until MAX_SCROLLING_ANIMATION_FRAMES is reached (Max velocity)
+		 * _scrollDistance = remaningScrollAmmount / _maxAnimationFramesNumber
+		 * _maxAnimationFramesNumber = _maxAnimationFramesNumber - _speedIncrease -> until MAX_SCROLLING_ANIMATION_FRAMES is reached (Max velocity)
 		 * contentElement.scrollTop = scrollDirection * scrollDistance
 		 * Where:
+		 * remaningScrollAmmount = totalScrollAmmount - _partialScrollAmmount, ALWAYS POSITIVE
 		 * totalScrollAmmount = the absolute value of the offset the contentElement has to scroll vertically
-		 * maxAnimationFramesNumber = the highest number of frame the scrolling animation can use
-		 * speedIncrease = a number which grows exponentially (speedIncrease(n) = speedIncrease(n-1)^2): it's value is contained between MIN_SPEED_INCREASE and MAX_SPEED_INCREASE
+		 * _partialScrollAmmount = the ammount of pixed scrolled from the first _safariSmoothPageScroll call
+		 * _maxAnimationFramesNumber = the highest number of frame the scrolling animation can use
+		 * _speedIncrease = a number which grows exponentially (_speedIncrease(n) = _speedIncrease(n-1)^2): it's value is contained between MIN_SPEED_INCREASE and MAX_SPEED_INCREASE
+		 * _scrollDistance = the ammount of pixel scrolled at each _safariSmoothPageScroll call
+		 * _currentPagesGapNumber = the number of pages there are between the current page and the one the user wants to land on
 		 */
 		let _maxAnimationFramesNumber = MAX_SCROLLING_ANIMATION_FRAMES;
-		let _partialScrollAmmount = 0;																									//The ammount of pixed scrolled from the first _safariSmoothPageScroll call
-		let _scrollDistance = totalScrollAmmount / _maxAnimationFramesNumber;						//The ammount of pixel scrolled at each _safariSmoothPageScroll call
-		let _currentPagesGapNumber = totalScrollAmmount / windowInnerHeight;						//How many pages there are between the current page and the one the user wants to land on
+		let _scrollDistance = totalScrollAmmount / _maxAnimationFramesNumber;
+		let _currentPagesGapNumber = totalScrollAmmount / windowInnerHeight;
+
 		let _speedIncrease = MAX_SPEED_INCREASE - (_currentPagesGapNumber * (MAX_SPEED_INCREASE - MIN_SPEED_INCREASE) / MAX_PAGES_GAP_NUMBER);
 
+		let _partialScrollAmmount = 0;
 		/*
 		 * This function should only be called inside the smoothScrollVertically function.
 		 * It physically scrolls the contentElement by scrollDistance in the given scrollDirection at each function call.
 		 */
 		function _safariSmoothPageScroll() {
-			contentElement.scrollTop += scrollDirection * _scrollDistance;
-			_partialScrollAmmount += _scrollDistance;
+			if(_scrollDistance > 0) {
+				contentElement.scrollTop += scrollDirection * _scrollDistance;
+				_partialScrollAmmount += _scrollDistance;
 
-			let _scrollRemaningDistance = totalScrollAmmount - _partialScrollAmmount;		//Never negative because the totalScrollAmmount is given by its absolute value
-			if(_scrollRemaningDistance > 0) {
 				if(_maxAnimationFramesNumber - _speedIncrease > MIN_SCROLLING_ANIMATION_FRAMES)
 					_maxAnimationFramesNumber = Math.round(_maxAnimationFramesNumber - _speedIncrease);
 				else
 					_maxAnimationFramesNumber = MIN_SCROLLING_ANIMATION_FRAMES;
 
-				_speedIncrease = (_speedIncrease * _speedIncrease < MAX_SPEED_INCREASE) ? _speedIncrease * _speedIncrease : MAX_SPEED_INCREASE;
-				_scrollDistance = Math.round(_scrollRemaningDistance / _maxAnimationFramesNumber);
+				_speedIncrease = (_speedIncrease * _speedIncrease < MAX_SPEED_INCREASE) ? _speedIncrease * 2 : MAX_SPEED_INCREASE;
+				_scrollDistance = Math.round((totalScrollAmmount - _partialScrollAmmount) / _maxAnimationFramesNumber);
 
-				if(_scrollDistance > 0)
-					window.requestAnimationFrame(_safariSmoothPageScroll);
-			}
+				window.requestAnimationFrame(_safariSmoothPageScroll);
+			} else
+				pageLinkClicked = false;																								//Used to avoid the spam of pageLinksSmoothScroll function calls
 		}
 
 		window.requestAnimationFrame(_safariSmoothPageScroll);
@@ -474,11 +486,11 @@ if(!browserIsSafari()) {
 	 * page index of the page the user wants to land to.
 	 * The actual scrolling is delegated to the smoothScrollVertically function.
 	 */
+	var pageLinkClicked = false;
 	function pageLinksSmoothScroll(pageLink) {
-		event.preventDefault();
 		let _contentElementScrollTop = contentElement.scrollTop;
 		currentPageIndex = Math.round(_contentElementScrollTop / windowInnerHeight);
-		let _targetPageIndex = pageLink.dataset.pageNumber;																							//The index of the page the passed pageLink refers
+		let _targetPageIndex = pageLink.dataset.pageNumber;																								//The index of the page that the passed pageLink refers to
 		let _totalScrollAmmount = _targetPageIndex * windowInnerHeight - _contentElementScrollTop;
 		smoothScrollVertically(Math.sign(_totalScrollAmmount), Math.abs(_totalScrollAmmount));						// Only defined if the browser used is Safari
 	}
@@ -519,13 +531,17 @@ function updateWindowSize(){
 		if(window.innerHeight > windowInnerHeight) {
 			windowInnerHeight = window.innerHeight;
 			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
-			MAX_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MAX_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
-			MIN_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MIN_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
+			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
+			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
+			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowInnerHeight;
+			MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowInnerHeight;
 		} else if(window.innerWidth > windowInnerWidth) {		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
 			windowInnerHeight = window.innerHeight;
 			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
-			MAX_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MAX_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
-			MIN_SCROLLING_ANIMATION_FRAMES = windowInnerHeight * MIN_SCROLLING_ANIMATION_FRAMES_DIVIDER / STANDARD_WINDOW_INNER_HEIGHT;
+			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
+			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
+			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowInnerHeight;
+			MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowInnerHeight;
 		}
 
 		windowInnerWidth = window.innerWidth;
