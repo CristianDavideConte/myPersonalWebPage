@@ -96,7 +96,9 @@ function desktopEventListenerInitialization() {
 		}, {passive:false});
 
 	headerElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});										//Scroll on the header is not allowed
+	headerElement.addEventListener("scroll", event => event.preventDefault(), {passive:false});										//Scroll on the header is not allowed
 	headerBackgroundElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});					//Scroll on the headerBackground is not allowed
+	headerBackgroundElement.addEventListener("scroll", event => event.preventDefault(), {passive:false});					//Scroll on the headerBackground is not allowed
 	hamburgerMenuElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});										//When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function
 
 	/*
