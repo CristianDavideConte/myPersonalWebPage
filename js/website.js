@@ -9,28 +9,29 @@ var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that
 var MIN_SPEED_INCREASE;																//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
 var MAX_SPEED_INCREASE;																//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
 
-var windowInnerWidth;															//A shortcut for the DOM element window.innerWidth
-var windowInnerHeight;														//A shortcut for the DOM element window.innerHeight
-var documentBodyElement;													//A shortcut for the HTML element document.body
-var computedStyle;																//All the computed styles for the document.body element
-var currentPageIndex;															//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
-var transitionTimeMedium;													//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
-var mobileMode; 																	//Indicates if the css for mobile is currently beign applied
-var backgroundElement;														//The HTML element with the id "backgroundElement", used as the website body background
-var headerBackgroundElement;											//The HTML element with the id "headerBackground", used as the website's navbar background
-var headerElement;																//The HTML element with the id "header", used as the website navbar
-var hamburgerMenuElement;													//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px
-var pageLinksElements; 														//All HTML elements with the class "pageLink", shown in the header to navigate through the website' sections
-var contentElement;																//The HTML element with the id "content", used as the website main container
-var carouselButtons;															//All HTML elements with the class "carouselButton", used to scroll the websitePreview carousel
-var websiteShowcase;															//The HTML element with the id "websiteShowcase", children of the websitePreviewCarousel HTML element and used as container for all the websitePreviews
-var websitePreviews;															//All HTML elements with the class "websitePreview", used as a clickable previews for all the projects inside the websitePreviewShowcase
-var websitePreviewExpandedMap; 										//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
-var contactMeFormElement;													//The HTML element with the id "contactMeForm", used to keep the contact informations until the contactMeFormSendButton is pressed
-var contactMeFormEmailElement;										//The HTML element with the id "contactMeFormEmail", used to store the user's email when the contactMeForm is being filled
-var contactMeFormBodyElement;											//The HTML element with the id "contactMeFormBody",used to store the user's message when the contactMeForm is being filled
-var contactMeFormSendButtonElement;								//The HTML element with the id "contactMeFormSendButton", used to send a contact request based on the contactMeForm fields
-var safariBrowserUsed;														//A Boolean which is true if the browser used is Apple's Safari, false otherwise
+var windowInnerWidth;																//A shortcut for the DOM element window.innerWidth
+var windowInnerHeight;															//A shortcut for the DOM element window.innerHeight
+var documentBodyElement;														//A shortcut for the HTML element document.body
+var computedStyle;																	//All the computed styles for the document.body element
+var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
+var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
+var mobileMode; 																		//Indicates if the css for mobile is currently being applied
+var websitePreviewExpandedBackgroundContentElement; //The HTML element with the id "websitePreviewExpandedBackgroundContent", used as a layer between a websitePreviewExpanded and the page beneath
+var backgroundElement;															//The HTML element with the id "backgroundElement", used as the website body background
+var headerBackgroundElement;												//The HTML element with the id "headerBackground", used as the website's navbar background
+var headerElement;																	//The HTML element with the id "header", used as the website navbar
+var hamburgerMenuElement;														//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px
+var pageLinksElements; 															//All HTML elements with the class "pageLink", shown in the header to navigate through the website' sections
+var contentElement;																	//The HTML element with the id "content", used as the website main container
+var carouselButtons;																//All HTML elements with the class "carouselButton", used to scroll the websitePreview carousel
+var websiteShowcase;																//The HTML element with the id "websiteShowcase", children of the websitePreviewCarousel HTML element and used as container for all the websitePreviews
+var websitePreviews;																//All HTML elements with the class "websitePreview", used as a clickable previews for all the projects inside the websitePreviewShowcase
+var websitePreviewExpandedMap; 											//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
+var contactMeFormElement;														//The HTML element with the id "contactMeForm", used to keep the contact informations until the contactMeFormSendButton is pressed
+var contactMeFormEmailElement;											//The HTML element with the id "contactMeFormEmail", used to store the user's email when the contactMeForm is being filled
+var contactMeFormBodyElement;												//The HTML element with the id "contactMeFormBody",used to store the user's message when the contactMeForm is being filled
+var contactMeFormSendButtonElement;									//The HTML element with the id "contactMeFormSendButton", used to send a contact request based on the contactMeForm fields
+var safariBrowserUsed;															//A Boolean which is true if the browser used is Apple's Safari, false otherwise
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {
@@ -49,6 +50,7 @@ function init() {
 function variableInitialization() {
 	documentBodyElement = document.body;
 
+	websitePreviewExpandedBackgroundContentElement = document.getElementById("websitePreviewExpandedBackgroundContent");
 	backgroundElement = document.getElementById("bodyBackground");
 	headerBackgroundElement = document.getElementById("headerBackground");
 	headerElement = document.getElementById("header");
@@ -261,29 +263,11 @@ function desktopEventListenerInitialization() {
 		}
 
 		_websitePreviewExpanded.appendChild(_viewButtonsSection);
+		websitePreviewExpandedMap.set(_websitePreviewExpanded, websitePreview);
 
-		let _backgroundContent = document.createElement("div");
-		_backgroundContent.id = "websitePreviewExpandedBackgroundContent";
-		_backgroundContent.className = "page";
-		_backgroundContent.appendChild(_websitePreviewExpanded);
-
-		/*
-		 * The listenersAlreadyTriggered variable is used to prevent the user to execute the backgroundContent eventListener
-		 * more than one time while the animation is still happening.
-		 * Otherwise the document.body would try to remove the backgroundContent multiple times generating errors in the browser console.
-		 * Note that this bug wouldn't cause the page to instantly crash.
-		 */
-		let _listenersAlreadyTriggered = false;
-		_backgroundContent.addEventListener("click", () => {
-			event.stopPropagation();
-			if(!_listenersAlreadyTriggered) {
-				_listenersAlreadyTriggered = true;
-				setTimeout(() => {
-					_listenersAlreadyTriggered = false;
-					headerElement.style = "";
-					websitePreview.classList.remove("expandedState");
-					documentBodyElement.removeChild(_backgroundContent);
-				}, transitionTimeMedium);
+		websitePreview.addEventListener("click", () => {
+			event.stopPropagation();																				//Prevents the click to instantly remove the previewExpanded element that is going to be created next
+			window.requestAnimationFrame(() => {
 				/*
 				 * The websitePreview is scaled while hovered.
 				 * The top and left offset have to take the scaling into consideration otherwise
@@ -292,40 +276,63 @@ function desktopEventListenerInitialization() {
 				 */
 				let _websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
 				let _documentBodyElementStyle = documentBodyElement.style;
+
 				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewBoundingRectangle.height + "px");
 
-				_websitePreviewExpanded.className = "";
-			}
-		}, {passive:true});
+				websitePreviewExpandedBackgroundContentElement.appendChild(_websitePreviewExpanded);
 
-		websitePreviewExpandedMap.set(websitePreview, _backgroundContent);
-
-		websitePreview.addEventListener("click", () => {
-			event.stopPropagation();																				//Prevents the click to instantly remove the previewExpanded element that is going to be created next
-			setTimeout(() => {
-				_websitePreviewExpanded.className = "expandedState";
-				websitePreview.classList.add("expandedState");
-			}, 20);
-
-			/*
-			 * The websitePreview is scaled while hovered.
-			 * The top and left offset have to take the scaling into consideration otherwise
-			 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
-			 * The initial position is instead calculated adding the hover effect's expansion.
-			 */
-			let _websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
-			let _documentBodyElementStyle = documentBodyElement.style;
-			documentBodyElement.insertBefore(websitePreviewExpandedMap.get(websitePreview), documentBodyElement.firstChild);
-
-			_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
-			_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
-			_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewBoundingRectangle.height + "px");
-
-			headerElement.style.pointerEvents = "none";
+				window.requestAnimationFrame(() => {
+					websitePreview.classList.add("expandedState");
+					websitePreviewExpandedBackgroundContentElement.classList.add("expandedState");
+				});
+			});
 		}, {passive:true});
 	}
+
+	/*
+	 * The listenersAlreadyTriggered variable is used to prevent the user to execute the backgroundContent eventListener
+	 * more than one time while the animation is still happening.
+	 * Otherwise the document.body would try to remove the backgroundContent multiple times generating errors in the browser console.
+	 * Note that this bug wouldn't cause the page to instantly crash.
+	 */
+	let _websitePreviewExpandedBackgroundListenerTriggered = false;
+	websitePreviewExpandedBackgroundContentElement.addEventListener("click", () => {
+		event.stopPropagation();
+		if(!_websitePreviewExpandedBackgroundListenerTriggered) {
+			_websitePreviewExpandedBackgroundListenerTriggered = true;
+
+			window.requestAnimationFrame(() => {
+				let _currentWebsitePreviewExpanded = websitePreviewExpandedBackgroundContentElement.firstChild;
+				let _currentWebsitePreview = websitePreviewExpandedMap.get(_currentWebsitePreviewExpanded);
+				/*
+				 * The websitePreview is scaled while hovered.
+				 * The top and left offset have to take the scaling into consideration otherwise
+				 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
+				 * The initial position is instead calculated adding the hover effect's expansion.
+				 */
+				let _websitePreviewBoundingRectangle = _currentWebsitePreview.getBoundingClientRect();
+				let _documentBodyElementStyle = documentBodyElement.style;
+
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewBoundingRectangle.height + "px");
+
+				websitePreviewExpandedBackgroundContentElement.classList.remove("expandedState");
+
+				setTimeout(() => {
+					window.requestAnimationFrame(() => {
+						_websitePreviewExpandedBackgroundListenerTriggered = false;
+						_currentWebsitePreview.classList.remove("expandedState");
+						websitePreviewExpandedBackgroundContentElement.removeChild(_currentWebsitePreviewExpanded);
+					});
+				}, transitionTimeMedium);
+
+			});
+		}
+	}, {passive:true});
+
 
  		/*
  		 * This function returns:

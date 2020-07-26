@@ -11,6 +11,10 @@
 }
 
 :root {
+  --vh:1vh;
+  --50vh:calc(var(--vh, 1vh) * 50);
+  --100vh:calc(var(--vh, 1vh) * 100);
+
 	--header-elements-height:4rem;
 	--header-elements-padding:1rem;
 	--header-socialNetworks-div-width:calc(4*var(--header-elements-height) + 3*var(--header-elements-padding));
@@ -20,6 +24,7 @@
 	--presentationCard-width:55vmin;
 
 	--websitePreview-size:15rem;
+  --websitePreview-expanded-size: 60vmin;
 
 	--boxShapedElement-border-radius:1rem;
 	--boxShapedElement-border-radius-wide:2.5rem;
@@ -39,10 +44,6 @@
 
 	--scaling-factor-increase:1;
 	--scaling-factor-decrease:1;
-
-	--vh:1vh;
-	--50vh:calc(var(--vh, 1vh) * 50);
-	--100vh:calc(var(--vh, 1vh) * 100);
 
 	--light-theme-blur-background-color-Black: rgba(0,0,0,1);
 	--light-theme-blur-background-color-White: rgba(255,255,255,0.5);
@@ -389,7 +390,6 @@ h1, h2 {
 
 #presentationCard p {
 	margin:calc(0.25 * var(--profilePic-size));
-	//text-shadow:var(--text-shadow-offset) var(--text-shadow-offset) var(--text-shadow-radius) var(--theme-text-color-shadow);
 	backface-visibility:hidden;						/* Blurry text fix */
 }
 
@@ -419,6 +419,11 @@ h1, h2 {
 	display:none;
 }
 
+#websiteShowcase::after {
+  content: "";
+  border-right: 1em solid transparent;			/* Fix for the right margin being ignored by the overflow of websiteShowcase */
+}
+
 .websitePreview {
 	margin:1em 0em 1em 1em;
 	cursor:pointer;
@@ -436,11 +441,6 @@ h1, h2 {
 	transition:opacity 0s, transform var(--transition-time-quick);
 }
 
-#websiteShowcase::after {
-  content: "";
-  border-right: 1em solid transparent;			/* Fix for the right margin being ignored by the overflow of websiteShowcase */
-}
-
 .websitePreview:hover {
 	-webkit-transform:scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
 	transform:scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
@@ -448,6 +448,7 @@ h1, h2 {
 
 .websitePreview.expandedState {
 	opacity:0;
+  transition:0s;
 }
 
 .websitePreviewImage {
@@ -482,7 +483,7 @@ h1, h2 {
 	--transform-translateY: calc(var(--websitePreview-original-top-position) - var(--50vh) + var(--websitePreview-current-size) / 2);
 }
 
-#websitePreviewExpanded.expandedState {
+.expandedState #websitePreviewExpanded {
 	/*top: calc(var(--50vh) - var(--presentationCard-height) / 2);
 	left: calc(50vw - var(--presentationCard-width) / 2);*/
 	height:var(--presentationCard-height);
@@ -537,9 +538,14 @@ h1, h2 {
 }
 
 #websitePreviewExpandedBackgroundContent {
+  pointer-events: none;
 	z-index:4;
 	position:absolute;
 	cursor:pointer;
+}
+
+#websitePreviewExpandedBackgroundContent.expandedState {
+    pointer-events: auto;
 }
 
 .carouselButton {
