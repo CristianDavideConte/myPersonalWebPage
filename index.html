@@ -105,14 +105,12 @@
 				<div class = "pageSeparator"></div>
 			</div>
 			<div id = "contactMe" class = "page">
-				<form id = "contactMeForm" autocomplete="off">
-					<label for = "contactMeFormName">Your Mail</label>
-					<input id = "contactMeFormName" type = "email" name = "email" autocomplete = "email">
-					<label for = "contactMeFormSubject">Subject</label>
-					<input id = "contactMeFormSubject" type="text">
-					<label for = "contactMeFormBody">Message</label>
-					<textarea id = "contactMeFormBody"></textarea>
-					<button  id = "contactMeFormSendButton">Send</button>
+				<form id = "contactMeForm" action = "https://formspree.io/xwkrawyv" method = "POST">
+					<label for = "contactMeFormEmail">Your email</label>
+					<input id = "contactMeFormEmail" type = "email" name="email" autocomplete = "email">
+					<label for = "contactMeFormBody">Your message</label>
+					<textarea id = "contactMeFormBody" type = "text" name="message"></textarea>
+					<button  id = "contactMeFormSendButton" type="submit">Send</button>
 				</form>
 			</div>
 		</div>

@@ -26,7 +26,10 @@ var carouselButtons;															//All HTML elements with the class "carouselB
 var websiteShowcase;															//The HTML element with the id "websiteShowcase", children of the websitePreviewCarousel HTML element and used as container for all the websitePreviews
 var websitePreviews;															//All HTML elements with the class "websitePreview", used as a clickable previews for all the projects inside the websitePreviewShowcase
 var websitePreviewExpandedMap; 										//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
-var contactMeFormSendButtonElement;								//The HTML element with the id "contactMeFormSendButton", used to send an email request to the Madrill API
+var contactMeFormElement;													//The HTML element with the id "contactMeForm", used to keep the contact informations until the contactMeFormSendButton is pressed
+var contactMeFormEmailElement;										//The HTML element with the id "contactMeFormEmail", used to store the user's email when the contactMeForm is being filled
+var contactMeFormBodyElement;											//The HTML element with the id "contactMeFormBody",used to store the user's message when the contactMeForm is being filled
+var contactMeFormSendButtonElement;								//The HTML element with the id "contactMeFormSendButton", used to send a contact request based on the contactMeForm fields
 var safariBrowserUsed;														//A Boolean which is true if the browser used is Apple's Safari, false otherwise
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
@@ -55,6 +58,9 @@ function variableInitialization() {
 	carouselButtons = document.getElementsByClassName("carouselButton");
 	websiteShowcase = document.getElementById("websiteShowcase");
 	websitePreviews = document.getElementsByClassName("websitePreview");
+	contactMeFormElement = document.getElementById("contactMeForm");
+	contactMeFormEmailElement = document.getElementById("contactMeFormEmail");
+	contactMeFormBodyElement = document.getElementById("contactMeFormBody");
 	contactMeFormSendButtonElement = document.getElementById("contactMeFormSendButton");
 
 	computedStyle = getComputedStyle(documentBodyElement);
@@ -321,48 +327,79 @@ function desktopEventListenerInitialization() {
 		}, {passive:true});
 	}
 
-	/* ----------------------------ABORT------------------------------------
-	 * If clicked the contactMeFormSendButton sends a POST request to the Mandrill API
-	 * with the contactMeFormName, contactMeFormSubject and the contactMeFormBody as the request's data.
-	 * All the datas are first extracted from the form's fields.
-	 * A data object is then created using the just extracted datas.
-	 * A POST request is created. And the page asyncronusly waits for the server's response.
-	 * The server response is used to give a feedback to the user.
-	 /
-	contactMeFormSendButtonElement.addEventListener("click", () => {
-		let request = new XMLHttpRequest();
-		let data = {
-    "key": "KEY HERE",
-    "message": {
-      "subject": "Your copy of the message",
-      "from_email": "cristiandavideconte@gmail.com",
-      "to": [
-          {
-            "email": "cristiandavideconte@gmail.com",
-            "name": "Contact Request from myPersonalWebPage",
-            "type": "to"
-          },
-					{
-						"email": "SENDER MAIL",
-						"name": "",
-						"type": "to"
-					}
-        ],
-      "autotext": "true",
-      "subject": "SENDER SUBJECT",
-      "html": "MAIL BODY"
+ 		/*
+ 		 * This function returns:
+ 		 * case1: "validData" if both the contactMeFormEmail && contactMeFormBody are valid
+ 		 * case2: an error message if at least one of the two contactMeForm fields is not valid
+ 		 * It uses a regular expression to check if the email field is correctly formatted, no further investigation is done
+ 		 */
+ 		function _checkContactMeFormDataIntegrity() {
+ 			let regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+ 			let valid = (regExp.test(contactMeFormEmailElement.value.toLowerCase())) ? "validData" : "Type a valid mail address";
+ 			valid += (contactMeFormBodyElement.value != "") ? "" : "\nYour message cannot by empty";
+ 			return valid;
+ 		}
+
+	 // Success and Error functions for after the form is submitted
+    function _ajaxResponceStatusSuccess() {
+      contactMeFormElement.reset();
+      contactMeFormSendButton.disabled = true;
+			contactMeFormElement.removeEventListener("submit", _submitForm, {passive:false});
+			contactMeFormElement.removeAttribute("action");
+			contactMeFormElement.removeAttribute("method");
     }
-  }
-		request.onreadystatechange = () => {
-				//Check if the request is compete and was successful
-				if(this.readyState === 4 && this.status === 200) {
-					console.log(this.responseText);
-				} else
-					console.log("ERRORE");
-		};
-		request.open("POST", "https://mandrillapp.com/api/1.0/messages/send.json", true);
-		request.send(data);
-	}, {passive:true});*/
+
+    function _ajaxResponceStatusError(status, response, responseType) {
+			_ajaxResponceStatusSuccess();	//REMOVE-> TEST ONLY
+      console.log("Oops! There was a problem" + "\nStatus: " + status + "\nResponseType: " + responseType + "\nResponse: " + response);
+    }
+
+	  /*
+		 * This function:
+		 * - creates an XMLHttpRequest
+		 * - sends the message request
+		 * - calls the _ajaxResponceStatusSuccess function when a positive response is returned (Code == 200)
+		 * - calls the _ajaxResponceStatusError function when a negative response is returned (Code != 200)
+		 */
+	  function _ajax(method, url, data, success, error) {
+	    let xhr = new XMLHttpRequest();
+	    xhr.open(method, url);
+	    xhr.setRequestHeader("Accept", "application/json");
+	    xhr.onreadystatechange = () => {
+	      if (xhr.readyState !== XMLHttpRequest.DONE)
+					return;
+	      if (xhr.status === 200)
+	        success(xhr.response, xhr.responseType);
+	      else
+	        error(xhr.status, xhr.response, xhr.responseType);
+	    };
+	    xhr.send(data);
+	  }
+
+		/*
+		 * This function:
+		 * - acquires the contactMeForm data
+		 * - calls _checkContactMeFormDataIntegrity in order to prevent the spam of invalid emails
+		 * - if the form data is valid calls _ajax to create the request, tells the user to fill the form fields with valid data otherwise
+		 */
+		function _submitForm() {
+			event.preventDefault();
+			let validData = _checkContactMeFormDataIntegrity();
+			if(validData == "validData")
+				_ajax(contactMeFormElement.method, contactMeFormElement.action, new FormData(contactMeFormElement), _ajaxResponceStatusSuccess, _ajaxResponceStatusError);
+			else
+				console.log(validData.replace("validData\n", ""));
+		}
+
+		/*
+		 * If clicked, the contactMeFormSendButton triggers a call to the _submitForm functon
+		 * which locally checks if the contactMeForm fields are valid and if so triggers an ajax request to the Formspree API.
+		 * The API will send an email to the registered receiver address.
+		 * The receiver address is always "cristiandavideconte@gmail.com"
+		 * The sender address is the contactMeFormEmail content
+		 * The body is the contactMeFormBody content
+		 */
+    contactMeFormElement.addEventListener("submit", _submitForm, {passive:false});
 }
 
 /*
