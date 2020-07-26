@@ -1,5 +1,5 @@
 const STANDARD_WINDOW_INNER_HEIGHT = 937;							//The standard browser inner height, usually about 937px at 1920x1080
-const MIN_SCROLLING_ANIMATION_FRAMES_STANDARD = 9;		//The minumum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
+const MIN_SCROLLING_ANIMATION_FRAMES_STANDARD = 7;		//The minumum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
 const MAX_SCROLLING_ANIMATION_FRAMES_STANDARD = 25;		//The maximum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
 const MIN_SPEED_INCREASE_STANDARD = 1;								//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
 const MAX_SPEED_INCREASE_STANDARD = 4;								//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
@@ -507,6 +507,8 @@ if(!browserIsSafari()) {
  */
 function imageLoading() {
 	function _changeWebsiteBackgroundTheme() {
+		backgroundElement.style.backgroundImage = "url(" + computedStyle.getPropertyValue("--theme-background-preview-image-url") + ")";
+
 		let backgroundImage = new Image();
 		backgroundImage.src = computedStyle.getPropertyValue("--theme-background-image-url");
 		backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => backgroundElement.style.backgroundImage = "url(" + backgroundImage.src + ")"), {passive:true});
