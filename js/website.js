@@ -343,7 +343,9 @@ function desktopEventListenerInitialization() {
 	 // Success and Error functions for after the form is submitted
     function _ajaxResponceStatusSuccess() {
       contactMeFormElement.reset();
-      contactMeFormSendButton.disabled = true;
+      contactMeFormEmailElement.disabled = true;
+      contactMeFormBodyElement.disabled = true;
+      contactMeFormSendButtonElement.disabled = true;
 			contactMeFormElement.removeEventListener("submit", _submitForm, {passive:false});
 			contactMeFormElement.removeAttribute("action");
 			contactMeFormElement.removeAttribute("method");

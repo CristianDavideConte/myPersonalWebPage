@@ -642,6 +642,14 @@ h1, h2 {
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
 }
 
+
+#contactMeFormEmail:disabled,
+#contactMeFormBody:disabled,
+#contactMeFormEmail[disabled],
+#contactMeFormBody[disabled] {
+    cursor: not-allowed;
+}
+
 #contactMeFormSendButton:disabled,
 #contactMeFormSendButton[disabled] {
   cursor: not-allowed;
