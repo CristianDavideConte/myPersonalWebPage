@@ -525,11 +525,11 @@ h1, h2 {
   position: fixed;            /* This avoids layout shifts during the expandedState animation  */
 	display:flex;
   justify-content: space-around;
-  width: 100%;
+  width: calc(100% * var(--scale3dFactor));
 	transition:all var(--transition-time-medium);
 
-  -webkit-transform: translate3d(0, calc(var(--websitePreview-current-size) / 2), 0) scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection),1);
-  transform: translate3d(0, calc(var(--websitePreview-current-size) / 2), 0) scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection),1);
+  -webkit-transform: translate3d(0, calc(var(--websitePreview-current-size) / 2), 0) scale3d(0, 0, 0);
+  transform: translate3d(0, calc(var(--websitePreview-current-size) / 2), 0) scale3d(0, 0, 0);
 
   --scale3dFactor-ButtonSection: calc(1 / var(--scale3dFactor));
 }
@@ -546,7 +546,7 @@ h1, h2 {
   white-space: nowrap;
   font-size:3em;
   padding:0.7em;
-  margin:0.7em 5% 0.7em 5%;
+  margin:0.7em 0 0.7em 0;
 	background:var(--theme-blur-background-color-White);
 	border-radius:var(--boxShapedElement-border-radius-wide);
 	-webkit-box-shadow: 0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
