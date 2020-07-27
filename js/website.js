@@ -15,6 +15,7 @@ var documentBodyElement;														//A shortcut for the HTML element document
 var computedStyle;																	//All the computed styles for the document.body element
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
 var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
+var presentationCardHeight;
 var mobileMode; 																		//Indicates if the css for mobile is currently being applied
 var websitePreviewExpandedBackgroundContentElement; //The HTML element with the id "websitePreviewExpandedBackgroundContent", used as a layer between a websitePreviewExpanded and the page beneath
 var backgroundElement;															//The HTML element with the id "backgroundElement", used as the website body background
@@ -67,6 +68,8 @@ function variableInitialization() {
 
 	computedStyle = getComputedStyle(documentBodyElement);
 	transitionTimeMedium = computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
+	presentationCardHeight = computedStyle.getPropertyValue("--presentationCard-height").replace("vmin", "");
+
 	websitePreviewExpandedMap = new Map();
 	windowInnerHeight = 0;
 }
@@ -223,7 +226,8 @@ function desktopEventListenerInitialization() {
 		let _websitePreviewExpanded = document.createElement("div");
 		_websitePreviewExpanded.id = "websitePreviewExpanded";
 
-		let _websitePreviewExpandedImage = websitePreview.firstElementChild.cloneNode(true);
+		let _websitePreviewImage = websitePreview.firstElementChild;
+		let _websitePreviewExpandedImage = _websitePreviewImage.cloneNode(true);
 		_websitePreviewExpandedImage.className = "websitePreviewExpandedImage";
 		_websitePreviewExpanded.appendChild(_websitePreviewExpandedImage);
 
@@ -263,6 +267,7 @@ function desktopEventListenerInitialization() {
 		}
 
 		_websitePreviewExpanded.appendChild(_viewButtonsSection);
+		_websitePreviewExpanded.addEventListener("click", event => event.stopPropagation(), {passive:true});
 		websitePreviewExpandedMap.set(_websitePreviewExpanded, websitePreview);
 
 		websitePreview.addEventListener("click", () => {
@@ -276,16 +281,26 @@ function desktopEventListenerInitialization() {
 				 */
 				let _websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
 				let _documentBodyElementStyle = documentBodyElement.style;
+				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
+				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
 				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
-				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewBoundingRectangle.height + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
+				_documentBodyElementStyle.setProperty("--scale3dFactor",  _presentationCardHeightValue / _websitePreviewCurrentSize);
+
+				let _websitePreviewImageBoundingRectangle = _websitePreviewImage.getBoundingClientRect();
+
+				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _websitePreviewImageBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-left-position", _websitePreviewImageBoundingRectangle.left + "px");
+				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _websitePreviewImageBoundingRectangle.height + "px");
 
 				websitePreviewExpandedBackgroundContentElement.appendChild(_websitePreviewExpanded);
 
 				window.requestAnimationFrame(() => {
 					websitePreview.classList.add("expandedState");
 					websitePreviewExpandedBackgroundContentElement.classList.add("expandedState");
+					websitePreviewExpandedBackgroundContentElement.style.pointerEvents = "auto";
 				});
 			});
 		}, {passive:true});
@@ -306,6 +321,7 @@ function desktopEventListenerInitialization() {
 			window.requestAnimationFrame(() => {
 				let _currentWebsitePreviewExpanded = websitePreviewExpandedBackgroundContentElement.firstChild;
 				let _currentWebsitePreview = websitePreviewExpandedMap.get(_currentWebsitePreviewExpanded);
+				let _currentWebsitePreviewImage = _currentWebsitePreview.firstElementChild;
 				/*
 				 * The websitePreview is scaled while hovered.
 				 * The top and left offset have to take the scaling into consideration otherwise
@@ -318,12 +334,18 @@ function desktopEventListenerInitialization() {
 				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewBoundingRectangle.height + "px");
+				let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreviewImage.getBoundingClientRect();
+
+				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _currentWebsitePreviewImageBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-left-position", _currentWebsitePreviewImageBoundingRectangle.left + "px");
+				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _currentWebsitePreviewImageBoundingRectangle.height + "px");
 
 				websitePreviewExpandedBackgroundContentElement.classList.remove("expandedState");
 
 				setTimeout(() => {
 					window.requestAnimationFrame(() => {
 						_websitePreviewExpandedBackgroundListenerTriggered = false;
+						websitePreviewExpandedBackgroundContentElement.style.pointerEvents = "";
 						_currentWebsitePreview.classList.remove("expandedState");
 						websitePreviewExpandedBackgroundContentElement.removeChild(_currentWebsitePreviewExpanded);
 					});
@@ -601,16 +623,16 @@ function updateWindowSize(){
 /* -------------------------------------------------------- 						TESTING CODE SECTION     					------------------------------------------------------------------*/
 var _test = 0;
 function lagTest() {
-	websitePreview = document.getElementsByClassName("websitePreview")[0];
+	websitePreview = document.getElementsByClassName("websitePreview")[1];
     var _testEvent = document.createEvent('Events');
     _testEvent.initEvent("click", true, false);
 	if(_test < 100) {
 		if(_test % 2 == 0)
 			websitePreview.dispatchEvent(_testEvent);
 		else
-			documentBodyElement.firstChild.dispatchEvent(_testEvent);
+			websitePreviewExpandedBackgroundContentElement.dispatchEvent(_testEvent);
 
-		setTimeout(lagTest, transitionTimeMedium);
+		setTimeout(lagTest, transitionTimeMedium + 100);
 		_test++;
 	}
 }

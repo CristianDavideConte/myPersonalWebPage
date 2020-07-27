@@ -421,11 +421,11 @@ h1, h2 {
 
 #websiteShowcase::after {
   content: "";
-  border-right: 1em solid transparent;			/* Fix for the right margin being ignored by the overflow of websiteShowcase */
+  border-right: 1rem solid transparent;			/* Fix for the right margin being ignored by the overflow of websiteShowcase */
 }
 
 .websitePreview {
-	margin:1em 0em 1em 1em;
+	margin:1rem 0em 1rem 1rem;
 	cursor:pointer;
 	display:flex;
 	flex-direction:column;
@@ -448,104 +448,127 @@ h1, h2 {
 
 .websitePreview.expandedState {
 	opacity:0;
-  transition:0s;
 }
 
 .websitePreviewImage {
 	border-radius:100%;
-	width:60%;
-	height:60%;
+	width:70%;
+	height:70%;
 	border:none;
 }
 
 #websitePreviewExpanded {
-	/*top: var(--websitePreview-original-top-position);
-	left: var(--websitePreview-original-left-position);	*/
-	position:absolute;
+  position: fixed;            /* This avoids layout shifts during the expandedState animation */
 	cursor:default;
 	display:flex;
 	flex-direction:column;
-	justify-content:space-around;
+	justify-content:center;
 	align-items:center;
+	border-radius:5%;
 	height:var(--websitePreview-current-size);
 	width:var(--websitePreview-current-size);
-	border-radius:var(--boxShapedElement-border-radius);
 	background:var(--theme-blur-background-color-Average);
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(130%);
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(130%);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(150%);
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(150%);
 	transition:all var(--transition-time-medium);
-	-webkit-transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0);
-	transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0);
+	-webkit-transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0) scale3d(1,1,1);
+	transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0) scale3d(1,1,1);
 
 	--transform-translateX: calc(var(--websitePreview-original-left-position) - 50vw + var(--websitePreview-current-size) / 2);
 	--transform-translateY: calc(var(--websitePreview-original-top-position) - var(--50vh) + var(--websitePreview-current-size) / 2);
 }
 
 .expandedState #websitePreviewExpanded {
-	/*top: calc(var(--50vh) - var(--presentationCard-height) / 2);
-	left: calc(50vw - var(--presentationCard-width) / 2);*/
-	height:var(--presentationCard-height);
-	width:var(--presentationCard-width);
-	border-radius:5%;
-	-webkit-transform: translate3d(0, 0, 0);
-	transform: translate3d(0, 0, 0);
-}
+	-webkit-transform: translate3d(0, 0, 0) scale3d(var(--scale3dFactor), var(--scale3dFactor), 1);
+	transform: translate3d(0, 0, 0) scale3d(var(--scale3dFactor), var(--scale3dFactor), 1);
 
-.websitePreviewExpandedTitle {
-	text-align:center;
-	font-size:0;
-	transition:all var(--transition-time-medium);
-}
-
-.expandedState .websitePreviewExpandedTitle {
-	font-size:2.5em;
 }
 
 .websitePreviewExpandedImage {
-	height:60%;
+  position: fixed;                                  /* This avoids layout shifts during the expandedState animation */
+	height:var(--websitePreviewImage-current-size);
+	width:var(--websitePreviewImage-current-size);
 	border-radius:100%;
 	transition:all var(--transition-time-medium);
+	-webkit-transform: translate3d(var(--transform-translateX-Image), var(--transform-translateY-Image), 0);
+	transform: translate3d(var(--transform-translateX-Image), var(--transform-translateY-Image), 0);
+
+	--transform-translateX-Image: calc(var(--websitePreviewImage-original-left-position) - 50vw + var(--websitePreview-websitePreviewImage-size) / 2);
+	--transform-translateY-Image: calc(var(--websitePreviewImage-original-top-position) - var(--50vh) + var(--websitePreviewImage-current-size) / 2);
+  --scale3dFactor-Image: calc(2 / var(--scale3dFactor));
 }
 
 .expandedState .websitePreviewExpandedImage {
-	height:50%;
+	-webkit-transform: translate3d(0, 0, 0) scale3d(var(--scale3dFactor-Image),var(--scale3dFactor-Image), 1);
+	transform: translate3d(0, 0, 0) scale3d(var(--scale3dFactor-Image), var(--scale3dFactor-Image), 1);
+}
+
+.websitePreviewExpandedTitle {
+  position: fixed;            /* This avoids layout shifts during the expandedState animation */
+  white-space: nowrap;
+  margin-top: 25%;
+  font-size:3em;
+	transition:all var(--transition-time-medium);
+	-webkit-transform: translate3d(0, calc(var(--websitePreview-current-size) / -2), 0) scale3d(0,0,0);
+	transform: translate3d(0, calc(var(--websitePreview-current-size) / -2), 0) scale3d(0,0,0);
+
+  --scale3dFactor-Title: calc(1 / var(--scale3dFactor));
+}
+
+.expandedState .websitePreviewExpandedTitle {
+	-webkit-transform: translate3d(0, calc(5% + var(--presentationCard-height) / -2 / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1);
+	transform: translate3d(0, calc(5% + var(--presentationCard-height) / -2 / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1);
 }
 
 #websitePreviewExpandedButtonSection {
+  position: fixed;            /* This avoids layout shifts during the expandedState animation  */
 	display:flex;
-	align-items:center;
-	width:100%;
+  justify-content: space-around;
+  width: 100%;
+	transition:all var(--transition-time-medium);
+
+  -webkit-transform: translate3d(0, calc(var(--websitePreview-current-size) / 2), 0) scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection),1);
+  transform: translate3d(0, calc(var(--websitePreview-current-size) / 2), 0) scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection),1);
+
+  --scale3dFactor-ButtonSection: calc(1 / var(--scale3dFactor));
+}
+
+.expandedState #websitePreviewExpandedButtonSection {
+	-webkit-transform: translate3d(0, calc(var(--presentationCard-height) / 2 / var(--scale3dFactor) - 50% / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1);
+	transform: translate3d(0, calc(var(--presentationCard-height) / 2 / var(--scale3dFactor) - 50% / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1);
 }
 
 .websitePreviewExpandedButton {
 	outline:none;
 	border:none;
 	cursor:pointer;
-	margin:0 auto 0 auto;
-	padding:0.7em;
+  white-space: nowrap;
+  font-size:3em;
+  padding:0.7em;
+  margin:0.7em 5% 0.7em 5%;
 	background:var(--theme-blur-background-color-White);
+	border-radius:var(--boxShapedElement-border-radius-wide);
 	-webkit-box-shadow: 0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	box-shadow: 0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
-	border-radius:var(--boxShapedElement-border-radius-wide);
-	font-size:0;
 	transition:all var(--transition-time-medium);
+
+  -webkit-transform: scale3d(0,0,0);
+	transform: scale3d(0,0,0);
 }
 
 .expandedState .websitePreviewExpandedButton {
-	font-size:3em;
+  -webkit-transform: scale3d(1, 1, 1);
+	transform: scale3d(1, 1, 1);
 }
 
 #websitePreviewExpandedBackgroundContent {
+  position: fixed;                   /* This avoids layout shifts during the expandedState animation */
   pointer-events: none;
 	z-index:4;
 	position:absolute;
 	cursor:pointer;
-}
-
-#websitePreviewExpandedBackgroundContent.expandedState {
-    pointer-events: auto;
 }
 
 .carouselButton {
@@ -679,6 +702,8 @@ h1, h2 {
 		--profilePic-size:23vmin;
 		--presentationCard-height:80vmin;
 		--presentationCard-width:75vmin;
+
+  	--websitePreview-size:20rem;
 	}
 
   #bodyBackground {
@@ -788,16 +813,21 @@ h1, h2 {
 		max-width:85%;
 	}
 
+  .websitePreview {
+  	margin:1.2rem 0em 1.2rem 1.2rem;
+  }
+
+  #websiteShowcase::after {
+    border-right: 1.2rem solid transparent;			/* Fix for the right margin being ignored by the overflow of websiteShowcase */
+  }
+
 	.carouselButton {
 		display:none;
 	}
 
-	.expandedState #websitePreviewExpandedButtonSection {
-		font-size:110%;
-	}
-
 	.websitePreviewExpandedButton {
 		padding:1em;
+    font-size:3.5em;
 	}
 
 	#contactMeForm {
