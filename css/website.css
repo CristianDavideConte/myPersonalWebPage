@@ -508,18 +508,17 @@ h1, h2 {
 .websitePreviewExpandedTitle {
   position: fixed;            /* This avoids layout shifts during the expandedState animation */
   white-space: nowrap;
-  margin-top: 25%;
   font-size:3em;
 	transition:all var(--transition-time-medium);
-	-webkit-transform: translate3d(0, calc(var(--websitePreview-current-size) / -2), 0) scale3d(0,0,0);
-	transform: translate3d(0, calc(var(--websitePreview-current-size) / -2), 0) scale3d(0,0,0);
+	-webkit-transform: translate3d(0, calc(var(--websitePreview-current-size) / -3), 0) scale3d(0,0,0);
+	transform: translate3d(0, calc(var(--websitePreview-current-size) / -3), 0) scale3d(0,0,0);
 
   --scale3dFactor-Title: calc(1 / var(--scale3dFactor));
 }
 
 .expandedState .websitePreviewExpandedTitle {
-	-webkit-transform: translate3d(0, calc(5% + var(--presentationCard-height) / -2 / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1);
-	transform: translate3d(0, calc(5% + var(--presentationCard-height) / -2 / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1);
+	-webkit-transform: translate3d(0, calc(-5% - var(--presentationCard-height) / 3 / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1);
+	transform: translate3d(0, calc(-5% - var(--presentationCard-height) / 3 / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1);
 }
 
 #websitePreviewExpandedButtonSection {
