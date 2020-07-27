@@ -330,10 +330,14 @@ function desktopEventListenerInitialization() {
 				 */
 				let _websitePreviewBoundingRectangle = _currentWebsitePreview.getBoundingClientRect();
 				let _documentBodyElementStyle = documentBodyElement.style;
+				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
+				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
 				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
-				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewBoundingRectangle.height + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
+				_documentBodyElementStyle.setProperty("--scale3dFactor", _presentationCardHeightValue / _websitePreviewCurrentSize);
+
 				let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreviewImage.getBoundingClientRect();
 
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _currentWebsitePreviewImageBoundingRectangle.top + "px");
