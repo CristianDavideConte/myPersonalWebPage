@@ -619,7 +619,7 @@ function updateWindowSize(){
 			_update(_currentWindowInnerHeight);
 		else if(_currentWindowInnerHeight <= windowInnerHeight) {//If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
 			windowInnerHeightOffset = _currentWindowInnerHeight - windowInnerHeight;
-			windowInnerHeightOffsetMax = (windowInnerHeightOffsetMax < windowInnerHeightOffset) ? windowInnerHeightOffset : windowInnerHeightOffsetMax;
+			windowInnerHeightOffsetMax = (Math.abs(windowInnerHeightOffsetMax) < Math.abs(windowInnerHeightOffset)) ? windowInnerHeightOffset : windowInnerHeightOffsetMax;
 		}
 		document.documentElement.style.setProperty("--window-inner-height-offset", windowInnerHeightOffset + "px"); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowInnerHeightOffset != 0
 		windowInnerWidth = window.innerWidth;
