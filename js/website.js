@@ -11,7 +11,7 @@ var MAX_SPEED_INCREASE;																//The maximum number of frames that are s
 
 var windowInnerWidth;																//A shortcut for the DOM element window.innerWidth
 var windowInnerHeight;															//A shortcut for the DOM element window.innerHeight
-var windowInnerHeightOffset;												//The difference between the previous windowInnerHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
+//var windowInnerHeightOffset;												//The difference between the previous windowInnerHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
 var documentBodyElement;														//A shortcut for the HTML element document.body
 var computedStyle;																	//All the computed styles for the document.body element
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
@@ -51,7 +51,7 @@ function init() {
 function variableInitialization() {
 	windowInnerWidth = 0;
 	windowInnerHeight = 0;
-	windowInnerHeightOffset = 0;
+	//windowInnerHeightOffset = 0;
 
 	documentBodyElement = document.body;
 
@@ -287,14 +287,14 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowInnerHeightOffset + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor",  _presentationCardHeightValue / _websitePreviewCurrentSize);
 
 				let _websitePreviewImageBoundingRectangle = _websitePreviewImage.getBoundingClientRect();
 
-				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _websitePreviewImageBoundingRectangle.top + windowInnerHeightOffset + "px");
+				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _websitePreviewImageBoundingRectangle.top + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-left-position", _websitePreviewImageBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _websitePreviewImageBoundingRectangle.height + "px");
 
@@ -336,14 +336,14 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowInnerHeightOffset + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor", _presentationCardHeightValue / _websitePreviewCurrentSize);
 
 				let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreviewImage.getBoundingClientRect();
 
-				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _currentWebsitePreviewImageBoundingRectangle.top + windowInnerHeightOffset + "px");
+				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _currentWebsitePreviewImageBoundingRectangle.top + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-left-position", _currentWebsitePreviewImageBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _currentWebsitePreviewImageBoundingRectangle.height + "px");
 
@@ -606,7 +606,7 @@ function imageLoading() {
  */
 function updateWindowSize(){
 	function _update(currentWindowInnerHeight) {
-			windowInnerHeightOffset = 0;
+			//windowInnerHeightOffset = 0;
 			windowInnerHeight = currentWindowInnerHeight;
 			documentBodyElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
 			//documentBodyElement.style.setProperty("--window-inner-height-offset", windowOriginalInnerHeight - windowInnerHeight + "px"); //PROVA
@@ -625,10 +625,10 @@ function updateWindowSize(){
 			_update(_currentWindowInnerHeight);
 		else if(_currentWindowInnerHeight > windowInnerWidth) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
 			_update(_currentWindowInnerHeight);
-		else if (_currentWindowInnerHeight <= 2 / 3 * windowInnerHeight) 		//Here the window hasn't change orientation and its height is decrease
+		else if (_currentWindowInnerHeight <= 3 / 4 * windowInnerHeight) 		//Here the window hasn't change orientation and its height is decrease
 			_update(_currentWindowInnerHeight);
-		else //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
-			windowInnerHeightOffset = _currentWindowInnerHeight - windowInnerHeight;
+		else if(_currentWindowInnerHeight != windowInnerHeight) //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
+			windowInnerHeight += _currentWindowInnerHeight - windowInnerHeight;
 	});
 }
 
