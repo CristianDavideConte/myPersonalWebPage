@@ -12,7 +12,6 @@ var MAX_SPEED_INCREASE;																//The maximum number of frames that are s
 var windowInnerWidth;																//A shortcut for the DOM element window.innerWidth
 var windowInnerHeight;															//A shortcut for the DOM element window.innerHeight
 var windowInnerHeightOffset;												//The difference between the previous windowInnerHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
-var windowInnerHeightOffsetMax;											//The highest value that windowInnerHeightOffset has ever reached, used to adjust the offsets of the previewExpanded Y-position
 var documentBodyElement;														//A shortcut for the HTML element document.body
 var computedStyle;																	//All the computed styles for the document.body element
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
@@ -53,7 +52,6 @@ function variableInitialization() {
 	windowInnerWidth = 0;
 	windowInnerHeight = 0;
 	windowInnerHeightOffset = 0;
-	windowInnerHeightOffsetMax = 0;
 
 	documentBodyElement = document.body;
 
@@ -288,7 +286,7 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top - windowInnerHeightOffsetMax / 2 + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top - windowInnerHeightOffset / 2 + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor",  _presentationCardHeightValue / _websitePreviewCurrentSize);
@@ -334,7 +332,7 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top - windowInnerHeightOffsetMax / 2 + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top - windowInnerHeightOffset / 2 + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor", _presentationCardHeightValue / _websitePreviewCurrentSize);
@@ -601,6 +599,7 @@ function imageLoading() {
  */
 function updateWindowSize(){
 	function _update(currentWindowInnerHeight) {
+			windowInnerHeightOffset = 0;
 			windowInnerHeight = currentWindowInnerHeight;
 			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
 			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
@@ -611,16 +610,15 @@ function updateWindowSize(){
 
 	window.requestAnimationFrame(() => {
 		let _currentWindowInnerHeight = window.innerHeight;
-		if(_currentWindowInnerHeight > windowInnerHeight)		//If the window gets higher all the variables are always updated
+		if(_currentWindowInnerHeight > windowInnerHeight + windowInnerHeightOffset)		//If the window gets higher all the variables are always updated
 			_update(_currentWindowInnerHeight);
 		else if(window.innerWidth > windowInnerWidth) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
 			_update(_currentWindowInnerHeight);
-		else if (_currentWindowInnerHeight <= 3 / 4 * windowInnerHeight) 		//Here the window hasn't change orientation and its height is decrease by 1/3 of the previous windowInnerHeight value
+		else if (_currentWindowInnerHeight <= windowInnerHeight - 50) 		//Here the window hasn't change orientation and its height is decrease by 50px in respect to the previous windowInnerHeight value
 			_update(_currentWindowInnerHeight);
-		else if(_currentWindowInnerHeight <= windowInnerHeight) {//If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
+		else //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
 			windowInnerHeightOffset = _currentWindowInnerHeight - windowInnerHeight;
-			windowInnerHeightOffsetMax = (Math.abs(windowInnerHeightOffsetMax) < Math.abs(windowInnerHeightOffset)) ? windowInnerHeightOffset : windowInnerHeightOffsetMax;
-		}
+
 		document.documentElement.style.setProperty("--window-inner-height-offset", windowInnerHeightOffset + "px"); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowInnerHeightOffset != 0
 		windowInnerWidth = window.innerWidth;
 		mobileMode = (windowInnerWidth < 1081) ? 1 : 0;
