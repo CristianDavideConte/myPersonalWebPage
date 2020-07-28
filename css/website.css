@@ -324,6 +324,7 @@ p {
 	flex-direction:column;
 	align-items:center;
 	justify-content:center;
+  transform: translate3d(1, var(--window-inner-height-offset), 1);
 }
 
 .pageSeparator {
@@ -472,12 +473,14 @@ h1, h2 {
 	border-radius:5%;
 	height:var(--websitePreview-current-size);
 	width:var(--websitePreview-current-size);
-	background:var(--theme-blur-background-color-Average);
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
+
+	background:var(--theme-blur-background-color-Average);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(150%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(150%);
 	transition:all var(--transition-time-medium);
+
 	-webkit-transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0) scale3d(1,1,1);
 	transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0) scale3d(1,1,1);
 
@@ -615,7 +618,6 @@ h1, h2 {
 	border-radius:1rem;
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
-	//text-shadow:var(--text-shadow-offset) var(--text-shadow-offset) var(--text-shadow-radius) var(--theme-text-color-shadow);
 	backface-visibility:hidden;						/* Blurry text fix */
 	background:var(--theme-blur-background-color-Dark);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(130%);

@@ -9,8 +9,10 @@ var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that
 var MIN_SPEED_INCREASE;																//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
 var MAX_SPEED_INCREASE;																//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
 
+var firstBoot;
 var windowInnerWidth;																//A shortcut for the DOM element window.innerWidth
 var windowInnerHeight;															//A shortcut for the DOM element window.innerHeight
+var windowOriginalInnerHeight;											//The window.innerHeight the page started with, used to calculate styles offsets
 var documentBodyElement;														//A shortcut for the HTML element document.body
 var computedStyle;																	//All the computed styles for the document.body element
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
@@ -41,7 +43,7 @@ function init() {
 
 	imageLoading();																	//Initializes all the HTML img elements' contents
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
-
+	window.requestAnimationFrame(() => 	firstBoot = false);
 	//setTimeout(lagTest, 10000);
 	//setTimeout(lagTestHeader, 10000);
 	//setTimeout(() => scrollTest(_scrollDirectionTest), 5000);
@@ -49,6 +51,11 @@ function init() {
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
+	firstBoot = true;
+	windowInnerWidth = 0;
+	windowInnerHeight = 0;
+	windowOriginalInnerHeight = 0;
+
 	documentBodyElement = document.body;
 
 	websitePreviewExpandedBackgroundContentElement = document.getElementById("websitePreviewExpandedBackgroundContent");
@@ -71,7 +78,6 @@ function variableInitialization() {
 	presentationCardHeight = computedStyle.getPropertyValue("--presentationCard-height").replace("vmin", "");
 
 	websitePreviewExpandedMap = new Map();
-	windowInnerHeight = 0;
 }
 
 /* This function binds all the HTML elements that can be interacted to their mouse and keyboard eventHandlers */
@@ -280,18 +286,19 @@ function desktopEventListenerInitialization() {
 				 * The initial position is instead calculated adding the hover effect's expansion.
 				 */
 				let _websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
+				let _windowInnerHeightOffset = windowInnerHeight - windowOriginalInnerHeight;
 				let _documentBodyElementStyle = documentBodyElement.style;
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + _windowInnerHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor",  _presentationCardHeightValue / _websitePreviewCurrentSize);
 
 				let _websitePreviewImageBoundingRectangle = _websitePreviewImage.getBoundingClientRect();
 
-				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _websitePreviewImageBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _websitePreviewImageBoundingRectangle.top + _windowInnerHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-left-position", _websitePreviewImageBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _websitePreviewImageBoundingRectangle.height + "px");
 
@@ -329,18 +336,19 @@ function desktopEventListenerInitialization() {
 				 * The initial position is instead calculated adding the hover effect's expansion.
 				 */
 				let _websitePreviewBoundingRectangle = _currentWebsitePreview.getBoundingClientRect();
+				let _windowInnerHeightOffset = windowInnerHeight - windowOriginalInnerHeight;
 				let _documentBodyElementStyle = documentBodyElement.style;
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + _windowInnerHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor", _presentationCardHeightValue / _websitePreviewCurrentSize);
 
 				let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreviewImage.getBoundingClientRect();
 
-				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _currentWebsitePreviewImageBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _currentWebsitePreviewImageBoundingRectangle.top + _windowInnerHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-left-position", _currentWebsitePreviewImageBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _currentWebsitePreviewImageBoundingRectangle.height + "px");
 
@@ -604,15 +612,19 @@ function imageLoading() {
 function updateWindowSize(){
 	window.requestAnimationFrame(() => {
 		if(window.innerHeight > windowInnerHeight) {
+			windowOriginalInnerHeight = (firstBoot === true) ? window.innerHeight : windowOriginalInnerHeight;
 			windowInnerHeight = window.innerHeight;
-			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+			documentBodyElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+			//documentBodyElement.style.setProperty("--window-inner-height-offset", windowOriginalInnerHeight - windowInnerHeight + "px"); //PROVA
 			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
 			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
 			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowInnerHeight;
 			MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowInnerHeight;
 		} else if(window.innerWidth > windowInnerWidth) {		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
+			windowOriginalInnerHeight = (firstBoot === true) ? window.innerHeight : windowOriginalInnerHeight;
 			windowInnerHeight = window.innerHeight;
-			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+			documentBodyElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+		//	documentBodyElement.style.setProperty("--window-inner-height-offset", windowOriginalInnerHeight - windowInnerHeight + "px"); //PROVA
 			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
 			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
 			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowInnerHeight;
@@ -620,7 +632,7 @@ function updateWindowSize(){
 		}
 
 		windowInnerWidth = window.innerWidth;
-		mobileMode = (windowInnerWidth < 1081 || windowInnerHeight < 601) ? 1 : 0;
+		mobileMode = (windowInnerWidth < 1081) ? 1 : 0;
 	});
 }
 
