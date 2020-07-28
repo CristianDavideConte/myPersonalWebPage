@@ -51,6 +51,7 @@
 	--light-theme-blur-background-color-Darkest: rgba(255,255,255,0.75);
 	--light-theme-blur-background-color-Dark: rgba(255,255,255,0.7);
 	--light-theme-blur-background-color-Average: rgba(255,255,255, 0.5);
+	--light-theme-blur-background-color-Bright: rgba(230,230,230,0.5);
 	--light-theme-blur-background-color-Brightest: rgba(200,200,200,0.4);
 	--light-theme-box-shadow:0 0 var(--box-shadow-radius) 0 rgba(50,50,50,1);
 	--light-theme-text-color-shadow: rgba(255,255,255,0.7);
@@ -68,6 +69,7 @@
 	--dark-theme-blur-background-color-Darkest: rgba(0,0,0,0.85);
 	--dark-theme-blur-background-color-Dark: rgba(0,0,0,0.8);
 	--dark-theme-blur-background-color-Average: rgba(0,0,0,0.5);
+	--dark-theme-blur-background-color-Bright: rgba(0,0,0,0.35);
 	--dark-theme-blur-background-color-Brightest: rgba(0,0,0,0.3);
 	--dark-theme-box-shadow: none;
 	--dark-theme-text-color-shadow: rgba(0,0,0,0.8);
@@ -85,6 +87,7 @@
 	--theme-blur-background-color-Darkest: var(--light-theme-blur-background-color-Darkest);
 	--theme-blur-background-color-Dark: var(--light-theme-blur-background-color-Dark);
 	--theme-blur-background-color-Average: var(--light-theme-blur-background-color-Average);
+	--theme-blur-background-color-Bright: var(--light-theme-blur-background-color-Bright);
 	--theme-blur-background-color-Brightest: var(--light-theme-blur-background-color-Brightest);
 	--theme-box-shadow: var(--light-theme-box-shadow);
 	--theme-text-color-shadow: var(--light-theme-text-color-shadow);
@@ -105,6 +108,7 @@
 		--theme-blur-background-color-Darkest: var(--dark-theme-blur-background-color-Darkest);
 		--theme-blur-background-color-Dark: var(--dark-theme-blur-background-color-Dark);
 		--theme-blur-background-color-Average: var(--dark-theme-blur-background-color-Average);
+  	--theme-blur-background-color-Bright: var(--dark-theme-blur-background-color-Bright);
 		--theme-blur-background-color-Brightest: var(--dark-theme-blur-background-color-Brightest);
 		--theme-box-shadow: var(--dark-theme-box-shadow);
 		--theme-text-color-shadow: var(--dark-theme-text-color-shadow);
@@ -192,8 +196,6 @@ p {
 	position:fixed;
 	height: 10%;
 	width: 10.1%;
-	-webkit-box-shadow: var(--theme-box-shadow);
-	box-shadow: var(--theme-box-shadow);
 	background:var(--theme-blur-background-color-Dark);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced));
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced));
@@ -338,8 +340,8 @@ p {
 	background:var(--theme-blur-background-color-Dark);
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 	transition:0.3s;
 }
 
@@ -382,9 +384,9 @@ h1, h2 {
 	overflow-x:hidden;
 	overflow-y:scroll;
 	border-radius:5%;
-	background:var(--theme-blur-background-color-Brightest);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-wide)) saturate(130%);
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-wide)) saturate(130%);
+	background:var(--theme-blur-background-color-Bright);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-wide)) saturate(150%);
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-wide)) saturate(150%);
 	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
 	transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
 
@@ -417,8 +419,8 @@ h1, h2 {
 	background:var(--theme-blur-background-color-Brightest);
 	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
 	-ms-overflow-style:none !important;								/* Edge */
 	scrollbar-width:none !important;									/* Firefox */
 	transition:var(--transition-time-quick);
@@ -587,8 +589,8 @@ h1, h2 {
 	background:var(--theme-blur-background-color-Brightest);
 	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);  		/**/
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);  		/**/
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
 	transition:transform var(--transition-time-quick);
 }
 
@@ -618,8 +620,8 @@ h1, h2 {
 	box-shadow: var(--theme-box-shadow);
 	backface-visibility:hidden;						/* Blurry text fix */
 	background:var(--theme-blur-background-color-Dark);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(130%);
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(130%);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(150%);
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(150%);
 }
 
 #contactMeFormEmail,
@@ -644,11 +646,11 @@ h1, h2 {
 #contactMeFormBody {
 	cursor: text;
 	overflow: auto;
-	background:var(--theme-blur-background-color-Brightest);
+	background:var(--theme-blur-background-color-Bright);
 	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-wide)) saturate(130%);
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-wide)) saturate(130%);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-wide)) saturate(150%);
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-wide)) saturate(150%);
 }
 
 #contactMeFormEmail {
@@ -671,8 +673,8 @@ h1, h2 {
 	background:var(--theme-blur-background-color-Dark);
 	-webkit-box-shadow:var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(130%);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
 }
 
 
@@ -714,10 +716,6 @@ h1, h2 {
     max-width:300%;
     max-height:300%;
   }
-
-	#headerBackground {
-		background:var(--theme-blur-background-color-Darkest);
-	}
 
 	#headerBackground.mobileExpanded {
 		transform: scale3d(var(--scale3dFactor-header), var(--scale3dFactor-header), 1) translate3d(0, 0, 0);

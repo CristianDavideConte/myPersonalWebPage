@@ -615,7 +615,7 @@ function updateWindowSize(){
 		else if(window.innerWidth > windowInnerWidth) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
 			_update(_currentWindowInnerHeight);
 		else //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
-			windowInnerHeightOffset = _currentWindowInnerHeight - windowInnerHeight;
+			windowInnerHeightOffset = (!safariBrowserUsed) ? _currentWindowInnerHeight - windowInnerHeight : windowInnerHeight - _currentWindowInnerHeight;
 
 		document.documentElement.style.setProperty("--window-inner-height-offset", windowInnerHeightOffset + "px"); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowInnerHeightOffset != 0
 		windowInnerWidth = window.innerWidth;
