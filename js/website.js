@@ -614,7 +614,7 @@ function updateWindowSize(){
 			_update(_currentWindowInnerHeight);
 		else if(window.innerWidth > windowInnerWidth) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
 			_update(_currentWindowInnerHeight);
-		else if (_currentWindowInnerHeight <= windowInnerHeight - 50) 		//Here the window hasn't change orientation and its height is decrease by 50px in respect to the previous windowInnerHeight value
+		else if (_currentWindowInnerHeight <= 3 / 4 * windowInnerHeight) 		//Here the window hasn't change orientation and its height is decrease by 50px in respect to the previous windowInnerHeight value
 			_update(_currentWindowInnerHeight);
 		else //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
 			windowInnerHeightOffset = _currentWindowInnerHeight - windowInnerHeight;
