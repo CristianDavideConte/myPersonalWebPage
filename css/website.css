@@ -573,7 +573,6 @@ h1, h2 {
   position: fixed;                   /* This avoids layout shifts during the expandedState animation */
   pointer-events: none;
 	z-index:4;
-	position:absolute;
 	cursor:pointer;
 }
 
