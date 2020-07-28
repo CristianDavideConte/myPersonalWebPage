@@ -616,22 +616,19 @@ function updateWindowSize(){
 	}
 
 	window.requestAnimationFrame(() => {
-		windowInnerWidth = window.innerWidth;
-		mobileMode = (windowInnerWidth < 1081) ? 1 : 0;
-
 		let _currentWindowInnerHeight = window.innerHeight;
 		if(_currentWindowInnerHeight > windowInnerHeight)		//If the window gets higher all the variables are always updated
 			_update(_currentWindowInnerHeight);
-		else {
-			if(_currentWindowInnerHeight > windowInnerWidth) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
-				_update(_currentWindowInnerHeight);
-			else {
-				if (_currentWindowInnerHeight <= 3 / 4 * windowInnerHeight) 		//Here the window hasn't change orientation and its height is decrease
-					_update(_currentWindowInnerHeight);
-				else if(_currentWindowInnerHeight != windowInnerHeight) //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
-					console.log(_currentWindowInnerHeight, windowInnerWidth, windowInnerWidth, window.innerWidth);//windowInnerHeightOffset = 0;//_currentWindowInnerHeight - windowInnerHeight;
-			}
+		else if(window.innerWidth > windowInnerWidth) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
+			_update(_currentWindowInnerHeight);
+		else if (_currentWindowInnerHeight <= 3 / 4 * windowInnerHeight) 		//Here the window hasn't change orientation and its height is decrease by 1/3 of the previous windowInnerHeight value
+			_update(_currentWindowInnerHeight);
+		else { //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
+			console.log("TRIGGER");
+			windowInnerHeightOffset = 0;//_currentWindowInnerHeight - windowInnerHeight;
 		}
+		windowInnerWidth = window.innerWidth;
+		mobileMode = (windowInnerWidth < 1081) ? 1 : 0;
 	});
 }
 
