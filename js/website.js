@@ -607,8 +607,7 @@ function updateWindowSize(){
 	function _update(currentWindowInnerHeight) {
 			windowInnerHeightOffset = 0;
 			windowInnerHeight = currentWindowInnerHeight;
-			documentBodyElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
-			//documentBodyElement.style.setProperty("--window-inner-height-offset", windowOriginalInnerHeight - windowInnerHeight + "px"); //PROVA
+			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
 			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
 			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
 			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowInnerHeight;
@@ -624,14 +623,38 @@ function updateWindowSize(){
 		else if (_currentWindowInnerHeight <= 3 / 4 * windowInnerHeight) 		//Here the window hasn't change orientation and its height is decrease by 1/3 of the previous windowInnerHeight value
 			_update(_currentWindowInnerHeight);
 		else if(_currentWindowInnerHeight < windowInnerHeight) { //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
-			console.log("TRIGGER");
-			windowInnerHeightOffset = 0;//_currentWindowInnerHeight - windowInnerHeight;
+			windowInnerHeightOffset = _currentWindowInnerHeight - windowInnerHeight;
+			console.log(windowInnerHeightOffset);
 		}
 		windowInnerWidth = window.innerWidth;
 		mobileMode = (windowInnerWidth < 1081) ? 1 : 0;
 	});
 }
 
+/*
+function updateWindowSize(){
+	window.requestAnimationFrame(() => {
+		if(window.innerHeight > windowInnerHeight) {
+			windowInnerHeight = window.innerHeight;
+			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
+			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
+			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowInnerHeight;
+			MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowInnerHeight;
+		} else if(window.innerWidth > windowInnerWidth) {		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
+			windowInnerHeight = window.innerHeight;
+			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
+			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
+			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowInnerHeight;
+			MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowInnerHeight;
+		}
+
+		windowInnerWidth = window.innerWidth;
+		mobileMode = (windowInnerWidth < 1081 || windowInnerHeight < 601) ? 1 : 0;
+	});
+}
+*/
 /* -------------------------------------------------------- 						TESTING CODE SECTION     					------------------------------------------------------------------*/
 var _test = 0;
 function lagTest() {
