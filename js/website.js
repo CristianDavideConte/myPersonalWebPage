@@ -166,9 +166,9 @@ function desktopEventListenerInitialization() {
 			else
 				clearTimeout(_smoothWebsiteShowcaseWheelScrollTimeout);
 
-			_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(function checkFingerDown() {
+			_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(function _checkFingerDown() {
 				if(_isFingerDown)
-					_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(checkFingerDown, 100);
+					_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(_checkFingerDown, 100);
 				else {
 					smoothPageScroll(_firstScrollYPosition, contentElement.scrollTop);
 					_firstScrollYPosition = null;
@@ -286,14 +286,14 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowInnerHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor",  _presentationCardHeightValue / _websitePreviewCurrentSize);
 
 				let _websitePreviewImageBoundingRectangle = _websitePreviewImage.getBoundingClientRect();
 
-				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _websitePreviewImageBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _websitePreviewImageBoundingRectangle.top + windowInnerHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-left-position", _websitePreviewImageBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _websitePreviewImageBoundingRectangle.height + "px");
 
@@ -335,14 +335,14 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowInnerHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor", _presentationCardHeightValue / _websitePreviewCurrentSize);
 
 				let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreviewImage.getBoundingClientRect();
 
-				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _currentWebsitePreviewImageBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _currentWebsitePreviewImageBoundingRectangle.top + windowInnerHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-left-position", _currentWebsitePreviewImageBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _currentWebsitePreviewImageBoundingRectangle.height + "px");
 
@@ -608,6 +608,7 @@ function updateWindowSize(){
 			windowInnerHeightOffset = 0;
 			windowInnerHeight = currentWindowInnerHeight;
 			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
+			document.documentElement.style.setProperty("--window-inner-height-offset", windowInnerHeightOffset + "px"); //PROVA
 			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
 			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
 			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowInnerHeight;
@@ -624,8 +625,9 @@ function updateWindowSize(){
 			_update(_currentWindowInnerHeight);
 		else if(_currentWindowInnerHeight < windowInnerHeight) { //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
 			windowInnerHeightOffset = _currentWindowInnerHeight - windowInnerHeight;
-			console.log(windowInnerHeightOffset);
+			document.documentElement.style.setProperty("--window-inner-height-offset", windowInnerHeightOffset + "px"); //PROVA
 		}
+
 		windowInnerWidth = window.innerWidth;
 		mobileMode = (windowInnerWidth < 1081) ? 1 : 0;
 	});
