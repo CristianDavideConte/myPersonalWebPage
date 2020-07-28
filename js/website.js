@@ -606,7 +606,7 @@ function imageLoading() {
  */
 function updateWindowSize(){
 	function _update(currentWindowInnerHeight) {
-			windowOriginalInnerHeight = 0;
+			windowInnerHeightOffset = 0;
 			windowInnerHeight = currentWindowInnerHeight;
 			documentBodyElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
 			//documentBodyElement.style.setProperty("--window-inner-height-offset", windowOriginalInnerHeight - windowInnerHeight + "px"); //PROVA
