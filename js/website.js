@@ -12,6 +12,7 @@ var MAX_SPEED_INCREASE;																//The maximum number of frames that are s
 var windowInnerWidth;																//A shortcut for the DOM element window.innerWidth
 var windowInnerHeight;															//A shortcut for the DOM element window.innerHeight
 var windowInnerHeightOffset;												//The difference between the previous windowInnerHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
+var windowInnerHeightOffsetMax;											//The highest value that windowInnerHeightOffset has ever reached, used to adjust the offsets of the previewExpanded Y-position
 var documentBodyElement;														//A shortcut for the HTML element document.body
 var computedStyle;																	//All the computed styles for the document.body element
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
@@ -52,6 +53,7 @@ function variableInitialization() {
 	windowInnerWidth = 0;
 	windowInnerHeight = 0;
 	windowInnerHeightOffset = 0;
+	windowInnerHeightOffsetMax 0;
 
 	documentBodyElement = document.body;
 
@@ -286,15 +288,12 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top - windowInnerHeightOffsetMax / 2 + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor",  _presentationCardHeightValue / _websitePreviewCurrentSize);
 
 				let _websitePreviewImageBoundingRectangle = _websitePreviewImage.getBoundingClientRect();
-
-				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _websitePreviewImageBoundingRectangle.top + "px");
-				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-left-position", _websitePreviewImageBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _websitePreviewImageBoundingRectangle.height + "px");
 
 				websitePreviewExpandedBackgroundContentElement.appendChild(_websitePreviewExpanded);
@@ -335,15 +334,12 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top - windowInnerHeightOffsetMax / 2 + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor", _presentationCardHeightValue / _websitePreviewCurrentSize);
 
 				let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreviewImage.getBoundingClientRect();
-
-				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-top-position", _currentWebsitePreviewImageBoundingRectangle.top + "px");
-				_documentBodyElementStyle.setProperty("--websitePreviewImage-original-left-position", _currentWebsitePreviewImageBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _currentWebsitePreviewImageBoundingRectangle.height + "px");
 
 				websitePreviewExpandedBackgroundContentElement.classList.remove("expandedState");
@@ -623,7 +619,7 @@ function updateWindowSize(){
 			_update(_currentWindowInnerHeight);
 		else if(_currentWindowInnerHeight <= windowInnerHeight) {//If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
 			windowInnerHeightOffset = _currentWindowInnerHeight - windowInnerHeight;
-			console.log(windowInnerHeightOffset);
+			windowInnerHeightOffsetMax = (windowInnerHeightOffsetMax < windowInnerHeightOffset) ? windowInnerHeightOffset : windowInnerHeightOffsetMax;
 		}
 		document.documentElement.style.setProperty("--window-inner-height-offset", windowInnerHeightOffset + "px"); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowInnerHeightOffset != 0
 		windowInnerWidth = window.innerWidth;
@@ -631,30 +627,6 @@ function updateWindowSize(){
 	});
 }
 
-/*
-function updateWindowSize(){
-	window.requestAnimationFrame(() => {
-		if(window.innerHeight > windowInnerHeight) {
-			windowInnerHeight = window.innerHeight;
-			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
-			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
-			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
-			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowInnerHeight;
-			MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowInnerHeight;
-		} else if(window.innerWidth > windowInnerWidth) {		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
-			windowInnerHeight = window.innerHeight;
-			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
-			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
-			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
-			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowInnerHeight;
-			MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowInnerHeight;
-		}
-
-		windowInnerWidth = window.innerWidth;
-		mobileMode = (windowInnerWidth < 1081 || windowInnerHeight < 601) ? 1 : 0;
-	});
-}
-*/
 /* -------------------------------------------------------- 						TESTING CODE SECTION     					------------------------------------------------------------------*/
 var _test = 0;
 function lagTest() {
