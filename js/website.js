@@ -605,7 +605,6 @@ function imageLoading() {
  */
 function updateWindowSize(){
 	function _update(currentWindowInnerHeight) {
-			windowInnerHeightOffset = 0;
 			windowInnerHeight = currentWindowInnerHeight;
 			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
 			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
