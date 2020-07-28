@@ -324,8 +324,10 @@ p {
 	flex-direction:column;
 	align-items:center;
 	justify-content:center;
+  transition: var(--transition-time-quick);
   -webkit-transform: translate3d(0, var(--window-inner-height-offset), 0);
   transform: translate3d(0, var(--window-inner-height-offset), 0);
+  transform-origin: top left;
 }
 
 .pageSeparator {
@@ -486,7 +488,7 @@ h1, h2 {
 	transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0) scale3d(1,1,1);
 
 	--transform-translateX: calc(var(--websitePreview-original-left-position) - 50vw + var(--websitePreview-current-size) / 2);
-	--transform-translateY: calc(var(--websitePreview-original-top-position) - var(--50vh) + var(--websitePreview-current-size) / 2);
+	--transform-translateY: calc(var(--websitePreview-original-top-position) - var(--50vh) + var(--websitePreview-current-size) / 2 - var(--window-inner-height-offset));
 }
 
 .expandedState #websitePreviewExpanded {
@@ -501,17 +503,13 @@ h1, h2 {
 	width:var(--websitePreviewImage-current-size);
 	border-radius:100%;
 	transition:all var(--transition-time-medium);
-	-webkit-transform: translate3d(var(--transform-translateX-Image), var(--transform-translateY-Image), 0);
-	transform: translate3d(var(--transform-translateX-Image), var(--transform-translateY-Image), 0);
 
-	--transform-translateX-Image: calc(var(--websitePreviewImage-original-left-position) - 50vw + var(--websitePreview-websitePreviewImage-size) / 2);
-	--transform-translateY-Image: calc(var(--websitePreviewImage-original-top-position) - var(--50vh) + var(--websitePreviewImage-current-size) / 2);
   --scale3dFactor-Image: calc(2 / var(--scale3dFactor));
 }
 
 .expandedState .websitePreviewExpandedImage {
-	-webkit-transform: translate3d(0, 0, 0) scale3d(var(--scale3dFactor-Image),var(--scale3dFactor-Image), 1);
-	transform: translate3d(0, 0, 0) scale3d(var(--scale3dFactor-Image), var(--scale3dFactor-Image), 1);
+	-webkit-transform: scale3d(var(--scale3dFactor-Image),var(--scale3dFactor-Image), 1);
+	transform: scale3d(var(--scale3dFactor-Image), var(--scale3dFactor-Image), 1);
 }
 
 .websitePreviewExpandedTitle {
