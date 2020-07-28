@@ -11,7 +11,7 @@ var MAX_SPEED_INCREASE;																//The maximum number of frames that are s
 
 var windowInnerWidth;																//A shortcut for the DOM element window.innerWidth
 var windowInnerHeight;															//A shortcut for the DOM element window.innerHeight
-//var windowInnerHeightOffset;												//The difference between the previous windowInnerHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
+var windowInnerHeightOffset;												//The difference between the previous windowInnerHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
 var documentBodyElement;														//A shortcut for the HTML element document.body
 var computedStyle;																	//All the computed styles for the document.body element
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
@@ -51,7 +51,7 @@ function init() {
 function variableInitialization() {
 	windowInnerWidth = 0;
 	windowInnerHeight = 0;
-	//windowInnerHeightOffset = 0;
+	windowInnerHeightOffset = 0;
 
 	documentBodyElement = document.body;
 
@@ -138,16 +138,15 @@ function desktopEventListenerInitialization() {
   	for(const pageLink of pageLinksElements)
 			 pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
 	else
-		for(const pageLink of pageLinksElements) {
-	 		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
+		for(const pageLink of pageLinksElements)
  			pageLink.addEventListener("click", event => {
 				event.preventDefault();
 				if(!pageLinkClicked) {
 					pageLinkClicked = true;
+					toggleExpandHamburgerMenu();
 					pageLinksSmoothScroll(pageLink);
 				}
 			}, {passive:false});
-		}
 
 	/* All the social networks icons are linked to the corresponding website */
 	document.getElementById("githubContact").addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
@@ -606,7 +605,7 @@ function imageLoading() {
  */
 function updateWindowSize(){
 	function _update(currentWindowInnerHeight) {
-			//windowInnerHeightOffset = 0;
+			windowInnerHeightOffset = 0;
 			windowInnerHeight = currentWindowInnerHeight;
 			documentBodyElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
 			//documentBodyElement.style.setProperty("--window-inner-height-offset", windowOriginalInnerHeight - windowInnerHeight + "px"); //PROVA
@@ -623,12 +622,16 @@ function updateWindowSize(){
 		let _currentWindowInnerHeight = window.innerHeight;
 		if(_currentWindowInnerHeight > windowInnerHeight)		//If the window gets higher all the variables are always updated
 			_update(_currentWindowInnerHeight);
-		else if(_currentWindowInnerHeight > windowInnerWidth) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
-			_update(_currentWindowInnerHeight);
-		else if (_currentWindowInnerHeight <= 3 / 4 * windowInnerHeight) 		//Here the window hasn't change orientation and its height is decrease
-			_update(_currentWindowInnerHeight);
-		else if(_currentWindowInnerHeight != windowInnerHeight) //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
-			windowInnerHeight += _currentWindowInnerHeight - windowInnerHeight;
+		else {
+			if(_currentWindowInnerHeight > windowInnerWidth) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
+				_update(_currentWindowInnerHeight);
+			else {
+				if (_currentWindowInnerHeight <= 3 / 4 * windowInnerHeight) 		//Here the window hasn't change orientation and its height is decrease
+					_update(_currentWindowInnerHeight);
+				else if(_currentWindowInnerHeight != windowInnerHeight) //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
+					console.log(_currentWindowInnerHeight, windowInnerWidth, windowInnerWidth, window.innerWidth);//windowInnerHeightOffset = 0;//_currentWindowInnerHeight - windowInnerHeight;
+			}
+		}
 	});
 }
 
