@@ -53,7 +53,7 @@ function variableInitialization() {
 	windowInnerWidth = 0;
 	windowInnerHeight = 0;
 	windowInnerHeightOffset = 0;
-	windowInnerHeightOffsetMax 0;
+	windowInnerHeightOffsetMax = 0;
 
 	documentBodyElement = document.body;
 
