@@ -228,7 +228,7 @@ h1, h2 {
 #headerBackground {
 	z-index:2;
 	position:fixed;
-	height: 10%;
+	height: 10.1%;
 	width: 10.1%;
 	background:var(--theme-blur-background-color-Dark);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced));
@@ -746,7 +746,7 @@ h1, h2 {
 	}
 
   #popUpMessageText {
-    font-size: 230%;
+    font-size: 350%;
   }
 
   #bodyBackground {
@@ -755,11 +755,13 @@ h1, h2 {
   }
 
 	#headerBackground.mobileExpanded {
+		-webkit-transform: scale3d(var(--scale3dFactor-header), var(--scale3dFactor-header), 1) translate3d(0, 0, 0);
 		transform: scale3d(var(--scale3dFactor-header), var(--scale3dFactor-header), 1) translate3d(0, 0, 0);
 	}
 
 	#header.mobileExpanded {
-		transform: translate3d(0, calc(var(--50vh) - var(--header-elements-height)), 0);
+		-webkit-transform: translate3d(0, calc(var(--50vh) - var(--header-elements-height) + var(--window-inner-height-offset)), 0);
+		transform: translate3d(0, calc(var(--50vh) - var(--header-elements-height) + var(--window-inner-height-offset)), 0);
 	}
 
 	#hamburgerMenu {
