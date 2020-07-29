@@ -9,15 +9,19 @@ var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that
 var MIN_SPEED_INCREASE;																//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
 var MAX_SPEED_INCREASE;																//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
 
+var mobileMode; 																		//Indicates if the css for mobile is currently being applied
+var safariBrowserUsed;															//A Boolean which is true if the browser used is Apple's Safari, false otherwise
+var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
+var websitePreviewExpandedMap; 											//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
+var computedStyle;																	//All the computed styles for the document.body element
+var presentationCardHeight;													//The --presentationCard-height css variable, used to calculate the scale factor of the websitePreviews expansion animation
+var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
 var windowInnerWidth;																//A shortcut for the DOM element window.innerWidth
 var windowInnerHeight;															//A shortcut for the DOM element window.innerHeight
 var windowInnerHeightOffset;												//The difference between the previous windowInnerHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
 var documentBodyElement;														//A shortcut for the HTML element document.body
-var computedStyle;																	//All the computed styles for the document.body element
-var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
-var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
-var presentationCardHeight;
-var mobileMode; 																		//Indicates if the css for mobile is currently being applied
+var popUpMessageElement;														//The HTML element with the id "popUpMessage", used as a pop-up message container: a modal
+var popUpMessageTextElement;												//The HTML element with the id "popUpMessageText", used as the text shown in the popUpMessage HTML element
 var websitePreviewExpandedBackgroundContentElement; //The HTML element with the id "websitePreviewExpandedBackgroundContent", used as a layer between a websitePreviewExpanded and the page beneath
 var backgroundElement;															//The HTML element with the id "backgroundElement", used as the website body background
 var headerBackgroundElement;												//The HTML element with the id "headerBackground", used as the website's navbar background
@@ -25,15 +29,13 @@ var headerElement;																	//The HTML element with the id "header", used
 var hamburgerMenuElement;														//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px
 var pageLinksElements; 															//All HTML elements with the class "pageLink", shown in the header to navigate through the website' sections
 var contentElement;																	//The HTML element with the id "content", used as the website main container
-var carouselButtons;																//All HTML elements with the class "carouselButton", used to scroll the websitePreview carousel
 var websiteShowcase;																//The HTML element with the id "websiteShowcase", children of the websitePreviewCarousel HTML element and used as container for all the websitePreviews
+var carouselButtons;																//All HTML elements with the class "carouselButton", used to scroll the websitePreview carousel
 var websitePreviews;																//All HTML elements with the class "websitePreview", used as a clickable previews for all the projects inside the websitePreviewShowcase
-var websitePreviewExpandedMap; 											//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
 var contactMeFormElement;														//The HTML element with the id "contactMeForm", used to keep the contact informations until the contactMeFormSendButton is pressed
 var contactMeFormEmailElement;											//The HTML element with the id "contactMeFormEmail", used to store the user's email when the contactMeForm is being filled
 var contactMeFormBodyElement;												//The HTML element with the id "contactMeFormBody",used to store the user's message when the contactMeForm is being filled
 var contactMeFormSendButtonElement;									//The HTML element with the id "contactMeFormSendButton", used to send a contact request based on the contactMeForm fields
-var safariBrowserUsed;															//A Boolean which is true if the browser used is Apple's Safari, false otherwise
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {
@@ -49,37 +51,40 @@ function init() {
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
+	documentBodyElement = document.body;
+
+	websitePreviewExpandedMap = new Map();
+
+	computedStyle = getComputedStyle(documentBodyElement);
+	presentationCardHeight = computedStyle.getPropertyValue("--presentationCard-height").replace("vmin", "");
+	transitionTimeMedium = computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
+
 	windowInnerWidth = 0;
 	windowInnerHeight = 0;
 	windowInnerHeightOffset = 0;
 
-	documentBodyElement = document.body;
-
+	popUpMessageElement = document.getElementById("popUpMessage");
+	popUpMessageTextElement = document.getElementById("popUpMessageText");
 	websitePreviewExpandedBackgroundContentElement = document.getElementById("websitePreviewExpandedBackgroundContent");
+
 	backgroundElement = document.getElementById("bodyBackground");
 	headerBackgroundElement = document.getElementById("headerBackground");
 	headerElement = document.getElementById("header");
 	hamburgerMenuElement = document.getElementById("hamburgerMenu");
 	pageLinksElements = document.getElementsByClassName("pageLink");
 	contentElement = document.getElementById("content");
-	carouselButtons = document.getElementsByClassName("carouselButton");
 	websiteShowcase = document.getElementById("websiteShowcase");
+	carouselButtons = document.getElementsByClassName("carouselButton");
 	websitePreviews = document.getElementsByClassName("websitePreview");
 	contactMeFormElement = document.getElementById("contactMeForm");
 	contactMeFormEmailElement = document.getElementById("contactMeFormEmail");
 	contactMeFormBodyElement = document.getElementById("contactMeFormBody");
 	contactMeFormSendButtonElement = document.getElementById("contactMeFormSendButton");
-
-	computedStyle = getComputedStyle(documentBodyElement);
-	transitionTimeMedium = computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
-	presentationCardHeight = computedStyle.getPropertyValue("--presentationCard-height").replace("vmin", "");
-
-	websitePreviewExpandedMap = new Map();
 }
 
 /* This function binds all the HTML elements that can be interacted to their mouse and keyboard eventHandlers */
 function desktopEventListenerInitialization() {
-	window.addEventListener("resize", updateWindowSize, {passive:true});										//Updates the height and the width whenever the window's resized
+	window.addEventListener("resize", updateWindowSize, {passive:true});
 	/*
 	 * The user can use the arrow keys to navigate the website.
 	 * Pressing the Arrow-up or the Arrow-left keys will trigger a scroll upwards by a scrollDistance of windowInnerHeight
@@ -355,82 +360,104 @@ function desktopEventListenerInitialization() {
 		}
 	}, {passive:true});
 
+	/*
+	 * This function animates the popUpMessageElement and modifies the text shown.
+	 * It also avoids the spam of this function by using a timeout which gets resetted at each function call.
+	 */
+	let _popUpMessageTimeout = null;
+	function _showMessage(message) {
+		window.requestAnimationFrame(() => {
+			popUpMessageTextElement.innerHTML = message;
+			popUpMessageElement.className = "messageOnScreen";
 
- 		/*
- 		 * This function returns:
- 		 * case1: "validData" if both the contactMeFormEmail && contactMeFormBody are valid
- 		 * case2: an error message if at least one of the two contactMeForm fields is not valid
- 		 * It uses a regular expression to check if the email field is correctly formatted, no further investigation is done
- 		 */
- 		function _checkContactMeFormDataIntegrity() {
- 			let regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
- 			let valid = (regExp.test(contactMeFormEmailElement.value.toLowerCase())) ? "validData" : "Type a valid mail address";
- 			valid += (contactMeFormBodyElement.value != "") ? "" : "\nYour message cannot by empty";
- 			return valid;
- 		}
+			if(_popUpMessageTimeout != null)
+				clearTimeout(_popUpMessageTimeout);
 
-	 // Success and Error functions for after the form is submitted
-    function _ajaxResponceStatusSuccess() {
-      contactMeFormElement.reset();
-      contactMeFormEmailElement.disabled = true;
-      contactMeFormBodyElement.disabled = true;
-      contactMeFormSendButtonElement.disabled = true;
-			contactMeFormElement.removeEventListener("submit", _submitForm, {passive:false});
-			contactMeFormElement.removeAttribute("action");
-			contactMeFormElement.removeAttribute("method");
-    }
+			_popUpMessageTimeout = setTimeout(() => window.requestAnimationFrame(() => popUpMessageElement.className = ""), 6000);			//Every message on screen is shown for 5seconds
+		});
+	}
 
-    function _ajaxResponceStatusError(status, response, responseType) {
-			_ajaxResponceStatusSuccess();	//REMOVE-> TEST ONLY
-      console.log("Oops! There was a problem" + "\nStatus: " + status + "\nResponseType: " + responseType + "\nResponse: " + response);
-    }
+	/*
+	 * This function returns:
+	 * case1: "validData" if both the contactMeFormEmail && contactMeFormBody are valid
+	 * case2: an error message if at least one of the two contactMeForm fields is not valid
+	 * It uses a regular expression to check if the email field is correctly formatted, no further investigation is done
+	 */
+	function _checkContactMeFormDataIntegrity() {
+		let regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		let valid = (regExp.test(contactMeFormEmailElement.value.toLowerCase())) ? "validData<br>" : "Type a valid email address";
+		if(contactMeFormBodyElement.value == "")
+			valid = (valid != "validData<br>") ?  "Fill the form first !" : valid + "Your message cannot by empty";
+		return valid;
+	}
 
-	  /*
-		 * This function:
-		 * - creates an XMLHttpRequest
-		 * - sends the message request
-		 * - calls the _ajaxResponceStatusSuccess function when a positive response is returned (Code == 200)
-		 * - calls the _ajaxResponceStatusError function when a negative response is returned (Code != 200)
-		 */
-	  function _ajax(method, url, data, success, error) {
-	    let xhr = new XMLHttpRequest();
-	    xhr.open(method, url);
-	    xhr.setRequestHeader("Accept", "application/json");
-	    xhr.onreadystatechange = () => {
-	      if (xhr.readyState !== XMLHttpRequest.DONE)
-					return;
-	      if (xhr.status === 200)
-	        success(xhr.response, xhr.responseType);
-	      else
-	        error(xhr.status, xhr.response, xhr.responseType);
-	    };
-	    xhr.send(data);
-	  }
+ 	// Success and Error functions for after the form is submitted
+  function _ajaxResponceStatusSuccess() {
+    contactMeFormElement.reset();
+    contactMeFormEmailElement.disabled = true;
+    contactMeFormBodyElement.disabled = true;
+    contactMeFormSendButtonElement.disabled = true;
+		contactMeFormElement.removeEventListener("submit", _submitForm, {passive:false});
+		contactMeFormElement.removeAttribute("action");
+		contactMeFormElement.removeAttribute("method");
+		_showMessage("Message Sent!");
+  }
 
-		/*
-		 * This function:
-		 * - acquires the contactMeForm data
-		 * - calls _checkContactMeFormDataIntegrity in order to prevent the spam of invalid emails
-		 * - if the form data is valid calls _ajax to create the request, tells the user to fill the form fields with valid data otherwise
-		 */
-		function _submitForm() {
-			event.preventDefault();
-			let validData = _checkContactMeFormDataIntegrity();
-			if(validData == "validData")
-				_ajax(contactMeFormElement.method, contactMeFormElement.action, new FormData(contactMeFormElement), _ajaxResponceStatusSuccess, _ajaxResponceStatusError);
-			else
-				console.log(validData.replace("validData\n", ""));
+  function _ajaxResponceStatusError(status, response, responseType) {
+		contactMeFormSendButtonElement.disabled = false;
+		_showMessage("Oops! There was a problem, try again later");
+		console.log("Request rejected from server.\nStatus: " + status + "\nResponseType: " + responseType + "\nResponse: " + response);
+  }
+
+  /*
+	 * This function:
+	 * - creates an XMLHttpRequest
+	 * - sends the message request
+	 * - calls the _ajaxResponceStatusSuccess function when a positive response is returned (Code == 200)
+	 * - calls the _ajaxResponceStatusError function when a negative response is returned (Code != 200)
+	 */
+  function _ajax(method, url, data, success, error) {
+    let xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState !== XMLHttpRequest.DONE)
+				return;
+      if (xhr.status === 200)
+        success(xhr.response, xhr.responseType);
+      else
+        error(xhr.status, xhr.response, xhr.responseType);
+    };
+    xhr.send(data);
+  }
+
+	/*
+	 * This function:
+	 * - acquires the contactMeForm data
+	 * - calls _checkContactMeFormDataIntegrity in order to prevent the spam of invalid emails
+	 * - if the form data is valid calls _ajax to create the request, tells the user to fill the form fields with valid data otherwise
+	 */
+	function _submitForm() {
+		event.preventDefault();
+    contactMeFormSendButtonElement.disabled = true;
+		let validData = _checkContactMeFormDataIntegrity();
+		if(validData == "validData<br>")
+			_ajax(contactMeFormElement.method, contactMeFormElement.action, new FormData(contactMeFormElement), _ajaxResponceStatusSuccess, _ajaxResponceStatusError);
+		else {
+			_showMessage(validData.replace("validData<br>", ""));
+			setTimeout(() => window.requestAnimationFrame(() => contactMeFormSendButtonElement.disabled = false), 6000);			//Every message on screen is shown for 5seconds
 		}
+	}
 
-		/*
-		 * If clicked, the contactMeFormSendButton triggers a call to the _submitForm functon
-		 * which locally checks if the contactMeForm fields are valid and if so triggers an ajax request to the Formspree API.
-		 * The API will send an email to the registered receiver address.
-		 * The receiver address is always "cristiandavideconte@gmail.com"
-		 * The sender address is the contactMeFormEmail content
-		 * The body is the contactMeFormBody content
-		 */
-    contactMeFormElement.addEventListener("submit", _submitForm, {passive:false});
+	/*
+	 * If clicked, the contactMeFormSendButton triggers a call to the _submitForm functon
+	 * which locally checks if the contactMeForm fields are valid and if so triggers an ajax request to the Formspree API.
+	 * The API will send an email to the registered receiver address.
+	 * The receiver address is always "cristiandavideconte@gmail.com"
+	 * The sender address is the contactMeFormEmail content
+	 * The body is the contactMeFormBody content
+	 */
+  contactMeFormElement.addEventListener("submit", _submitForm, {passive:false});
 }
 
 /*
