@@ -204,20 +204,20 @@ function desktopEventListenerInitialization() {
 	 * If the direction is > 0  the scroll direction is from left to right, it's from right to left otherwise.
 	 */
 	let _carouselButtonScrollEnabled = false;
-	function smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection) {
+	function _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection) {
 		websiteShowcase.scrollLeft += scrollDirection * windowInnerWidth / 100;
 		if(_carouselButtonScrollEnabled)
-			window.requestAnimationFrame(() => smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection));
+			window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection));
 	}
 
 	carouselButtons[0].addEventListener("mousedown", () => {
 		_carouselButtonScrollEnabled = true;
-		window.requestAnimationFrame(() => smoothWebsiteShowcaseWheelScrollHorizzontally(-1));
+		window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(-1));
 	}, {passive:true});
 
 	carouselButtons[1].addEventListener("mousedown", () => {
 		_carouselButtonScrollEnabled = true;
-		window.requestAnimationFrame(() => smoothWebsiteShowcaseWheelScrollHorizzontally(1));
+		window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(1));
 	}, {passive:true});
 
 	carouselButtons[0].addEventListener("mouseup", () => _carouselButtonScrollEnabled = false, {passive:true});
@@ -615,7 +615,7 @@ function updateWindowSize(){
 		else if(window.innerWidth > windowInnerWidth) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
 			_update(_currentWindowInnerHeight);
 		else //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
-			windowInnerHeightOffset = (!safariBrowserUsed) ? _currentWindowInnerHeight - windowInnerHeight : windowInnerHeight - _currentWindowInnerHeight;
+			windowInnerHeightOffset = _currentWindowInnerHeight - windowInnerHeight;
 
 		document.documentElement.style.setProperty("--window-inner-height-offset", windowInnerHeightOffset + "px"); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowInnerHeightOffset != 0
 		windowInnerWidth = window.innerWidth;

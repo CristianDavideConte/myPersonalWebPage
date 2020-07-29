@@ -151,11 +151,10 @@ html {
 }
 
 body {
-  overflow:hidden;
 	margin:0;
 	width:100vw;
 	height:var(--100vh);
-	background-color: var(--theme-blur-background-color-Black);
+	background-color: var(--theme-text-color);
 }
 
 body::-webkit-scrollbar {
@@ -372,8 +371,8 @@ h1, h2 {
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	height:var(--profilePic-size);
 	width:var(--profilePic-size);
-	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size)*0.75 - var(--presentationCard-height)/2 + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
-	transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size)*0.75 - var(--presentationCard-height)/2 + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
+	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size) * 0.75 - var(--presentationCard-height) / 2 + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
+	transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size) * 0.75 - var(--presentationCard-height) / 2 + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
 }
 
 #presentationCard {
@@ -387,8 +386,8 @@ h1, h2 {
 	background:var(--theme-blur-background-color-Bright);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-wide)) saturate(150%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-wide)) saturate(150%);
-	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
-	transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height)/2 - var(--profilePic-size) + var(--header-elements-height) + 2*var(--header-elements-padding)), 0);
+	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height) / 2 - var(--profilePic-size) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
+	transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height) / 2 - var(--profilePic-size) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
 
 	-ms-overflow-style:none !important;									/* Edge */
 	scrollbar-width:none !important;									/* Firefox */
