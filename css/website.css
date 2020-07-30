@@ -760,8 +760,8 @@ h1, h2 {
 	}
 
 	#header.mobileExpanded {
-		-webkit-transform: translate3d(0, calc(var(--50vh) - var(--header-elements-height) + var(--window-inner-height-offset)), 0);
-		transform: translate3d(0, calc(var(--50vh) - var(--header-elements-height) + var(--window-inner-height-offset)), 0);
+		-webkit-transform: translate3d(0, calc(var(--50vh) - var(--header-elements-height) / 2 - var(--header-elements-padding) + var(--window-inner-height-offset) / 2), 0);
+		transform: translate3d(0, calc(var(--50vh) - var(--header-elements-height) / 2 - var(--header-elements-padding) + var(--window-inner-height-offset) / 2), 0);
 	}
 
 	#hamburgerMenu {
