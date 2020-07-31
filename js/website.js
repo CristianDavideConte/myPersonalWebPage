@@ -1,15 +1,15 @@
 const STANDARD_WINDOW_INNER_HEIGHT = 937;							//The standard browser inner height, usually about 937px at 1920x1080
-const MIN_SCROLLING_ANIMATION_FRAMES_STANDARD = 7;		//The minumum number of frames that the smoothScrollVertically function can use to scroll the window if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
-const MAX_SCROLLING_ANIMATION_FRAMES_STANDARD = 25;		//The maximum number of frames that the smoothScrollVertically function can use to scroll the window if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
-const MIN_SPEED_INCREASE_STANDARD = 1;								//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
-const MAX_SPEED_INCREASE_STANDARD = 4;								//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
+const MIN_SCROLLING_ANIMATION_FRAMES_STANDARD = 7;		//The minumum number of frames that the smoothScrollVertically function can use to scroll the window if the windowHeight = STANDARD_WINDOW_INNER_HEIGHT
+const MAX_SCROLLING_ANIMATION_FRAMES_STANDARD = 25;		//The maximum number of frames that the smoothScrollVertically function can use to scroll the window if the windowHeight = STANDARD_WINDOW_INNER_HEIGHT
+const MIN_SPEED_INCREASE_STANDARD = 1;								//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function if the windowHeight = STANDARD_WINDOW_INNER_HEIGHT
+const MAX_SPEED_INCREASE_STANDARD = 4;								//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function if the windowHeight = STANDARD_WINDOW_INNER_HEIGHT
 const MAX_PAGES_GAP_NUMBER = 3;												//The maximum number of pages of the window
-var MIN_SCROLLING_ANIMATION_FRAMES;										//The minumum number of frames that the smoothScrollVertically function can use to scroll the window for the current windowInnerHeight value
-var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that the smoothScrollVertically function can use to scroll the window for the current windowInnerHeight value
-var MIN_SPEED_INCREASE;																//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
-var MAX_SPEED_INCREASE;																//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
+var MIN_SCROLLING_ANIMATION_FRAMES;										//The minumum number of frames that the smoothScrollVertically function can use to scroll the window for the current windowHeight value
+var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that the smoothScrollVertically function can use to scroll the window for the current windowHeight value
+var MIN_SPEED_INCREASE;																//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowHeight value
+var MAX_SPEED_INCREASE;																//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowHeight value
 
-var windowScrollYBy; 																//A shorthand for the y => window.scroll(0,y) function, used to scroll the window without the user's interaction
+var windowScrollYBy; 																//A shorthand for the y => window.scroll(0, window.scrollY + y) function, used to scroll the window without the user's interaction
 var mobileMode; 																		//Indicates if the css for mobile is currently being applied
 var safariBrowserUsed;															//A Boolean which is true if the browser used is Apple's Safari, false otherwise
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
@@ -17,9 +17,9 @@ var websitePreviewExpandedMap; 											//A map which contains all the already
 var computedStyle;																	//All the computed styles for the document.body element
 var presentationCardHeight;													//The --presentationCard-height css variable, used to calculate the scale factor of the websitePreviews expansion animation
 var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
-var windowInnerWidth;																//A shortcut for the DOM element window.innerWidth
-var windowInnerHeight;															//A shortcut for the DOM element window.innerHeight
-var windowInnerHeightOffset;												//The difference between the previous windowInnerHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
+var windowWidth;																//A shortcut for the DOM element window.innerWidth
+var windowHeight;															//A shortcut for the DOM element window.innerHeight
+var windowHeightOffset;												//The difference between the previous windowHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
 var documentBodyElement;														//A shortcut for the HTML element document.body
 var popUpMessageElement;														//The HTML element with the id "popUpMessage", used as a pop-up message container: a modal
 var popUpMessageTextElement;												//The HTML element with the id "popUpMessageText", used as the text shown in the popUpMessage HTML element
@@ -51,7 +51,7 @@ function init() {
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
-	windowScrollYBy = (y) => window.scroll(0,y);
+	windowScrollYBy = (y) => window.scroll(0, window.scrollY + y);
 	documentBodyElement = document.body;
 
 	websitePreviewExpandedMap = new Map();
@@ -60,9 +60,9 @@ function variableInitialization() {
 	presentationCardHeight = computedStyle.getPropertyValue("--presentationCard-height").replace("vmin", "");
 	transitionTimeMedium = computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
 
-	windowInnerWidth = 0;
-	windowInnerHeight = 0;
-	windowInnerHeightOffset = 0;
+	windowWidth = 0;
+	windowHeight = 0;
+	windowHeightOffset = 0;
 
 	popUpMessageElement = document.getElementById("popUpMessage");
 	popUpMessageTextElement = document.getElementById("popUpMessageText");
@@ -87,8 +87,8 @@ function desktopEventListenerInitialization() {
 	window.addEventListener("resize", updateWindowSize, {passive:true});
 	/*
 	 * The user can use the arrow keys to navigate the website.
-	 * Pressing the Arrow-up or the Arrow-left keys will trigger a scroll upwards by a scrollDistance of windowInnerHeight
- 	 * Pressing the Arrow-down or the Arrow-right keys will trigger a scroll downwards by a scrollDistance of windowInnerHeight
+	 * Pressing the Arrow-up or the Arrow-left keys will trigger a scroll upwards by a scrollDistance of windowHeight
+ 	 * Pressing the Arrow-down or the Arrow-right keys will trigger a scroll downwards by a scrollDistance of windowHeight
 	 * Safari support is added by using the smoothScrollVertically function.
 	 */
 	if(!safariBrowserUsed)
@@ -96,10 +96,10 @@ function desktopEventListenerInitialization() {
 			if(event.target.tagName == "BODY") {
 				let _keyName = event.key;
 				if(_keyName == "ArrowUp" || _keyName == "ArrowLeft") {
-					windowScrollYBy(window.scrollY - windowInnerHeight);
+					windowScrollYBy(-windowHeight);
 					event.preventDefault();
 				} else if(_keyName == "ArrowDown" || _keyName == "ArrowRight") {
-					windowScrollYBy(window.scrollY + windowInnerHeight);
+					windowScrollYBy(windowHeight);
 					event.preventDefault();
 				}
 			}
@@ -109,10 +109,10 @@ function desktopEventListenerInitialization() {
 			if(event.target.tagName == "BODY") {
 				let _keyName = event.key;
 				if(_keyName == "ArrowUp" || _keyName == "ArrowLeft") {
-					smoothScrollVertically(-1, windowInnerHeight);
+					smoothScrollVertically(-1, windowHeight);
 					event.preventDefault();
 				} else if(_keyName == "ArrowDown" || _keyName == "ArrowRight") {
-					smoothScrollVertically(1, windowInnerHeight);
+					smoothScrollVertically(1, windowHeight);
 					event.preventDefault();
 				}
 			}
@@ -182,14 +182,15 @@ function desktopEventListenerInitialization() {
 	}, {passive:true});
 
 	websiteShowcase.addEventListener("wheel", event => {
+		event.preventDefault();
 		let _scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
-		let _totalScrollAmmount = windowInnerWidth/20;						//The total ammount of pixel horizontally scrolled by the _smoothWebsiteShowcaseWheelScroll function
-		let _scrollDistance = windowInnerWidth/150;							//The ammount of pixel scrolled at each _smoothWebsiteShowcaseWheelScroll call
+		let _totalScrollAmmount = windowWidth/20;						//The total ammount of pixel horizontally scrolled by the _smoothWebsiteShowcaseWheelScroll function
+		let _scrollDistance = windowWidth/150;							//The ammount of pixel scrolled at each _smoothWebsiteShowcaseWheelScroll call
 		let _partialScrollAmmount = 0;														//scrollDistance * number of _smoothWebsiteShowcaseWheelScroll function calls
 
 		/*
 		 * This function should only be called inside the websiteShowcases wheelEvent listeners.
-		 * The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth
+		 * The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowWidth
 		 * and so that is 1/20th of the window's innerWidth at any given resolution.
 		 * If the wheel is scrolled from top to bottom the scroll direction will be from right to left, it will be inverted otherwise.
 		 */
@@ -201,16 +202,16 @@ function desktopEventListenerInitialization() {
 		}
 
 		window.requestAnimationFrame(_smoothWebsiteShowcaseWheelScroll);
-	}, {passive:true});
+	}, {passive:false});
 
 	/*
-	 * The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowInnerWidth
+	 * The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowWidth
 	 * and so that is +1/100th of the window's innerWidth at any given resolution.
 	 * If the direction is > 0  the scroll direction is from left to right, it's from right to left otherwise.
 	 */
 	let _carouselButtonScrollEnabled = false;
 	function _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection) {
-		websiteShowcase.scrollLeft += scrollDirection * windowInnerWidth / 100;
+		websiteShowcase.scrollLeft += scrollDirection * windowWidth / 100;
 		if(_carouselButtonScrollEnabled)
 			window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection));
 	}
@@ -232,6 +233,7 @@ function desktopEventListenerInitialization() {
 		/* First, all the websitePreviewExpanded basic components are created */
 		let _websitePreviewExpanded = document.createElement("div");
 		_websitePreviewExpanded.id = "websitePreviewExpanded";
+		_websitePreviewExpanded.addEventListener("click", event => event.stopPropagation(), {passive:true});
 
 		let _websitePreviewImage = websitePreview.firstElementChild;
 		let _websitePreviewExpandedImage = _websitePreviewImage.cloneNode(true);
@@ -254,10 +256,7 @@ function desktopEventListenerInitialization() {
 			let _viewCodeButton = document.createElement("button");
 			_viewCodeButton.innerHTML = "View Code";
 			_viewCodeButton.className = "websitePreviewExpandedButton";
-			_viewCodeButton.addEventListener("click", event => {
-				event.stopPropagation();
-				window.open(_dataCode);
-			}, {passive:true});
+			_viewCodeButton.addEventListener("click", () => window.open(_dataCode), {passive:true});
 			_viewButtonsSection.appendChild(_viewCodeButton);
 		}
 
@@ -266,17 +265,16 @@ function desktopEventListenerInitialization() {
 			let _viewDemoButton = document.createElement("button");
 			_viewDemoButton.innerHTML = "View Demo";
 			_viewDemoButton.className = "websitePreviewExpandedButton";
-			_viewDemoButton.addEventListener("click", event => {
-				event.stopPropagation();
-				window.open(_dataDemo);
-			}, {passive:true});
+			_viewDemoButton.addEventListener("click", () => window.open(_dataDemo), {passive:true});
 			_viewButtonsSection.appendChild(_viewDemoButton);
 		}
 
 		_websitePreviewExpanded.appendChild(_viewButtonsSection);
-		_websitePreviewExpanded.addEventListener("click", event => event.stopPropagation(), {passive:true});
+
+		/* Then the websitePreviewExpanded are mapped to their websitePreview counterparts */
 		websitePreviewExpandedMap.set(_websitePreviewExpanded, websitePreview);
 
+		/* At the end of the process each websitePreview is given a listener for the back-to-normal-state animation */
 		websitePreview.addEventListener("click", () => {
 			event.stopPropagation();																				//Prevents the click to instantly remove the previewExpanded element that is going to be created next
 			window.requestAnimationFrame(() => {
@@ -289,12 +287,13 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
 				let _documentBodyElementStyle = documentBodyElement.style;
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
-				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
+				let _presentationCardHeightValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * presentationCardHeight / 100 : windowWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowInnerHeightOffset + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor",  _presentationCardHeightValue / _websitePreviewCurrentSize);
+				console.log(_presentationCardHeightValue / _websitePreviewCurrentSize);
 
 				let _websitePreviewImageBoundingRectangle = _websitePreviewImage.getBoundingClientRect();
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _websitePreviewImageBoundingRectangle.height + "px");
@@ -337,12 +336,13 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewBoundingRectangle = _currentWebsitePreview.getBoundingClientRect();
 				let _documentBodyElementStyle = documentBodyElement.style;
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
-				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
+				let _presentationCardHeightValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * presentationCardHeight / 100 : windowWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowInnerHeightOffset + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor", _presentationCardHeightValue / _websitePreviewCurrentSize);
+				console.log(_presentationCardHeightValue / _websitePreviewCurrentSize);
 
 				let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreviewImage.getBoundingClientRect();
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _currentWebsitePreviewImageBoundingRectangle.height + "px");
@@ -487,22 +487,22 @@ function browserIsSafari() {
  * taking into consideration the current page position.
  * It triggers after a scroll is completed.
  * If at the end of the scroll, the current page is not alligned, it gets:
- * - alligned if it covers 3/4 of the windowInnerHeight or more
+ * - alligned if it covers 3/4 of the windowHeight or more
  * - scrolled, following the original user's scroll direction, otherwise
  */
 if(!browserIsSafari()) {
 	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
-		currentPageIndex = Math.round(lastScrollYPosition / windowInnerHeight);
+		currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
 		let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
-		if(_scrollYAmmount > windowInnerHeight / 2 || _scrollYAmmount < -windowInnerHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
+		if(_scrollYAmmount > windowHeight / 2 || _scrollYAmmount < -windowHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowHeight / 2
 			let _scrollDirection = Math.sign(_scrollYAmmount);																										//1 if the scrolling is going downwards -1 otherwise.
-			let _pageOffset = _scrollDirection * (currentPageIndex * windowInnerHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
+			let _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
 			if(_pageOffset != 0)
-				if(-_pageOffset < windowInnerHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
-					windowScrollYBy(window.scrollY + _scrollDirection * _pageOffset);
-				else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
-					windowScrollYBy(window.scrollY + _scrollDirection * (windowInnerHeight + _pageOffset));
+				if(-_pageOffset < windowHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
+					windowScrollYBy(_scrollDirection * _pageOffset);
+				else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
+					windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset));
 		}
 	}
 } else {
@@ -513,17 +513,17 @@ if(!browserIsSafari()) {
 	 * - pageLinksSmoothScroll for the specific case of a pageLink clicked
 	 */
 	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
-		currentPageIndex = Math.round(lastScrollYPosition / windowInnerHeight);
+		currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
 		let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
-		if(_scrollYAmmount > windowInnerHeight / 2 || _scrollYAmmount < -windowInnerHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowInnerHeight / 2
+		if(_scrollYAmmount > windowHeight / 2 || _scrollYAmmount < -windowHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowHeight / 2
 			let _scrollDirection = Math.sign(_scrollYAmmount);																										//1 if the scrolling is going downwards -1 otherwise.
-			let _pageOffset = _scrollDirection * (currentPageIndex * windowInnerHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
+			let _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
 			if(_pageOffset != 0)
-				if(-_pageOffset < windowInnerHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
+				if(-_pageOffset < windowHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
 					smoothScrollVertically(Math.sign(_scrollDirection * _pageOffset), Math.abs(_pageOffset));
-				else  																																														//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
-					smoothScrollVertically(Math.sign(_scrollDirection * (windowInnerHeight + _pageOffset)), windowInnerHeight + _pageOffset);
+				else  																																														//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
+					smoothScrollVertically(Math.sign(_scrollDirection * (windowHeight + _pageOffset)), windowHeight + _pageOffset);
 		}
 	}
 
@@ -548,7 +548,7 @@ if(!browserIsSafari()) {
 		 */
 		let _maxAnimationFramesNumber = MAX_SCROLLING_ANIMATION_FRAMES;
 		let _scrollDistance = totalScrollAmmount / _maxAnimationFramesNumber;
-		let _currentPagesGapNumber = totalScrollAmmount / windowInnerHeight;
+		let _currentPagesGapNumber = totalScrollAmmount / windowHeight;
 
 		let _speedIncrease = MAX_SPEED_INCREASE - (_currentPagesGapNumber * (MAX_SPEED_INCREASE - MIN_SPEED_INCREASE) / MAX_PAGES_GAP_NUMBER);
 
@@ -559,7 +559,7 @@ if(!browserIsSafari()) {
 		 */
 		function _safariSmoothPageScroll() {
 			if(_scrollDistance > 0) {
-				windowScrollYBy(window.scrollY + scrollDirection * _scrollDistance);
+				windowScrollYBy(scrollDirection * _scrollDistance);
 				_partialScrollAmmount += _scrollDistance;
 
 				if(_maxAnimationFramesNumber - _speedIncrease > MIN_SCROLLING_ANIMATION_FRAMES)
@@ -587,9 +587,9 @@ if(!browserIsSafari()) {
 	var pageLinkClicked = false;
 	function pageLinksSmoothScroll(pageLink) {
 		let _windowScrollY = window.scrollY;
-		currentPageIndex = Math.round(_windowScrollY / windowInnerHeight);
+		currentPageIndex = Math.round(_windowScrollY / windowHeight);
 		let _targetPageIndex = pageLink.dataset.pageNumber;																								//The index of the page that the passed pageLink refers to
-		let _totalScrollAmmount = _targetPageIndex * windowInnerHeight - _windowScrollY;
+		let _totalScrollAmmount = _targetPageIndex * windowHeight - _windowScrollY;
 		smoothScrollVertically(Math.sign(_totalScrollAmmount), Math.abs(_totalScrollAmmount));						// Only defined if the browser used is Safari
 	}
 }
@@ -605,49 +605,51 @@ function imageLoading() {
 	function _changeWebsiteBackgroundTheme() {
 		backgroundElement.style.backgroundImage = "url(" + computedStyle.getPropertyValue("--theme-background-preview-image-url") + ")";
 
-		let backgroundImage = new Image();
-		backgroundImage.src = computedStyle.getPropertyValue("--theme-background-image-url");
-		backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => backgroundElement.style.backgroundImage = "url(" + backgroundImage.src + ")"), {passive:true});
+		let _backgroundImage = new Image();
+		_backgroundImage.src = computedStyle.getPropertyValue("--theme-background-image-url");
+		_backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => backgroundElement.style.backgroundImage = "url(" + _backgroundImage.src + ")"), {passive:true});
 	}
 
 	_changeWebsiteBackgroundTheme();
 	window.matchMedia("(prefers-color-scheme:dark)").addListener(_changeWebsiteBackgroundTheme);
 
-	let profilePicElement = document.getElementById("profilePic");
-	let profileImageLoaded = new Image();
-	profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";
-	profileImageLoaded.addEventListener("load", () => window.requestAnimationFrame(() => profilePicElement.src = profileImageLoaded.src), {passive:true});
+	let _profilePicElement = document.getElementById("profilePic");
+	let _profileImageLoaded = new Image();
+	_profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";
+	_profileImageLoaded.addEventListener("load", () => window.requestAnimationFrame(() => _profilePicElement.src = _profileImageLoaded.src), {passive:true});
 }
 
 /*
  * This Function:
- * - calls the _update function when necessary in order to udate the windowInnerHeight and windowInnerWidth values
+ * - calls the _update function when necessary in order to udate the windowHeight and windowWidth values
  * - checks if the page can go to the mobileMode and set the javascript mobileMode variable accordingly
  * - if needed calculates the window's offset between the previous height and the new one to adjust animation without triggering any layout shift
  */
 function updateWindowSize(){
-	function _update(currentWindowInnerHeight) {
-			windowInnerHeightOffset = 0;
-			windowInnerHeight = currentWindowInnerHeight;
-			document.documentElement.style.setProperty("--vh", windowInnerHeight * 0.01 + "px");
-			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
-			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowInnerHeight;
-			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowInnerHeight;
-			MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowInnerHeight;
+	function _update(currentwindowHeight) {
+			windowHeightOffset = 0;
+			windowHeight = currentwindowHeight;
+			document.documentElement.style.setProperty("--vh", windowHeight * 0.01 + "px");
+			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
+			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
+			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowHeight;
+			MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowHeight;
 	}
 
 	window.requestAnimationFrame(() => {
-		let _currentWindowInnerHeight = window.innerHeight;
-		if(_currentWindowInnerHeight >= windowInnerHeight + windowInnerHeightOffset)		//If the window gets higher all the variables are always updated
-			_update(_currentWindowInnerHeight);
-		else if(window.innerWidth > windowInnerWidth) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
-			_update(_currentWindowInnerHeight);
-		else //If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
-			windowInnerHeightOffset = _currentWindowInnerHeight - windowInnerHeight;
-
-		document.documentElement.style.setProperty("--window-inner-height-offset", windowInnerHeightOffset + "px"); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowInnerHeightOffset != 0
-		windowInnerWidth = window.innerWidth;
-		mobileMode = (windowInnerWidth < 1081) ? 1 : 0;
+		let _currentwindowHeight = window.outerHeight;
+		let _currentwindowWidth = window.outerWidth;
+		if(_currentwindowHeight >= windowHeight + windowHeightOffset)		//If the window gets higher all the variables are always updated
+			_update(_currentwindowHeight);
+		else if(_currentwindowWidth >= windowWidth && _currentwindowWidth >= _currentwindowHeight) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
+			_update(_currentwindowHeight);
+		else {//If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
+			windowHeightOffset = _currentwindowHeight - windowHeight;
+			windowScrollYBy(-windowHeightOffset / 2);
+		}
+		document.documentElement.style.setProperty("--window-inner-height-offset", windowHeightOffset + "px"); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowHeightOffset != 0
+		windowWidth = window.outerWidth;
+		mobileMode = (windowWidth < 1081) ? 1 : 0;
 	});
 }
 
@@ -683,7 +685,7 @@ var _scroll = 0;
 var _scrollDirectionTest = 1;
 function scrollTest(_scrollDirectionTest) {
 	if(_scroll < 10){
-		windowScrollYBy(window.scrollY + _scrollDirectionTest * windowInnerHeight / 4 + _scrollDirectionTest);
+		windowScrollYBy(_scrollDirectionTest * windowHeight / 4 + _scrollDirectionTest);
 		_scroll++;
 		setTimeout(() => scrollTest(-_scrollDirectionTest), 2000);
 	}

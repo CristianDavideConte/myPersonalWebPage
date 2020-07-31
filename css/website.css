@@ -12,8 +12,8 @@
 
 :root {
   --vh:1vh;
-  --50vh:calc(var(--vh, 1vh) * 50);
-  --100vh:calc(var(--vh, 1vh) * 100);
+  --50vh:calc(var(--vh) * 50);
+  --100vh:calc(var(--vh) * 100);
 
 	--header-elements-height:4rem;
 	--header-elements-padding:1rem;
@@ -132,6 +132,11 @@
 		--scaling-factor-increase:1.1;
 		--scaling-factor-decrease:0.9;
 	}
+
+  .websitePreview:hover {
+  	-webkit-transform:scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
+  	transform:scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
+  }
 }
 
 * {
@@ -190,8 +195,8 @@ h1, h2 {
 #bodyBackground {
 	position:fixed;
   margin: -1%;
-  width:102%;
-  height:102%;
+  width:120%;
+  height:120%;
 	background-repeat:no-repeat;
 	background-size:cover;
 	background-position:50% 0%;
@@ -476,11 +481,6 @@ h1, h2 {
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
 	transition:opacity 0s, transform var(--transition-time-quick);
-}
-
-.websitePreview:hover {
-	-webkit-transform:scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
-	transform:scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
 }
 
 .websitePreview.expandedState {
