@@ -17,6 +17,7 @@ var websitePreviewExpandedMap; 											//A map which contains all the already
 var computedStyle;																	//All the computed styles for the document.body element
 var presentationCardHeight;													//The --presentationCard-height css variable, used to calculate the scale factor of the websitePreviews expansion animation
 var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
+var documentElement; 																//A shorthand for document.documentElement, used for getting the browser's inner dimensions and computed styles
 var windowWidth;																		//A shortcut for the DOM element window.innerWidth
 var windowHeight;																		//A shortcut for the DOM element window.innerHeight
 var windowHeightOffset;															//The difference between the previous windowHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
@@ -59,6 +60,8 @@ function variableInitialization() {
 	computedStyle = getComputedStyle(documentBodyElement);
 	presentationCardHeight = computedStyle.getPropertyValue("--presentationCard-height").replace("vmin", "");
 	transitionTimeMedium = computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
+
+	documentElement = document.documentElement;
 
 	windowWidth = 0;
 	windowHeight = 0;
@@ -627,7 +630,7 @@ function updateWindowSize(){
 	function _update(currentwindowHeight) {
 			windowHeightOffset = 0;
 			windowHeight = currentwindowHeight;
-			document.documentElement.style.setProperty("--vh", windowHeight * 0.01 + "px");
+			documentElement.style.setProperty("--vh", windowHeight * 0.01 + "px");
 			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
 			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
 			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowHeight;
@@ -635,17 +638,19 @@ function updateWindowSize(){
 	}
 
 	window.requestAnimationFrame(() => {
-		let _currentwindowHeight = (browserIsSafari) ? window.innerHeight : window.outerHeight;
-		let _currentwindowWidth = (browserIsSafari) ? window.innerWidth : window.outerWidth;
+		let _currentwindowHeight = documentElement.clientHeight;
+		let _currentwindowWidth = documentElement.clientWidth;
+
 		if(_currentwindowHeight >= windowHeight + windowHeightOffset)		//If the window gets higher all the variables are always updated
 			_update(_currentwindowHeight);
 		else if(_currentwindowWidth >= windowWidth && _currentwindowWidth >= _currentwindowHeight) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
 			_update(_currentwindowHeight);
-		else {//If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
+		else {			//If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
 			windowHeightOffset = _currentwindowHeight - windowHeight;
 			windowScrollYBy(-windowHeightOffset / 2);
 		}
-		document.documentElement.style.setProperty("--window-inner-height-offset", windowHeightOffset + "px"); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowHeightOffset != 0
+
+		documentElement.style.setProperty("--window-inner-height-offset", windowHeightOffset + "px"); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowHeightOffset != 0
 		windowWidth = window.outerWidth;
 		mobileMode = (windowWidth < 1081) ? 1 : 0;
 	});
