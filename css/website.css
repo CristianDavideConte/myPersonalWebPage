@@ -84,46 +84,46 @@
   --dark-theme-background-image-url: ./images/backgroundImages/smoke_Dark_Blurred.jpg;
 	--dark-theme-background-color: rgba(0,0,0,1);
 
-	--theme-blur-background-color-Black: var(--light-theme-blur-background-color-Black);
-	--theme-blur-background-color-White: var(--light-theme-blur-background-color-White);
-	--theme-blur-background-color-Darkest: var(--light-theme-blur-background-color-Darkest);
-	--theme-blur-background-color-Dark: var(--light-theme-blur-background-color-Dark);
-	--theme-blur-background-color-Average: var(--light-theme-blur-background-color-Average);
-	--theme-blur-background-color-Bright: var(--light-theme-blur-background-color-Bright);
-	--theme-blur-background-color-Brightest: var(--light-theme-blur-background-color-Brightest);
-	--theme-box-shadow: var(--light-theme-box-shadow);
-	--theme-text-color-shadow: var(--light-theme-text-color-shadow);
-	--theme-text-color: var(--light-theme-text-color);
-	--theme-text-color-disabled: var(--light-theme-text-color-disabled);
-	--theme-githubContact-background-color: var(--light-theme-githubContact-background-color);
-	--theme-facebookContact-background-color: var(--light-theme-facebookContact-background-color);
-	--theme-instagramContact-background-color: var(--light-theme-instagramContact-background-color);
-	--theme-mailContact-background-color: var(--light-theme-mailContact-background-color);
-  --theme-background-preview-image-url: var(--light-theme-background-preview-image-url);
-  --theme-background-image-url: var(--light-theme-background-image-url);
-  --theme-background-color: var(--light-theme-background-color);
+  --theme-blur-background-color-Black: var(--dark-theme-blur-background-color-Black);
+  --theme-blur-background-color-White: var(--dark-theme-blur-background-color-White);
+  --theme-blur-background-color-Darkest: var(--dark-theme-blur-background-color-Darkest);
+  --theme-blur-background-color-Dark: var(--dark-theme-blur-background-color-Dark);
+  --theme-blur-background-color-Average: var(--dark-theme-blur-background-color-Average);
+  --theme-blur-background-color-Bright: var(--dark-theme-blur-background-color-Bright);
+  --theme-blur-background-color-Brightest: var(--dark-theme-blur-background-color-Brightest);
+  --theme-box-shadow: var(--dark-theme-box-shadow);
+  --theme-text-color-shadow: var(--dark-theme-text-color-shadow);
+  --theme-text-color: var(--dark-theme-text-color);
+  --theme-text-color-disabled: var(--dark-theme-text-color-disabled);
+  --theme-githubContact-background-color: var(--dark-theme-githubContact-background-color);
+  --theme-facebookContact-background-color: var(--dark-theme-facebookContact-background-color);
+  --theme-instagramContact-background-color: var(--dark-theme-instagramContact-background-color);
+  --theme-mailContact-background-color: var(--dark-theme-mailContact-background-color);
+  --theme-background-preview-image-url: var(--dark-theme-background-preview-image-url);
+  --theme-background-image-url: var(--dark-theme-background-image-url);
+  --theme-background-color: var(--dark-theme-background-color);
 }
 
-@media (prefers-color-scheme:dark) {
+@media (prefers-color-scheme:light) {
 	:root {
-		--theme-blur-background-color-Black: var(--dark-theme-blur-background-color-Black);
-		--theme-blur-background-color-White: var(--dark-theme-blur-background-color-White);
-		--theme-blur-background-color-Darkest: var(--dark-theme-blur-background-color-Darkest);
-		--theme-blur-background-color-Dark: var(--dark-theme-blur-background-color-Dark);
-		--theme-blur-background-color-Average: var(--dark-theme-blur-background-color-Average);
-  	--theme-blur-background-color-Bright: var(--dark-theme-blur-background-color-Bright);
-		--theme-blur-background-color-Brightest: var(--dark-theme-blur-background-color-Brightest);
-		--theme-box-shadow: var(--dark-theme-box-shadow);
-		--theme-text-color-shadow: var(--dark-theme-text-color-shadow);
-		--theme-text-color: var(--dark-theme-text-color);
-  	--theme-text-color-disabled: var(--dark-theme-text-color-disabled);
-		--theme-githubContact-background-color: var(--dark-theme-githubContact-background-color);
-		--theme-facebookContact-background-color: var(--dark-theme-facebookContact-background-color);
-		--theme-instagramContact-background-color: var(--dark-theme-instagramContact-background-color);
-		--theme-mailContact-background-color: var(--dark-theme-mailContact-background-color);
-    --theme-background-preview-image-url: var(--dark-theme-background-preview-image-url);
-    --theme-background-image-url: var(--dark-theme-background-image-url);
-    --theme-background-color: var(--dark-theme-background-color);
+    --theme-blur-background-color-Black: var(--light-theme-blur-background-color-Black);
+    --theme-blur-background-color-White: var(--light-theme-blur-background-color-White);
+    --theme-blur-background-color-Darkest: var(--light-theme-blur-background-color-Darkest);
+    --theme-blur-background-color-Dark: var(--light-theme-blur-background-color-Dark);
+    --theme-blur-background-color-Average: var(--light-theme-blur-background-color-Average);
+    --theme-blur-background-color-Bright: var(--light-theme-blur-background-color-Bright);
+    --theme-blur-background-color-Brightest: var(--light-theme-blur-background-color-Brightest);
+    --theme-box-shadow: var(--light-theme-box-shadow);
+    --theme-text-color-shadow: var(--light-theme-text-color-shadow);
+    --theme-text-color: var(--light-theme-text-color);
+    --theme-text-color-disabled: var(--light-theme-text-color-disabled);
+    --theme-githubContact-background-color: var(--light-theme-githubContact-background-color);
+    --theme-facebookContact-background-color: var(--light-theme-facebookContact-background-color);
+    --theme-instagramContact-background-color: var(--light-theme-instagramContact-background-color);
+    --theme-mailContact-background-color: var(--light-theme-mailContact-background-color);
+    --theme-background-preview-image-url: var(--light-theme-background-preview-image-url);
+    --theme-background-image-url: var(--light-theme-background-image-url);
+    --theme-background-color: var(--light-theme-background-color);
 	}
 }
 
