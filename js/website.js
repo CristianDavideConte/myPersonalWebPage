@@ -645,13 +645,11 @@ function updateWindowSize(){
 			_update(_currentwindowHeight);
 		else if(_currentwindowWidth >= windowWidth && _currentwindowWidth >= _currentwindowHeight) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
 			_update(_currentwindowHeight);
-		else {			//If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
+		else 			//If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
 			windowHeightOffset = _currentwindowHeight - windowHeight;
-			windowScrollYBy(-windowHeightOffset / 2);
-		}
 
 		documentElement.style.setProperty("--window-inner-height-offset", windowHeightOffset + "px"); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowHeightOffset != 0
-		windowWidth = window.outerWidth;
+		windowWidth = _currentwindowWidth;
 		mobileMode = (windowWidth < 1081) ? 1 : 0;
 	});
 }
