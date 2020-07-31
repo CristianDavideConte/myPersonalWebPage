@@ -132,6 +132,11 @@
 		--scaling-factor-increase:1.1;
 		--scaling-factor-decrease:0.9;
 	}
+
+  .pageLink:hover .pageLinkBarOnHover,
+  .pageLink:active .pageLinkBarOnHover {
+  	width:100%;
+  }
 }
 
 * {
@@ -294,11 +299,6 @@ h1, h2 {
 	border-radius:1em;
 	background-color: var(--theme-text-color);
 	transition:0.3s;
-}
-
-.pageLink:focus .pageLinkBarOnHover,
-.pageLink:hover .pageLinkBarOnHover {
-	width:100%;
 }
 
 #socialNetworks {
