@@ -87,7 +87,29 @@ function variableInitialization() {
 
 /* This function binds all the HTML elements that can be interacted to their mouse and keyboard eventHandlers */
 function desktopEventListenerInitialization() {
+	let _isFingerDown = false;
+	documentBodyElement.addEventListener("touchstart", () => _isFingerDown = true, {passive:true});
+	documentBodyElement.addEventListener("touchend", () => _isFingerDown = false, {passive:true});
+
+	let _firstScrollYPosition = null;
+	let _smoothWebsiteShowcaseWheelScrollTimeout;
+	window.addEventListener("scroll", event => {
+			if(_firstScrollYPosition == null)
+				_firstScrollYPosition = window.scrollY;
+			else
+				clearTimeout(_smoothWebsiteShowcaseWheelScrollTimeout);
+
+			_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(function _checkFingerDown() {
+				if(_isFingerDown)
+					_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(_checkFingerDown, 100);
+				else {
+					smoothPageScroll(_firstScrollYPosition, window.scrollY);
+					_firstScrollYPosition = null;
+				}
+			}, 100);
+	}, {passive:true});
 	window.addEventListener("resize", updateWindowSize, {passive:true});
+
 	/*
 	 * The user can use the arrow keys to navigate the website.
 	 * Pressing the Arrow-up or the Arrow-left keys will trigger a scroll upwards by a scrollDistance of windowHeight
@@ -162,28 +184,6 @@ function desktopEventListenerInitialization() {
 	document.getElementById("facebookContact").addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"), {passive:true});
 	document.getElementById("mailContact").addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 
-	let _isFingerDown = false;
-	documentBodyElement.addEventListener("touchstart", () => _isFingerDown = true, {passive:true});
-	documentBodyElement.addEventListener("touchend", () => _isFingerDown = false, {passive:true});
-
-	let _firstScrollYPosition = null;
-	let _smoothWebsiteShowcaseWheelScrollTimeout;
-	window.addEventListener("scroll", event => {
-			if(_firstScrollYPosition == null)
-				_firstScrollYPosition = window.scrollY;
-			else
-				clearTimeout(_smoothWebsiteShowcaseWheelScrollTimeout);
-
-			_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(function _checkFingerDown() {
-				if(_isFingerDown)
-					_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(_checkFingerDown, 100);
-				else {
-					smoothPageScroll(_firstScrollYPosition, window.scrollY);
-					_firstScrollYPosition = null;
-				}
-			}, 100);
-	}, {passive:true});
-
 	websiteShowcase.addEventListener("wheel", event => {
 		event.preventDefault();
 		let _scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
@@ -224,13 +224,25 @@ function desktopEventListenerInitialization() {
 		window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(-1));
 	}, {passive:true});
 
+	carouselButtons[0].addEventListener("touchstart", () => {
+		_carouselButtonScrollEnabled = true;
+		window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(-1));
+	}, {passive:true});
+
 	carouselButtons[1].addEventListener("mousedown", () => {
 		_carouselButtonScrollEnabled = true;
 		window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(1));
 	}, {passive:true});
 
+	carouselButtons[1].addEventListener("touchstart", () => {
+		_carouselButtonScrollEnabled = true;
+		window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(1));
+	}, {passive:true});
+
 	carouselButtons[0].addEventListener("mouseup", () => _carouselButtonScrollEnabled = false, {passive:true});
+	carouselButtons[0].addEventListener("touchend", () => _carouselButtonScrollEnabled = false, {passive:true});
 	carouselButtons[1].addEventListener("mouseup", () => _carouselButtonScrollEnabled = false, {passive:true});
+	carouselButtons[1].addEventListener("touchend", () => _carouselButtonScrollEnabled = false, {passive:true});
 
 	for(const websitePreview of websitePreviews) {
 		/* First, all the websitePreviewExpanded basic components are created */
