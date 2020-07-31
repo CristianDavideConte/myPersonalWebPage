@@ -373,7 +373,7 @@ h1, h2 {
 }
 
 .pageSeparator {
-	border-radius:10px;
+  border-radius: 5rem;
 	height:0.7%;
 	width:20%;
 	margin:auto auto 0 auto;
