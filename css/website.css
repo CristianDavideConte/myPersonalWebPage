@@ -160,7 +160,8 @@
 }
 
 /* Scrollbar - Handle on hover */
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
   background: var(--theme-blur-background-color-Dark);
 }
 
