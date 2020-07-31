@@ -9,6 +9,7 @@ var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that
 var MIN_SPEED_INCREASE;																//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
 var MAX_SPEED_INCREASE;																//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
 
+var windowScrollYBy; 																//A shorthand for the y => window.scroll(0,y) function, used to scroll the window without the user's interaction
 var mobileMode; 																		//Indicates if the css for mobile is currently being applied
 var safariBrowserUsed;															//A Boolean which is true if the browser used is Apple's Safari, false otherwise
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
@@ -72,7 +73,8 @@ function variableInitialization() {
 	headerElement = document.getElementById("header");
 	hamburgerMenuElement = document.getElementById("hamburgerMenu");
 	pageLinksElements = document.getElementsByClassName("pageLink");
-	contentElement = document.getElementById("content");
+	//contentElement = document.getElementById("content");
+	windowScrollYBy = (y) => window.scroll(0,y);
 	websiteShowcase = document.getElementById("websiteShowcase");
 	carouselButtons = document.getElementsByClassName("carouselButton");
 	websitePreviews = document.getElementsByClassName("websitePreview");
@@ -96,10 +98,12 @@ function desktopEventListenerInitialization() {
 			if(event.target.tagName == "BODY") {
 				let _keyName = event.key;
 				if(_keyName == "ArrowUp" || _keyName == "ArrowLeft") {
-					contentElement.scrollTop -= windowInnerHeight;
+					//contentElement.scrollTop -= windowInnerHeight;
+					windowScrollYBy(window.scrollY - windowInnerHeight);
 					event.preventDefault();
 				} else if(_keyName == "ArrowDown" || _keyName == "ArrowRight") {
-					contentElement.scrollTop += windowInnerHeight;
+					//contentElement.scrollTop += windowInnerHeight;
+					windowScrollYBy(window.scrollY + windowInnerHeight);
 					event.preventDefault();
 				}
 			}
@@ -160,14 +164,18 @@ function desktopEventListenerInitialization() {
 	document.getElementById("mailContact").addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 
 	let _isFingerDown = false;
-	contentElement.addEventListener("touchstart", () => _isFingerDown = true, {passive:true});
-	contentElement.addEventListener("touchend", () => _isFingerDown = false, {passive:true});
+	//contentElement.addEventListener("touchstart", () => _isFingerDown = true, {passive:true});
+	//contentElement.addEventListener("touchend", () => _isFingerDown = false, {passive:true});
+
+	documentBodyElement.addEventListener("touchstart", () => _isFingerDown = true, {passive:true});
+	documentBodyElement.addEventListener("touchend", () => _isFingerDown = false, {passive:true});
 
 	let _firstScrollYPosition = null;
 	let _smoothWebsiteShowcaseWheelScrollTimeout;
-	contentElement.addEventListener("scroll", event => {
+	//contentElement.addEventListener("scroll", event => {
+	window.addEventListener("scroll", event => {
 			if(_firstScrollYPosition == null)
-				_firstScrollYPosition = contentElement.scrollTop;
+				_firstScrollYPosition = window.scrollY;//_firstScrollYPosition = contentElement.scrollTop;
 			else
 				clearTimeout(_smoothWebsiteShowcaseWheelScrollTimeout);
 
@@ -175,7 +183,8 @@ function desktopEventListenerInitialization() {
 				if(_isFingerDown)
 					_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(_checkFingerDown, 100);
 				else {
-					smoothPageScroll(_firstScrollYPosition, contentElement.scrollTop);
+					//smoothPageScroll(_firstScrollYPosition, contentElement.scrollTop);
+					smoothPageScroll(_firstScrollYPosition, window.scrollY);
 					_firstScrollYPosition = null;
 				}
 			}, 100);
@@ -291,7 +300,8 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top - windowInnerHeightOffset / 2 + "px");
+		//		_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top - windowInnerHeightOffset / 2 + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowInnerHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor",  _presentationCardHeightValue / _websitePreviewCurrentSize);
@@ -337,7 +347,8 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top - windowInnerHeightOffset / 2 + "px");
+				//_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top - windowInnerHeightOffset / 2 + "px");
+				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowInnerHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor", _presentationCardHeightValue / _websitePreviewCurrentSize);
@@ -498,9 +509,11 @@ if(!browserIsSafari()) {
 
 			if(_pageOffset != 0)
 				if(-_pageOffset < windowInnerHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
-					contentElement.scrollTop += _scrollDirection * _pageOffset;
+					//contentElement.scrollTop += _scrollDirection * _pageOffset;
+					windowScrollYBy(window.scrollY + _scrollDirection * _pageOffset);
 				else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
-					contentElement.scrollTop += _scrollDirection * (windowInnerHeight + _pageOffset);
+					//contentElement.scrollTop += _scrollDirection * (windowInnerHeight + _pageOffset);
+					windowScrollYBy(window.scrollY + _scrollDirection * (windowInnerHeight + _pageOffset));
 		}
 	}
 } else {
@@ -558,7 +571,8 @@ if(!browserIsSafari()) {
 		 */
 		function _safariSmoothPageScroll() {
 			if(_scrollDistance > 0) {
-				contentElement.scrollTop += scrollDirection * _scrollDistance;
+				//contentElement.scrollTop += scrollDirection * _scrollDistance;
+				windowScrollYBy(window.scrollY + scrollDirection * _scrollDistance);
 				_partialScrollAmmount += _scrollDistance;
 
 				if(_maxAnimationFramesNumber - _speedIncrease > MIN_SCROLLING_ANIMATION_FRAMES)
@@ -585,10 +599,11 @@ if(!browserIsSafari()) {
 	 */
 	var pageLinkClicked = false;
 	function pageLinksSmoothScroll(pageLink) {
-		let _contentElementScrollTop = contentElement.scrollTop;
-		currentPageIndex = Math.round(_contentElementScrollTop / windowInnerHeight);
+		//let _contentElementScrollTop = contentElement.scrollTop;
+		let _contentElementScrollY = window.scrollY;
+		currentPageIndex = Math.round(_contentElementScrollY / windowInnerHeight);
 		let _targetPageIndex = pageLink.dataset.pageNumber;																								//The index of the page that the passed pageLink refers to
-		let _totalScrollAmmount = _targetPageIndex * windowInnerHeight - _contentElementScrollTop;
+		let _totalScrollAmmount = _targetPageIndex * windowInnerHeight - _contentElementScrollY;
 		smoothScrollVertically(Math.sign(_totalScrollAmmount), Math.abs(_totalScrollAmmount));						// Only defined if the browser used is Safari
 	}
 }
@@ -682,7 +697,8 @@ var _scroll = 0;
 var _scrollDirectionTest = 1;
 function scrollTest(_scrollDirectionTest) {
 	if(_scroll < 10){
-		contentElement.scrollTop += _scrollDirectionTest * windowInnerHeight / 4 + _scrollDirectionTest;
+		//contentElement.scrollTop += _scrollDirectionTest * windowInnerHeight / 4 + _scrollDirectionTest;
+		windowScrollYBy(window.scrollY + _scrollDirectionTest * windowInnerHeight / 4 + _scrollDirectionTest);
 		_scroll++;
 		setTimeout(() => scrollTest(-_scrollDirectionTest), 2000);
 	}
