@@ -1,11 +1,11 @@
 const STANDARD_WINDOW_INNER_HEIGHT = 937;							//The standard browser inner height, usually about 937px at 1920x1080
-const MIN_SCROLLING_ANIMATION_FRAMES_STANDARD = 7;		//The minumum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
-const MAX_SCROLLING_ANIMATION_FRAMES_STANDARD = 25;		//The maximum number of frames that the smoothScrollVertically function can use to scroll the contentElement if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
+const MIN_SCROLLING_ANIMATION_FRAMES_STANDARD = 7;		//The minumum number of frames that the smoothScrollVertically function can use to scroll the window if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
+const MAX_SCROLLING_ANIMATION_FRAMES_STANDARD = 25;		//The maximum number of frames that the smoothScrollVertically function can use to scroll the window if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
 const MIN_SPEED_INCREASE_STANDARD = 1;								//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
 const MAX_SPEED_INCREASE_STANDARD = 4;								//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function if the windowInnerHeight = STANDARD_WINDOW_INNER_HEIGHT
-const MAX_PAGES_GAP_NUMBER = 3;												//The maximum number of pages of the contentElement
-var MIN_SCROLLING_ANIMATION_FRAMES;										//The minumum number of frames that the smoothScrollVertically function can use to scroll the contentElement for the current windowInnerHeight value
-var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that the smoothScrollVertically function can use to scroll the contentElement for the current windowInnerHeight value
+const MAX_PAGES_GAP_NUMBER = 3;												//The maximum number of pages of the window
+var MIN_SCROLLING_ANIMATION_FRAMES;										//The minumum number of frames that the smoothScrollVertically function can use to scroll the window for the current windowInnerHeight value
+var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that the smoothScrollVertically function can use to scroll the window for the current windowInnerHeight value
 var MIN_SPEED_INCREASE;																//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
 var MAX_SPEED_INCREASE;																//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowInnerHeight value
 
@@ -29,7 +29,6 @@ var headerBackgroundElement;												//The HTML element with the id "headerBa
 var headerElement;																	//The HTML element with the id "header", used as the website navbar
 var hamburgerMenuElement;														//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px
 var pageLinksElements; 															//All HTML elements with the class "pageLink", shown in the header to navigate through the website' sections
-var contentElement;																	//The HTML element with the id "content", used as the website main container
 var websiteShowcase;																//The HTML element with the id "websiteShowcase", children of the websitePreviewCarousel HTML element and used as container for all the websitePreviews
 var carouselButtons;																//All HTML elements with the class "carouselButton", used to scroll the websitePreview carousel
 var websitePreviews;																//All HTML elements with the class "websitePreview", used as a clickable previews for all the projects inside the websitePreviewShowcase
@@ -52,6 +51,7 @@ function init() {
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
+	windowScrollYBy = (y) => window.scroll(0,y);
 	documentBodyElement = document.body;
 
 	websitePreviewExpandedMap = new Map();
@@ -73,8 +73,6 @@ function variableInitialization() {
 	headerElement = document.getElementById("header");
 	hamburgerMenuElement = document.getElementById("hamburgerMenu");
 	pageLinksElements = document.getElementsByClassName("pageLink");
-	//contentElement = document.getElementById("content");
-	windowScrollYBy = (y) => window.scroll(0,y);
 	websiteShowcase = document.getElementById("websiteShowcase");
 	carouselButtons = document.getElementsByClassName("carouselButton");
 	websitePreviews = document.getElementsByClassName("websitePreview");
@@ -98,11 +96,9 @@ function desktopEventListenerInitialization() {
 			if(event.target.tagName == "BODY") {
 				let _keyName = event.key;
 				if(_keyName == "ArrowUp" || _keyName == "ArrowLeft") {
-					//contentElement.scrollTop -= windowInnerHeight;
 					windowScrollYBy(window.scrollY - windowInnerHeight);
 					event.preventDefault();
 				} else if(_keyName == "ArrowDown" || _keyName == "ArrowRight") {
-					//contentElement.scrollTop += windowInnerHeight;
 					windowScrollYBy(window.scrollY + windowInnerHeight);
 					event.preventDefault();
 				}
@@ -139,7 +135,7 @@ function desktopEventListenerInitialization() {
 	 * When the website is in mobile mode the page links are hidden under the hamburgerMenu
 	 * which can be expanded by toggling the class "mobileExpanded" on the header.
 	 * Once it's expanded the pageLinks can be clicked to go to the relative website section.
-	 * Whenever a link is clicked and the contentElement is scrolled, it's convenient to hide all the links under the hamburgerMenu.
+	 * Whenever a link is clicked and the window is scrolled, it's convenient to hide all the links under the hamburgerMenu.
 	 * This is done the same way the hamburgerMenu expands when clicked directly (see above in the comment).
 	 * Plus, if safari needs a manual implementation for the smoothScroll CSS attribute.
 	 */
@@ -164,18 +160,14 @@ function desktopEventListenerInitialization() {
 	document.getElementById("mailContact").addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 
 	let _isFingerDown = false;
-	//contentElement.addEventListener("touchstart", () => _isFingerDown = true, {passive:true});
-	//contentElement.addEventListener("touchend", () => _isFingerDown = false, {passive:true});
-
 	documentBodyElement.addEventListener("touchstart", () => _isFingerDown = true, {passive:true});
 	documentBodyElement.addEventListener("touchend", () => _isFingerDown = false, {passive:true});
 
 	let _firstScrollYPosition = null;
 	let _smoothWebsiteShowcaseWheelScrollTimeout;
-	//contentElement.addEventListener("scroll", event => {
 	window.addEventListener("scroll", event => {
 			if(_firstScrollYPosition == null)
-				_firstScrollYPosition = window.scrollY;//_firstScrollYPosition = contentElement.scrollTop;
+				_firstScrollYPosition = window.scrollY;
 			else
 				clearTimeout(_smoothWebsiteShowcaseWheelScrollTimeout);
 
@@ -183,7 +175,6 @@ function desktopEventListenerInitialization() {
 				if(_isFingerDown)
 					_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(_checkFingerDown, 100);
 				else {
-					//smoothPageScroll(_firstScrollYPosition, contentElement.scrollTop);
 					smoothPageScroll(_firstScrollYPosition, window.scrollY);
 					_firstScrollYPosition = null;
 				}
@@ -300,7 +291,6 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-		//		_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top - windowInnerHeightOffset / 2 + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowInnerHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
@@ -327,6 +317,8 @@ function desktopEventListenerInitialization() {
 	 * Note that this bug wouldn't cause the page to instantly crash.
 	 */
 	let _websitePreviewExpandedBackgroundListenerTriggered = false;
+	websitePreviewExpandedBackgroundContentElement.addEventListener("touchmove", event => event.preventDefault(), {passive:false});
+	websitePreviewExpandedBackgroundContentElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});
 	websitePreviewExpandedBackgroundContentElement.addEventListener("click", () => {
 		event.stopPropagation();
 		if(!_websitePreviewExpandedBackgroundListenerTriggered) {
@@ -347,7 +339,6 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _presentationCardHeightValue = (windowInnerHeight < windowInnerWidth) ? windowInnerHeight * presentationCardHeight / 100 : windowInnerWidth * presentationCardHeight / 100;
 
-				//_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top - windowInnerHeightOffset / 2 + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowInnerHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
@@ -509,10 +500,8 @@ if(!browserIsSafari()) {
 
 			if(_pageOffset != 0)
 				if(-_pageOffset < windowInnerHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
-					//contentElement.scrollTop += _scrollDirection * _pageOffset;
 					windowScrollYBy(window.scrollY + _scrollDirection * _pageOffset);
 				else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowInnerHeight
-					//contentElement.scrollTop += _scrollDirection * (windowInnerHeight + _pageOffset);
 					windowScrollYBy(window.scrollY + _scrollDirection * (windowInnerHeight + _pageOffset));
 		}
 	}
@@ -520,7 +509,7 @@ if(!browserIsSafari()) {
 	/*
 	 * If the browser used is Safari, which doesn't support the CSS3 scroll-behavior:smooth getAttribute
 	 * the smoothPageScroll function is redifined and the smooth scrolling is done by using:
-	 * - smoothScrollVertically for a generic smooth scroll of the contentElement
+	 * - smoothScrollVertically for a generic smooth scroll of the window
 	 * - pageLinksSmoothScroll for the specific case of a pageLink clicked
 	 */
 	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
@@ -548,10 +537,9 @@ if(!browserIsSafari()) {
 		 * The velocity of the scrolling (scrollDistance) is calculated by following this formula:
 		 * _scrollDistance = remaningScrollAmmount / _maxAnimationFramesNumber
 		 * _maxAnimationFramesNumber = _maxAnimationFramesNumber - _speedIncrease -> until MAX_SCROLLING_ANIMATION_FRAMES is reached (Max velocity)
-		 * contentElement.scrollTop = scrollDirection * scrollDistance
 		 * Where:
 		 * remaningScrollAmmount = totalScrollAmmount - _partialScrollAmmount, ALWAYS POSITIVE
-		 * totalScrollAmmount = the absolute value of the offset the contentElement has to scroll vertically
+		 * totalScrollAmmount = the absolute value of the offset that the window has to scroll vertically
 		 * _partialScrollAmmount = the ammount of pixed scrolled from the first _safariSmoothPageScroll call
 		 * _maxAnimationFramesNumber = the highest number of frame the scrolling animation can use
 		 * _speedIncrease = a number which grows exponentially (_speedIncrease(n) = _speedIncrease(n-1)^2): it's value is contained between MIN_SPEED_INCREASE and MAX_SPEED_INCREASE
@@ -567,11 +555,10 @@ if(!browserIsSafari()) {
 		let _partialScrollAmmount = 0;
 		/*
 		 * This function should only be called inside the smoothScrollVertically function.
-		 * It physically scrolls the contentElement by scrollDistance in the given scrollDirection at each function call.
+		 * It physically scrolls the window by scrollDistance in the given scrollDirection at each function call.
 		 */
 		function _safariSmoothPageScroll() {
 			if(_scrollDistance > 0) {
-				//contentElement.scrollTop += scrollDirection * _scrollDistance;
 				windowScrollYBy(window.scrollY + scrollDirection * _scrollDistance);
 				_partialScrollAmmount += _scrollDistance;
 
@@ -599,11 +586,10 @@ if(!browserIsSafari()) {
 	 */
 	var pageLinkClicked = false;
 	function pageLinksSmoothScroll(pageLink) {
-		//let _contentElementScrollTop = contentElement.scrollTop;
-		let _contentElementScrollY = window.scrollY;
-		currentPageIndex = Math.round(_contentElementScrollY / windowInnerHeight);
+		let _windowScrollY = window.scrollY;
+		currentPageIndex = Math.round(_windowScrollY / windowInnerHeight);
 		let _targetPageIndex = pageLink.dataset.pageNumber;																								//The index of the page that the passed pageLink refers to
-		let _totalScrollAmmount = _targetPageIndex * windowInnerHeight - _contentElementScrollY;
+		let _totalScrollAmmount = _targetPageIndex * windowInnerHeight - _windowScrollY;
 		smoothScrollVertically(Math.sign(_totalScrollAmmount), Math.abs(_totalScrollAmmount));						// Only defined if the browser used is Safari
 	}
 }
@@ -697,7 +683,6 @@ var _scroll = 0;
 var _scrollDirectionTest = 1;
 function scrollTest(_scrollDirectionTest) {
 	if(_scroll < 10){
-		//contentElement.scrollTop += _scrollDirectionTest * windowInnerHeight / 4 + _scrollDirectionTest;
 		windowScrollYBy(window.scrollY + _scrollDirectionTest * windowInnerHeight / 4 + _scrollDirectionTest);
 		_scroll++;
 		setTimeout(() => scrollTest(-_scrollDirectionTest), 2000);

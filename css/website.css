@@ -63,6 +63,7 @@
 	--light-theme-mailContact-background-color: linear-gradient(35deg, rgba(255,248,0,1) 0%, rgba(255,99,0,1) 67%);
   --light-theme-background-preview-image-url: ./images/backgroundImages/smoke_Light_Compressed.jpg;
   --light-theme-background-image-url: ./images/backgroundImages/smoke_Light_Blurred.jpg;
+	--light-theme-background-color: rgba(255,255,255,1);
 
 	--dark-theme-blur-background-color-Black: rgba(0,0,0,1);
 	--dark-theme-blur-background-color-White: rgba(100,100,100,0.2);
@@ -81,6 +82,7 @@
 	--dark-theme-mailContact-background-color: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
   --dark-theme-background-preview-image-url: ./images/backgroundImages/smoke_Dark_Compressed.jpg;
   --dark-theme-background-image-url: ./images/backgroundImages/smoke_Dark_Blurred.jpg;
+	--dark-theme-background-color: rgba(0,0,0,1);
 
 	--theme-blur-background-color-Black: var(--light-theme-blur-background-color-Black);
 	--theme-blur-background-color-White: var(--light-theme-blur-background-color-White);
@@ -99,6 +101,7 @@
 	--theme-mailContact-background-color: var(--light-theme-mailContact-background-color);
   --theme-background-preview-image-url: var(--light-theme-background-preview-image-url);
   --theme-background-image-url: var(--light-theme-background-image-url);
+  --theme-background-color: var(--light-theme-background-color);
 }
 
 @media (prefers-color-scheme:dark) {
@@ -120,6 +123,7 @@
 		--theme-mailContact-background-color: var(--dark-theme-mailContact-background-color);
     --theme-background-preview-image-url: var(--dark-theme-background-preview-image-url);
     --theme-background-image-url: var(--dark-theme-background-image-url);
+    --theme-background-color: var(--dark-theme-background-color);
 	}
 }
 
@@ -138,31 +142,13 @@
 	user-drag:none !important;
 
 }
-/*
-html {
-	font-family:"Baloo Bhaina 2";
-	font-size:1.3vmin;
-	-webkit-touch-callout:none !important; /* iOS Safari /
-	-webkit-user-select:none !important; /* Safari /
-	-khtml-user-select:none !important; /* Konqueror HTML /
-	-moz-user-select:none !important; /* Old versions of Firefox /
-	-ms-user-select:none !important; /* Internet Explorer/Edge /
-	user-select:none !important; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox /
-}
-
-body {
-	margin:0;
-	width:100vw;
-	height:var(--100vh);
-	background-color: var(--theme-text-color);
-}*/
 
 html {
   margin:0;
   scroll-behavior:smooth;
   -ms-overflow-style:none !important;									/* Edge */
   scrollbar-width:none !important;									/* Firefox */
-	background-color: var(--theme-text-color);
+	background-color: var(--theme-background-color);
   font-family:"Baloo Bhaina 2";
 	font-size:1.3vmin;
 	-webkit-touch-callout:none !important; /* iOS Safari */
@@ -374,19 +360,6 @@ h1, h2 {
   opacity: 1;
 }
 
-#content {
-	width:100%;
-	height:100%;
-	overflow:auto;
-	scroll-behavior:smooth;
-	-ms-overflow-style:none !important;									/* Edge */
-	scrollbar-width:none !important;									/* Firefox */
-}
-
-#content::-webkit-scrollbar {
-	display:none;
-}
-
 .page {
   position: relative;
   width:100vw;
@@ -396,25 +369,8 @@ h1, h2 {
 	align-items:center;
 	justify-content:center;
   transition: var(--transition-time-quick);
-  //-webkit-transform: translate3d(0, var(--window-inner-height-offset), 0);
-  //transform: translate3d(0, var(--window-inner-height-offset), 0);
   transform-origin: top left;
 }
-
-/*
-.page {
-	width:100%;
-	height:100%;
-	display:flex;
-	flex-direction:column;
-	align-items:center;
-	justify-content:center;
-  transition: var(--transition-time-quick);
-  -webkit-transform: translate3d(0, var(--window-inner-height-offset), 0);
-  transform: translate3d(0, var(--window-inner-height-offset), 0);
-  transform-origin: top left;
-}
-*/
 
 .pageSeparator {
 	border-radius:10px;
