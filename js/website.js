@@ -17,9 +17,9 @@ var websitePreviewExpandedMap; 											//A map which contains all the already
 var computedStyle;																	//All the computed styles for the document.body element
 var presentationCardHeight;													//The --presentationCard-height css variable, used to calculate the scale factor of the websitePreviews expansion animation
 var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
-var windowWidth;																//A shortcut for the DOM element window.innerWidth
-var windowHeight;															//A shortcut for the DOM element window.innerHeight
-var windowHeightOffset;												//The difference between the previous windowHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
+var windowWidth;																		//A shortcut for the DOM element window.innerWidth
+var windowHeight;																		//A shortcut for the DOM element window.innerHeight
+var windowHeightOffset;															//The difference between the previous windowHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
 var documentBodyElement;														//A shortcut for the HTML element document.body
 var popUpMessageElement;														//The HTML element with the id "popUpMessage", used as a pop-up message container: a modal
 var popUpMessageTextElement;												//The HTML element with the id "popUpMessageText", used as the text shown in the popUpMessage HTML element
@@ -635,8 +635,8 @@ function updateWindowSize(){
 	}
 
 	window.requestAnimationFrame(() => {
-		let _currentwindowHeight = window.outerHeight;
-		let _currentwindowWidth = window.outerWidth;
+		let _currentwindowHeight = (browserIsSafari) ? window.innerHeight : window.outerHeight;
+		let _currentwindowWidth = (browserIsSafari) ? window.innerWidth : window.outerWidth;
 		if(_currentwindowHeight >= windowHeight + windowHeightOffset)		//If the window gets higher all the variables are always updated
 			_update(_currentwindowHeight);
 		else if(_currentwindowWidth >= windowWidth && _currentwindowWidth >= _currentwindowHeight) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode

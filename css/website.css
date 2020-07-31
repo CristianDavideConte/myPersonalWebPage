@@ -127,16 +127,11 @@
 	}
 }
 
-@media (hover:hover) {					/* Prevents touch devices to trigger the fake hover behaviour */
+@media (hover:hover) and (pointer: fine) {					/* Prevents touch devices to trigger the fake hover behaviour */
 	:root {
 		--scaling-factor-increase:1.1;
 		--scaling-factor-decrease:0.9;
 	}
-
-  .websitePreview:hover {
-  	-webkit-transform:scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
-  	transform:scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
-  }
 }
 
 * {
@@ -481,6 +476,11 @@ h1, h2 {
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
 	transition:opacity 0s, transform var(--transition-time-quick);
+}
+
+.websitePreview:hover {
+	-webkit-transform:scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
+	transform:scale3d(var(--scaling-factor-increase), var(--scaling-factor-increase), var(--scaling-factor-increase));
 }
 
 .websitePreview.expandedState {
