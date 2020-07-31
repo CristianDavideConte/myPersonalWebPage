@@ -638,7 +638,7 @@ function updateWindowSize(){
 
 	window.requestAnimationFrame(() => {
 		let _currentWindowInnerHeight = window.innerHeight;
-		if(_currentWindowInnerHeight > windowInnerHeight + windowInnerHeightOffset)		//If the window gets higher all the variables are always updated
+		if(_currentWindowInnerHeight >= windowInnerHeight + windowInnerHeightOffset)		//If the window gets higher all the variables are always updated
 			_update(_currentWindowInnerHeight);
 		else if(window.innerWidth > windowInnerWidth) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
 			_update(_currentWindowInnerHeight);

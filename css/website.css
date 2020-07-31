@@ -189,9 +189,9 @@ h1, h2 {
 
 #bodyBackground {
 	position:fixed;
-	margin:-0.5em;
-  width:101vw;
-  height:calc(var(--vh, 1vh) * 101);
+  margin: -1%;
+  width:102%;
+  height:102%;
 	background-repeat:no-repeat;
 	background-size:cover;
 	background-position:50% 0%;
