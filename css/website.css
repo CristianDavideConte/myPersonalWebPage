@@ -10,6 +10,16 @@
   font-display: swap;												/* Allow the default font to be visible while this one is loading */
 }
 
+@keyframes scrollDownButtonBounce {
+  0% {
+    transform: rotate3d(0,0,1,45deg) translate3d(-20%,-20%,0);
+  }
+
+  100% {
+      transform: rotate3d(0,0,1,45deg) translate3d(0,0,0);
+  }
+}
+
 :root {
   --vh:1vh;
   --50vh:calc(var(--vh) * 50);
@@ -39,6 +49,7 @@
 	--backdrop-filter-blur-radius-wide:2rem;
 	--backdrop-filter-blur-radius-ultra-wide:3rem;
 
+  --transition-time-slow:1s;
 	--transition-time:0.5s;
 	--transition-time-medium:0.4s;
 	--transition-time-quick:0.2s;
@@ -408,6 +419,49 @@ h1, h2 {
 	margin-top:auto;				/* Centers the title */
 }
 
+#scrollDownButton {
+  font-size:3em;
+  padding:0.5em;
+  margin: 0;
+  cursor:pointer;
+  border-radius:100%;
+  outline:none;
+  border:none;
+
+  background:var(--theme-blur-background-color-Brightest);
+  -webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+  box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+
+  -webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
+  backdrop-filter:blur(var(--backdrop-filter-blur-radius));
+
+  transition:transform var(--transition-time-quick);
+}
+
+#scrollDownButton:active {
+	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black) inset;
+	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black) inset;
+}
+
+#scrollDownButton::after {
+  content:"";
+  width: 1rem;
+  height: 1rem;
+  display: block;
+  border: 0.5rem solid rgba(0,0,0,0);
+  border-radius: 30%;
+  border-right-color: var(--theme-text-color);
+  border-bottom-color: var(--theme-text-color);
+
+  -webkit-transform: rotate3d(0,0,1,45deg);
+  transform: rotate3d(0,0,1,45deg);
+  animation: scrollDownButtonBounce var(--transition-time-slow) ease-out alternate infinite;
+}
+
+#scrollDownButton:active::after {
+    animation:none;
+}
+
 #profilePic {
 	z-index:1;
 	border-radius:100%;
@@ -420,16 +474,19 @@ h1, h2 {
 }
 
 #presentationCard {
+  overflow-x:hidden;
+  overflow-y:scroll;
+  border-radius:5%;
 	height:var(--presentationCard-height);
 	width:var(--presentationCard-width);
+
 	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
-	overflow-x:hidden;
-	overflow-y:scroll;
-	border-radius:5%;
+
 	background:var(--theme-blur-background-color-Bright);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-wide)) saturate(150%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-wide)) saturate(150%);
+
 	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height) / 2 - var(--profilePic-size) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
 	transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height) / 2 - var(--profilePic-size) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
 
@@ -442,9 +499,21 @@ h1, h2 {
 	display:none;
 }
 
-#presentationCard p {
+#presentationCard > * {
+  color:var(--theme-text-color);
+  text-shadow: none;
+  font-size: 2rem;
 	margin:calc(0.25 * var(--profilePic-size));
 	backface-visibility:hidden;						/* Blurry text fix */
+}
+
+#presentationCard > * strong {
+    font-size: 110%;
+}
+
+#presentationCard > h2 {
+  font-size: 3rem;
+	margin:calc(0.25 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size));
 }
 
 .projectsCarousel {
@@ -560,7 +629,7 @@ h1, h2 {
 .websitePreviewExpandedTitle {
   position: fixed;            /* This avoids layout shifts during the expandedState animation */
   white-space: nowrap;
-  font-size:3em;
+  font-size:3rem;
 	transition:all var(--transition-time-medium);
 	-webkit-transform: translate3d(0, calc(var(--websitePreview-current-size) / -3), 0) scale3d(0,0,0);
 	transform: translate3d(0, calc(var(--websitePreview-current-size) / -3), 0) scale3d(0,0,0);
@@ -569,8 +638,8 @@ h1, h2 {
 }
 
 .expandedState .websitePreviewExpandedTitle {
-	-webkit-transform: translate3d(0, calc(-5% - var(--presentationCard-height) / 3 / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1);
-	transform: translate3d(0, calc(-5% - var(--presentationCard-height) / 3 / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1);
+	-webkit-transform: translate3d(0, calc(-5% - var(--websitePreview-expanded-size) / 3 / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1);
+	transform: translate3d(0, calc(-5% - var(--websitePreview-expanded-size) / 3 / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1);
 }
 
 #websitePreviewExpandedButtonSection {
@@ -587,8 +656,8 @@ h1, h2 {
 }
 
 .expandedState #websitePreviewExpandedButtonSection {
-	-webkit-transform: translate3d(0, calc(var(--presentationCard-height) / 2 / var(--scale3dFactor) - 50% / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1);
-	transform: translate3d(0, calc(var(--presentationCard-height) / 2 / var(--scale3dFactor) - 50% / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1);
+	-webkit-transform: translate3d(0, calc(var(--websitePreview-expanded-size) / 2 / var(--scale3dFactor) - 50% / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1);
+	transform: translate3d(0, calc(var(--websitePreview-expanded-size) / 2 / var(--scale3dFactor) - 50% / var(--scale3dFactor)), 0) scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1);
 }
 
 .websitePreviewExpandedButton {
@@ -596,9 +665,9 @@ h1, h2 {
 	border:none;
 	cursor:pointer;
   white-space: nowrap;
-  font-size:3em;
+  font-size:3rem;
   padding:0.7em;
-  margin:0.7em 0 0.7em 0;
+  margin:5% 0 5% 0;
 	background:var(--theme-blur-background-color-White);
 	border-radius:var(--boxShapedElement-border-radius-wide);
 	-webkit-box-shadow: 0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
@@ -630,16 +699,16 @@ h1, h2 {
 	outline:none;
 	border:none;
 	background:var(--theme-blur-background-color-Brightest);
-	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);  		/**/
-	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);  		/**/
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
+	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 	transition:transform var(--transition-time-quick);
 }
 
 .carouselButton:active {
-	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black) inset;  		/**/
-	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black) inset;  		/**/
+	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black) inset;
+	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black) inset;
 }
 
 #contactMeForm {
@@ -854,9 +923,9 @@ h1, h2 {
 		opacity: 1;
 	}
 
-	#presentationCard p {
-		font-size:300%;
-	}
+  #presentationCard > * {
+    font-size: 3rem;
+  }
 
 	#websiteShowcase {
 		max-width:85%;
@@ -874,10 +943,9 @@ h1, h2 {
 		display:none;
 	}
 
-	.websitePreviewExpandedButton {
-		padding:1em;
-    font-size:3.5em;
-	}
+  .websitePreviewExpandedImage {
+    --scale3dFactor-Image: calc(1.5 / var(--scale3dFactor));
+  }
 
 	#contactMeForm {
 		width: 75%;

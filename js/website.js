@@ -15,7 +15,7 @@ var safariBrowserUsed;															//A Boolean which is true if the browser us
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
 var websitePreviewExpandedMap; 											//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
 var computedStyle;																	//All the computed styles for the document.body element
-var presentationCardHeight;													//The --presentationCard-height css variable, used to calculate the scale factor of the websitePreviews expansion animation
+var websitePreviewExpandedSize;											//The --websitePreview-expanded-size css variable, used to calculate the scale factor of the websitePreviews expansion animation
 var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
 var documentElement; 																//A shorthand for document.documentElement, used for getting the browser's inner dimensions and computed styles
 var windowWidth;																		//A shortcut for the DOM element window.innerWidth
@@ -58,7 +58,7 @@ function variableInitialization() {
 	websitePreviewExpandedMap = new Map();
 
 	computedStyle = getComputedStyle(documentBodyElement);
-	presentationCardHeight = computedStyle.getPropertyValue("--presentationCard-height").replace("vmin", "");
+	websitePreviewExpandedSize = computedStyle.getPropertyValue("--websitePreview-expanded-size").replace("vmin", "");
 	transitionTimeMedium = computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
 
 	documentElement = document.documentElement;
@@ -168,7 +168,7 @@ function desktopEventListenerInitialization() {
   	for(const pageLink of pageLinksElements)
 			 pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
 	else
-		for(const pageLink of pageLinksElements)
+		for(const pageLink of pageLinksElements) {
  			pageLink.addEventListener("click", event => {
 				event.preventDefault();
 				if(!pageLinkClicked) {
@@ -177,6 +177,13 @@ function desktopEventListenerInitialization() {
 					pageLinksSmoothScroll(pageLink);
 				}
 			}, {passive:false});
+
+			if(pageLink.dataset.pageNumber == 0)
+				document.getElementById("scrollDownButton").addEventListener("click", event => {
+					event.preventDefault();	
+					smoothScrollVertically(1, windowHeight);
+				}, {passive:false});
+		}
 
 	/* All the social networks icons are linked to the corresponding website */
 	document.getElementById("githubContact").addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
@@ -302,12 +309,12 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
 				let _documentBodyElementStyle = documentBodyElement.style;
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
-				let _presentationCardHeightValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * presentationCardHeight / 100 : windowWidth * presentationCardHeight / 100;
+				let _websitePreviewExpandedSizeValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * websitePreviewExpandedSize / 100 : windowWidth * websitePreviewExpandedSize / 100;
 
 				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
-				_documentBodyElementStyle.setProperty("--scale3dFactor",  _presentationCardHeightValue / _websitePreviewCurrentSize);
+				_documentBodyElementStyle.setProperty("--scale3dFactor",  _websitePreviewExpandedSizeValue / _websitePreviewCurrentSize);
 
 				let _websitePreviewImageBoundingRectangle = _websitePreviewImage.getBoundingClientRect();
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _websitePreviewImageBoundingRectangle.height + "px");
@@ -350,12 +357,12 @@ function desktopEventListenerInitialization() {
 				let _websitePreviewBoundingRectangle = _currentWebsitePreview.getBoundingClientRect();
 				let _documentBodyElementStyle = documentBodyElement.style;
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
-				let _presentationCardHeightValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * presentationCardHeight / 100 : windowWidth * presentationCardHeight / 100;
+				let _websitePreviewExpandedSizeValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * websitePreviewExpandedSize / 100 : windowWidth * websitePreviewExpandedSize / 100;
 
 				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + windowHeightOffset + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
-				_documentBodyElementStyle.setProperty("--scale3dFactor", _presentationCardHeightValue / _websitePreviewCurrentSize);
+				_documentBodyElementStyle.setProperty("--scale3dFactor", _websitePreviewExpandedSizeValue / _websitePreviewCurrentSize);
 
 				let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreviewImage.getBoundingClientRect();
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _currentWebsitePreviewImageBoundingRectangle.height + "px");
