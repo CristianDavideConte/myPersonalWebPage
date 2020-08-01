@@ -937,6 +937,8 @@ h1, h2 {
   }
 
   #scrollDownButton::after {
+    border-right-color: var(--dark-theme-text-color);
+    border-bottom-color: var(--dark-theme-text-color);
     width: 3rem;
     height: 3rem;
   }
