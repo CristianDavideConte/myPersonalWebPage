@@ -167,8 +167,13 @@ function desktopEventListenerInitialization() {
   if(!safariBrowserUsed)
   	for(const pageLink of pageLinksElements)
 			 pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
-	else
-		for(const pageLink of pageLinksElements) {
+	else {
+		document.getElementById("scrollDownButton").addEventListener("click", event => {
+			event.preventDefault();
+			smoothScrollVertically(1, windowHeight);
+		}, {passive:false});
+
+		for(const pageLink of pageLinksElements)
  			pageLink.addEventListener("click", event => {
 				event.preventDefault();
 				if(!pageLinkClicked) {
@@ -177,13 +182,7 @@ function desktopEventListenerInitialization() {
 					pageLinksSmoothScroll(pageLink);
 				}
 			}, {passive:false});
-
-			if(pageLink.dataset.pageNumber == 0)
-				document.getElementById("scrollDownButton").addEventListener("click", event => {
-					event.preventDefault();	
-					smoothScrollVertically(1, windowHeight);
-				}, {passive:false});
-		}
+	}
 
 	/* All the social networks icons are linked to the corresponding website */
 	document.getElementById("githubContact").addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
