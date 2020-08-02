@@ -84,7 +84,7 @@
 	--dark-theme-blur-background-color-Bright: rgba(0,0,0,0.35);
 	--dark-theme-blur-background-color-Brightest: rgba(0,0,0,0.3);
 	--dark-theme-box-shadow: none;
-	--dark-theme-text-shadow-color: rgba(50,50,50,1);
+	--dark-theme-text-shadow-color: rgba(0,0,0,0.7);
 	--dark-theme-text-shadow-color-inverted: rgba(200,200,200,1);
 	--dark-theme-text-color: rgba(255,255,255,1);
 	--dark-theme-text-color-disabled: rgba(255,255,255,0.5);
@@ -396,10 +396,6 @@ p {
 	background-size:auto 100%;
 	background-position:50% 0%;
   -webkit-background-clip:text;
-
-	//text-shadow:var(--text-shadow-offset) var(--text-shadow-offset) var(--text-shadow-radius) var(--dark-theme-text-shadow-color);
-  //text-shadow:var(--text-shadow-radius) var(--text-shadow-radius)  var(--text-shadow-radius) var(--theme-text-shadow-color),
-              calc(-1 * var(--text-shadow-radius)) calc(-1 * var(--text-shadow-radius)) var(--text-shadow-radius) var(--theme-text-shadow-color);
 }
 
 h1.title {
@@ -455,7 +451,6 @@ h2.title {
   height: 1.5rem;
   display: block;
   border: 0.5rem solid rgba(0,0,0,0);
-  border-radius: 20%;
   border-right-color: var(--theme-text-color);
   border-bottom-color: var(--theme-text-color);
 
@@ -929,6 +924,12 @@ h2.title {
 		opacity: 1;
 	}
 
+  .title {
+    color: var(--dark-theme-text-color);
+  	text-shadow:var(--text-shadow-offset) var(--text-shadow-offset) var(--text-shadow-radius) var(--dark-theme-text-shadow-color);
+    filter:none;
+  }
+
   #scrollDownButton {
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -945,6 +946,10 @@ h2.title {
   #scrollDownButton::after {
     width: 3rem;
     height: 3rem;
+    border-right-color: var(--dark-theme-text-color);
+    border-bottom-color: var(--dark-theme-text-color);
+    -webkit-box-shadow: none;
+    box-shadow: var(--box-shadow-radius) var(--box-shadow-radius) var(--box-shadow-radius) var(--theme-blur-background-color-Black);
   }
 
   #presentationCard > * {
