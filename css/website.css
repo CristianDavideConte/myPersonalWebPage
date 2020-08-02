@@ -41,7 +41,7 @@
 
 	--box-shadow-radius:0.5rem;
 	--text-shadow-offset:0.08em;
-	--text-shadow-radius:0.1em;
+	--text-shadow-radius:0.3rem;
 
   --backdrop-filter-blur-radius-ultra-reduced:1.3px;
 	--backdrop-filter-blur-radius-reduced:1rem;
@@ -65,15 +65,15 @@
 	--light-theme-blur-background-color-Bright: rgba(230,230,230,0.5);
 	--light-theme-blur-background-color-Brightest: rgba(200,200,200,0.4);
 	--light-theme-box-shadow:0 0 var(--box-shadow-radius) 0 rgba(50,50,50,1);
-	--light-theme-text-color-shadow: rgba(255,255,255,0.7);
+	--light-theme-text-shadow-color: rgba(200,200,200,1);
+	--light-theme-text-shadow-color-inverted: rgba(50,50,50,1);
 	--light-theme-text-color: rgba(0,0,0,1);
 	--light-theme-text-color-disabled: rgba(0,0,0,0.5);
 	--light-theme-githubContact-background-color: radial-gradient(circle, rgba(255,255,255,1) 58%, rgba(145,145,145,1) 60%);
 	--light-theme-facebookContact-background-color: linear-gradient(0deg, rgba(0,111,255,1) 26%, rgba(94,201,255,1) 100%);
 	--light-theme-instagramContact-background-color: linear-gradient(340deg, rgba(244,255,0,1) 0%, rgba(255,39,218,1) 58%, rgba(255,39,218,1) 72%, rgba(0,83,255,1) 99%);
 	--light-theme-mailContact-background-color: linear-gradient(35deg, rgba(255,248,0,1) 0%, rgba(255,99,0,1) 67%);
-  --light-theme-background-preview-image-url: ./images/backgroundImages/smoke_Light_Compressed.jpg;
-  --light-theme-background-image-url: ./images/backgroundImages/smoke_Light_Blurred.jpg;
+  --light-theme-background-image-base-url: ./images/backgroundImages/LightTheme/background_Light;  /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
 	--light-theme-background-color: rgba(255,255,255,1);
 
 	--dark-theme-blur-background-color-Black: rgba(0,0,0,1);
@@ -84,15 +84,15 @@
 	--dark-theme-blur-background-color-Bright: rgba(0,0,0,0.35);
 	--dark-theme-blur-background-color-Brightest: rgba(0,0,0,0.3);
 	--dark-theme-box-shadow: none;
-	--dark-theme-text-color-shadow: rgba(0,0,0,0.8);
+	--dark-theme-text-shadow-color: rgba(50,50,50,1);
+	--dark-theme-text-shadow-color-inverted: rgba(200,200,200,1);
 	--dark-theme-text-color: rgba(255,255,255,1);
 	--dark-theme-text-color-disabled: rgba(255,255,255,0.5);
 	--dark-theme-githubContact-background-color: radial-gradient(circle, rgba(30,30,30,1) 61%, rgba(57,57,57,1) 62%);
 	--dark-theme-facebookContact-background-color: linear-gradient(0deg, rgba(0,48,255,1) 0%, rgba(9,187,255,1) 100%);
 	--dark-theme-instagramContact-background-color: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
 	--dark-theme-mailContact-background-color: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
-  --dark-theme-background-preview-image-url: ./images/backgroundImages/smoke_Dark_Compressed.jpg;
-  --dark-theme-background-image-url: ./images/backgroundImages/smoke_Dark_Blurred.jpg;
+  --dark-theme-background-image-base-url: ./images/backgroundImages/DarkTheme/background_Dark;      /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
 	--dark-theme-background-color: rgba(0,0,0,1);
 
   --theme-blur-background-color-Black: var(--dark-theme-blur-background-color-Black);
@@ -103,15 +103,15 @@
   --theme-blur-background-color-Bright: var(--dark-theme-blur-background-color-Bright);
   --theme-blur-background-color-Brightest: var(--dark-theme-blur-background-color-Brightest);
   --theme-box-shadow: var(--dark-theme-box-shadow);
-  --theme-text-color-shadow: var(--dark-theme-text-color-shadow);
+  --theme-text-shadow-color: var(--dark-theme-text-shadow-color);
+  --theme-text-shadow-color-inverted: var(--dark-theme-text-shadow-color-inverted);
   --theme-text-color: var(--dark-theme-text-color);
   --theme-text-color-disabled: var(--dark-theme-text-color-disabled);
   --theme-githubContact-background-color: var(--dark-theme-githubContact-background-color);
   --theme-facebookContact-background-color: var(--dark-theme-facebookContact-background-color);
   --theme-instagramContact-background-color: var(--dark-theme-instagramContact-background-color);
   --theme-mailContact-background-color: var(--dark-theme-mailContact-background-color);
-  --theme-background-preview-image-url: var(--dark-theme-background-preview-image-url);
-  --theme-background-image-url: var(--dark-theme-background-image-url);
+  --theme-background-image-base-url: var(--dark-theme-background-image-base-url);
   --theme-background-color: var(--dark-theme-background-color);
 }
 
@@ -125,15 +125,15 @@
     --theme-blur-background-color-Bright: var(--light-theme-blur-background-color-Bright);
     --theme-blur-background-color-Brightest: var(--light-theme-blur-background-color-Brightest);
     --theme-box-shadow: var(--light-theme-box-shadow);
-    --theme-text-color-shadow: var(--light-theme-text-color-shadow);
+    --theme-text-shadow-color: var(--light-theme-text-shadow-color);
+    --theme-text-shadow-color-inverted: var(--light-theme-text-shadow-color-inverted);
     --theme-text-color: var(--light-theme-text-color);
     --theme-text-color-disabled: var(--light-theme-text-color-disabled);
     --theme-githubContact-background-color: var(--light-theme-githubContact-background-color);
     --theme-facebookContact-background-color: var(--light-theme-facebookContact-background-color);
     --theme-instagramContact-background-color: var(--light-theme-instagramContact-background-color);
     --theme-mailContact-background-color: var(--light-theme-mailContact-background-color);
-    --theme-background-preview-image-url: var(--light-theme-background-preview-image-url);
-    --theme-background-image-url: var(--light-theme-background-image-url);
+    --theme-background-image-base-url: var(--light-theme-background-image-base-url);
     --theme-background-color: var(--light-theme-background-color);
 	}
 }
@@ -204,20 +204,6 @@ body::-webkit-scrollbar {
 p {
 	margin:0;
 	font-size:190%;
-}
-
-h1 {
-	font-size:6em;
-}
-
-h2 {
-	font-size:2.5em;
-}
-
-h1, h2 {
-  margin:0;
-	color: var(--dark-theme-text-color);
-	text-shadow:var(--text-shadow-offset) var(--text-shadow-offset) var(--text-shadow-radius) var(--dark-theme-text-color-shadow);
 }
 
 #bodyBackground {
@@ -396,8 +382,34 @@ h1, h2 {
 	flex-direction:column;
 	align-items:center;
 	justify-content:center;
-  transition: var(--transition-time-quick);
-  transform-origin: top left;
+}
+
+.title {
+  width:100%;
+  text-align:center;
+  margin-top:auto;				/* Centers the title */
+
+  color: rgba(255,255,255,0.1);
+  filter: drop-shadow(var(--text-shadow-offset) var(--text-shadow-offset) var(--text-shadow-radius) var(--theme-blur-background-color-Black));
+  background-attachment: fixed;
+	background-repeat:no-repeat;
+	background-size:auto 100%;
+	background-position:50% 0%;
+  -webkit-background-clip:text;
+
+	//text-shadow:var(--text-shadow-offset) var(--text-shadow-offset) var(--text-shadow-radius) var(--dark-theme-text-shadow-color);
+  //text-shadow:var(--text-shadow-radius) var(--text-shadow-radius)  var(--text-shadow-radius) var(--theme-text-shadow-color),
+              calc(-1 * var(--text-shadow-radius)) calc(-1 * var(--text-shadow-radius)) var(--text-shadow-radius) var(--theme-text-shadow-color);
+}
+
+h1.title {
+  font-size: 7rem;
+  margin-bottom: 0;
+}
+
+h2.title {
+  font-size: 3rem;
+  margin: 0;
 }
 
 .pageSeparator {
@@ -411,12 +423,6 @@ h1, h2 {
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 	transition:0.3s;
-}
-
-.title {
-	width:100%;
-	text-align:center;
-	margin-top:auto;				/* Centers the title */
 }
 
 #scrollDownButton {
@@ -937,8 +943,6 @@ h1, h2 {
   }
 
   #scrollDownButton::after {
-    border-right-color: var(--dark-theme-text-color);
-    border-bottom-color: var(--dark-theme-text-color);
     width: 3rem;
     height: 3rem;
   }

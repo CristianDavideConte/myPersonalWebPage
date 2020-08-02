@@ -614,7 +614,9 @@ if(!browserIsSafari()) {
 }
 
 /*
- * This function asyncronusly load the content of the DOM img elements
+ * This function, accordingly to the user's preferred theme, asyncronusly load:
+ * - the src content of the <img> elements
+ * - background-image of the "title" classed elements
  * The full image is loaded when ready and not at the initial page loading.
  * Instead a lower resolution and blurry version of the image is loaded in the css file.
  * This allows the user to interact much quicker with the page and lowers the probability of a page crash.
@@ -622,15 +624,23 @@ if(!browserIsSafari()) {
  */
 function imageLoading() {
 	function _changeWebsiteBackgroundTheme() {
-		backgroundElement.style.backgroundImage = "url(" + computedStyle.getPropertyValue("--theme-background-preview-image-url") + ")";
+		let backgroundImageUrl = computedStyle.getPropertyValue("--theme-background-image-base-url");
+		let backgroundImageUrlCompressed = backgroundImageUrl + "_Compressed.jpg";
+		let backgroundImageUrlCompressedInverted = backgroundImageUrl + "_Compressed_Inverted.jpg";
+
+		backgroundElement.style.backgroundImage = "url(" + backgroundImageUrlCompressed + ")";
 
 		let _backgroundImage = new Image();
-		_backgroundImage.src = computedStyle.getPropertyValue("--theme-background-image-url");
+		_backgroundImage.src = backgroundImageUrl + ".jpg";
 		_backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => backgroundElement.style.backgroundImage = "url(" + _backgroundImage.src + ")"), {passive:true});
+
+		let titles = document.getElementsByClassName("title");
+		for(const title of titles)
+			title.style.backgroundImage = "url(" + backgroundImageUrlCompressedInverted + ")";
 	}
 
 	_changeWebsiteBackgroundTheme();
-	window.matchMedia("(prefers-color-scheme:dark)").addListener(_changeWebsiteBackgroundTheme);
+	window.matchMedia("(prefers-color-scheme:light)").addListener(_changeWebsiteBackgroundTheme);
 
 	let _profilePicElement = document.getElementById("profilePic");
 	let _profileImageLoaded = new Image();
