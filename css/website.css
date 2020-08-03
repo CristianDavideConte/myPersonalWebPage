@@ -988,6 +988,10 @@ h2.pageTitle {
 }
 
 @media only screen and (max-height:600px) {
+  :root {
+    --websitePreview-expanded-size:90vmin;
+  }
+
   .pageSeparator {
 		opacity:0;
 	}

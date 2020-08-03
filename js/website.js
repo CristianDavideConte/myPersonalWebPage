@@ -663,6 +663,8 @@ function updateWindowSize(){
 			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
 			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowHeight;
 			MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowHeight;
+			computedStyle = getComputedStyle(documentBodyElement);
+			websitePreviewExpandedSize = computedStyle.getPropertyValue("--websitePreview-expanded-size").replace("vmin", "");
 	}
 
 	window.requestAnimationFrame(() => {
