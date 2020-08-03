@@ -652,10 +652,11 @@ h2.pageTitle {
   position: fixed;            /* This avoids layout shifts during the expandedState animation */
   white-space: nowrap;
   font-size:3rem;
+  font-weight: bold;
 
   /* the *2 is due to the scale3dFactor-image having as the increasing factor 2 */
-	-webkit-transform: translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / -4), 0) scale3d(0,0,0);
-	transform: translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / -4), 0) scale3d(0,0,0);
+	-webkit-transform: scale3d(0, var(--scale3dFactor-Title), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / -4), 0);
+	transform: scale3d(0, var(--scale3dFactor-Title), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / -4), 0);
 	transition:all var(--transition-time-medium);
 
   --scale3dFactor-Title: calc(1 / var(--scale3dFactor));
@@ -673,8 +674,8 @@ h2.pageTitle {
   width: calc(100% * var(--scale3dFactor));
 
   /* the *2 is due to the scale3dFactor-image having as the increasing factor 2 */
-  -webkit-transform:translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / 4), 0) scale3d(0,0,0);
-	transform: translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / 4), 0) scale3d(0,0,0);
+  -webkit-transform: scale3d(0, var(--scale3dFactor-ButtonSection), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / 4), 0);
+	transform: scale3d(0, var(--scale3dFactor-ButtonSection), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / 4), 0);
 	transition:all var(--transition-time-medium);
 
   --scale3dFactor-ButtonSection: calc(1 / var(--scale3dFactor));
@@ -687,6 +688,7 @@ h2.pageTitle {
 
 .websitePreviewExpandedButton {
   font-family: "UniNeueLight";
+  font-weight: bold;
 	outline:none;
 	border:none;
 	cursor:pointer;
@@ -809,10 +811,12 @@ h2.pageTitle {
 	margin:auto;
 	width: 50%;
 	height: 10%;
-	background:var(--theme-blur-background-color-Dark);
+
 	-webkit-box-shadow:var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
+
+  background:var(--theme-blur-background-color-Dark);
+  -webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
 }
 
