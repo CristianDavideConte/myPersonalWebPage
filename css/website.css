@@ -1,12 +1,36 @@
 /*
- * The CSS style's elements are ordered from the most generic one (*) to the most specific one.
- * The CSS style's elements are also ordered from the ones you encounter first in the debugger view to the ones that are more nested/you encounter later.
+ * The CSS style's elements are ordered from the most generic one (*) to the most specific one (#idName.className).
+ * The CSS style's elements are also ordered from the ones you encounter first in the HTML (header) to the ones that are more nested/you encounter later (contactMeForm elements).
  */
 @font-face {
   font-family:"Baloo Bhaina 2";
   font-style:normal;
   font-weight:400;
   src:url("../fonts/BalooBhaina2/BalooBhaina2-Regular.ttf");
+  font-display: swap;												/* Allow the default font to be visible while this one is loading */
+}
+
+@font-face {
+  font-family:"ColorTube";
+  font-style:normal;
+  font-weight:400;
+  src:url("../fonts/ColorTube/ColorTube-Regular.ttf");
+  font-display: swap;												/* Allow the default font to be visible while this one is loading */
+}
+
+@font-face {
+  font-family:"UniNeueLight";
+  font-style:normal;
+  font-weight:400;
+  src:url("../fonts/UniNeue/UniNeue-Light.ttf");
+  font-display: swap;												/* Allow the default font to be visible while this one is loading */
+}
+
+@font-face {
+  font-family:"UniNeueHeavy";
+  font-style:italic;
+  font-weight:600;
+  src:url("../fonts/UniNeue/UniNeue-HeavyItalic.ttf");
   font-display: swap;												/* Allow the default font to be visible while this one is loading */
 }
 
@@ -34,7 +58,7 @@
 	--presentationCard-width:55vmin;
 
 	--websitePreview-size:15rem;
-  --websitePreview-expanded-size: 60vmin;
+  --websitePreview-expanded-size:65vmin;
 
 	--boxShapedElement-border-radius:1rem;
 	--boxShapedElement-border-radius-wide:2.5rem;
@@ -146,7 +170,8 @@
 
   .pageLink:hover .pageLinkBarOnHover,
   .pageLink:active .pageLinkBarOnHover {
-  	width:100%;
+    -webkit-transform: scale3d(1,1,1);
+    transform: scale3d(1,1,1);
   }
 }
 
@@ -182,7 +207,7 @@ html {
   -ms-overflow-style:none !important;									/* Edge */
   scrollbar-width:none !important;									/* Firefox */
 	background-color: var(--theme-background-color);
-  font-family:"Baloo Bhaina 2";
+  font-family: "UniNeueLight";
 	font-size:1.3vmin;
 	-webkit-touch-callout:none !important; /* iOS Safari */
 	-webkit-user-select:none !important; /* Safari */
@@ -303,16 +328,19 @@ p {
 	display:block;
 	text-align:center;
 	align-items:center;
-	margin:0px 1em 0px 1em;
+	margin:0 1em 0 1em;
 }
 
 .pageLinkBarOnHover {
-	width:0em;
-	height:0.3em;
+	width:100%;
+	height:0.15em;
 	margin:auto;
-	border-radius:1em;
+	border-radius:5rem;
 	background-color: var(--theme-text-color);
-	transition:0.3s;
+
+  -webkit-transform: scale3d(0,1,0);
+  transform: scale3d(0,1,0);
+	transition:var(--transition-time-medium);
 }
 
 #socialNetworks {
@@ -384,7 +412,8 @@ p {
 	justify-content:center;
 }
 
-.title {
+.pageTitle {
+  font-family: "UniNeueLight";
   width:100%;
   text-align:center;
   margin-top:auto;				/* Centers the title */
@@ -398,12 +427,12 @@ p {
   -webkit-background-clip:text;
 }
 
-h1.title {
+h1.pageTitle {
   font-size: 7rem;
   margin-bottom: 0;
 }
 
-h2.title {
+h2.pageTitle {
   font-size: 3rem;
   margin: 0;
 }
@@ -422,45 +451,27 @@ h2.title {
 }
 
 #scrollDownButton {
-  font-size:3rem;
-  padding:0.5em;
-  margin: 0;
+  position: absolute;
   cursor:pointer;
-  border-radius:100%;
   outline:none;
   border:none;
 
-  background:var(--theme-blur-background-color-Brightest);
-  -webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
-  box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
-
-  -webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
-  backdrop-filter:blur(var(--backdrop-filter-blur-radius));
-
-  transition:transform var(--transition-time-quick);
-}
-
-#scrollDownButton:active {
-	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black) inset;
-	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black) inset;
+  -webkit-transform: translate3d(0, calc(var(--100vh) / 4),0);
+  transform: translate3d(0, calc(var(--100vh) / 4),0);
 }
 
 #scrollDownButton::after {
   content:"";
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 4rem;
+  height: 4rem;
   display: block;
-  border: 0.5rem solid rgba(0,0,0,0);
-  border-right-color: var(--theme-text-color);
-  border-bottom-color: var(--theme-text-color);
+  border: 0.3rem solid rgba(0,0,0,0);
+  border-right-color: var(--theme-text-shadow-color);
+  border-bottom-color: var(--theme-text-shadow-color);
 
   -webkit-transform: rotate3d(0,0,1,45deg);
   transform: rotate3d(0,0,1,45deg);
   animation: scrollDownButtonBounce var(--transition-time-slow) ease-out alternate infinite;
-}
-
-#scrollDownButton:active::after {
-    animation:none;
 }
 
 #profilePic {
@@ -662,6 +673,7 @@ h2.title {
 }
 
 .websitePreviewExpandedButton {
+  font-family: "UniNeueLight";
 	outline:none;
 	border:none;
 	cursor:pointer;
@@ -721,13 +733,15 @@ h2.title {
 }
 
 #contactMeForm > label {
-	z-index:1;
+  font-family: "UniNeueLight";
+  z-index:1;
 	box-sizing: border-box;
 	display:flex;
 	align-items:center;
 	font-size: calc(var(--vh, 1vh) * 3.5);
 	margin: auto auto 0 auto;
 	padding: 0 10% 0 10%;
+	height: 8%;
 	border-radius:1rem;
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
@@ -740,6 +754,7 @@ h2.title {
 #contactMeFormEmail,
 #contactMeFormBody,
 #contactMeFormSendButton {
+  font-family: "UniNeueLight";
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	font-size: calc(var(--vh, 1vh) * 3);
@@ -768,7 +783,6 @@ h2.title {
 
 #contactMeFormEmail {
 	text-align:center;
-	font-family:"Baloo Bhaina 2";
 	height: 10%;
 }
 
@@ -924,32 +938,16 @@ h2.title {
 		opacity: 1;
 	}
 
-  .title {
+  .pageTitle {
+    filter:none;
     color: var(--dark-theme-text-color);
   	text-shadow:var(--text-shadow-offset) var(--text-shadow-offset) var(--text-shadow-radius) var(--dark-theme-text-shadow-color);
-    filter:none;
-  }
-
-  #scrollDownButton {
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    background: transparent;
-    -webkit-backdrop-filter:none;
-    backdrop-filter:none;
-  }
-
-  #scrollDownButton:active {
-    -webkit-box-shadow: none;
-    box-shadow: none;
   }
 
   #scrollDownButton::after {
-    width: 3rem;
-    height: 3rem;
-    border-right-color: var(--dark-theme-text-color);
-    border-bottom-color: var(--dark-theme-text-color);
-    -webkit-box-shadow: none;
-    box-shadow: var(--box-shadow-radius) var(--box-shadow-radius) var(--box-shadow-radius) var(--theme-blur-background-color-Black);
+    border: 0.6rem solid rgba(0,0,0,0);
+    border-right-color: var(--theme-text-shadow-color);
+    border-bottom-color: var(--theme-text-shadow-color);
   }
 
   #presentationCard > * {

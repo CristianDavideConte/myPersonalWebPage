@@ -275,7 +275,7 @@ function desktopEventListenerInitialization() {
 		let _dataCode = websitePreview.getAttribute("data-code");
 		if(_dataCode != null) {													//There could be a project that isn't open-source
 			let _viewCodeButton = document.createElement("button");
-			_viewCodeButton.innerHTML = "View Code";
+			_viewCodeButton.innerHTML = "VIEW CODE";
 			_viewCodeButton.className = "websitePreviewExpandedButton";
 			_viewCodeButton.addEventListener("click", () => window.open(_dataCode), {passive:true});
 			_viewButtonsSection.appendChild(_viewCodeButton);
@@ -284,7 +284,7 @@ function desktopEventListenerInitialization() {
 		let _dataDemo = websitePreview.getAttribute("data-demo");
 		if(_dataDemo != null) {													//There could be a project that hasn't got a demo ready yet
 			let _viewDemoButton = document.createElement("button");
-			_viewDemoButton.innerHTML = "View Demo";
+			_viewDemoButton.innerHTML = "PLAY DEMO";
 			_viewDemoButton.className = "websitePreviewExpandedButton";
 			_viewDemoButton.addEventListener("click", () => window.open(_dataDemo), {passive:true});
 			_viewButtonsSection.appendChild(_viewDemoButton);
@@ -634,9 +634,9 @@ function imageLoading() {
 		_backgroundImage.src = backgroundImageUrl + ".jpg";
 		_backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => backgroundElement.style.backgroundImage = "url(" + _backgroundImage.src + ")"), {passive:true});
 
-		let titles = document.getElementsByClassName("title");
-		for(const title of titles)
-			title.style.backgroundImage = "url(" + backgroundImageUrlCompressedInverted + ")";
+		let _pageTitles = document.getElementsByClassName("pageTitle");
+		for(const _pageTitle of _pageTitles)
+			_pageTitle.style.backgroundImage = "url(" + backgroundImageUrlCompressedInverted + ")";
 	}
 
 	_changeWebsiteBackgroundTheme();
