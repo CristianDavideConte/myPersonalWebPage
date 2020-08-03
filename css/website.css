@@ -27,6 +27,14 @@
 }
 
 @font-face {
+  font-family:"UniNeueBold";
+  font-style:normal;
+  font-weight:600;
+  src:url("../fonts/UniNeue/UniNeue-Bold.otf") format("opentype");
+  font-display: swap;												/* Allow the default font to be visible while this one is loading */
+}
+
+@font-face {
   font-family:"UniNeueHeavy";
   font-style:italic;
   font-weight:600;
@@ -413,7 +421,6 @@ p {
 }
 
 .pageTitle {
-  font-family: "UniNeueLight";
   width:100%;
   text-align:center;
   margin-top:auto;				/* Centers the title */
@@ -428,11 +435,13 @@ p {
 }
 
 h1.pageTitle {
+  font-family: "UniNeueLight";
   font-size: 7rem;
   margin-bottom: 0;
 }
 
 h2.pageTitle {
+  font-family: "UniNeueBold";
   font-size: 3rem;
   margin: 0;
 }
