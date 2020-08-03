@@ -265,7 +265,7 @@ function desktopEventListenerInitialization() {
 		if(_dataTitle != null) {
 			let _websitePreviewExpandedTitle = document.createElement("div");
 			_websitePreviewExpandedTitle.className = "websitePreviewExpandedTitle";
-			_websitePreviewExpandedTitle.innerHTML = _dataTitle;
+			_websitePreviewExpandedTitle.innerHTML = "<strong>" + _dataTitle + "</strong>";
 			_websitePreviewExpanded.appendChild(_websitePreviewExpandedTitle);
 		}
 
@@ -275,7 +275,7 @@ function desktopEventListenerInitialization() {
 		let _dataCode = websitePreview.getAttribute("data-code");
 		if(_dataCode != null) {													//There could be a project that isn't open-source
 			let _viewCodeButton = document.createElement("button");
-			_viewCodeButton.innerHTML = "VIEW CODE";
+			_viewCodeButton.innerHTML = "<strong>VIEW CODE</strong>";
 			_viewCodeButton.className = "websitePreviewExpandedButton";
 			_viewCodeButton.addEventListener("click", () => window.open(_dataCode), {passive:true});
 			_viewButtonsSection.appendChild(_viewCodeButton);
@@ -284,7 +284,7 @@ function desktopEventListenerInitialization() {
 		let _dataDemo = websitePreview.getAttribute("data-demo");
 		if(_dataDemo != null) {													//There could be a project that hasn't got a demo ready yet
 			let _viewDemoButton = document.createElement("button");
-			_viewDemoButton.innerHTML = "PLAY DEMO";
+			_viewDemoButton.innerHTML = "<strong>PLAY DEMO</strong>";
 			_viewDemoButton.className = "websitePreviewExpandedButton";
 			_viewDemoButton.addEventListener("click", () => window.open(_dataDemo), {passive:true});
 			_viewButtonsSection.appendChild(_viewDemoButton);
