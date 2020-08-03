@@ -748,6 +748,7 @@ h2.pageTitle {
 
 #contactMeForm > label {
   font-family: "UniNeueLight";
+  font-weight: bold;
   z-index:1;
 	box-sizing: border-box;
 	display:flex;
@@ -807,6 +808,7 @@ h2.pageTitle {
 }
 
 #contactMeFormSendButton {
+  font-weight: bold;
 	cursor: pointer;
 	margin:auto;
 	width: 50%;
@@ -903,7 +905,10 @@ h2.pageTitle {
 	#linkSection {
 		pointer-events:none;
 		flex-direction:column;
-		font-size:2.5em;
+    justify-content: space-around;
+		font-size:2.5rem;
+    font-weight: bold;
+    height: var(--50vh);
 
 		-webkit-transform:scale3d(0, 0, 0);
 		transform:scale3d(0, 0, 0);
@@ -917,8 +922,7 @@ h2.pageTitle {
 	}
 
 	.pageLink {
-    font-weight: bold;
-		margin:20% 1em 20% 1em;
+		margin:0 auto 0 auto;
 	}
 
 	#socialNetworks {
@@ -1009,9 +1013,5 @@ h2.pageTitle {
 
   .pageSeparator {
 		opacity:0;
-	}
-
-	.pageLink {
-		margin:9% 1em 9% 1em;
 	}
 }
