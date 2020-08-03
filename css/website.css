@@ -462,9 +462,10 @@ h2.pageTitle {
 
 #scrollDownButton::after {
   content:"";
+  display: block;
   width: 4rem;
   height: 4rem;
-  display: block;
+
   border: 0.3rem solid rgba(0,0,0,0);
   border-right-color: var(--theme-text-shadow-color);
   border-bottom-color: var(--theme-text-shadow-color);
@@ -942,6 +943,14 @@ h2.pageTitle {
     filter:none;
     color: var(--dark-theme-text-color);
   	text-shadow:var(--text-shadow-offset) var(--text-shadow-offset) var(--text-shadow-radius) var(--dark-theme-text-shadow-color);
+  }
+
+  h1.pageTitle {
+    font-size: 6rem;
+  }
+
+  h2.pageTitle {
+    font-size: 3rem;
   }
 
   #scrollDownButton::after {
