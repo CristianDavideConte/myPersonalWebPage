@@ -210,13 +210,14 @@
 }
 
 html {
+  font-family: "UniNeueLight";
+  font-size:1.3vmin;
   margin:0;
+	background-color: var(--theme-background-color);
+
   scroll-behavior:smooth;
   -ms-overflow-style:none !important;									/* Edge */
   scrollbar-width:none !important;									/* Firefox */
-	background-color: var(--theme-background-color);
-  font-family: "UniNeueLight";
-	font-size:1.3vmin;
 	-webkit-touch-callout:none !important; /* iOS Safari */
 	-webkit-user-select:none !important; /* Safari */
 	-khtml-user-select:none !important; /* Konqueror HTML */
@@ -281,6 +282,7 @@ p {
 }
 
 #popUpMessageText {
+  font-weight: bold;
   white-space: nowrap;
 }
 
@@ -456,7 +458,7 @@ h2.pageTitle {
 	box-shadow: var(--theme-box-shadow);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius));
-	transition:0.3s;
+	transition:var(--transition-time-quick);
 }
 
 #scrollDownButton {

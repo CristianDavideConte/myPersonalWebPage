@@ -45,9 +45,6 @@ function init() {
 
 	imageLoading();																	//Initializes all the HTML img elements' contents
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
-	//setTimeout(lagTest, 10000);
-	//setTimeout(lagTestHeader, 10000);
-	//setTimeout(() => scrollTest(_scrollDirectionTest), 5000);
 }
 
 /* This Function initializes all the public variables */
