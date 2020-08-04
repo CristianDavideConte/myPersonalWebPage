@@ -306,16 +306,14 @@ p {
 #header {
 	z-index:3;
 	position:fixed;
-	top:0%;
-	left:0%;
-	right:0%;
-	padding:var(--header-elements-padding);
-	height:var(--header-elements-height);
 	display:flex;
 	align-items:center;
 	justify-content:center;
+  margin-top: 0;
+  width:100%;
+	padding:var(--header-elements-padding);
+
 	transition:var(--transition-time);
-	overscroll-behavior:none;
 }
 
 #header > * {
@@ -329,14 +327,11 @@ p {
 	align-items:center;
 }
 
-#linkSection > * {
-	text-decoration:none;
-}
-
 .pageLink {
 	outline:none;
 	display:block;
 	text-align:center;
+	text-decoration:none;
 	align-items:center;
 	margin:0 1em 0 1em;
 }

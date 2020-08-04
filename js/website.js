@@ -43,8 +43,8 @@ function init() {
 	variableInitialization();												//Binds the js variables to the corresponding HTML elements
 	desktopEventListenerInitialization();						//Initializes all the mouse and keyboard eventHandlers
 
-	imageLoading();																	//Initializes all the HTML img elements' contents
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
+	imageLoading();																	//Initializes all the HTML img elements' contents
 }
 
 /* This Function initializes all the public variables */
@@ -483,10 +483,11 @@ function desktopEventListenerInitialization() {
  * Mobile mode is triggered by the window's resize event.
  */
 function toggleExpandHamburgerMenu() {
-	if(mobileMode) {
-		headerBackgroundElement.classList.toggle("mobileExpanded");
-		headerElement.classList.toggle("mobileExpanded");
-	}
+	if(mobileMode)
+		window.requestAnimationFrame(() => {
+			headerBackgroundElement.classList.toggle("mobileExpanded");
+			headerElement.classList.toggle("mobileExpanded");
+		});
 }
 
 /* Returns true if the user's browser is Safari, false otherwise */
@@ -623,7 +624,6 @@ function imageLoading() {
 	function _changeWebsiteBackgroundTheme() {
 		let backgroundImageUrl = computedStyle.getPropertyValue("--theme-background-image-base-url");
 		let backgroundImageUrlCompressed = backgroundImageUrl + "_Compressed.jpg";
-		let backgroundImageUrlCompressedInverted = backgroundImageUrl + "_Compressed_Inverted.jpg";
 
 		backgroundElement.style.backgroundImage = "url(" + backgroundImageUrlCompressed + ")";
 
@@ -631,12 +631,15 @@ function imageLoading() {
 		_backgroundImage.src = backgroundImageUrl + ".jpg";
 		_backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => backgroundElement.style.backgroundImage = "url(" + _backgroundImage.src + ")"), {passive:true});
 
-		let _pageTitles = document.getElementsByClassName("pageTitle");
-		for(const _pageTitle of _pageTitles)
-			_pageTitle.style.backgroundImage = "url(" + backgroundImageUrlCompressedInverted + ")";
-	}
+		if(!mobileMode) {
+			let backgroundImageUrlCompressedInverted = backgroundImageUrl + "_Compressed_Inverted.jpg";
+			let _pageTitles = document.getElementsByClassName("pageTitle");
+			for(const _pageTitle of _pageTitles)
+				_pageTitle.style.backgroundImage = "url(" + backgroundImageUrlCompressedInverted + ")";
+		}
+}
 
-	_changeWebsiteBackgroundTheme();
+	window.requestAnimationFrame(_changeWebsiteBackgroundTheme);
 	window.matchMedia("(prefers-color-scheme:light)").addListener(_changeWebsiteBackgroundTheme);
 
 	let _profilePicElement = document.getElementById("profilePic");
@@ -720,5 +723,15 @@ function scrollTest(_scrollDirectionTest) {
 		windowScrollYBy(_scrollDirectionTest * windowHeight / 4 + _scrollDirectionTest);
 		_scroll++;
 		setTimeout(() => scrollTest(-_scrollDirectionTest), 2000);
+	}
+}
+
+var _fastScroll = 0;
+function _fastPagesScrollTest() {
+	if(_fastScroll < 20) {
+		let _scrollAmmount = (_fastScroll % 2 == 0) ? windowHeight * 4 : windowHeight * -4;
+		windowScrollYBy(_scrollAmmount);
+		_fastScroll++;
+		setTimeout( _fastPagesScrollTest, 1000);
 	}
 }
