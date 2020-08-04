@@ -13,6 +13,7 @@ Hope to hear you soon !</p>
   <li>Real time White/Dark Theme based on OS system preferences</li>
   <li>Browsers' layers stacking system</li>
   <li>Form Validation</li>
+  <li>Receiving form's emails without hosting a server</li>
   <li>Overriding the browser's default behaviour with event handlers</li>
   <li>Javascript optimizations for managing large HTML collections</li>
 </ul>
