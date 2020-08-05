@@ -1,0 +1,39 @@
+@font-face {
+  font-family:"Baloo Bhaina 2";
+  font-style:normal;
+  font-weight:400;
+  src:url("../fonts/BalooBhaina2/BalooBhaina2-Regular.ttf");
+  font-display: swap;												/* Allow the default font to be visible while this one is loading */
+}
+
+@font-face {
+  font-family:"ColorTube";
+  font-style:normal;
+  font-weight:400;
+  src:url("../fonts/ColorTube/ColorTube-Regular.ttf");
+  font-display: swap;												/* Allow the default font to be visible while this one is loading */
+}
+
+@font-face {
+  font-family:"UniNeueLight";
+  font-style:normal;
+  font-weight:200;
+  src:url("../fonts/UniNeue/UniNeue-Light.ttf");
+  font-display: swap;												/* Allow the default font to be visible while this one is loading */
+}
+
+@font-face {
+  font-family:"UniNeueBold";
+  font-style:normal;
+  font-weight:600;
+  src:url("../fonts/UniNeue/UniNeue-Bold.otf") format("opentype");
+  font-display: swap;												/* Allow the default font to be visible while this one is loading */
+}
+
+@font-face {
+  font-family:"UniNeueHeavy";
+  font-style:italic;
+  font-weight:600;
+  src:url("../fonts/UniNeue/UniNeue-HeavyItalic.ttf");
+  font-display: swap;												/* Allow the default font to be visible while this one is loading */
+}

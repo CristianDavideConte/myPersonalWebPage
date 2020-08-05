@@ -2,46 +2,6 @@
  * The CSS style's elements are ordered from the most generic one (*) to the most specific one (#idName.className).
  * The CSS style's elements are also ordered from the ones you encounter first in the HTML (header) to the ones that are more nested/you encounter later (contactMeForm elements).
  */
-@font-face {
-  font-family:"Baloo Bhaina 2";
-  font-style:normal;
-  font-weight:400;
-  src:url("../fonts/BalooBhaina2/BalooBhaina2-Regular.ttf");
-  font-display: swap;												/* Allow the default font to be visible while this one is loading */
-}
-
-@font-face {
-  font-family:"ColorTube";
-  font-style:normal;
-  font-weight:400;
-  src:url("../fonts/ColorTube/ColorTube-Regular.ttf");
-  font-display: swap;												/* Allow the default font to be visible while this one is loading */
-}
-
-@font-face {
-  font-family:"UniNeueLight";
-  font-style:normal;
-  font-weight:200;
-  src:url("../fonts/UniNeue/UniNeue-Light.ttf");
-  font-display: swap;												/* Allow the default font to be visible while this one is loading */
-}
-
-@font-face {
-  font-family:"UniNeueBold";
-  font-style:normal;
-  font-weight:600;
-  src:url("../fonts/UniNeue/UniNeue-Bold.otf") format("opentype");
-  font-display: swap;												/* Allow the default font to be visible while this one is loading */
-}
-
-@font-face {
-  font-family:"UniNeueHeavy";
-  font-style:italic;
-  font-weight:600;
-  src:url("../fonts/UniNeue/UniNeue-HeavyItalic.ttf");
-  font-display: swap;												/* Allow the default font to be visible while this one is loading */
-}
-
 @keyframes scrollDownButtonBounce {
   0% {
     transform: rotate3d(0,0,1,45deg) translate3d(-20%,-20%,0);
@@ -177,7 +137,7 @@
 	}
 
   .pageLink:hover .pageLinkBarOnHover,
-  .pageLink:active .pageLinkBarOnHover {
+  .pageLink:focus .pageLinkBarOnHover {
     -webkit-transform: scale3d(1,1,1);
     transform: scale3d(1,1,1);
   }
@@ -416,6 +376,27 @@ p {
 	flex-direction:column;
 	align-items:center;
 	justify-content:center;
+}
+
+#svgPageTitle {
+	z-index: 1;
+	width: 100%;
+	height: 200%;
+
+	-webkit-backdrop-filter: blur(20px) saturate(180%);
+	backdrop-filter: blur(20px) saturate(180%);
+
+	/* Chrome, Safari and all webkit browsers */
+	-webkit-mask-image: url(../svg/SVG.svg);
+	-webkit-mask-size: contain;
+	-webkit-mask-position: center;
+	-webkit-mask-repeat: no-repeat;
+
+	/* FIREFOX */
+	mask-image: url(../svg/SVG.svg);
+	mask-size: contain;
+	mask-position: center;
+	mask-repeat: no-repeat;
 }
 
 .pageTitle {
