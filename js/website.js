@@ -104,7 +104,7 @@ function desktopEventListenerInitialization() {
 					_firstScrollYPosition = null;
 				}
 			}, 100);
-	}, {passive:true});
+	}, {passive:false});
 	window.addEventListener("resize", updateWindowSize, {passive:true});
 
 	/*
@@ -391,7 +391,7 @@ function desktopEventListenerInitialization() {
 			if(_popUpMessageTimeout != null)
 				clearTimeout(_popUpMessageTimeout);
 
-			_popUpMessageTimeout = setTimeout(() => window.requestAnimationFrame(() => popUpMessageElement.className = ""), 6000);			//Every message on screen is shown for 5seconds
+			_popUpMessageTimeout = setTimeout(() => window.requestAnimationFrame(() => popUpMessageElement.className = ""), 6000);			//Every message on screen is shown for 6seconds
 		});
 	}
 
@@ -463,7 +463,7 @@ function desktopEventListenerInitialization() {
 			_ajax(contactMeFormElement.method, contactMeFormElement.action, new FormData(contactMeFormElement), _ajaxResponceStatusSuccess, _ajaxResponceStatusError);
 		else {
 			_showMessage(validData.replace("validData<br>", ""));
-			setTimeout(() => window.requestAnimationFrame(() => contactMeFormSendButtonElement.disabled = false), 6000);			//Every message on screen is shown for 5seconds
+			setTimeout(() => window.requestAnimationFrame(() => contactMeFormSendButtonElement.disabled = false), 6000);			//Every message on screen is shown for 6seconds
 		}
 	}
 
