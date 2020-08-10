@@ -80,9 +80,9 @@
 	--header-elements-padding:1rem;
 	--header-socialNetworks-div-width:calc(4*var(--header-elements-height) + 3*var(--header-elements-padding));
 
-  --main-title-svg-path:../svgs/mainTitles/svgs/haarlemDeco.svg;
+  --main-title-svg-path:./svgs/mainTitles/svgs/haarlemDeco.svg;
   --main-title-svg-url: url(../svgs/mainTitles/svgs/haarlemDeco.svg);
-  --my-projects-svg-path:../svgs/myProjects/svgs/haarlemDeco.svg;
+  --my-projects-svg-path:./svgs/myProjects/svgs/haarlemDeco.svg;
   --my-projects-svg-url: url(../svgs/myProjects/svgs/haarlemDeco.svg);
 
 	--profilePic-size:17vmin;
