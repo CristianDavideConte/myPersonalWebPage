@@ -12,16 +12,39 @@
 		<script async src = "https://kit.fontawesome.com/f48b5d4594.js" crossorigin = "anonymous"></script>
 	</head>
 
+	<!--
+	 	- BODY ELEMENTS' ORGANIZATION
+		- 0) OUT-OF-THE-SCREEN / NON-USER-REACHABLE ELEMENTS
+		- 1) HEADER-NAVIGATION-BAR ELEMENTS
+		- 2) FIRST PAGE ELEMENTS: HOME
+		- 3) SECOND PAGE ELEMENTS: ABOUT ME
+		- 4) THIRD PAGE ELEMENTS: MY PROJECTS
+		- 5) FOURTH PAGE ELEMENTS: CONTACT ME
+	-->
 	<body onload = "init()">
+
+		<!-- 0) OUT-OF-THE-SCREEN/ NON-USER-REACHABLE ELEMENTS -->
 		<div id = "popUpMessage"><p id = "popUpMessageText"></p></div>
 		<div id="websitePreviewExpandedBackgroundContent" class="page"></div>
 		<img id = "bodyBackground"/>
 		<div id = "headerBackground"></div>
+
+
+
+
+
+
+
+
+
+		<!-- 1) HEADER-NAVIGATION-BAR ELEMENTS -->
 		<nav id = "header">
+
 			<div id ="hamburgerMenu">
 				<div id = "hamburgerMenuUpperBar"></div>
 				<div id = "hamburgerMenuLowerBar"></div>
 			</div>
+
 			<div id = "linkSection">
 				<a class = "pageLink" href = "#home" data-page-number = "0">
 					<p>HOME</p>
@@ -31,7 +54,7 @@
 					<p>ABOUT ME</p>
 					<div class = "pageLinkBarOnHover"></div>
 				</a>
-				<a class = "pageLink" href = "#projects" data-page-number = "2">
+				<a class = "pageLink" href = "#myProjects" data-page-number = "2">
 					<p>PROJECTS</p>
 					<div class = "pageLinkBarOnHover"></div>
 				</a>
@@ -40,21 +63,56 @@
 					<div class = "pageLinkBarOnHover"></div>
 				</a>
 			</div>
+
 			<div id = "socialNetworks">
-				<a id = "githubContact" class = "fab fa-github"></a>
-				<a id = "facebookContact" class = "fab fa-facebook-f"></a>
+				<a id = "githubContact" class = "fab fa-github">
+				<a id = "stackoverflowContact" class = "fab fa-stack-overflow"></a>
 				<a id = "instagramContact" class = "fab fa-instagram"></a>
 				<a id = "mailContact" class = "fas fa-envelope"></a>
 			</div>
+
 		</nav>
+
+
+
+
+
+
+
+
+
+		<!-- 2) FIRST PAGE ELEMENTS: HOME -->
 		<div id = "home" class = "page">
-			<!--<div id = "svgPageTitle"></div>-->
-			<h1 class="pageTitle">CRISTIAN DAVIDE CONTE</h1>
-			<h2 class="pageTitle">SOFTWARE DEVELOPER</h2>
+
+			<section id = "svgPageTitleWrapperMainTitle" class = "svgPageTitleWrapper">
+				<div id = "svgPageTitleMainTitle" class = "svgPageTitle"/></div>
+				<svg class = "svgPageTitleShadow">
+					<defs>
+						<filter id = "svgPageTitleMainTitleShadowFilter">
+						<feGaussianBlur stdDeviation = "5"/>
+						<feComposite operator = "out" in2 = "SourceGraphic"/>
+						</filter>
+					</defs>
+					<image id = "svgPageTitleMainTitleShadowImage" filter = "url(#svgPageTitleMainTitleShadowFilter)" x = "0" y = "0" width = "100%" height = "100%"/>
+				</svg>
+			</section>
 			<a id = "scrollDownButton" href = "#aboutMe"></a>
+
 			<div class = "pageSeparator"></div>
+
 		</div>
+
+
+
+
+
+
+
+
+
+		<!-- 3) SECOND PAGE ELEMENTS: ABOUT ME -->
 		<div id = "aboutMe" class = "page">
+
 			<img id = "profilePic" alt = "profilePic" src = "./images/profilePictures/profilePicture_Compressed.jpg"/>
 			<div id = "presentationCard">
 				<h2>Hi,</h2>
@@ -71,10 +129,35 @@
 				<p>Down<strong> below</strong> you'll find some of <strong>my projects</strong> and many ways to contact me.</p>
 				<h2>Hope to hear you soon !</h2>
 			</div>
+
 			<div class = "pageSeparator"></div>
+
 		</div>
-		<div id = "projects" class = "page">
-			<h1 class="pageTitle">MY PROJECTS</h1>
+
+
+
+
+
+
+
+
+
+		<!-- 4) THIRD PAGE ELEMENTS: MY PROJECTS -->
+		<div id = "myProjects" class = "page">
+
+			<section id = "svgPageTitleWrapperMyProjects" class = "svgPageTitleWrapper">
+				<div id = "svgPageTitleMyProjects" class = "svgPageTitle"/></div>
+				<svg class = "svgPageTitleShadow">
+					<defs>
+					  <filter id = "svgPageTitleMyProjectsShadowFilter">
+					  <feGaussianBlur stdDeviation = "5"/>
+					  <feComposite operator = "out" in2 = "SourceGraphic"/>
+					  </filter>
+					</defs>
+		  		<image id = "svgPageTitleMyProjectsShadowImage" filter = "url(#svgPageTitleMyProjectsShadowFilter)" x = "0" y = "0" width = "100%" height = "100%"/>
+				</svg>
+			</section>
+
 			<div class = "projectsCarousel">
 				<button class = "carouselButton">&lt;_</button>
 				<div id = "websiteShowcase">
@@ -105,8 +188,19 @@
 				</div>
 				<button class = "carouselButton">_&gt;</button>
 			</div>
+
 			<div class = "pageSeparator"></div>
 		</div>
+
+
+
+
+
+
+
+
+
+		<!-- 5) FOURTH PAGE ELEMENTS: CONTACT ME -->
 		<div id = "contactMe" class = "page">
 			<form id = "contactMeForm" action = "https://formspree.io/xwkrawyv" method = "POST">
 				<label for = "contactMeFormEmail">Your email</label>
@@ -116,5 +210,6 @@
 				<button  id = "contactMeFormSendButton" type="submit">SEND</button>
 			</form>
 		</div>
+
 	</body>
 </html>

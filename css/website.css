@@ -1,7 +1,28 @@
 /*
- * The CSS style's elements are ordered from the most generic one (*) to the most specific one (#idName.className).
- * The CSS style's elements are also ordered from the ones you encounter first in the HTML (header) to the ones that are more nested/you encounter later (contactMeForm elements).
+ * CSS STYLES' ORGANIZATION
+ * 0) KEYFRAMES GLOBAL ANIMATIONS
+ * 1A) CSS GLOBAL VARIABLES
+ * 1B) CSS WEBSITE LIGHT-THEME'S GLOBAL VARIABLES
+ * 2) GENERAL STYLING
+ * 3) OFFSCREEN/BACKGROUND ELEMENTS STYLING
+ * 4) HEADER ELEMENTS STYLING
+ * 5) PAGES COMMON STYLING
+ * 6) FIRST PAGE ELEMENTS' STYLING
+ * 7) SECOND PAGE ELEMENTS' STYLING
+ * 8) THIRD PAGE ELEMENTS' STYLING
+ * 9) FOURTH PAGE ELEMENTS' STYLING
+ * 10) MEDIA:HOVER-WITH-ACTUAL-MOUSE ELEMENTS' STYLING
+ * 11) MEDIA:MOBILE-PORTRAIT BROWSERS ELEMENTS' STYLING
+ * 12) MEDIA:MOBILE-LANDASCAPE BROWSERS ELEMENTS' STYLING
  */
+
+
+
+
+
+
+
+ /* 0) KEYFRAMES GLOBAL ANIMATIONS */
 @keyframes scrollDownButtonBounce {
   0% {
     transform: rotate3d(0,0,1,45deg) translate3d(-20%,-20%,0);
@@ -12,21 +33,33 @@
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 1A) CSS GLOBAL VARIABLES */
 :root {
   --vh:1vh;
   --50vh:calc(var(--vh) * 50);
   --100vh:calc(var(--vh) * 100);
 
-	--header-elements-height:4rem;
-	--header-elements-padding:1rem;
-	--header-socialNetworks-div-width:calc(4*var(--header-elements-height) + 3*var(--header-elements-padding));
-
-	--profilePic-size:17vmin;
-	--presentationCard-height:60vmin;
-	--presentationCard-width:55vmin;
-
-	--websitePreview-size:15rem;
-  --websitePreview-expanded-size:70vmin;
+  --backdrop-filter-blur-radius-ultra-reduced:1.3px;
+	--backdrop-filter-blur-radius-reduced:1rem;
+	--backdrop-filter-blur-radius:1.5rem;
+	--backdrop-filter-blur-radius-wide:2rem;
+	--backdrop-filter-blur-radius-ultra-wide:3rem;
 
 	--boxShapedElement-border-radius:1rem;
 	--boxShapedElement-border-radius-wide:2.5rem;
@@ -35,19 +68,29 @@
 	--text-shadow-offset:0.08em;
 	--text-shadow-radius:0.3rem;
 
-  --backdrop-filter-blur-radius-ultra-reduced:1.3px;
-	--backdrop-filter-blur-radius-reduced:1rem;
-	--backdrop-filter-blur-radius:1.5rem;
-	--backdrop-filter-blur-radius-wide:2rem;
-	--backdrop-filter-blur-radius-ultra-wide:3rem;
+	--scaling-factor-increase:1;
+	--scaling-factor-decrease:1;
 
   --transition-time-slow:1s;
 	--transition-time:0.5s;
 	--transition-time-medium:0.4s;
 	--transition-time-quick:0.2s;
 
-	--scaling-factor-increase:1;
-	--scaling-factor-decrease:1;
+	--header-elements-height:4rem;
+	--header-elements-padding:1rem;
+	--header-socialNetworks-div-width:calc(4*var(--header-elements-height) + 3*var(--header-elements-padding));
+
+  --main-title-svg-path:../svgs/mainTitles/svgs/haarlemDeco.svg;
+  --main-title-svg-url: url(../svgs/mainTitles/svgs/haarlemDeco.svg);
+  --my-projects-svg-path:../svgs/myProjects/svgs/haarlemDeco.svg;
+  --my-projects-svg-url: url(../svgs/myProjects/svgs/haarlemDeco.svg);
+
+	--profilePic-size:17vmin;
+	--presentationCard-height:60vmin;
+	--presentationCard-width:55vmin;
+
+	--websitePreview-size:15rem;
+  --websitePreview-expanded-size:70vmin;
 
 	--light-theme-blur-background-color-Black: rgba(0,0,0,1);
 	--light-theme-blur-background-color-White: rgba(255,255,255,0.5);
@@ -62,7 +105,7 @@
 	--light-theme-text-color: rgba(0,0,0,1);
 	--light-theme-text-color-disabled: rgba(0,0,0,0.5);
 	--light-theme-githubContact-background-color: radial-gradient(circle, rgba(255,255,255,1) 58%, rgba(145,145,145,1) 60%);
-	--light-theme-facebookContact-background-color: linear-gradient(0deg, rgba(0,111,255,1) 26%, rgba(94,201,255,1) 100%);
+	--light-theme-stackoverflowContact-background-color: radial-gradient(circle, rgba(230,230,230,1) 60%, rgba(255,115,0,1) 64%);
 	--light-theme-instagramContact-background-color: linear-gradient(340deg, rgba(244,255,0,1) 0%, rgba(255,39,218,1) 58%, rgba(255,39,218,1) 72%, rgba(0,83,255,1) 99%);
 	--light-theme-mailContact-background-color: linear-gradient(35deg, rgba(255,248,0,1) 0%, rgba(255,99,0,1) 67%);
   --light-theme-background-image-base-url: ./images/backgroundImages/LightTheme/background_Light;  /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
@@ -80,8 +123,8 @@
 	--dark-theme-text-shadow-color-inverted: rgba(200,200,200,1);
 	--dark-theme-text-color: rgba(255,255,255,1);
 	--dark-theme-text-color-disabled: rgba(255,255,255,0.5);
-	--dark-theme-githubContact-background-color: radial-gradient(circle, rgba(30,30,30,1) 61%, rgba(57,57,57,1) 62%);
-	--dark-theme-facebookContact-background-color: linear-gradient(0deg, rgba(0,48,255,1) 0%, rgba(9,187,255,1) 100%);
+	--dark-theme-githubContact-background-color: radial-gradient(circle, rgba(36,41,46,1) 59%, rgba(85,85,85,1) 62%);
+	--dark-theme-stackoverflowContact-background-color: radial-gradient(circle, rgba(57,57,57,1) 60%, rgba(255,124,0,1) 64%);
 	--dark-theme-instagramContact-background-color: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
 	--dark-theme-mailContact-background-color: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
   --dark-theme-background-image-base-url: ./images/backgroundImages/DarkTheme/background_Dark;      /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
@@ -100,13 +143,19 @@
   --theme-text-color: var(--dark-theme-text-color);
   --theme-text-color-disabled: var(--dark-theme-text-color-disabled);
   --theme-githubContact-background-color: var(--dark-theme-githubContact-background-color);
-  --theme-facebookContact-background-color: var(--dark-theme-facebookContact-background-color);
+  --theme-stackoverflowContact-background-color: var(--dark-theme-stackoverflowContact-background-color);
   --theme-instagramContact-background-color: var(--dark-theme-instagramContact-background-color);
   --theme-mailContact-background-color: var(--dark-theme-mailContact-background-color);
   --theme-background-image-base-url: var(--dark-theme-background-image-base-url);
   --theme-background-color: var(--dark-theme-background-color);
 }
 
+
+
+
+
+
+/* 1B) CSS WEBSITE LIGHT-THEME'S GLOBAL VARIABLES */
 @media (prefers-color-scheme:light) {
 	:root {
     --theme-blur-background-color-Black: var(--light-theme-blur-background-color-Black);
@@ -122,7 +171,7 @@
     --theme-text-color: var(--light-theme-text-color);
     --theme-text-color-disabled: var(--light-theme-text-color-disabled);
     --theme-githubContact-background-color: var(--light-theme-githubContact-background-color);
-    --theme-facebookContact-background-color: var(--light-theme-facebookContact-background-color);
+    --theme-stackoverflowContact-background-color: var(--light-theme-stackoverflowContact-background-color);
     --theme-instagramContact-background-color: var(--light-theme-instagramContact-background-color);
     --theme-mailContact-background-color: var(--light-theme-mailContact-background-color);
     --theme-background-image-base-url: var(--light-theme-background-image-base-url);
@@ -130,26 +179,25 @@
 	}
 }
 
-@media (hover:hover) and (pointer: fine) {					/* Prevents touch devices to trigger the fake hover behaviour */
-	:root {
-		--scaling-factor-increase:1.1;
-		--scaling-factor-decrease:0.9;
-	}
 
-  .pageLink:hover .pageLinkBarOnHover,
-  .pageLink:focus .pageLinkBarOnHover {
-    -webkit-transform: scale3d(1,1,1);
-    transform: scale3d(1,1,1);
-  }
-}
 
+
+
+
+
+
+
+
+
+
+
+/* 2) GENERAL STYLING */
 * {
 	color:var(--theme-text-color);
 	-webkit-tap-highlight-color:rgba(0,0,0,0);
 	-webkit-appearance: none;						/* Fix for box-shadows on Safari */
 	-webkit-user-drag:none !important;
 	user-drag:none !important;
-
 }
 
 /* Scrollbar */
@@ -200,6 +248,32 @@ p {
 	font-size:190%;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 3) OFFSCREEN/BACKGROUND ELEMENTS STYLING */
 #bodyBackground {
 	position:fixed;
   margin: -1%;
@@ -246,6 +320,24 @@ p {
   white-space: nowrap;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 4) HEADER ELEMENTS STYLING */
 #headerBackground {
 	z-index:2;
 	position:fixed;
@@ -289,7 +381,6 @@ p {
 }
 
 .pageLink {
-	outline:none;
 	display:block;
 	text-align:center;
 	text-decoration:none;
@@ -344,7 +435,7 @@ p {
 }
 
 #socialNetworks > #mailContact,
-#socialNetworks > #facebookContact {
+#socialNetworks > #stackoverflowContact {
 	font-size: 3em;
 }
 
@@ -352,8 +443,8 @@ p {
 	background: var(--theme-githubContact-background-color);
 }
 
-#facebookContact::after {
-	background: var(--theme-facebookContact-background-color);
+#stackoverflowContact::after {
+	background: var(--theme-stackoverflowContact-background-color);
 }
 
 #instagramContact::after {
@@ -368,6 +459,24 @@ p {
   opacity: 1;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 5) PAGES COMMON STYLING */
 .page {
   position: relative;
   width:100vw;
@@ -378,51 +487,43 @@ p {
 	justify-content:center;
 }
 
-#svgPageTitle {
-	z-index: 1;
-	width: 100%;
-	height: 200%;
+.svgPageTitleWrapper {
+    pointer-events: none;             /* If the wrapper overlays with another element, this prevents the page to scroll instead of scrolling whithin that element */
 
-	-webkit-backdrop-filter: blur(20px) saturate(180%);
-	backdrop-filter: blur(20px) saturate(180%);
-
-	/* Chrome, Safari and all webkit browsers */
-	-webkit-mask-image: url(../svg/SVG.svg);
-	-webkit-mask-size: contain;
-	-webkit-mask-position: center;
-	-webkit-mask-repeat: no-repeat;
-
-	/* FIREFOX */
-	mask-image: url(../svg/SVG.svg);
-	mask-size: contain;
-	mask-position: center;
-	mask-repeat: no-repeat;
+    position: absolute;
+    max-width:100rem;
+    height: 100rem;
+    width:100%;
 }
 
-.pageTitle {
-  width:100%;
-  text-align:center;
-  margin-top:auto;				/* Centers the title */
+.svgPageTitle {
+  width: 100%;
+  height: 100%;
 
-  color: rgba(255,255,255,0.1);
-  filter: drop-shadow(var(--text-shadow-offset) var(--text-shadow-offset) var(--text-shadow-radius) var(--theme-blur-background-color-Black));
-  background-attachment: fixed;
-	background-repeat:no-repeat;
-	background-size:auto 100%;
-	background-position:50% 0%;
-  -webkit-background-clip:text;
+  background-color: rgba(255,255,255,0.15);
+  -webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius-reduced)) saturate(250%);
+  backdrop-filter: blur(var(--backdrop-filter-blur-radius-reduced)) saturate(250%);
+
+  /* Chrome, Safari and all webkit browsers */
+  -webkit-mask-size: contain;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+
+  /* Firefox */
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+
+  /* For 3d acceleration purpose only */
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 
-h1.pageTitle {
-  font-family: "UniNeueLight";
-  font-size: 7rem;
-  margin-bottom: 0;
-}
-
-h2.pageTitle {
-  font-family: "UniNeueBold";
-  font-size: 3rem;
-  margin: 0;
+.svgPageTitleShadow {
+  width: 100%;
+  height: 100%;
+  -webkit-transform: translate3d(0,-100%, 0);
+  transform: translate3d(0,-100%, 0);
 }
 
 .pageSeparator {
@@ -436,6 +537,38 @@ h2.pageTitle {
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius));
 	transition:var(--transition-time-quick);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 6) FIRST PAGE ELEMENTS' STYLING */
+#svgPageTitleWrapperMainTitle {
+  -webkit-transform: translate3d(0, calc(var(--websitePreview-size) / -3), 0);
+  transform: translate3d(0, calc(var(--websitePreview-size) / -3), 0);
+}
+
+#svgPageTitleMainTitle {
+  -webkit-mask-image: var(--main-title-svg-url);  /* Chrome, Safari and all webkit browsers */
+  mask-image: var(--main-title-svg-url);          /* Firefox */
 }
 
 #scrollDownButton {
@@ -463,6 +596,29 @@ h2.pageTitle {
   animation: scrollDownButtonBounce var(--transition-time-slow) ease-out alternate infinite;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 7) SECOND PAGE ELEMENTS' STYLING */
 #profilePic {
 	z-index:1;
 	border-radius:100%;
@@ -517,10 +673,47 @@ h2.pageTitle {
 	margin:calc(0.25 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size));
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 8) THIRD PAGE ELEMENTS' STYLING */
+#svgPageTitleWrapperMyProjects {
+  -webkit-transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0);    /* 2rem is the total websitePreviews margin */
+  transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0);
+}
+
+#svgPageTitleMyProjects {
+  -webkit-mask-image: var(--my-projects-svg-url);  /* Chrome, Safari and all webkit browsers */
+  mask-image: var(--my-projects-svg-url);          /* Firefox */
+}
+
 .projectsCarousel {
 	width:100%;
 	display:flex;
 	justify-content:center;
+
+  -webkit-transform: translate3d(0, calc(var(--50vh) - 25%), 0);
+  transform: translate3d(0, calc(var(--50vh) - 25%), 0);
 }
 
 #websiteShowcase {
@@ -717,6 +910,29 @@ h2.pageTitle {
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black) inset;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 9) FOURTH PAGE ELEMENTS' STYLING */
 #contactMeForm {
 	display:flex;
 	flex-direction:column;
@@ -816,6 +1032,43 @@ h2.pageTitle {
 	background:var(--theme-blur-background-color-Brightest);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 10) MEDIA:HOVER-WITH-ACTUAL-MOUSE ELEMENTS' STYLING */
+@media (hover:hover) and (pointer: fine) {					/* Prevents touch devices to trigger the fake hover behaviour */
+	:root {
+		--scaling-factor-increase:1.1;
+		--scaling-factor-decrease:0.9;
+	}
+
+  .pageLink:hover .pageLinkBarOnHover,
+  .pageLink:focus .pageLinkBarOnHover {
+    -webkit-transform: scale3d(1,1,1);
+    transform: scale3d(1,1,1);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+/* 11) MEDIA:MOBILE-PORTRAIT BROWSERS ELEMENTS' STYLING */
 @media only screen and (max-width:1080px) {
 	:root {
 		--header-elements-height:50px;
@@ -914,7 +1167,7 @@ h2.pageTitle {
 	}
 
 	#socialNetworks > #mailContact,
-	#socialNetworks > #facebookContact {
+	#socialNetworks > #stackoverflowContact {
 		font-size: var(--header-elements-height-reduced);
 	}
 
@@ -939,20 +1192,6 @@ h2.pageTitle {
 	.mobileExpanded #socialNetworks > a:hover::after {
 		opacity: 1;
 	}
-
-  .pageTitle {
-    filter:none;
-    color: var(--dark-theme-text-color);
-  	text-shadow:var(--text-shadow-offset) var(--text-shadow-offset) var(--text-shadow-radius) var(--dark-theme-text-shadow-color);
-  }
-
-  h1.pageTitle {
-    font-size: 6rem;
-  }
-
-  h2.pageTitle {
-    font-size: 3rem;
-  }
 
   #scrollDownButton::after {
     border: 0.6rem solid rgba(0,0,0,0);
@@ -985,6 +1224,14 @@ h2.pageTitle {
 	}
 }
 
+
+
+
+
+
+
+
+/* 12) MEDIA:MOBILE-LANDASCAPE BROWSERS ELEMENTS' STYLING */
 @media only screen and (max-height:600px) {
   :root {
     --websitePreview-expanded-size:90vmin;

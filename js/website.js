@@ -183,8 +183,8 @@ function desktopEventListenerInitialization() {
 
 	/* All the social networks icons are linked to the corresponding website */
 	document.getElementById("githubContact").addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
+	document.getElementById("stackoverflowContact").addEventListener("click", () => window.open("https://stackoverflow.com/users/13938363/cristian-davide-conte?tab=profile"), {passive:true});
 	document.getElementById("instagramContact").addEventListener("click", () => window.open("https://www.instagram.com/cristiandavideconte/?hl=it"), {passive:true});
-	document.getElementById("facebookContact").addEventListener("click", () => window.open("https://www.facebook.com/cristiandavide.conte/"), {passive:true});
 	document.getElementById("mailContact").addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 
 	websiteShowcase.addEventListener("wheel", event => {
@@ -630,22 +630,23 @@ function imageLoading() {
 		let _backgroundImage = new Image();
 		_backgroundImage.src = backgroundImageUrl + ".jpg";
 		_backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => backgroundElement.style.backgroundImage = "url(" + _backgroundImage.src + ")"), {passive:true});
-
-		if(!mobileMode) {
-			let backgroundImageUrlCompressedInverted = backgroundImageUrl + "_Compressed_Inverted.jpg";
-			let _pageTitles = document.getElementsByClassName("pageTitle");
-			for(const _pageTitle of _pageTitles)
-				_pageTitle.style.backgroundImage = "url(" + backgroundImageUrlCompressedInverted + ")";
-		}
 }
 
-	window.requestAnimationFrame(_changeWebsiteBackgroundTheme);
 	window.matchMedia("(prefers-color-scheme:light)").addListener(_changeWebsiteBackgroundTheme);
+	window.requestAnimationFrame(() => {
+		let svgPageTitleMainTitleShadowImagePath = computedStyle.getPropertyValue("--main-title-svg-path").trim();
+		document.getElementById("svgPageTitleMainTitleShadowImage").setAttribute("href", svgPageTitleMainTitleShadowImagePath);
 
-	let _profilePicElement = document.getElementById("profilePic");
-	let _profileImageLoaded = new Image();
-	_profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";
-	_profileImageLoaded.addEventListener("load", () => window.requestAnimationFrame(() => _profilePicElement.src = _profileImageLoaded.src), {passive:true});
+		let svgPageTitleMyProjectsShadowImagePath = computedStyle.getPropertyValue("--my-projects-svg-path").trim();
+		document.getElementById("svgPageTitleMyProjectsShadowImage").setAttribute("href", svgPageTitleMyProjectsShadowImagePath);
+
+		_changeWebsiteBackgroundTheme();
+
+		let _profilePicElement = document.getElementById("profilePic");
+		let _profileImageLoaded = new Image();
+		_profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";
+		_profileImageLoaded.addEventListener("load", () => window.requestAnimationFrame(() => _profilePicElement.src = _profileImageLoaded.src), {passive:true});
+	});
 }
 
 /*
@@ -733,5 +734,22 @@ function _fastPagesScrollTest() {
 		windowScrollYBy(_scrollAmmount);
 		_fastScroll++;
 		setTimeout( _fastPagesScrollTest, 1000);
+	}
+}
+
+/*
+ * Performs a scrolling test
+ */
+let _testScrolledTimes = 0;
+function testScrollingSmoothness() {
+	if(_testScrolledTimes == 0) {
+		window.scroll(0, window.scrollY - window.innerHeight / 2);
+		_testScrolledTimes++;
+		setTimeout(testScrollingSmoothness, 650);
+	} else if(_testScrolledTimes < 50) {
+		let _scrollAmmount = (_testScrolledTimes % 2 == 0) ? window.scrollY - window.innerHeight : window.scrollY + window.innerHeight;
+		window.scroll(0, _scrollAmmount);
+		_testScrolledTimes++;
+		setTimeout(testScrollingSmoothness, 650);
 	}
 }
