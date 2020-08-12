@@ -89,22 +89,23 @@ function desktopEventListenerInitialization() {
 	documentBodyElement.addEventListener("touchend", () => _isFingerDown = false, {passive:true});
 
 	let _firstScrollYPosition = null;
-	let _smoothWebsiteShowcaseWheelScrollTimeout;
+	let _smoothPageScrollTimeout = 0;
 	window.addEventListener("scroll", event => {
 			if(_firstScrollYPosition == null)
 				_firstScrollYPosition = window.scrollY;
 			else
-				clearTimeout(_smoothWebsiteShowcaseWheelScrollTimeout);
+				clearTimeout(_smoothPageScrollTimeout);
 
-			_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(function _checkFingerDown() {
-				if(_isFingerDown)
-					_smoothWebsiteShowcaseWheelScrollTimeout = setTimeout(_checkFingerDown, 100);
-				else {
-					smoothPageScroll(_firstScrollYPosition, window.scrollY);
-					_firstScrollYPosition = null;
-				}
-			}, 100);
-	}, {passive:false});
+			_smoothPageScrollTimeout = setTimeout(function _checkFingerDown() {
+					if(_isFingerDown)
+						_smoothPageScrollTimeout = window.requestAnimationFrame(_checkFingerDown);
+					else {
+						smoothPageScroll(_firstScrollYPosition, window.scrollY);
+						_firstScrollYPosition = null;
+					}
+			}, 66);
+	}, {passive:true});
+
 	window.addEventListener("resize", updateWindowSize, {passive:true});
 
 	/*
@@ -656,10 +657,11 @@ function imageLoading() {
  * - if needed calculates the window's offset between the previous height and the new one to adjust animation without triggering any layout shift
  */
 function updateWindowSize(){
-	function _update(currentwindowHeight) {
+	function _update(currentWindowHeight) {
 			windowHeightOffset = 0;
-			windowHeight = currentwindowHeight;
+			windowHeight = currentWindowHeight;
 			documentElement.style.setProperty("--vh", windowHeight * 0.01 + "px");
+			documentElement.style.setProperty("--body-background-height", currentWindowHeight + "px");
 			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
 			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
 			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowHeight;
@@ -669,20 +671,20 @@ function updateWindowSize(){
 	}
 
 	window.requestAnimationFrame(() => {
-		let _currentwindowHeight = documentElement.clientHeight;
+		let _currentWindowHeight = documentElement.clientHeight;
 		let _currentwindowWidth = documentElement.clientWidth;
 
 		mobileMode = (_currentwindowWidth < 1081) ? 1 : 0;
 
 		if(mobileMode) {
-			if(_currentwindowHeight >= windowHeight + windowHeightOffset)		//If the window gets higher all the variables are always updated
-				_update(_currentwindowHeight);
-			else if(_currentwindowWidth > windowWidth && _currentwindowWidth >= _currentwindowHeight) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
-				_update(_currentwindowHeight);
+			if(_currentWindowHeight >= windowHeight + windowHeightOffset)		//If the window gets higher all the variables are always updated
+				_update(_currentWindowHeight);
+			else if(_currentwindowWidth > windowWidth && _currentwindowWidth >= _currentWindowHeight) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
+				_update(_currentWindowHeight);
 			else 			//If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
-				windowHeightOffset = _currentwindowHeight - windowHeight;
+				windowHeightOffset = _currentWindowHeight - windowHeight;
 		} else
-			_update(_currentwindowHeight);
+			_update(_currentWindowHeight);
 
 		documentElement.style.setProperty("--window-inner-height-offset", windowHeightOffset + "px"); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowHeightOffset != 0
 		windowWidth = _currentwindowWidth;
