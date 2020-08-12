@@ -276,7 +276,7 @@ p {
 #bodyBackground {
 	position:fixed;
   margin: -1%;
-  width:120%;
+  width:120vw;
   height:calc(120 / 100 * var(--body-background-height));
   background-repeat:no-repeat;
 	background-size:cover;

@@ -104,7 +104,7 @@ function desktopEventListenerInitialization() {
 						_firstScrollYPosition = null;
 					}
 			}, 66);
-	}, {passive:true});
+	}, {passive:false});
 
 	window.addEventListener("resize", updateWindowSize, {passive:true});
 
