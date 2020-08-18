@@ -670,8 +670,8 @@ function updateWindowSize(){
 	}
 
 	window.requestAnimationFrame(() => {
-		let _currentWindowHeight = documentElement.offsetHeight;
-		let _currentwindowWidth = documentElement.clientWidth;
+		let _currentWindowHeight = window.innerHeight;
+		let _currentwindowWidth = window.innerWidth;
 
 		mobileMode = (_currentwindowWidth < 1081) ? 1 : 0;
 
