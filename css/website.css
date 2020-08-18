@@ -52,7 +52,7 @@
 /* 1A) CSS GLOBAL VARIABLES */
 :root {
   /*
-   * The var(--100vh) is defined with js on the pageLoad. 
+   * The var(--100vh) is defined with js on the pageLoad.
    * The var(--1vh) and var(--50vh) are used instead of 1vh and 50vh because
    * 1vh and 50vh would decrease if the browser's window shrinks,
    * but this is not a desired behaviour
@@ -833,8 +833,12 @@ p {
 }
 
 .expandedState #websitePreviewExpanded {
-	-webkit-transform: translate3d(0, 0, 0) scale3d(var(--scale3dFactor), var(--scale3dFactor), 1);
-	transform: translate3d(0, 0, 0) scale3d(var(--scale3dFactor), var(--scale3dFactor), 1);
+  /*
+   * var(--window-inner-height-offset) / 2 instead of var(--window-inner-height-offset)
+   * because the transform-origin is center.
+   */
+	-webkit-transform: translate3d(0, calc(var(--window-inner-height-offset) / 2), 0) scale3d(var(--scale3dFactor), var(--scale3dFactor), 1);
+	transform: translate3d(0, calc(var(--window-inner-height-offset) / 2), 0) scale3d(var(--scale3dFactor), var(--scale3dFactor), 1);
 
 }
 
