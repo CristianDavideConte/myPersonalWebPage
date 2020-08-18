@@ -1280,7 +1280,7 @@ p {
 /* 12) MEDIA:MOBILE-LANDASCAPE BROWSERS ELEMENTS' STYLING */
 @media only screen and (max-height:600px) {
   :root {
-    --websitePreview-expanded-size:80vmin;
+    --websitePreview-expanded-size:85vmin;
   }
 
   .pageSeparator {
