@@ -63,7 +63,7 @@
   --1vh:calc(var(--100vh) / 100);
   --50vh:calc(var(--100vh) / 2);
 
-  --backdrop-filter-blur-radius-ultra-reduced:1.3px;
+  --backdrop-filter-blur-radius-ultra-reduced:0.1rem;
 	--backdrop-filter-blur-radius-reduced:1rem;
 	--backdrop-filter-blur-radius:1.5rem;
 	--backdrop-filter-blur-radius-wide:2rem;
