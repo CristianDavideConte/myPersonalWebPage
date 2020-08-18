@@ -742,20 +742,24 @@ p {
 }
 
 .websitePreview {
-	margin:1rem 0em 1rem 1rem;
 	cursor:pointer;
 	display:flex;
+	flex:none;
 	flex-direction:column;
 	justify-content:center;
 	align-items:center;
-	flex:none;
-	width:var(--websitePreview-size);
+  margin:1rem 0em 1rem 1rem;
+  border-radius:var(--boxShapedElement-border-radius);
+
+  width:var(--websitePreview-size);
 	height:var(--websitePreview-size);
-	border-radius:var(--boxShapedElement-border-radius);
-	background:var(--theme-blur-background-color-Average);
-	-webkit-box-shadow: var(--theme-box-shadow);
+
+  background:var(--theme-blur-background-color-Average);
+
+  -webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
-	transition:opacity 0s, transform var(--transition-time-quick);
+
+  transition:opacity 0s, transform var(--transition-time-quick);
 }
 
 .websitePreview:hover {
@@ -775,28 +779,47 @@ p {
 }
 
 #websitePreviewExpanded {
+  cursor:default;
+
   position: fixed;            /* This avoids layout shifts during the expandedState animation */
-	cursor:default;
 	display:flex;
 	flex-direction:column;
 	justify-content:center;
 	align-items:center;
-	border-radius:5%;
-	height:var(--websitePreview-current-size);
+
+  border-radius:5%;
+
+  height:var(--websitePreview-current-size);
 	width:var(--websitePreview-current-size);
-	-webkit-box-shadow: var(--theme-box-shadow);
+
+  -webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
 
 	background:var(--theme-blur-background-color-Average);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(150%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(150%);
-	transition:all var(--transition-time-medium);
 
 	-webkit-transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0) scale3d(1,1,1);
 	transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0) scale3d(1,1,1);
+  transition:all var(--transition-time-medium);
 
-	--transform-translateX: calc(var(--websitePreview-original-left-position) - 50vw + var(--websitePreview-current-size) / 2);
-	--transform-translateY: calc(var(--websitePreview-original-top-position) - var(--50vh) + var(--websitePreview-current-size) / 2 - var(--window-inner-height-offset));
+  /*
+   * The websitePreviewExpanded is centered by default thanks to the display flex-allignment of its
+   * container (websitePreviewExpandedBackgroundContent).
+   * Its initial position should match the corresponding websitePreview's one.
+   * This is achieved throught 2 translation (X and Y, the Z is untouched).
+   * The transformations:
+   * - Reset the X and Y to (-websitePreview-current-size / 2, -websitePreview-current-size / 2) -> the transform-origin is center !
+   * - Add half of the corresponding websitePreview's size (width and height are the same) to the X and Y so that the coordinates are now (0,0)
+   * - Add the orginal-left-position to the X and the original-top-position to the Y to allign the websitePreviewExpanded to the corresponding websitePreview
+   *
+   * NOTE: 50vh + window-inner-height-offset => current browser's height
+   *       this has to be subtracted from the current position in order to reset the Y to 0.
+   *       - (50vh + window-inner-height-offset) == - 50vh - window-inner-height-offset (TranslateY).
+   */
+	--transform-translateX: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-left-position) - 50vw );
+	--transform-translateY: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-top-position) - var(--50vh) - var(--window-inner-height-offset));
+
 }
 
 .expandedState #websitePreviewExpanded {
@@ -1234,7 +1257,7 @@ p {
 /* 12) MEDIA:MOBILE-LANDASCAPE BROWSERS ELEMENTS' STYLING */
 @media only screen and (max-height:600px) {
   :root {
-    --websitePreview-expanded-size:90vmin;
+    --websitePreview-expanded-size:80vmin;
   }
 
   .pageSeparator {

@@ -658,16 +658,17 @@ function imageLoading() {
  */
 function updateWindowSize(){
 	function _update(currentWindowHeight) {
-			windowHeightOffset = 0;
-			windowHeight = currentWindowHeight;
-			documentElement.style.setProperty("--vh", windowHeight * 0.01 + "px");
-			documentElement.style.setProperty("--body-background-height", currentWindowHeight + "px");
-			MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
-			MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
-			MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowHeight;
-			MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowHeight;
-			computedStyle = getComputedStyle(documentBodyElement);
-			websitePreviewExpandedSize = computedStyle.getPropertyValue("--websitePreview-expanded-size").replace("vmin", "");
+		console.log("OK");
+		windowHeightOffset = 0;
+		windowHeight = currentWindowHeight;
+		//documentElement.style.setProperty("--vh", currentWindowHeight / 100 + "px");
+		documentElement.style.setProperty("--body-background-height", currentWindowHeight + "px");
+		MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
+		MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
+		MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowHeight;
+		MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowHeight;
+		computedStyle = getComputedStyle(documentBodyElement);
+		websitePreviewExpandedSize = computedStyle.getPropertyValue("--websitePreview-expanded-size").replace("vmin", "");
 	}
 
 	window.requestAnimationFrame(() => {
@@ -677,7 +678,7 @@ function updateWindowSize(){
 		mobileMode = (_currentwindowWidth < 1081) ? 1 : 0;
 
 		if(mobileMode) {
-			if(_currentWindowHeight >= windowHeight + windowHeightOffset)		//If the window gets higher all the variables are always updated
+			if(_currentWindowHeight > windowHeight)		//If the window gets higher all the variables are always updated
 				_update(_currentWindowHeight);
 			else if(_currentwindowWidth > windowWidth && _currentwindowWidth >= _currentWindowHeight) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
 				_update(_currentWindowHeight);
