@@ -830,6 +830,14 @@ p {
 	--transform-translateX: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-left-position) - 50vw );
 	--transform-translateY: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-top-position) - var(--50vh) - var(--window-inner-height-offset));
 
+  /*
+   * When expanded the image occupies only 50% of the height/width of the websitePreview, not the 70%.
+   * The *var(--scale3dFactor) is done when the websitePreviewExpanded container of the websitePreviewExpandedImage is transformed.
+   */
+  --scale3dFactor-Image: calc(50 / 70);
+  --scale3dFactor-Title: calc(1 / var(--scale3dFactor));
+  --scale3dFactor-ButtonSection: calc(1 / var(--scale3dFactor));
+  --websitePreviewImage-expanded-size: calc(var(--scale3dFactor-Image) * var(--scale3dFactor) * var(--websitePreviewImage-current-size));
 }
 
 .expandedState #websitePreviewExpanded {
@@ -848,8 +856,6 @@ p {
 	width:var(--websitePreviewImage-current-size);
 	border-radius:100%;
 	transition:all var(--transition-time-medium);
-
-  --scale3dFactor-Image: calc(2 / var(--scale3dFactor));
 }
 
 .expandedState .websitePreviewExpandedImage {
@@ -859,45 +865,49 @@ p {
 
 .websitePreviewExpandedTitle {
   position: fixed;            /* This avoids layout shifts during the expandedState animation */
+  height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
+
+  line-height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
+  text-align: center;
+  vertical-align: middle;
   white-space: nowrap;
   font-size:3rem;
   font-weight: bold;
 
-  /* the *2 is due to the scale3dFactor-image having as the increasing factor 2 */
-	-webkit-transform: scale3d(0, var(--scale3dFactor-Title), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / -4), 0);
-	transform: scale3d(0, var(--scale3dFactor-Title), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / -4), 0);
+  /* The x2 is due to the var(scale3dFactor-Image) having as the increasing factor 2 */
+	-webkit-transform: scale3d(0, var(--scale3dFactor-Title), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-expanded-size)) / -4), 0);
+	transform: scale3d(0, var(--scale3dFactor-Title), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-expanded-size)) / -4), 0);
 	transition:all var(--transition-time-medium);
-
-  --scale3dFactor-Title: calc(1 / var(--scale3dFactor));
 }
 
 .expandedState .websitePreviewExpandedTitle {
-  -webkit-transform: scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / -4), 0);
-  transform: scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / -4), 0);
+  -webkit-transform: scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-expanded-size)) / -4), 0);
+  transform: scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-expanded-size)) / -4), 0);
 }
 
 #websitePreviewExpandedButtonSection {
   position: fixed;            /* This avoids layout shifts during the expandedState animation  */
 	display:flex;
   justify-content: space-around;
+  align-items: center;
   width: calc(100% * var(--scale3dFactor));
+  height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
 
   /* the *2 is due to the scale3dFactor-image having as the increasing factor 2 */
-  -webkit-transform: scale3d(0, var(--scale3dFactor-ButtonSection), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / 4), 0);
-	transform: scale3d(0, var(--scale3dFactor-ButtonSection), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / 4), 0);
+  -webkit-transform: scale3d(0, var(--scale3dFactor-ButtonSection), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-expanded-size)) / 4), 0);
+	transform: scale3d(0, var(--scale3dFactor-ButtonSection), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-expanded-size)) / 4), 0);
 	transition:all var(--transition-time-medium);
-
-  --scale3dFactor-ButtonSection: calc(1 / var(--scale3dFactor));
 }
 
 .expandedState #websitePreviewExpandedButtonSection {
-  -webkit-transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / 4), 0);
-  transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-current-size) * 2) / 4), 0);
+  -webkit-transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-expanded-size)) / 4), 0);
+  transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-expanded-size)) / 4), 0);
 }
 
 .websitePreviewExpandedButton {
   font-family: "UniNeueLight";
   font-weight: bold;
+  height: 60%;
 	outline:none;
 	border:none;
 	cursor:pointer;
