@@ -658,11 +658,9 @@ function imageLoading() {
  */
 function updateWindowSize(){
 	function _update(currentWindowHeight) {
-		console.log("OK");
 		windowHeightOffset = 0;
 		windowHeight = currentWindowHeight;
-		//documentElement.style.setProperty("--vh", currentWindowHeight / 100 + "px");
-		documentElement.style.setProperty("--body-background-height", currentWindowHeight + "px");
+		documentElement.style.setProperty("--100vh", currentWindowHeight + "px");
 		MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
 		MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
 		MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowHeight;
@@ -672,7 +670,7 @@ function updateWindowSize(){
 	}
 
 	window.requestAnimationFrame(() => {
-		let _currentWindowHeight = documentElement.clientHeight;
+		let _currentWindowHeight = documentElement.offsetHeight;
 		let _currentwindowWidth = documentElement.clientWidth;
 
 		mobileMode = (_currentwindowWidth < 1081) ? 1 : 0;
