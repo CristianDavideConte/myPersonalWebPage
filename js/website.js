@@ -103,7 +103,7 @@ function desktopEventListenerInitialization() {
 						smoothPageScroll(_firstScrollYPosition, window.scrollY);
 						_firstScrollYPosition = null;
 					}
-			}, 66);
+			}, 100);
 	}, {passive:false});
 
 	window.addEventListener("resize", updateWindowSize, {passive:true});
