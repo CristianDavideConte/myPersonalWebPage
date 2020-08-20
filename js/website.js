@@ -1,16 +1,7 @@
-const STANDARD_WINDOW_INNER_HEIGHT = 937;							//The standard browser inner height, usually about 937px at 1920x1080
-const MIN_SCROLLING_ANIMATION_FRAMES_STANDARD = 7;		//The minumum number of frames that the smoothScrollVertically function can use to scroll the window if the windowHeight = STANDARD_WINDOW_INNER_HEIGHT
-const MAX_SCROLLING_ANIMATION_FRAMES_STANDARD = 25;		//The maximum number of frames that the smoothScrollVertically function can use to scroll the window if the windowHeight = STANDARD_WINDOW_INNER_HEIGHT
-const MIN_SPEED_INCREASE_STANDARD = 1;								//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function if the windowHeight = STANDARD_WINDOW_INNER_HEIGHT
-const MAX_SPEED_INCREASE_STANDARD = 4;								//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function if the windowHeight = STANDARD_WINDOW_INNER_HEIGHT
-const MAX_PAGES_GAP_NUMBER = 3;												//The maximum number of pages of the window
-var MIN_SCROLLING_ANIMATION_FRAMES;										//The minumum number of frames that the smoothScrollVertically function can use to scroll the window for the current windowHeight value
-var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that the smoothScrollVertically function can use to scroll the window for the current windowHeight value
-var MIN_SPEED_INCREASE;																//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowHeight value
-var MAX_SPEED_INCREASE;																//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowHeight value
+const pageLinksScrollDuration = 500;								//The duration of each zenscroll.toY() scroll which is not invoked by windowScrollYBy
+const windowScrollYByDuration = 250;								//The duration of each windowScrollYBy scroll
 
 var windowScrollYBy; 																//A shorthand for the y => zenscroll.toY(window.scrollY + y) function, used to scroll the window without the user's interaction
-var windowScrollYByDuration;												//The duration of each zenscroll.toY() scroll
 var mobileMode; 																		//Indicates if the css for mobile is currently being applied
 var safariBrowserUsed;															//A Boolean which is true if the browser used is Apple's Safari, false otherwise
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
@@ -18,7 +9,7 @@ var websitePreviewExpandedMap; 											//A map which contains all the already
 var computedStyle;																	//All the computed styles for the document.body element
 var websitePreviewExpandedSize;											//The --websitePreview-expanded-size css variable, used to calculate the scale factor of the websitePreviews expansion animation
 var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
-var documentElement; 																//A shorthand for document.documentElement, used for getting the browser's inner dimensions and computed styles
+var documentElement; 																//A shorthand for document.documentElement (<html> element), used for getting the browser's inner dimensions and computed styles
 var windowWidth;																		//A shortcut for the DOM element window.innerWidth
 var windowHeight;																		//A shortcut for the DOM element window.innerHeight
 var windowHeightOffset;															//The difference between the previous windowHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
@@ -50,8 +41,7 @@ function init() {
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
-	zenscroll.setup(500);			//page links scroll's durations
-	windowScrollYByDuration = 250;			//windowScrollYBy scrolls' durations
+	zenscroll.setup(pageLinksScrollDuration);
 	windowScrollYBy = (y, onDone = null) => zenscroll.toY(window.scrollY + y, windowScrollYByDuration, onDone);
 
 	documentBodyElement = document.body;
@@ -119,33 +109,21 @@ function desktopEventListenerInitialization() {
 	 * Pressing the Arrow-up or the Arrow-left keys will trigger a scroll upwards by a scrollDistance of windowHeight
  	 * Pressing the Arrow-down or the Arrow-right keys will trigger a scroll downwards by a scrollDistance of windowHeight
 	 * Safari support is added by using the smoothScrollVertically function.
-	 /
-	if(!safariBrowserUsed)*/
-		documentBodyElement.addEventListener("keydown", event => {
-			if(event.target.tagName == "BODY") {
-				let _keyName = event.key;
-				if(_keyName == "ArrowUp" || _keyName == "ArrowLeft") {
-					windowScrollYBy(-windowHeight);
-					event.preventDefault();
-				} else if(_keyName == "ArrowDown" || _keyName == "ArrowRight") {
-					windowScrollYBy(windowHeight);
-					event.preventDefault();
-				}
+   */
+	documentBodyElement.addEventListener("keydown", event => {
+		if(event.target.tagName == "BODY") {
+			let _keyName = event.key;
+			if(_keyName == "ArrowUp" || _keyName == "ArrowLeft") {
+				event.preventDefault();
+				zenscroll.stop();
+				windowScrollYBy(-windowHeight);
+			} else if(_keyName == "ArrowDown" || _keyName == "ArrowRight") {
+				event.preventDefault();
+				zenscroll.stop();
+				windowScrollYBy(windowHeight);
 			}
-		}, {passive:false});
-/*	else
-		documentBodyElement.addEventListener("keydown", event => {
-			if(event.target.tagName == "BODY") {
-				let _keyName = event.key;
-				if(_keyName == "ArrowUp" || _keyName == "ArrowLeft") {
-					smoothScrollVertically(-1, windowHeight);
-					event.preventDefault();
-				} else if(_keyName == "ArrowDown" || _keyName == "ArrowRight") {
-					smoothScrollVertically(1, windowHeight);
-					event.preventDefault();
-				}
-			}
-		}, {passive:false});
+		}
+	}, {passive:false});
 
 	/*
 	 * When a scroll triggered by mouse wheel, a trackpad or touch gesture is detected
@@ -167,26 +145,9 @@ function desktopEventListenerInitialization() {
 	 * Whenever a link is clicked and the window is scrolled, it's convenient to hide all the links under the hamburgerMenu.
 	 * This is done the same way the hamburgerMenu expands when clicked directly (see above in the comment).
 	 * Plus, if safari needs a manual implementation for the smoothScroll CSS attribute.
-	 /
-  if(!safariBrowserUsed)*/
-  	for(const pageLink of pageLinksElements)
-			 pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
-	/*else {
-		document.getElementById("scrollDownButton").addEventListener("click", event => {
-			event.preventDefault();
-			smoothScrollVertically(1, windowHeight);
-		}, {passive:false});
-
-		for(const pageLink of pageLinksElements)
- 			pageLink.addEventListener("click", event => {
-				event.preventDefault();
-				if(!pageLinkClicked) {
-					pageLinkClicked = true;
-					toggleExpandHamburgerMenu();
-					pageLinksSmoothScroll(pageLink);
-				}
-			}, {passive:false});
-	}*/
+	 */
+	for(const pageLink of pageLinksElements)
+		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
 
 	/* All the social networks icons are linked to the corresponding website */
 	document.getElementById("githubContact").addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
@@ -513,110 +474,21 @@ function browserIsSafari() {
  * If at the end of the scroll, the current page is not alligned, it gets:
  * - alligned if it covers 3/4 of the windowHeight or more
  * - scrolled, following the original user's scroll direction, otherwise
- /
-if(!browserIsSafari()) {*/
-	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, onDone) {
-		currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
-		let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
-		if(_scrollYAmmount > windowHeight / 2 || _scrollYAmmount < -windowHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowHeight / 2
-			let _scrollDirection = Math.sign(_scrollYAmmount);																										//1 if the scrolling is going downwards -1 otherwise.
-			let _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
+ */
+function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, onDone) {
+	currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
+	let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
+	if(_scrollYAmmount > windowHeight / 2 || _scrollYAmmount < -windowHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowHeight / 2
+		let _scrollDirection = Math.sign(_scrollYAmmount);																										//1 if the scrolling is going downwards -1 otherwise.
+		let _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
-			if(_pageOffset != 0)
-				if(-_pageOffset < windowHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
-					windowScrollYBy(_scrollDirection * _pageOffset, onDone);
-				else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
-					windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset), onDone);
-		}
-	}/*
-} else {
-	/*
-	 * If the browser used is Safari, which doesn't support the CSS3 scroll-behavior:smooth getAttribute
-	 * the smoothPageScroll function is redifined and the smooth scrolling is done by using:
-	 * - smoothScrollVertically for a generic smooth scroll of the window
-	 * - pageLinksSmoothScroll for the specific case of a pageLink clicked
-	 /
-	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
-		currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
-		let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
-		if(_scrollYAmmount > windowHeight / 2 || _scrollYAmmount < -windowHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowHeight / 2
-			let _scrollDirection = Math.sign(_scrollYAmmount);																										//1 if the scrolling is going downwards -1 otherwise.
-			let _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
-
-			if(_pageOffset != 0)
-				if(-_pageOffset < windowHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
-					smoothScrollVertically(Math.sign(_scrollDirection * _pageOffset), Math.abs(_pageOffset));
-				else  																																														//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
-					smoothScrollVertically(Math.sign(_scrollDirection * (windowHeight + _pageOffset)), windowHeight + _pageOffset);
-		}
+		if(_pageOffset != 0)
+			if(-_pageOffset < windowHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
+				windowScrollYBy(_scrollDirection * _pageOffset, onDone);
+			else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
+				windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset), onDone);
 	}
-
-	/*
-	 * This funcion replaces the scroll-behavior:smooth css rules for the safari browser that doesn't support it.
-	 * scrollDirection is 1 if the scrolling is going downwards -1 otherwise.
-	 * totalScrollAmmount is the total ammount of pixel vertically scrolled by the smoothScrollVertically function: MUST ALWAYS BE >= 0
-	 /
-	function smoothScrollVertically(scrollDirection, totalScrollAmmount) {
-		/*
-		 * The velocity of the scrolling (scrollDistance) is calculated by following this formula:
-		 * _scrollDistance = remaningScrollAmmount / _maxAnimationFramesNumber
-		 * _maxAnimationFramesNumber = _maxAnimationFramesNumber - _speedIncrease -> until MAX_SCROLLING_ANIMATION_FRAMES is reached (Max velocity)
-		 * Where:
-		 * remaningScrollAmmount = totalScrollAmmount - _partialScrollAmmount, ALWAYS POSITIVE
-		 * totalScrollAmmount = the absolute value of the offset that the window has to scroll vertically
-		 * _partialScrollAmmount = the ammount of pixed scrolled from the first _safariSmoothPageScroll call
-		 * _maxAnimationFramesNumber = the highest number of frame the scrolling animation can use
-		 * _speedIncrease = a number which grows exponentially (_speedIncrease(n) = _speedIncrease(n-1)^2): it's value is contained between MIN_SPEED_INCREASE and MAX_SPEED_INCREASE
-		 * _scrollDistance = the ammount of pixel scrolled at each _safariSmoothPageScroll call
-		 * _currentPagesGapNumber = the number of pages there are between the current page and the one the user wants to land on
-		 /
-		let _maxAnimationFramesNumber = MAX_SCROLLING_ANIMATION_FRAMES;
-		let _scrollDistance = totalScrollAmmount / _maxAnimationFramesNumber;
-		let _currentPagesGapNumber = totalScrollAmmount / windowHeight;
-
-		let _speedIncrease = MAX_SPEED_INCREASE - (_currentPagesGapNumber * (MAX_SPEED_INCREASE - MIN_SPEED_INCREASE) / MAX_PAGES_GAP_NUMBER);
-
-		let _partialScrollAmmount = 0;
-		/*
-		 * This function should only be called inside the smoothScrollVertically function.
-		 * It physically scrolls the window by scrollDistance in the given scrollDirection at each function call.
-		 /
-		function _safariSmoothPageScroll() {
-			if(_scrollDistance > 0) {
-				windowScrollYBy(scrollDirection * _scrollDistance);
-				_partialScrollAmmount += _scrollDistance;
-
-				if(_maxAnimationFramesNumber - _speedIncrease > MIN_SCROLLING_ANIMATION_FRAMES)
-					_maxAnimationFramesNumber = Math.round(_maxAnimationFramesNumber - _speedIncrease);
-				else
-					_maxAnimationFramesNumber = MIN_SCROLLING_ANIMATION_FRAMES;
-
-				_speedIncrease = (_speedIncrease * _speedIncrease < MAX_SPEED_INCREASE) ? _speedIncrease * 2 : MAX_SPEED_INCREASE;
-				_scrollDistance = Math.round((totalScrollAmmount - _partialScrollAmmount) / _maxAnimationFramesNumber);
-
-				window.requestAnimationFrame(_safariSmoothPageScroll);
-			} else
-				pageLinkClicked = false;																								//Used to avoid the spam of pageLinksSmoothScroll function calls
-		}
-
-		window.requestAnimationFrame(_safariSmoothPageScroll);
-	}
-
-	/*
-	 * This function adds the smooth scroll for the href pageLinks HTML elements
-	 * It's done by comparing the current page's index and the
-	 * page index of the page the user wants to land to.
-	 * The actual scrolling is delegated to the smoothScrollVertically function.
-	 /
-	var pageLinkClicked = false;
-	function pageLinksSmoothScroll(pageLink) {
-		let _windowScrollY = window.scrollY;
-		currentPageIndex = Math.round(_windowScrollY / windowHeight);
-		let _targetPageIndex = pageLink.dataset.pageNumber;																								//The index of the page that the passed pageLink refers to
-		let _totalScrollAmmount = _targetPageIndex * windowHeight - _windowScrollY;
-		smoothScrollVertically(Math.sign(_totalScrollAmmount), Math.abs(_totalScrollAmmount));						// Only defined if the browser used is Safari
-	}
-}*/
+}
 
 /*
  * This function, accordingly to the user's preferred theme, asyncronusly load:
@@ -666,11 +538,8 @@ function updateWindowSize(){
 	function _update(currentWindowHeight) {
 		windowHeightOffset = 0;
 		windowHeight = currentWindowHeight;
+
 		documentElement.style.setProperty("--100vh", currentWindowHeight + "px");
-		MAX_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MAX_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
-		MIN_SCROLLING_ANIMATION_FRAMES = STANDARD_WINDOW_INNER_HEIGHT * MIN_SCROLLING_ANIMATION_FRAMES_STANDARD / windowHeight;
-		MIN_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MIN_SPEED_INCREASE_STANDARD / windowHeight;
-		MAX_SPEED_INCREASE = STANDARD_WINDOW_INNER_HEIGHT * MAX_SPEED_INCREASE_STANDARD / windowHeight;
 		computedStyle = getComputedStyle(documentBodyElement);
 		websitePreviewExpandedSize = computedStyle.getPropertyValue("--websitePreview-expanded-size").replace("vmin", "");
 	}
@@ -750,12 +619,12 @@ function _fastPagesScrollTest() {
 let _testScrolledTimes = 0;
 function testScrollingSmoothness() {
 	if(_testScrolledTimes == 0) {
-		zenscroll.toY(window.scrollY - window.innerHeight / 2);
+		windowScrollYBy(window.scrollY - window.innerHeight / 2);
 		_testScrolledTimes++;
 		setTimeout(testScrollingSmoothness, 650);
 	} else if(_testScrolledTimes < 50) {
 		let _scrollAmmount = (_testScrolledTimes % 2 == 0) ? window.scrollY - window.innerHeight : window.scrollY + window.innerHeight;
-		zenscroll.toY(_scrollAmmount);
+		windowScrollYBy(_scrollAmmount);
 		_testScrolledTimes++;
 		setTimeout(testScrollingSmoothness, 650);
 	}
