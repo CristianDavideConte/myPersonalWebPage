@@ -1,5 +1,5 @@
-const pageLinksScrollDuration = 500;								//The duration of each zenscroll.toY() scroll which is not invoked by windowScrollYBy
-const windowScrollYByDuration = 250;								//The duration of each windowScrollYBy scroll
+const PAGELINKSCROLLDURATION = 500;									//The duration of each zenscroll.toY() scroll which is not invoked by windowScrollYBy
+const WINDOWSCROLLYBYDURATION = 250;								//The duration of each windowScrollYBy scroll
 
 var windowScrollYBy; 																//A shorthand for the y => zenscroll.toY(window.scrollY + y) function, used to scroll the window without the user's interaction
 var mobileMode; 																		//Indicates if the css for mobile is currently being applied
@@ -33,7 +33,7 @@ var contactMeFormSendButtonElement;									//The HTML element with the id "cont
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {
 	variableInitialization();												//Binds the js variables to the corresponding HTML elements
-	desktopEventListenerInitialization();						//Initializes all the mouse and keyboard eventHandlers
+	eventHandlersInitialization();									//Initializes all the eventHandlers
 
 	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
 	imageLoading();																	//Initializes all the HTML img elements' contents
@@ -41,8 +41,8 @@ function init() {
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
-	zenscroll.setup(pageLinksScrollDuration);
-	windowScrollYBy = (y, onDone = null) => zenscroll.toY(window.scrollY + y, windowScrollYByDuration, onDone);
+	zenscroll.setup(PAGELINKSCROLLDURATION); //Manual (github page): https://github.com/zengabor/zenscroll
+	windowScrollYBy = (y, onDone = null) => zenscroll.toY(window.scrollY + y, WINDOWSCROLLYBYDURATION, onDone);
 
 	documentBodyElement = document.body;
 
@@ -76,8 +76,8 @@ function variableInitialization() {
 	contactMeFormSendButtonElement = document.getElementById("contactMeFormSendButton");
 }
 
-/* This function binds all the HTML elements that can be interacted to their mouse and keyboard eventHandlers */
-function desktopEventListenerInitialization() {
+/* This function binds all the HTML elements that can be interacted to the corresponding eventHandlers */
+function eventHandlersInitialization() {
 	let _isFingerDown = false;
 	documentBodyElement.addEventListener("touchstart", () => {
 		_isFingerDown = true;
@@ -377,7 +377,7 @@ function desktopEventListenerInitialization() {
 		return valid;
 	}
 
- 	// Success and Error functions for after the form is submitted
+ 	/* Success function for after the form is submitted */
   function _ajaxResponceStatusSuccess() {
     contactMeFormElement.reset();
     contactMeFormEmailElement.disabled = true;
@@ -389,6 +389,7 @@ function desktopEventListenerInitialization() {
 		_showMessage("Message Sent!");
   }
 
+	/* Error function for after the form is submitted */
   function _ajaxResponceStatusError(status, response, responseType) {
 		contactMeFormSendButtonElement.disabled = false;
 		_showMessage("Oops! There was a problem, try again later");
@@ -456,15 +457,6 @@ function toggleExpandHamburgerMenu() {
 			headerBackgroundElement.classList.toggle("mobileExpanded");
 			headerElement.classList.toggle("mobileExpanded");
 		});
-}
-
-/* Returns true if the user's browser is Safari, false otherwise */
-function browserIsSafari() {
-	safariBrowserUsed = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
-									   	navigator.userAgent &&
-									   	navigator.userAgent.indexOf("CriOS") == -1 &&
-									   	navigator.userAgent.indexOf("FxiOS") == -1;
-	return safariBrowserUsed;
 }
 
 /*
@@ -565,6 +557,14 @@ function updateWindowSize(){
 	});
 }
 
+/* Returns true if the user's browser is Safari, false otherwise */
+function browserIsSafari() {
+	safariBrowserUsed = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
+									   	navigator.userAgent &&
+									   	navigator.userAgent.indexOf("CriOS") == -1 &&
+									   	navigator.userAgent.indexOf("FxiOS") == -1;
+	return safariBrowserUsed;
+}
 /* -------------------------------------------------------- 						TESTING CODE SECTION     					------------------------------------------------------------------*/
 var _test = 0;
 function lagTest() {
