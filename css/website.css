@@ -349,18 +349,15 @@ p {
 #headerBackground {
 	z-index:2;
 	position:fixed;
-	height: 10.1%;
-	width: 10.1%;
+	height: var(--100vh);
+	width: 100vw;
 	background:var(--theme-blur-background-color-Dark);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced));
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced));
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 
-	-webkit-transform: scale3d(var(--scale3dFactor-header), var(--scale3dFactor-header), 1) translate3d(0, calc((var(--header-elements-height) + 2 * var(--header-elements-padding)) / var(--scale3dFactor-header) - 100%), 0);
-	transform: scale3d(var(--scale3dFactor-header), var(--scale3dFactor-header), 1) translate3d(0, calc((var(--header-elements-height) + 2 * var(--header-elements-padding)) / var(--scale3dFactor-header) - 100%), 0);
-  transform-origin: top left;
+	-webkit-transform: translate3d(0, calc(var(--header-elements-height) + 2 * var(--header-elements-padding) - var(--100vh)), 0);
+	transform: translate3d(0, calc(var(--header-elements-height) + 2 * var(--header-elements-padding) - var(--100vh)), 0);
 	transition:var(--transition-time);
-
-  --scale3dFactor-header: 10;
 }
 
 #header {
@@ -1146,8 +1143,8 @@ p {
   }
 
 	#headerBackground.mobileExpanded {
-		-webkit-transform: scale3d(var(--scale3dFactor-header), var(--scale3dFactor-header), 1) translate3d(0, 0, 0);
-		transform: scale3d(var(--scale3dFactor-header), var(--scale3dFactor-header), 1) translate3d(0, 0, 0);
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
 	}
 
 	#header.mobileExpanded {
