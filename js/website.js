@@ -113,8 +113,8 @@ function desktopEventListenerInitialization() {
 	 * Pressing the Arrow-up or the Arrow-left keys will trigger a scroll upwards by a scrollDistance of windowHeight
  	 * Pressing the Arrow-down or the Arrow-right keys will trigger a scroll downwards by a scrollDistance of windowHeight
 	 * Safari support is added by using the smoothScrollVertically function.
-	 */
-	if(!safariBrowserUsed)
+	 /
+	if(!safariBrowserUsed)*/
 		documentBodyElement.addEventListener("keydown", event => {
 			if(event.target.tagName == "BODY") {
 				let _keyName = event.key;
@@ -127,7 +127,7 @@ function desktopEventListenerInitialization() {
 				}
 			}
 		}, {passive:false});
-	else
+/*	else
 		documentBodyElement.addEventListener("keydown", event => {
 			if(event.target.tagName == "BODY") {
 				let _keyName = event.key;
@@ -161,11 +161,11 @@ function desktopEventListenerInitialization() {
 	 * Whenever a link is clicked and the window is scrolled, it's convenient to hide all the links under the hamburgerMenu.
 	 * This is done the same way the hamburgerMenu expands when clicked directly (see above in the comment).
 	 * Plus, if safari needs a manual implementation for the smoothScroll CSS attribute.
-	 */
-  if(!safariBrowserUsed)
+	 /
+  if(!safariBrowserUsed)*/
   	for(const pageLink of pageLinksElements)
 			 pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
-	else {
+	/*else {
 		document.getElementById("scrollDownButton").addEventListener("click", event => {
 			event.preventDefault();
 			smoothScrollVertically(1, windowHeight);
@@ -180,7 +180,7 @@ function desktopEventListenerInitialization() {
 					pageLinksSmoothScroll(pageLink);
 				}
 			}, {passive:false});
-	}
+	}*/
 
 	/* All the social networks icons are linked to the corresponding website */
 	document.getElementById("githubContact").addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
@@ -507,8 +507,8 @@ function browserIsSafari() {
  * If at the end of the scroll, the current page is not alligned, it gets:
  * - alligned if it covers 3/4 of the windowHeight or more
  * - scrolled, following the original user's scroll direction, otherwise
- */
-if(!browserIsSafari()) {
+ /
+if(!browserIsSafari()) {*/
 	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 		currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
 		let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
@@ -522,14 +522,14 @@ if(!browserIsSafari()) {
 				else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
 					windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset));
 		}
-	}
+	}/*
 } else {
 	/*
 	 * If the browser used is Safari, which doesn't support the CSS3 scroll-behavior:smooth getAttribute
 	 * the smoothPageScroll function is redifined and the smooth scrolling is done by using:
 	 * - smoothScrollVertically for a generic smooth scroll of the window
 	 * - pageLinksSmoothScroll for the specific case of a pageLink clicked
-	 */
+	 /
 	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 		currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
 		let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
@@ -549,7 +549,7 @@ if(!browserIsSafari()) {
 	 * This funcion replaces the scroll-behavior:smooth css rules for the safari browser that doesn't support it.
 	 * scrollDirection is 1 if the scrolling is going downwards -1 otherwise.
 	 * totalScrollAmmount is the total ammount of pixel vertically scrolled by the smoothScrollVertically function: MUST ALWAYS BE >= 0
-	 */
+	 /
 	function smoothScrollVertically(scrollDirection, totalScrollAmmount) {
 		/*
 		 * The velocity of the scrolling (scrollDistance) is calculated by following this formula:
@@ -563,7 +563,7 @@ if(!browserIsSafari()) {
 		 * _speedIncrease = a number which grows exponentially (_speedIncrease(n) = _speedIncrease(n-1)^2): it's value is contained between MIN_SPEED_INCREASE and MAX_SPEED_INCREASE
 		 * _scrollDistance = the ammount of pixel scrolled at each _safariSmoothPageScroll call
 		 * _currentPagesGapNumber = the number of pages there are between the current page and the one the user wants to land on
-		 */
+		 /
 		let _maxAnimationFramesNumber = MAX_SCROLLING_ANIMATION_FRAMES;
 		let _scrollDistance = totalScrollAmmount / _maxAnimationFramesNumber;
 		let _currentPagesGapNumber = totalScrollAmmount / windowHeight;
@@ -574,7 +574,7 @@ if(!browserIsSafari()) {
 		/*
 		 * This function should only be called inside the smoothScrollVertically function.
 		 * It physically scrolls the window by scrollDistance in the given scrollDirection at each function call.
-		 */
+		 /
 		function _safariSmoothPageScroll() {
 			if(_scrollDistance > 0) {
 				windowScrollYBy(scrollDirection * _scrollDistance);
@@ -601,7 +601,7 @@ if(!browserIsSafari()) {
 	 * It's done by comparing the current page's index and the
 	 * page index of the page the user wants to land to.
 	 * The actual scrolling is delegated to the smoothScrollVertically function.
-	 */
+	 /
 	var pageLinkClicked = false;
 	function pageLinksSmoothScroll(pageLink) {
 		let _windowScrollY = window.scrollY;
@@ -610,7 +610,7 @@ if(!browserIsSafari()) {
 		let _totalScrollAmmount = _targetPageIndex * windowHeight - _windowScrollY;
 		smoothScrollVertically(Math.sign(_totalScrollAmmount), Math.abs(_totalScrollAmmount));						// Only defined if the browser used is Safari
 	}
-}
+}*/
 
 /*
  * This function, accordingly to the user's preferred theme, asyncronusly load:
