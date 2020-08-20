@@ -52,7 +52,9 @@
 /* 1A) CSS GLOBAL VARIABLES */
 :root {
   /*
-   * The var(--100vh) is defined with js on the pageLoad.
+   * The var(--100vh) is initially set to 100vh
+   * so that the cumulative layout shift is greatly reduced,
+   * after the body element loaded it's defined with js.
    * The var(--1vh) and var(--50vh) are used instead of 1vh and 50vh because
    * 1vh and 50vh would decrease if the browser's window shrinks,
    * but this is not a desired behaviour
@@ -62,6 +64,7 @@
    */
   --1vh:calc(var(--100vh) / 100);
   --50vh:calc(var(--100vh) / 2);
+  --100vh: 100vh;
 
   --backdrop-filter-blur-radius-ultra-reduced:0.13rem;
 	--backdrop-filter-blur-radius-reduced:1rem;
@@ -86,7 +89,7 @@
 
 	--header-elements-height:4rem;
 	--header-elements-padding:1rem;
-	--header-socialNetworks-div-width:calc(4*var(--header-elements-height) + 3*var(--header-elements-padding));
+	--header-socialNetworks-div-width:calc(4 * var(--header-elements-height) + 3 * var(--header-elements-padding)); /* 4: number of socialNetworks; 3: number of spaces between them*/
 
   --main-title-svg-path:./svgs/mainTitles/svgs/haarlemDeco.svg;
   --main-title-svg-url: url(../svgs/mainTitles/svgs/haarlemDeco.svg);

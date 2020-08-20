@@ -33,15 +33,15 @@ var contactMeFormSendButtonElement;									//The HTML element with the id "cont
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {
 	variableInitialization();												//Binds the js variables to the corresponding HTML elements
-	eventHandlersInitialization();									//Initializes all the eventHandlers
+	updateWindowSize();															//Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
 
-	updateWindowSize();															//Initially sets the height (fixes mobile top search bar behavior) and stores the window's inner width
+	eventHandlersInitialization();									//Initializes all the eventHandlers
 	imageLoading();																	//Initializes all the HTML img elements' contents
 }
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
-	zenscroll.setup(PAGELINKSCROLLDURATION); //Manual (github page): https://github.com/zengabor/zenscroll
+	zenscroll.setup(PAGELINKSCROLLDURATION); //Zenscroll API manual (github page): https://github.com/zengabor/zenscroll
 	windowScrollYBy = (y, onDone = null) => zenscroll.toY(window.scrollY + y, WINDOWSCROLLYBYDURATION, onDone);
 
 	documentBodyElement = document.body;
@@ -565,6 +565,7 @@ function browserIsSafari() {
 									   	navigator.userAgent.indexOf("FxiOS") == -1;
 	return safariBrowserUsed;
 }
+
 /* -------------------------------------------------------- 						TESTING CODE SECTION     					------------------------------------------------------------------*/
 var _test = 0;
 function lagTest() {
