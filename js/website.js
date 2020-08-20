@@ -49,7 +49,7 @@ function init() {
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
-	windowScrollYBy = (y) => window.scroll(0, window.scrollY + y);
+	windowScrollYBy = (y) => zenscroll.toY(window.scrollY + y);
 	documentBodyElement = document.body;
 
 	websitePreviewExpandedMap = new Map();
@@ -744,12 +744,12 @@ function _fastPagesScrollTest() {
 let _testScrolledTimes = 0;
 function testScrollingSmoothness() {
 	if(_testScrolledTimes == 0) {
-		window.scroll(0, window.scrollY - window.innerHeight / 2);
+		zenscroll.toY(window.scrollY - window.innerHeight / 2);
 		_testScrolledTimes++;
 		setTimeout(testScrollingSmoothness, 650);
 	} else if(_testScrolledTimes < 50) {
 		let _scrollAmmount = (_testScrolledTimes % 2 == 0) ? window.scrollY - window.innerHeight : window.scrollY + window.innerHeight;
-		window.scroll(0, _scrollAmmount);
+		zenscroll.toY(_scrollAmmount);
 		_testScrolledTimes++;
 		setTimeout(testScrollingSmoothness, 650);
 	}
