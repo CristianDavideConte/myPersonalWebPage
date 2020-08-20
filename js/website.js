@@ -97,8 +97,10 @@ function eventHandlersInitialization() {
 			_smoothPageScrollTimeout = setTimeout(function _checkFingerDown() {
 					if(_isFingerDown)
 						_smoothPageScrollTimeout = window.requestAnimationFrame(_checkFingerDown);
-					else
-						smoothPageScroll(_firstScrollYPosition, window.scrollY, () => _firstScrollYPosition = null);
+					else {
+						smoothPageScroll(_firstScrollYPosition, window.scrollY);
+						_firstScrollYPosition = null;
+					}
 			}, 100);
 	}, {passive:true});
 
