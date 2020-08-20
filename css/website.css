@@ -233,7 +233,6 @@ html {
   height: 100%;   /* Needed for the var(--100vh) fix */
 	background-color: var(--theme-background-color);
 
-  scroll-behavior:smooth;
   -ms-overflow-style:none !important;									/* Edge */
   scrollbar-width:none !important;									/* Firefox */
 	-webkit-touch-callout:none !important; /* iOS Safari */

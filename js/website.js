@@ -9,7 +9,8 @@ var MAX_SCROLLING_ANIMATION_FRAMES;										//The maximum number of frames that
 var MIN_SPEED_INCREASE;																//The minumum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowHeight value
 var MAX_SPEED_INCREASE;																//The maximum number of frames that are subtracted to the scrolling animation frames in the smoothScrollVertically function for the current windowHeight value
 
-var windowScrollYBy; 																//A shorthand for the y => window.scroll(0, window.scrollY + y) function, used to scroll the window without the user's interaction
+var windowScrollYBy; 																//A shorthand for the y => zenscroll.toY(window.scrollY + y) function, used to scroll the window without the user's interaction
+var windowScrollYByDuration;												//The duration of each zenscroll.toY() scroll
 var mobileMode; 																		//Indicates if the css for mobile is currently being applied
 var safariBrowserUsed;															//A Boolean which is true if the browser used is Apple's Safari, false otherwise
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
@@ -49,7 +50,10 @@ function init() {
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
-	windowScrollYBy = (y) => zenscroll.toY(window.scrollY + y);
+	zenscroll.setup(500);			//page links scroll's durations
+	windowScrollYByDuration = 250;			//windowScrollYBy scrolls' durations
+	windowScrollYBy = (y, onDone = null) => zenscroll.toY(window.scrollY + y, windowScrollYByDuration, onDone);
+
 	documentBodyElement = document.body;
 
 	websitePreviewExpandedMap = new Map();
@@ -85,8 +89,12 @@ function variableInitialization() {
 /* This function binds all the HTML elements that can be interacted to their mouse and keyboard eventHandlers */
 function desktopEventListenerInitialization() {
 	let _isFingerDown = false;
-	documentBodyElement.addEventListener("touchstart", () => _isFingerDown = true, {passive:true});
+	documentBodyElement.addEventListener("touchstart", () => {
+		_isFingerDown = true;
+		zenscroll.stop();
+	}, {passive:true});
 	documentBodyElement.addEventListener("touchend", () => _isFingerDown = false, {passive:true});
+	documentBodyElement.addEventListener("wheel", () =>	zenscroll.stop(), {passive:true});
 
 	let _firstScrollYPosition = null;
 	let _smoothPageScrollTimeout = 0;
@@ -99,12 +107,10 @@ function desktopEventListenerInitialization() {
 			_smoothPageScrollTimeout = setTimeout(function _checkFingerDown() {
 					if(_isFingerDown)
 						_smoothPageScrollTimeout = window.requestAnimationFrame(_checkFingerDown);
-					else {
-						smoothPageScroll(_firstScrollYPosition, window.scrollY);
-						_firstScrollYPosition = null;
-					}
+					else
+						smoothPageScroll(_firstScrollYPosition, window.scrollY, () => _firstScrollYPosition = null);
 			}, 100);
-	}, {passive:false});
+	}, {passive:true});
 
 	window.addEventListener("resize", updateWindowSize, {passive:true});
 
@@ -509,7 +515,7 @@ function browserIsSafari() {
  * - scrolled, following the original user's scroll direction, otherwise
  /
 if(!browserIsSafari()) {*/
-	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
+	function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, onDone) {
 		currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
 		let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
 		if(_scrollYAmmount > windowHeight / 2 || _scrollYAmmount < -windowHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowHeight / 2
@@ -518,9 +524,9 @@ if(!browserIsSafari()) {*/
 
 			if(_pageOffset != 0)
 				if(-_pageOffset < windowHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
-					windowScrollYBy(_scrollDirection * _pageOffset);
+					windowScrollYBy(_scrollDirection * _pageOffset, onDone);
 				else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
-					windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset));
+					windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset), onDone);
 		}
 	}/*
 } else {
