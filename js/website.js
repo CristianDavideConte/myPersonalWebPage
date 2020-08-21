@@ -35,7 +35,7 @@ function init() {
 	variableInitialization();												//Binds the js variables to the corresponding HTML elements
 	updateWindowSize();															//Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
 
-	eventHandlersInitialization();									//Initializes all the eventHandlers
+	eventListenersInitialization();									//Initializes all the eventHandlers
 	imageLoading();																	//Initializes all the HTML img elements' contents
 }
 
@@ -77,7 +77,7 @@ function variableInitialization() {
 }
 
 /* This function binds all the HTML elements that can be interacted to the corresponding eventHandlers */
-function eventHandlersInitialization() {
+function eventListenersInitialization() {
 	let _isFingerDown = false;
 	documentBodyElement.addEventListener("touchstart", () => {
 		_isFingerDown = true;
@@ -156,6 +156,29 @@ function eventHandlersInitialization() {
 	document.getElementById("stackoverflowContact").addEventListener("click", () => window.open("https://stackoverflow.com/users/13938363/cristian-davide-conte?tab=profile"), {passive:true});
 	document.getElementById("instagramContact").addEventListener("click", () => window.open("https://www.instagram.com/cristiandavideconte/?hl=it"), {passive:true});
 	document.getElementById("mailContact").addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
+
+	let presentationCard = document.getElementById("presentationCard");
+	presentationCard.addEventListener("wheel", event => {
+		event.preventDefault();
+		let _scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
+		let _totalScrollAmmount = windowHeight/20;							//The total ammount of pixel vertically scrolled by the _smoothPresentationCardWheelScroll function
+		let _scrollDistance = windowHeight/150;									//The ammount of pixel scrolled at each _smoothPresentationCardWheelScroll call
+		let _partialScrollAmmount = 0;													//scrollDistance * number of _smoothPresentationCardWheelScroll function calls
+
+		/*
+		 * This function should only be called inside the presentationCard wheelEvent listeners.
+		 * The number of the pixel scrolled on the y-axis, it's calculated dynamically based on the windowHeight
+		 * and so that is 1/20th of the window's innerHeight at any given resolution.
+		 */
+		function _smoothPresentationCardWheelScroll() {
+			presentationCard.scrollTop += _scrollDirection * _scrollDistance;
+			_partialScrollAmmount += _scrollDistance;
+			if(_partialScrollAmmount < _totalScrollAmmount)
+				window.requestAnimationFrame(_smoothPresentationCardWheelScroll);
+		}
+
+		window.requestAnimationFrame(_smoothPresentationCardWheelScroll);
+	}, {passive:false});
 
 	websiteShowcase.addEventListener("wheel", event => {
 		event.preventDefault();
