@@ -591,6 +591,7 @@ p {
 
   line-height: 4rem;
   text-align: center;
+  white-space: nowrap;
 
   font-size:6rem;
   padding:0.3em;
