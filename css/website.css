@@ -25,11 +25,11 @@
  /* 0) KEYFRAMES GLOBAL ANIMATIONS */
 @keyframes scrollDownButtonBounce {
   0% {
-    transform: rotate3d(0,0,1,45deg) translate3d(-20%,-20%,0);
+    transform: translate3d(-20%,0,0);
   }
 
   100% {
-      transform: rotate3d(0,0,1,45deg) translate3d(0,0,0);
+      transform: translate3d(0,0,0);
   }
 }
 
@@ -577,23 +577,32 @@ p {
   cursor:pointer;
   outline:none;
   border:none;
+  text-decoration: none;
 
-  -webkit-transform: translate3d(0, calc(var(--100vh) / 4),0);
-  transform: translate3d(0, calc(var(--100vh) / 4),0);
+  -webkit-transform: translate3d(0, calc(var(--100vh) / 4),0) rotate3d(0,0,1,90deg);
+  transform: translate3d(0, calc(var(--100vh) / 4),0) rotate3d(0,0,1,90deg);
 }
 
 #scrollDownButton::after {
-  content:"";
+  content:"->";
   display: block;
   width: 4rem;
   height: 4rem;
 
-  border: 0.3rem solid rgba(0,0,0,0);
-  border-right-color: var(--theme-text-shadow-color);
-  border-bottom-color: var(--theme-text-shadow-color);
+  line-height: 4rem;
+  text-align: center;
 
-  -webkit-transform: rotate3d(0,0,1,45deg);
-  transform: rotate3d(0,0,1,45deg);
+  font-size:6rem;
+  padding:0.3em;
+  border-radius:100%;
+
+  -webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+  box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+
+  background:var(--theme-blur-background-color-Brightest);
+  -webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
+  backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
+
   animation: scrollDownButtonBounce var(--transition-time-slow) ease-out alternate infinite;
 }
 
@@ -1229,9 +1238,14 @@ p {
 	}
 
   #scrollDownButton::after {
-    border: 0.6rem solid rgba(0,0,0,0);
-    border-right-color: var(--theme-text-shadow-color);
-    border-bottom-color: var(--theme-text-shadow-color);
+    width: 5rem;
+    height: 5rem;
+
+    line-height: 5rem;
+    text-align: center;
+
+    font-size:7rem;
+    font-weight: bold;
   }
 
   #presentationCard > * {
