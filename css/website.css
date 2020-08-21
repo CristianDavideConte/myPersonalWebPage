@@ -632,6 +632,7 @@ p {
 }
 
 #presentationCard {
+  cursor:default;   /* Fix for safari text-cursor on non-selectable text */
   overflow-x:hidden;
   overflow-y:scroll;
   border-radius:5%;
