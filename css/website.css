@@ -92,9 +92,7 @@
 	--header-socialNetworks-div-width:calc(4 * var(--header-elements-height) + 3 * var(--header-elements-padding)); /* 4: number of socialNetworks; 3: number of spaces between them*/
 
   --main-title-svg-path:./svgs/mainTitles/svgs/haarlemDeco.svg;
-  --main-title-svg-url: url(../svgs/mainTitles/svgs/haarlemDeco.svg);
   --my-projects-svg-path:./svgs/myProjects/svgs/haarlemDeco.svg;
-  --my-projects-svg-url: url(../svgs/myProjects/svgs/haarlemDeco.svg);
 
 	--profilePic-size:17vmin;
 	--presentationCard-height:60vmin;
@@ -119,7 +117,7 @@
 	--light-theme-stackoverflowContact-background-color: radial-gradient(circle, rgba(245,245,245,1) 60%, rgba(255,115,0,1) 64%);
 	--light-theme-instagramContact-background-color: linear-gradient(340deg, rgba(244,255,0,1) 0%, rgba(255,39,218,1) 58%, rgba(255,39,218,1) 72%, rgba(0,83,255,1) 99%);
 	--light-theme-mailContact-background-color: linear-gradient(35deg, rgba(255,248,0,1) 0%, rgba(255,99,0,1) 67%);
-  --light-theme-background-image-base-url: ./images/backgroundImages/LightTheme/background_Light;  /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
+  --light-theme-background-image-base-path: ./images/backgroundImages/LightTheme/background_Light;  /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
 	--light-theme-background-color: rgba(255,255,255,1);
 
 	--dark-theme-blur-background-color-Black: rgba(0,0,0,1);
@@ -138,7 +136,7 @@
 	--dark-theme-stackoverflowContact-background-color: radial-gradient(circle, rgba(57,57,57,1) 60%, rgba(255,124,0,1) 64%);
 	--dark-theme-instagramContact-background-color: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
 	--dark-theme-mailContact-background-color: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
-  --dark-theme-background-image-base-url: ./images/backgroundImages/DarkTheme/background_Dark;      /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
+  --dark-theme-background-image-base-path: ./images/backgroundImages/DarkTheme/background_Dark;      /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
 	--dark-theme-background-color: rgba(0,0,0,1);
 
   --theme-blur-background-color-Black: var(--dark-theme-blur-background-color-Black);
@@ -157,7 +155,7 @@
   --theme-stackoverflowContact-background-color: var(--dark-theme-stackoverflowContact-background-color);
   --theme-instagramContact-background-color: var(--dark-theme-instagramContact-background-color);
   --theme-mailContact-background-color: var(--dark-theme-mailContact-background-color);
-  --theme-background-image-base-url: var(--dark-theme-background-image-base-url);
+  --theme-background-image-base-path: var(--dark-theme-background-image-base-path);
   --theme-background-color: var(--dark-theme-background-color);
 }
 
@@ -185,7 +183,7 @@
     --theme-stackoverflowContact-background-color: var(--light-theme-stackoverflowContact-background-color);
     --theme-instagramContact-background-color: var(--light-theme-instagramContact-background-color);
     --theme-mailContact-background-color: var(--light-theme-mailContact-background-color);
-    --theme-background-image-base-url: var(--light-theme-background-image-base-url);
+    --theme-background-image-base-path: var(--light-theme-background-image-base-path);
     --theme-background-color: var(--light-theme-background-color);
 	}
 }
@@ -574,11 +572,6 @@ p {
   transform: translate3d(0, calc(var(--websitePreview-size) / -3), 0);
 }
 
-#svgPageTitleMainTitle {
-  -webkit-mask-image: var(--main-title-svg-url);  /* Chrome, Safari and all webkit browsers */
-  mask-image: var(--main-title-svg-url);          /* Firefox */
-}
-
 #scrollDownButton {
   position: absolute;
   cursor:pointer;
@@ -709,11 +702,6 @@ p {
   height:calc(var(--100vh) - var(--websitePreview-size) - 2rem); /* 2rem is the total websitePreviews margin */
   -webkit-transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0);    /* 2rem is the total websitePreviews margin */
   transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0);
-}
-
-#svgPageTitleMyProjects {
-  -webkit-mask-image: var(--my-projects-svg-url);  /* Chrome, Safari and all webkit browsers */
-  mask-image: var(--my-projects-svg-url);          /* Firefox */
 }
 
 .projectsCarousel {

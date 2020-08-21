@@ -495,30 +495,36 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, onDone) {
  */
 function imageLoading() {
 	function _changeWebsiteBackgroundTheme() {
-		let backgroundImageUrl = computedStyle.getPropertyValue("--theme-background-image-base-url");
-		let backgroundImageUrlCompressed = backgroundImageUrl + "_Compressed.jpg";
+		let backgroundImagePath = computedStyle.getPropertyValue("--theme-background-image-base-path");
+		let backgroundImagePathCompressed = backgroundImagePath + "_Compressed.jpg";
 
-		backgroundElement.style.backgroundImage = "url(" + backgroundImageUrlCompressed + ")";
+		backgroundElement.style.backgroundImage = "url(" + backgroundImagePathCompressed + ")";
 
 		let _backgroundImage = new Image();
-		_backgroundImage.src = backgroundImageUrl + ".jpg";
-		_backgroundImage.addEventListener("load", () => window.requestAnimationFrame(() => backgroundElement.style.backgroundImage = "url(" + _backgroundImage.src + ")"), {passive:true});
+		_backgroundImage.src = backgroundImagePath + ".jpg";
+		_backgroundImage.addEventListener("load", () => backgroundElement.style.backgroundImage = "url(" + _backgroundImage.src + ")", {passive:true});
 }
 
 	window.matchMedia("(prefers-color-scheme:light)").addListener(_changeWebsiteBackgroundTheme);
 	window.requestAnimationFrame(() => {
-		let svgPageTitleMainTitleShadowImagePath = computedStyle.getPropertyValue("--main-title-svg-path").trim();
-		document.getElementById("svgPageTitleMainTitleShadowImage").setAttribute("href", svgPageTitleMainTitleShadowImagePath);
+		let svgPageTitleMainTitleSVGPath = computedStyle.getPropertyValue("--main-title-svg-path").trim();
+		let svgPageTitleMainTitle = document.getElementById("svgPageTitleMainTitle");
+		svgPageTitleMainTitle.style.webkitMaskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
+		svgPageTitleMainTitle.style.maskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
+		document.getElementById("svgPageTitleMainTitleShadowImage").setAttribute("href", svgPageTitleMainTitleSVGPath);
 
-		let svgPageTitleMyProjectsShadowImagePath = computedStyle.getPropertyValue("--my-projects-svg-path").trim();
-		document.getElementById("svgPageTitleMyProjectsShadowImage").setAttribute("href", svgPageTitleMyProjectsShadowImagePath);
+		let svgPageTitleMyProjectsSVGPath = computedStyle.getPropertyValue("--my-projects-svg-path").trim();
+		let svgPageTitleMyProjects = document.getElementById("svgPageTitleMyProjects");
+		svgPageTitleMyProjects.style.webkitMaskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
+		svgPageTitleMyProjects.style.maskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
+		document.getElementById("svgPageTitleMyProjectsShadowImage").setAttribute("href", svgPageTitleMyProjectsSVGPath);
 
 		_changeWebsiteBackgroundTheme();
 
 		let _profilePicElement = document.getElementById("profilePic");
 		let _profileImageLoaded = new Image();
 		_profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";
-		_profileImageLoaded.addEventListener("load", () => window.requestAnimationFrame(() => _profilePicElement.src = _profileImageLoaded.src), {passive:true});
+		_profileImageLoaded.addEventListener("load", () => _profilePicElement.src = _profileImageLoaded.src, {passive:true});
 	});
 }
 
