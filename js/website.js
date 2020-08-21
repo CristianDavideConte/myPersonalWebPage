@@ -161,8 +161,8 @@ function eventListenersInitialization() {
 	presentationCard.addEventListener("wheel", event => {
 		event.preventDefault();
 		let _scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
-		let _totalScrollAmmount = windowHeight/20;							//The total ammount of pixel vertically scrolled by the _smoothPresentationCardWheelScroll function
-		let _scrollDistance = windowHeight/150;									//The ammount of pixel scrolled at each _smoothPresentationCardWheelScroll call
+		let _totalScrollAmmount = windowHeight/10;							//The total ammount of pixel vertically scrolled by the _smoothPresentationCardWheelScroll function
+		let _scrollDistance = windowHeight/120;									//The ammount of pixel scrolled at each _smoothPresentationCardWheelScroll call
 		let _partialScrollAmmount = 0;													//scrollDistance * number of _smoothPresentationCardWheelScroll function calls
 
 		/*
