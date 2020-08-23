@@ -267,6 +267,7 @@ function eventListenersInitialization() {
 
 		let _websitePreviewImage = websitePreview.firstElementChild;
 		let _websitePreviewExpandedImage = _websitePreviewImage.cloneNode(true);
+		_websitePreviewExpandedImage.src = _websitePreviewExpandedImage.getAttribute("data-lazy");
 		_websitePreviewExpandedImage.className = "websitePreviewExpandedImage";
 		_websitePreviewExpanded.appendChild(_websitePreviewExpandedImage);
 
@@ -526,9 +527,8 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, onDone) {
 
 /*
  * This function, accordingly to the user's preferred theme, asyncronusly load:
- * - the src content of the <img> elements
- * - background-image of the "title" classed elements
- * The full image is loaded when ready and not at the initial page loading.
+ * - the src content of the <img> elements (uses lazyLoad() function)
+ * The full background-image is loaded when ready and not at the initial page loading.
  * Instead a lower resolution and blurry version of the image is loaded in the css file.
  * This allows the user to interact much quicker with the page and lowers the probability of a page crash.
  * Whenever the full image is ready the two images are swapped with a transition in between.
@@ -536,12 +536,12 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, onDone) {
 function imageLoading() {
 	function _changeWebsiteBackgroundTheme() {
 		let backgroundImagePath = computedStyle.getPropertyValue("--theme-background-image-base-path");
-		let backgroundImagePathCompressed = backgroundImagePath + "_Compressed.jpg";
+		let backgroundImagePathCompressed = backgroundImagePath + "_Compressed.jpg";		//When ios 14 is released change this to ".webp"
 
 		backgroundElement.style.backgroundImage = "url(" + backgroundImagePathCompressed + ")";
 
 		let _backgroundImage = new Image();
-		_backgroundImage.src = backgroundImagePath + ".jpg";
+		_backgroundImage.src = backgroundImagePath + ".jpg";	 //When ios 14 is released change this to ".webp"
 		_backgroundImage.addEventListener("load", () => backgroundElement.style.backgroundImage = "url(" + _backgroundImage.src + ")", {passive:true});
 }
 
@@ -560,10 +560,30 @@ function imageLoading() {
 
 	_changeWebsiteBackgroundTheme();
 
-	let _profilePicElement = document.getElementById("profilePic");
-	let _profileImageLoaded = new Image();
-	_profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";
-	_profileImageLoaded.addEventListener("load", () => _profilePicElement.src = _profileImageLoaded.src, {passive:true});
+	lazyLoad(document.getElementById("profilePic"));
+
+	let websitePreviewImages = document.getElementsByClassName("websitePreviewImage");
+	for(websitePreviewImage of websitePreviewImages)
+		lazyLoad(websitePreviewImage);
+}
+
+/*
+ * This function uses an intersectionObserver to know when an image is in the viewport.
+ * If it is, then its src attribute is made equals to its data-lazy attribute.
+ * This allows the images to not be loaded until they're used and allows for quicker loading times.
+ */
+function lazyLoad(target) {
+	const intersectionObserver = new IntersectionObserver((entries, observer) => {
+		entries.forEach(entry => {
+			if(entry.isIntersecting) {
+				const image = entry.target;
+				image.setAttribute("src", image.getAttribute("data-lazy"));
+				intersectionObserver.disconnect();
+			}
+		});
+	});
+
+	intersectionObserver.observe(target);
 }
 
 /*
