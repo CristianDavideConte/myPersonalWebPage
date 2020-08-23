@@ -132,16 +132,46 @@ function eventListenersInitialization() {
 
 	/*
 	 * When a scroll triggered by mouse wheel, a trackpad or touch gesture is detected
-	 * on the header or its background it's immediatly stopped.
-	 * Any type of scroll-event is not allowed over the header section.
+	 * on the header or its background:
+	 * if the scroll direction is opposite to the header (and its background) state
+	 * (i.e. header is expanded and the scroll would is upwards) the toggleHeaderExpandedState function is called.
 	 */
-	headerBackgroundElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});
-	headerBackgroundElement.addEventListener("touchmove", event => event.preventDefault(), {passive:false});
-	headerElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});
-	headerElement.addEventListener("touchmove", event => event.preventDefault(), {passive:false});
+	headerElement.addEventListener("wheel", event => {
+		event.preventDefault();
+		let _className = headerElement.className;
+		if(_className == "mobileExpanded" && event.deltaY < 0 || _className !== "mobileExpanded" && event.deltaY > 0)
+			toggleHeaderExpandedState();
+	}, {passive:false});
 
-	/* When the hamburgerMenu is pressed it expands by calling the toggleExpandHamburgerMenu function */
-	hamburgerMenuElement.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
+	headerBackgroundElement.addEventListener("wheel", event => {
+		event.preventDefault();
+		let _className = headerBackgroundElement.className;
+		if(_className == "mobileExpanded" && event.deltaY < 0 || _className !== "mobileExpanded" && event.deltaY > 0)
+			toggleHeaderExpandedState();
+	}, {passive:false});
+
+	let _firstTouchPosition = null;
+	headerElement.addEventListener("touchstart", event => _firstTouchPosition = event.touches[0].clientY, {passive:false});
+	headerBackgroundElement.addEventListener("touchstart", event => _firstTouchPosition = event.touches[0].clientY, {passive:false});
+
+	headerElement.addEventListener("touchmove", event => {
+		event.preventDefault();
+		let _className = headerElement.className;
+		let _direction = event.touches[0].clientY - _firstTouchPosition; /* >0 downwards <0 upwards */
+		if(_className == "mobileExpanded" && _direction < 0 || _className !== "mobileExpanded" && _direction > 0)
+			toggleHeaderExpandedState();
+	}, {passive:false});
+
+	headerBackgroundElement.addEventListener("touchmove", event => {
+		event.preventDefault();
+		let _className = headerBackgroundElement.className;
+		let _direction = event.touches[0].clientY - _firstTouchPosition; /* >0 downwards <0 upwards */
+		if(_className == "mobileExpanded" && _direction < 0 || _className !== "mobileExpanded" && _direction > 0)
+			toggleHeaderExpandedState();
+	}, {passive:false});
+
+	/* When the hamburgerMenu is pressed it expands by calling the toggleHeaderExpandedState function */
+	hamburgerMenuElement.addEventListener("click", toggleHeaderExpandedState, {passive:false});
 
 	/*
 	 * When the website is in mobile mode the page links are hidden under the hamburgerMenu
@@ -152,7 +182,7 @@ function eventListenersInitialization() {
 	 * Plus, if safari needs a manual implementation for the smoothScroll CSS attribute.
 	 */
 	for(const pageLink of pageLinksElements)
-		pageLink.addEventListener("click", toggleExpandHamburgerMenu, {passive:true});
+		pageLink.addEventListener("click", toggleHeaderExpandedState, {passive:true});
 
 	/* All the social networks icons are linked to the corresponding website */
 	document.getElementById("githubContact").addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
@@ -494,7 +524,7 @@ function eventListenersInitialization() {
  * This Function toggles the mobileExpanded class of the hamburgerMenu HTML element if the page is in mobileMode.
  * Mobile mode is triggered by the window's resize event.
  */
-function toggleExpandHamburgerMenu() {
+function toggleHeaderExpandedState() {
 	if(mobileMode)
 		window.requestAnimationFrame(() => {
 			headerBackgroundElement.classList.toggle("mobileExpanded");
