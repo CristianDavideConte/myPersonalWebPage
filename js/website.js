@@ -139,14 +139,14 @@ function eventListenersInitialization() {
 	headerElement.addEventListener("wheel", event => {
 		event.preventDefault();
 		let _className = headerElement.className;
-		if(_className == "mobileExpanded" && event.deltaY < 0 || _className !== "mobileExpanded" && event.deltaY > 0)
+		if(_className == "mobileExpanded" && event.deltaY > 0 || _className !== "mobileExpanded" && event.deltaY < 0)
 			toggleHeaderExpandedState();
 	}, {passive:false});
 
 	headerBackgroundElement.addEventListener("wheel", event => {
 		event.preventDefault();
 		let _className = headerBackgroundElement.className;
-		if(_className == "mobileExpanded" && event.deltaY < 0 || _className !== "mobileExpanded" && event.deltaY > 0)
+		if(_className == "mobileExpanded" && event.deltaY > 0 || _className !== "mobileExpanded" && event.deltaY < 0)
 			toggleHeaderExpandedState();
 	}, {passive:false});
 
@@ -608,6 +608,7 @@ function lazyLoad(target) {
 			if(entry.isIntersecting) {
 				const image = entry.target;
 				image.setAttribute("src", image.getAttribute("data-lazy"));
+				window.requestAnimationFrame(() => image.classList.add("lazyLoadElementAnimation"));
 				intersectionObserver.disconnect();
 			}
 		});
