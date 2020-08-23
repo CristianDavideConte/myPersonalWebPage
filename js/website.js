@@ -35,8 +35,10 @@ function init() {
 	variableInitialization();												//Binds the js variables to the corresponding HTML elements
 	updateWindowSize();															//Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
 
-	eventListenersInitialization();									//Initializes all the eventHandlers
 	imageLoading();																	//Initializes all the HTML img elements' contents
+	eventListenersInitialization();									//Initializes all the eventHandlers
+
+	window.location.href = "#home";									//The page always starts from the the #home page
 }
 
 /* This Function initializes all the public variables */
@@ -105,6 +107,7 @@ function eventListenersInitialization() {
 	}, {passive:true});
 
 	window.addEventListener("resize", updateWindowSize, {passive:true});
+	window.addEventListener("beforeunload", () => history.replaceState({}, "", "/index.html"), {passive:false}); //Allows the page to always start from the #home page
 
 	/*
 	 * The user can use the arrow keys to navigate the website.
@@ -157,12 +160,18 @@ function eventListenersInitialization() {
 	document.getElementById("instagramContact").addEventListener("click", () => window.open("https://www.instagram.com/cristiandavideconte/?hl=it"), {passive:true});
 	document.getElementById("mailContact").addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 
-	let presentationCard = document.getElementById("presentationCard");
-	presentationCard.addEventListener("wheel", event => {
+	let _presentationCard = document.getElementById("presentationCard");
+	let _smoothPresentationCardWheelScrollID = null;
+	_presentationCard.addEventListener("wheel", event => {
 		event.preventDefault();
+		if(_smoothPresentationCardWheelScrollID !== null) {
+			window.cancelAnimationFrame(_smoothPresentationCardWheelScrollID);		//The previous scroll is cancelled
+			_smoothPresentationCardWheelScrollID = null;
+		}
+
 		let _scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
-		let _totalScrollAmmount = windowHeight/10;							//The total ammount of pixel vertically scrolled by the _smoothPresentationCardWheelScroll function
-		let _scrollDistance = windowHeight/120;									//The ammount of pixel scrolled at each _smoothPresentationCardWheelScroll call
+		let _totalScrollAmmount = windowHeight/7;								//The total ammount of pixel vertically scrolled by the _smoothPresentationCardWheelScroll function
+		let _scrollDistance = windowHeight/100;									//The ammount of pixel scrolled at each _smoothPresentationCardWheelScroll call
 		let _partialScrollAmmount = 0;													//scrollDistance * number of _smoothPresentationCardWheelScroll function calls
 
 		/*
@@ -171,20 +180,28 @@ function eventListenersInitialization() {
 		 * and so that is 1/20th of the window's innerHeight at any given resolution.
 		 */
 		function _smoothPresentationCardWheelScroll() {
-			presentationCard.scrollTop += _scrollDirection * _scrollDistance;
+			_presentationCard.scrollTop += _scrollDirection * _scrollDistance;
 			_partialScrollAmmount += _scrollDistance;
 			if(_partialScrollAmmount < _totalScrollAmmount)
-				window.requestAnimationFrame(_smoothPresentationCardWheelScroll);
+				_smoothPresentationCardWheelScrollID = window.requestAnimationFrame(_smoothPresentationCardWheelScroll);
+			else
+				_smoothPresentationCardWheelScrollID = null;
 		}
 
-		window.requestAnimationFrame(_smoothPresentationCardWheelScroll);
+		_smoothPresentationCardWheelScrollID = window.requestAnimationFrame(_smoothPresentationCardWheelScroll);
 	}, {passive:false});
 
+	let _smoothWebsiteShowcaseWheelScrollID = null;
 	websiteShowcase.addEventListener("wheel", event => {
 		event.preventDefault();
+		if(_smoothWebsiteShowcaseWheelScrollID !== null) {
+			window.cancelAnimationFrame(_smoothWebsiteShowcaseWheelScrollID);		//The previous scroll is cancelled
+			_smoothWebsiteShowcaseWheelScrollID = null;
+		}
+
 		let _scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
-		let _totalScrollAmmount = windowWidth/20;						//The total ammount of pixel horizontally scrolled by the _smoothWebsiteShowcaseWheelScroll function
-		let _scrollDistance = windowWidth/150;							//The ammount of pixel scrolled at each _smoothWebsiteShowcaseWheelScroll call
+		let _totalScrollAmmount = windowWidth/10;						//The total ammount of pixel horizontally scrolled by the _smoothWebsiteShowcaseWheelScroll function
+		let _scrollDistance = windowWidth/70;							//The ammount of pixel scrolled at each _smoothWebsiteShowcaseWheelScroll call
 		let _partialScrollAmmount = 0;														//scrollDistance * number of _smoothWebsiteShowcaseWheelScroll function calls
 
 		/*
@@ -197,10 +214,12 @@ function eventListenersInitialization() {
 			websiteShowcase.scrollLeft += _scrollDirection * _scrollDistance;
 			_partialScrollAmmount += _scrollDistance;
 			if(_partialScrollAmmount < _totalScrollAmmount)
-				window.requestAnimationFrame(_smoothWebsiteShowcaseWheelScroll);
+				_smoothWebsiteShowcaseWheelScrollID = window.requestAnimationFrame(_smoothWebsiteShowcaseWheelScroll);
+			else
+				_smoothWebsiteShowcaseWheelScrollID = null;
 		}
 
-		window.requestAnimationFrame(_smoothWebsiteShowcaseWheelScroll);
+		_smoothWebsiteShowcaseWheelScrollID = window.requestAnimationFrame(_smoothWebsiteShowcaseWheelScroll);
 	}, {passive:false});
 
 	/*
@@ -377,15 +396,13 @@ function eventListenersInitialization() {
 	 */
 	let _popUpMessageTimeout = null;
 	function _showMessage(message) {
-		window.requestAnimationFrame(() => {
-			popUpMessageTextElement.innerHTML = message;
-			popUpMessageElement.className = "messageOnScreen";
+		popUpMessageTextElement.innerHTML = message;
+		popUpMessageElement.className = "messageOnScreen";
 
-			if(_popUpMessageTimeout != null)
-				clearTimeout(_popUpMessageTimeout);
+		if(_popUpMessageTimeout != null)
+			clearTimeout(_popUpMessageTimeout);
 
-			_popUpMessageTimeout = setTimeout(() => window.requestAnimationFrame(() => popUpMessageElement.className = ""), 6000);			//Every message on screen is shown for 6seconds
-		});
+		_popUpMessageTimeout = setTimeout(() => popUpMessageElement.className = "", 6000);			//Every message on screen is shown for 6seconds
 	}
 
 	/*
@@ -457,7 +474,7 @@ function eventListenersInitialization() {
 			_ajax(contactMeFormElement.method, contactMeFormElement.action, new FormData(contactMeFormElement), _ajaxResponceStatusSuccess, _ajaxResponceStatusError);
 		else {
 			_showMessage(validData.replace("validData<br>", ""));
-			setTimeout(() => window.requestAnimationFrame(() => contactMeFormSendButtonElement.disabled = false), 6000);			//Every message on screen is shown for 6seconds
+			setTimeout(() => contactMeFormSendButtonElement.disabled = false, 6000);			//Every message on screen is shown for 6seconds
 		}
 	}
 
@@ -529,26 +546,24 @@ function imageLoading() {
 }
 
 	window.matchMedia("(prefers-color-scheme:light)").addListener(_changeWebsiteBackgroundTheme);
-	window.requestAnimationFrame(() => {
-		let svgPageTitleMainTitleSVGPath = computedStyle.getPropertyValue("--main-title-svg-path").trim();
-		let svgPageTitleMainTitle = document.getElementById("svgPageTitleMainTitle");
-		svgPageTitleMainTitle.style.webkitMaskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
-		svgPageTitleMainTitle.style.maskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
-		document.getElementById("svgPageTitleMainTitleShadowImage").setAttribute("href", svgPageTitleMainTitleSVGPath);
+	let svgPageTitleMainTitleSVGPath = computedStyle.getPropertyValue("--main-title-svg-path").trim();
+	let svgPageTitleMainTitle = document.getElementById("svgPageTitleMainTitle");
+	svgPageTitleMainTitle.style.webkitMaskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
+	svgPageTitleMainTitle.style.maskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
+	document.getElementById("svgPageTitleMainTitleShadowImage").setAttribute("href", svgPageTitleMainTitleSVGPath);
 
-		let svgPageTitleMyProjectsSVGPath = computedStyle.getPropertyValue("--my-projects-svg-path").trim();
-		let svgPageTitleMyProjects = document.getElementById("svgPageTitleMyProjects");
-		svgPageTitleMyProjects.style.webkitMaskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
-		svgPageTitleMyProjects.style.maskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
-		document.getElementById("svgPageTitleMyProjectsShadowImage").setAttribute("href", svgPageTitleMyProjectsSVGPath);
+	let svgPageTitleMyProjectsSVGPath = computedStyle.getPropertyValue("--my-projects-svg-path").trim();
+	let svgPageTitleMyProjects = document.getElementById("svgPageTitleMyProjects");
+	svgPageTitleMyProjects.style.webkitMaskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
+	svgPageTitleMyProjects.style.maskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
+	document.getElementById("svgPageTitleMyProjectsShadowImage").setAttribute("href", svgPageTitleMyProjectsSVGPath);
 
-		_changeWebsiteBackgroundTheme();
+	_changeWebsiteBackgroundTheme();
 
-		let _profilePicElement = document.getElementById("profilePic");
-		let _profileImageLoaded = new Image();
-		_profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";
-		_profileImageLoaded.addEventListener("load", () => _profilePicElement.src = _profileImageLoaded.src, {passive:true});
-	});
+	let _profilePicElement = document.getElementById("profilePic");
+	let _profileImageLoaded = new Image();
+	_profileImageLoaded.src = "./images/profilePictures/profilePicture.jpg";
+	_profileImageLoaded.addEventListener("load", () => _profilePicElement.src = _profileImageLoaded.src, {passive:true});
 }
 
 /*
@@ -562,30 +577,30 @@ function updateWindowSize(){
 		windowHeightOffset = 0;
 		windowHeight = currentWindowHeight;
 
-		documentElement.style.setProperty("--100vh", currentWindowHeight + "px");
-		computedStyle = getComputedStyle(documentBodyElement);
-		websitePreviewExpandedSize = computedStyle.getPropertyValue("--websitePreview-expanded-size").replace("vmin", "");
+		window.requestAnimationFrame(() => {
+			documentElement.style.setProperty("--100vh", currentWindowHeight + "px");
+			computedStyle = getComputedStyle(documentBodyElement);
+			websitePreviewExpandedSize = computedStyle.getPropertyValue("--websitePreview-expanded-size").replace("vmin", "");
+		});
 	}
 
-	window.requestAnimationFrame(() => {
-		let _currentWindowHeight = window.innerHeight;
-		let _currentwindowWidth = window.innerWidth;
+	let _currentWindowHeight = window.innerHeight;
+	let _currentwindowWidth = window.innerWidth;
 
-		mobileMode = (_currentwindowWidth < 1081) ? 1 : 0;
+	mobileMode = (_currentwindowWidth < 1081) ? 1 : 0;
 
-		if(mobileMode) {
-			if(_currentWindowHeight > windowHeight)		//If the window gets higher all the variables are always updated
-				_update(_currentWindowHeight);
-			else if(_currentwindowWidth > windowWidth && _currentwindowWidth >= _currentWindowHeight) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
-				_update(_currentWindowHeight);
-			else 			//If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
-				windowHeightOffset = _currentWindowHeight - windowHeight;
-		} else
+	if(mobileMode) {
+		if(_currentWindowHeight > windowHeight)		//If the window gets higher all the variables are always updated
 			_update(_currentWindowHeight);
+		else if(_currentwindowWidth > windowWidth && _currentwindowWidth >= _currentWindowHeight) 		//If the window's height has reduced and the width has increased: the device has switched to Landscape mode
+			_update(_currentWindowHeight);
+		else 			//If the change is too small we probably are in a mobile browser where the url bar shrunk the innerHeight
+			windowHeightOffset = _currentWindowHeight - windowHeight;
+	} else
+		_update(_currentWindowHeight);
 
-		documentElement.style.setProperty("--window-inner-height-offset", windowHeightOffset + "px"); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowHeightOffset != 0
-		windowWidth = _currentwindowWidth;
-	});
+	windowWidth = _currentwindowWidth;
+	window.requestAnimationFrame(() => documentElement.style.setProperty("--window-inner-height-offset", windowHeightOffset + "px")); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowHeightOffset != 0
 }
 
 /* Returns true if the user's browser is Safari, false otherwise */
