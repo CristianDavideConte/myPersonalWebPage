@@ -296,7 +296,7 @@ p {
 	position:fixed;
   top:  50%;
   left: 50%;
-  min-height: var(--100vh);
+  min-height: calc(var(--100vh) - var(--window-inner-height-offset));
   min-width: 100vw;
 
   background-position: center;
