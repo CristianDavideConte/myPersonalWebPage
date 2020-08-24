@@ -557,7 +557,8 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, onDone) {
 
 /*
  * This function, accordingly to the user's preferred theme, asyncronusly load:
- * - the src content of the <img> elements (uses lazyLoad() function)
+ * - the src of the <img> elements (uses lazyLoad() function)
+ * - the srcset of the backgroundElement (has different versions for different resolutions)
  * The full background-image is loaded when ready and not at the initial page loading.
  * Instead a lower resolution and blurry version of the image is loaded in the css file.
  * This allows the user to interact much quicker with the page and lowers the probability of a page crash.
@@ -566,13 +567,13 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, onDone) {
 function imageLoading() {
 	function _changeWebsiteBackgroundTheme() {
 		let backgroundImagePath = computedStyle.getPropertyValue("--theme-background-image-base-path");
-		let backgroundImagePathCompressed = backgroundImagePath + "_Compressed.jpg";		//When ios 14 is released change this to ".webp"
 
-		backgroundElement.style.backgroundImage = "url(" + backgroundImagePathCompressed + ")";
-
-		let _backgroundImage = new Image();
-		_backgroundImage.src = backgroundImagePath + ".jpg";	 //When ios 14 is released change this to ".webp"
-		_backgroundImage.addEventListener("load", () => backgroundElement.style.backgroundImage = "url(" + _backgroundImage.src + ")", {passive:true});
+		/* When ios 14 is released use the .webp versions of the images */
+		backgroundElement.src = backgroundImagePath + "initial.jpg";
+		backgroundElement.srcset = backgroundImagePath + "1280w.jpg 1280w," +
+															 backgroundImagePath + "1920w.jpg 1920w," +
+															 backgroundImagePath + "2560w.jpg 2560w," +
+															 backgroundImagePath + "4096w.jpg 4096w";
 }
 
 	window.matchMedia("(prefers-color-scheme:light)").addListener(_changeWebsiteBackgroundTheme);

@@ -125,7 +125,7 @@
 	--light-theme-stackoverflowContact-background-color: radial-gradient(circle, rgba(245,245,245,1) 60%, rgba(255,115,0,1) 64%);
 	--light-theme-instagramContact-background-color: linear-gradient(340deg, rgba(244,255,0,1) 0%, rgba(255,39,218,1) 58%, rgba(255,39,218,1) 72%, rgba(0,83,255,1) 99%);
 	--light-theme-mailContact-background-color: linear-gradient(35deg, rgba(255,248,0,1) 0%, rgba(255,99,0,1) 67%);
-  --light-theme-background-image-base-path: ./images/backgroundImages/LightTheme/background_Light;  /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
+  --light-theme-background-image-base-path: ./images/backgroundImages/LightTheme/finalImages/final_light_;  /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
 	--light-theme-background-color: rgba(255,255,255,1);
 
 	--dark-theme-blur-background-color-Black: rgba(0,0,0,1);
@@ -144,7 +144,7 @@
 	--dark-theme-stackoverflowContact-background-color: radial-gradient(circle, rgba(57,57,57,1) 60%, rgba(255,124,0,1) 64%);
 	--dark-theme-instagramContact-background-color: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
 	--dark-theme-mailContact-background-color: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
-  --dark-theme-background-image-base-path: ./images/backgroundImages/DarkTheme/background_Dark;      /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
+  --dark-theme-background-image-base-path: ./images/backgroundImages/DarkTheme/finalImages/final_dark_;      /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
 	--dark-theme-background-color: rgba(0,0,0,1);
 
   --theme-blur-background-color-Black: var(--dark-theme-blur-background-color-Black);
@@ -292,14 +292,14 @@ p {
 
 /* 3) OFFSCREEN/BACKGROUND ELEMENTS STYLING */
 #bodyBackground {
-	position:fixed;
-  margin: -1%;
-  width:120vw;
-  height:calc(120 / 100 * var(--100vh));
-  background-repeat:no-repeat;
-	background-size:cover;
-	background-position:50% 0%;
   z-index:-1;
+	position:fixed;
+  min-height: var(--100vh);
+  min-width: 100vw;
+  left: 50%;
+  top:  50%;
+  -webkit-transform: translate3d(-50%, -50%, 0);
+  transform: translate3d(-50%, -50%, 0);
 }
 
 #popUpMessage {
@@ -1161,11 +1161,6 @@ select:-webkit-autofill:focus {
 
   #popUpMessageText {
     font-size: 350%;
-  }
-
-  #bodyBackground {
-    max-width:300%;
-    max-height:300%;
   }
 
 	#headerBackground.mobileExpanded {
