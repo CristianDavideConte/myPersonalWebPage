@@ -566,14 +566,14 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, onDone) {
  */
 function imageLoading() {
 	function _changeWebsiteBackgroundTheme() {
-		let backgroundImagePath = computedStyle.getPropertyValue("--theme-background-image-base-path");
+		let backgroundSrcPath = computedStyle.getPropertyValue("--theme-background-image-base-path");
 
 		/* When ios 14 is released use the .webp versions of the images */
-		backgroundElement.src = backgroundImagePath + "initial.jpg";
-		backgroundElement.srcset = backgroundImagePath + "1280w.jpg 1919w," +
-															 backgroundImagePath + "1920w.jpg 1920w," +
-															 backgroundImagePath + "2560w.jpg 2560w," +
-															 backgroundImagePath + "4096w.jpg 4096w";
+		backgroundElement.style.backgroundImage = "url(" + backgroundSrcPath + "initial.jpg)";
+		backgroundElement.srcset = backgroundSrcPath + "1280w.jpg 1919w," +
+															 backgroundSrcPath + "1920w.jpg 1920w," +
+															 backgroundSrcPath + "2560w.jpg 2560w," +
+															 backgroundSrcPath + "4096w.jpg 4096w";
 	}
 
 	window.matchMedia("(prefers-color-scheme:light)").addListener(_changeWebsiteBackgroundTheme);

@@ -145,7 +145,7 @@
 	--dark-theme-instagramContact-background-color: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
 	--dark-theme-mailContact-background-color: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
   --dark-theme-background-image-base-path: ./images/backgroundImages/DarkTheme/finalImages/final_dark_;      /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
-	--dark-theme-background-color: rgba(0,0,0,1);
+  --dark-theme-background-color: rgba(0,0,0,1);
 
   --theme-blur-background-color-Black: var(--dark-theme-blur-background-color-Black);
   --theme-blur-background-color-White: var(--dark-theme-blur-background-color-White);
@@ -294,10 +294,15 @@ p {
 #bodyBackground {
   z-index:-1;
 	position:fixed;
+  top:  50%;
+  left: 50%;
   min-height: var(--100vh);
   min-width: 100vw;
-  left: 50%;
-  top:  50%;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
   -webkit-transform: translate3d(-50%, -50%, 0);
   transform: translate3d(-50%, -50%, 0);
 }
