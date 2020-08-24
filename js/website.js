@@ -605,6 +605,12 @@ function imageLoading() {
  * This allows the images to not be loaded until they're used and allows for quicker loading times.
  */
 function lazyLoad(target) {
+	let options = {
+	  root: null,
+	  rootMargin: windowHeight / 2 + "px",
+	  threshold: 0
+	}
+
 	const intersectionObserver = new IntersectionObserver((entries, observer) => {
 		entries.forEach(entry => {
 			if(entry.isIntersecting) {
@@ -614,7 +620,7 @@ function lazyLoad(target) {
 				intersectionObserver.disconnect();
 			}
 		});
-	});
+	}, options);
 
 	intersectionObserver.observe(target);
 }
