@@ -570,7 +570,8 @@ function imageLoading() {
 
 		/* When ios 14 is released use the .webp versions of the images */
 		backgroundElement.src = backgroundImagePath + "initial.jpg";
-		backgroundElement.srcset = backgroundImagePath + "1920w.jpg 1920w," +
+		backgroundElement.srcset = backgroundImagePath + "1280w.jpg 1919w," +
+															 backgroundImagePath + "1920w.jpg 1920w," +
 															 backgroundImagePath + "2560w.jpg 2560w," +
 															 backgroundImagePath + "4096w.jpg 4096w";
 	}
