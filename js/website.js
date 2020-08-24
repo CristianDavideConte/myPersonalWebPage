@@ -90,21 +90,22 @@ function eventListenersInitialization() {
 
 	let _firstScrollYPosition = null;
 	let _smoothPageScrollTimeout = 0;
-	window.addEventListener("scroll", event => {
-			if(_firstScrollYPosition == null)
-				_firstScrollYPosition = window.scrollY;
-			else
-				clearTimeout(_smoothPageScrollTimeout);
+	if(!mobileMode)
+		window.addEventListener("scroll", event => {
+				if(_firstScrollYPosition == null)
+					_firstScrollYPosition = window.scrollY;
+				else
+					clearTimeout(_smoothPageScrollTimeout);
 
-			_smoothPageScrollTimeout = setTimeout(function _checkFingerDown() {
-					if(_isFingerDown)
-						_smoothPageScrollTimeout = window.requestAnimationFrame(_checkFingerDown);
-					else {
-						smoothPageScroll(_firstScrollYPosition, window.scrollY);
-						_firstScrollYPosition = null;
-					}
-			}, 100);
-	}, {passive:true});
+				_smoothPageScrollTimeout = setTimeout(function _checkFingerDown() {
+						if(_isFingerDown)
+							_smoothPageScrollTimeout = window.requestAnimationFrame(_checkFingerDown);
+						else {
+							smoothPageScroll(_firstScrollYPosition, window.scrollY);
+							_firstScrollYPosition = null;
+						}
+				}, 100);
+		}, {passive:true});
 
 	window.addEventListener("resize", updateWindowSize, {passive:true});
 	window.addEventListener("beforeunload", () => history.replaceState({}, "", "/index.html"), {passive:false}); //Allows the page to always start from the #home page
