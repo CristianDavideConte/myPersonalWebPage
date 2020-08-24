@@ -570,13 +570,15 @@ function imageLoading() {
 
 		/* When ios 14 is released use the .webp versions of the images */
 		backgroundElement.src = backgroundImagePath + "initial.jpg";
-		backgroundElement.srcset = backgroundImagePath + "1280w.jpg 1280w," +
+		backgroundElement.srcset = backgroundImagePath + "1079w.jpg 1079w," +
 															 backgroundImagePath + "1920w.jpg 1920w," +
 															 backgroundImagePath + "2560w.jpg 2560w," +
 															 backgroundImagePath + "4096w.jpg 4096w";
-}
+	}
 
 	window.matchMedia("(prefers-color-scheme:light)").addListener(_changeWebsiteBackgroundTheme);
+	_changeWebsiteBackgroundTheme();
+
 	let svgPageTitleMainTitleSVGPath = computedStyle.getPropertyValue("--main-title-svg-path").trim();
 	let svgPageTitleMainTitle = document.getElementById("svgPageTitleMainTitle");
 	svgPageTitleMainTitle.style.webkitMaskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
@@ -589,7 +591,6 @@ function imageLoading() {
 	svgPageTitleMyProjects.style.maskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
 	document.getElementById("svgPageTitleMyProjectsShadowImage").setAttribute("href", svgPageTitleMyProjectsSVGPath);
 
-	_changeWebsiteBackgroundTheme();
 
 	lazyLoad(document.getElementById("profilePic"));
 
