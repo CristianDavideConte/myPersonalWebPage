@@ -39,13 +39,12 @@ function init() {
 	eventListenersInitialization();									//Initializes all the eventHandlers
 
 	window.location.href = "#home";									//The page always starts from the the #home page
+	universalSmoothScroll.hrefSetup();
 }
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
-	zenscroll.setup(PAGELINKSCROLLDURATION); //Zenscroll API manual (github page): https://github.com/zengabor/zenscroll
-	windowScrollYBy = (y, onDone = null) => zenscroll.toY(window.scrollY + y, WINDOWSCROLLYBYDURATION, onDone);
-
+	windowScrollYBy = (y, onDone = null) => universalSmoothScroll.scrollYby(y, window, onDone);
 	documentBodyElement = document.body;
 
 	websitePreviewExpandedMap = new Map();
@@ -83,29 +82,28 @@ function eventListenersInitialization() {
 	let _isFingerDown = false;
 	documentBodyElement.addEventListener("touchstart", () => {
 		_isFingerDown = true;
-		zenscroll.stop();
+		universalSmoothScroll.stopScrollingY();
 	}, {passive:true});
 	documentBodyElement.addEventListener("touchend", () => _isFingerDown = false, {passive:true});
-	documentBodyElement.addEventListener("wheel", () =>	zenscroll.stop(), {passive:true});
+	documentBodyElement.addEventListener("wheel", () =>	universalSmoothScroll.stopScrollingY(), {passive:true});
 
 	let _firstScrollYPosition = null;
 	let _smoothPageScrollTimeout = 0;
-	if(!mobileMode)
-		window.addEventListener("scroll", event => {
-				if(_firstScrollYPosition == null)
-					_firstScrollYPosition = window.scrollY;
-				else
-					clearTimeout(_smoothPageScrollTimeout);
+	window.addEventListener("scroll", event => {
+			if(_firstScrollYPosition == null)
+				_firstScrollYPosition = window.scrollY;
+			else
+				clearTimeout(_smoothPageScrollTimeout);
 
-				_smoothPageScrollTimeout = setTimeout(function _checkFingerDown() {
-						if(_isFingerDown)
-							_smoothPageScrollTimeout = window.requestAnimationFrame(_checkFingerDown);
-						else {
-							smoothPageScroll(_firstScrollYPosition, window.scrollY);
-							_firstScrollYPosition = null;
-						}
-				}, 100);
-		}, {passive:true});
+			_smoothPageScrollTimeout = setTimeout(function _checkFingerDown() {
+					if(_isFingerDown)
+						_smoothPageScrollTimeout = window.requestAnimationFrame(_checkFingerDown);
+					else {
+						smoothPageScroll(_firstScrollYPosition, window.scrollY);
+						_firstScrollYPosition = null;
+					}
+			}, 100);
+	}, {passive:true});
 
 	window.addEventListener("resize", updateWindowSize, {passive:true});
 	window.addEventListener("beforeunload", () => history.replaceState({}, "", "/index.html"), {passive:false}); //Allows the page to always start from the #home page
@@ -121,12 +119,10 @@ function eventListenersInitialization() {
 			let _keyName = event.key;
 			if(_keyName == "ArrowUp" || _keyName == "ArrowLeft") {
 				event.preventDefault();
-				zenscroll.stop();
-				windowScrollYBy(-windowHeight);
+				universalSmoothScroll.scrollYby(-windowHeight, window, null, true);
 			} else if(_keyName == "ArrowDown" || _keyName == "ArrowRight") {
 				event.preventDefault();
-				zenscroll.stop();
-				windowScrollYBy(windowHeight);
+				universalSmoothScroll.scrollYby(windowHeight, window, null, true);
 			}
 		}
 	}, {passive:false});
@@ -192,65 +188,17 @@ function eventListenersInitialization() {
 	document.getElementById("mailContact").addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 
 	let _presentationCard = document.getElementById("presentationCard");
-	let _smoothPresentationCardWheelScrollID = null;
 	_presentationCard.addEventListener("wheel", event => {
 		event.preventDefault();
-		if(_smoothPresentationCardWheelScrollID !== null) {
-			window.cancelAnimationFrame(_smoothPresentationCardWheelScrollID);		//The previous scroll is cancelled
-			_smoothPresentationCardWheelScrollID = null;
-		}
-
-		let _scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
-		let _totalScrollAmmount = windowHeight/7;								//The total ammount of pixel vertically scrolled by the _smoothPresentationCardWheelScroll function
-		let _scrollDistance = windowHeight/100;									//The ammount of pixel scrolled at each _smoothPresentationCardWheelScroll call
-		let _partialScrollAmmount = 0;													//scrollDistance * number of _smoothPresentationCardWheelScroll function calls
-
-		/*
-		 * This function should only be called inside the presentationCard wheelEvent listeners.
-		 * The number of the pixel scrolled on the y-axis, it's calculated dynamically based on the windowHeight
-		 * and so that is 1/20th of the window's innerHeight at any given resolution.
-		 */
-		function _smoothPresentationCardWheelScroll() {
-			_presentationCard.scrollTop += _scrollDirection * _scrollDistance;
-			_partialScrollAmmount += _scrollDistance;
-			if(_partialScrollAmmount < _totalScrollAmmount)
-				_smoothPresentationCardWheelScrollID = window.requestAnimationFrame(_smoothPresentationCardWheelScroll);
-			else
-				_smoothPresentationCardWheelScrollID = null;
-		}
-
-		_smoothPresentationCardWheelScrollID = window.requestAnimationFrame(_smoothPresentationCardWheelScroll);
+		event.stopPropagation();
+		universalSmoothScroll.scrollYby(Math.sign(event.deltaY) * windowHeight/25, _presentationCard, null, true);
 	}, {passive:false});
 
 	let _smoothWebsiteShowcaseWheelScrollID = null;
 	websiteShowcase.addEventListener("wheel", event => {
 		event.preventDefault();
-		if(_smoothWebsiteShowcaseWheelScrollID !== null) {
-			window.cancelAnimationFrame(_smoothWebsiteShowcaseWheelScrollID);		//The previous scroll is cancelled
-			_smoothWebsiteShowcaseWheelScrollID = null;
-		}
-
-		let _scrollDirection = Math.sign(event.deltaY);					//1 if the scrolling is going downwards -1 otherwise
-		let _totalScrollAmmount = windowWidth/10;						//The total ammount of pixel horizontally scrolled by the _smoothWebsiteShowcaseWheelScroll function
-		let _scrollDistance = windowWidth/70;							//The ammount of pixel scrolled at each _smoothWebsiteShowcaseWheelScroll call
-		let _partialScrollAmmount = 0;														//scrollDistance * number of _smoothWebsiteShowcaseWheelScroll function calls
-
-		/*
-		 * This function should only be called inside the websiteShowcases wheelEvent listeners.
-		 * The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowWidth
-		 * and so that is 1/20th of the window's innerWidth at any given resolution.
-		 * If the wheel is scrolled from top to bottom the scroll direction will be from right to left, it will be inverted otherwise.
-		 */
-		function _smoothWebsiteShowcaseWheelScroll() {
-			websiteShowcase.scrollLeft += _scrollDirection * _scrollDistance;
-			_partialScrollAmmount += _scrollDistance;
-			if(_partialScrollAmmount < _totalScrollAmmount)
-				_smoothWebsiteShowcaseWheelScrollID = window.requestAnimationFrame(_smoothWebsiteShowcaseWheelScroll);
-			else
-				_smoothWebsiteShowcaseWheelScrollID = null;
-		}
-
-		_smoothWebsiteShowcaseWheelScrollID = window.requestAnimationFrame(_smoothWebsiteShowcaseWheelScroll);
+		event.stopPropagation();
+		universalSmoothScroll.scrollXby(Math.sign(event.deltaY) * windowWidth/25, websiteShowcase, null, true);
 	}, {passive:false});
 
 	/*
