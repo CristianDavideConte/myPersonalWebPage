@@ -80,16 +80,27 @@ function variableInitialization() {
 /* This function binds all the HTML elements that can be interacted to the corresponding eventHandlers */
 function eventListenersInitialization() {
 	let _isFingerDown = false;
+	let _userTriggeredScroll = false;
 	documentBodyElement.addEventListener("touchstart", () => {
 		_isFingerDown = true;
 		universalSmoothScroll.stopScrollingY();
 	}, {passive:true});
-	documentBodyElement.addEventListener("touchend", () => _isFingerDown = false, {passive:true});
-	documentBodyElement.addEventListener("wheel", () =>	universalSmoothScroll.stopScrollingY(), {passive:true});
+	documentBodyElement.addEventListener("touchmove", () => {
+		_userTriggeredScroll = true;
+	}, {passive:true});
+	documentBodyElement.addEventListener("touchend", () => {
+		_isFingerDown = false;
+		_userTriggeredScroll = false;
+	}, {passive:true});
+	documentBodyElement.addEventListener("wheel", () =>	{
+		_userTriggeredScroll = true;
+		universalSmoothScroll.stopScrollingY();
+	}, {passive:true});
 
 	let _firstScrollYPosition = null;
 	let _smoothPageScrollTimeout = 0;
 	window.addEventListener("scroll", event => {
+			if(!_userTriggeredScroll) return;
 			if(_firstScrollYPosition == null)
 				_firstScrollYPosition = window.scrollY;
 			else
@@ -100,6 +111,7 @@ function eventListenersInitialization() {
 						_smoothPageScrollTimeout = window.requestAnimationFrame(_checkFingerDown);
 					else {
 						smoothPageScroll(_firstScrollYPosition, window.scrollY);
+						_userTriggeredScroll = false;
 						_firstScrollYPosition = null;
 					}
 			}, 100);
