@@ -85,13 +85,16 @@ function eventListenersInitialization() {
 		_isFingerDown = true;
 		universalSmoothScroll.stopScrollingY();
 	}, {passive:true});
+
 	documentBodyElement.addEventListener("touchmove", () => {
 		_userTriggeredScroll = true;
 	}, {passive:true});
+
 	documentBodyElement.addEventListener("touchend", () => {
 		_isFingerDown = false;
 		_userTriggeredScroll = false;
 	}, {passive:true});
+
 	documentBodyElement.addEventListener("wheel", () =>	{
 		_userTriggeredScroll = true;
 		universalSmoothScroll.stopScrollingY();
@@ -501,7 +504,7 @@ function toggleHeaderExpandedState() {
  * - alligned if it covers 3/4 of the windowHeight or more
  * - scrolled, following the original user's scroll direction, otherwise
  */
-function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, onDone) {
+function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 	currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
 	let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
 	if(_scrollYAmmount > windowHeight / 2 || _scrollYAmmount < -windowHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowHeight / 2
@@ -510,9 +513,9 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, onDone) {
 
 		if(_pageOffset != 0)
 			if(-_pageOffset < windowHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
-				windowScrollYBy(_scrollDirection * _pageOffset, onDone);
+				windowScrollYBy(_scrollDirection * _pageOffset);
 			else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
-				windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset), onDone);
+				windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset));
 	}
 }
 
