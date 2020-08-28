@@ -32,14 +32,14 @@ var contactMeFormSendButtonElement;									//The HTML element with the id "cont
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {
-	variableInitialization();												//Binds the js variables to the corresponding HTML elements
-	updateWindowSize();															//Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
+	window.setTimeout(variableInitialization, 0);					//Binds the js variables to the corresponding HTML elements
+	window.setTimeout(updateWindowSize, 0);								//Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
 
-	imageLoading();																	//Initializes all the HTML img elements' contents
-	eventListenersInitialization();									//Initializes all the eventHandlers
+	window.setTimeout(imageLoading, 0);										//Initializes all the HTML img elements' contents
+	window.setTimeout(eventListenersInitialization, 0);		//Initializes all the eventHandlers
 
+	window.setTimeout(universalSmoothScroll.hrefSetup, 0);
 	window.location.href = "#home";									//The page always starts from the the #home page
-	universalSmoothScroll.hrefSetup();
 }
 
 /* This Function initializes all the public variables */
@@ -81,43 +81,34 @@ function variableInitialization() {
 function eventListenersInitialization() {
 	let _isFingerDown = false;
 	let _userTriggeredScroll = false;
-	documentBodyElement.addEventListener("touchstart", () => {
+	window.addEventListener("touchstart", () => {
+		universalSmoothScroll.stopScrollingY();
 		_isFingerDown = true;
+	}, {passive:true});
+	window.addEventListener("touchmove",  () => _userTriggeredScroll = true, {passive:true});
+	window.addEventListener("touchend",   () => _isFingerDown = false, {passive:true});
+	window.addEventListener("wheel", () => {
 		universalSmoothScroll.stopScrollingY();
-	}, {passive:true});
-
-	documentBodyElement.addEventListener("touchmove", () => {
 		_userTriggeredScroll = true;
-	}, {passive:true});
-
-	documentBodyElement.addEventListener("touchend", () => {
-		_isFingerDown = false;
-		_userTriggeredScroll = false;
-	}, {passive:true});
-
-	documentBodyElement.addEventListener("wheel", () =>	{
-		_userTriggeredScroll = true;
-		universalSmoothScroll.stopScrollingY();
 	}, {passive:true});
 
 	let _firstScrollYPosition = null;
 	let _smoothPageScrollTimeout = 0;
 	window.addEventListener("scroll", event => {
-			if(!_userTriggeredScroll) return;
-			if(_firstScrollYPosition == null)
+			if(_firstScrollYPosition == null) {
 				_firstScrollYPosition = window.scrollY;
-			else
-				clearTimeout(_smoothPageScrollTimeout);
-
-			_smoothPageScrollTimeout = setTimeout(function _checkFingerDown() {
-					if(_isFingerDown)
-						_smoothPageScrollTimeout = window.requestAnimationFrame(_checkFingerDown);
-					else {
+				return;
+			}
+			clearTimeout(_smoothPageScrollTimeout);
+			_smoothPageScrollTimeout = window.setTimeout(function _checkFingerDown() {
+					if(_isFingerDown) return;
+					_smoothPageScrollTimeout = window.setTimeout(() => {
+						if(!_userTriggeredScroll) return;
 						smoothPageScroll(_firstScrollYPosition, window.scrollY);
 						_userTriggeredScroll = false;
 						_firstScrollYPosition = null;
-					}
-			}, 100);
+					}, 100);
+			}, 0);
 	}, {passive:true});
 
 	window.addEventListener("resize", updateWindowSize, {passive:true});
@@ -372,7 +363,7 @@ function eventListenersInitialization() {
 
 				websitePreviewExpandedBackgroundContentElement.classList.remove("expandedState");
 
-				setTimeout(() => {
+				window.setTimeout(() => {
 					window.requestAnimationFrame(() => {
 						_websitePreviewExpandedBackgroundListenerTriggered = false;
 						websitePreviewExpandedBackgroundContentElement.style.pointerEvents = "";
@@ -397,7 +388,7 @@ function eventListenersInitialization() {
 		if(_popUpMessageTimeout != null)
 			clearTimeout(_popUpMessageTimeout);
 
-		_popUpMessageTimeout = setTimeout(() => popUpMessageElement.className = "", 6000);			//Every message on screen is shown for 6seconds
+		_popUpMessageTimeout = window.setTimeout(() => popUpMessageElement.className = "", 6000);			//Every message on screen is shown for 6seconds
 	}
 
 	/*
@@ -469,7 +460,7 @@ function eventListenersInitialization() {
 			_ajax(contactMeFormElement.method, contactMeFormElement.action, new FormData(contactMeFormElement), _ajaxResponceStatusSuccess, _ajaxResponceStatusError);
 		else {
 			_showMessage(validData.replace("validData<br>", ""));
-			setTimeout(() => contactMeFormSendButtonElement.disabled = false, 6000);			//Every message on screen is shown for 6seconds
+			window.setTimeout(() => contactMeFormSendButtonElement.disabled = false, 6000);			//Every message on screen is shown for 6seconds
 		}
 	}
 
@@ -647,7 +638,7 @@ function lagTest() {
 		else
 			websitePreviewExpandedBackgroundContentElement.dispatchEvent(_testEvent);
 
-		setTimeout(lagTest, transitionTimeMedium + 100);
+		window.setTimeout(lagTest, transitionTimeMedium + 100);
 		_test++;
 	}
 }
@@ -658,7 +649,7 @@ function lagTestHeader() {
     _testEvent.initEvent("click", true, false);
 	if(_test2 < 100) {
 		hamburgerMenuElement.dispatchEvent(_testEvent);
-		setTimeout(lagTestHeader, transitionTimeMedium);
+		window.setTimeout(lagTestHeader, transitionTimeMedium);
 		_test2++;
 	}
 }
@@ -669,7 +660,7 @@ function scrollTest(_scrollDirectionTest) {
 	if(_scroll < 10){
 		windowScrollYBy(_scrollDirectionTest * windowHeight / 4 + _scrollDirectionTest);
 		_scroll++;
-		setTimeout(() => scrollTest(-_scrollDirectionTest), 2000);
+		window.setTimeout(() => scrollTest(-_scrollDirectionTest), 2000);
 	}
 }
 
@@ -679,7 +670,7 @@ function _fastPagesScrollTest() {
 		let _scrollAmmount = (_fastScroll % 2 == 0) ? windowHeight * 4 : windowHeight * -4;
 		windowScrollYBy(_scrollAmmount);
 		_fastScroll++;
-		setTimeout( _fastPagesScrollTest, 1000);
+		window.setTimeout( _fastPagesScrollTest, 1000);
 	}
 }
 
@@ -691,11 +682,11 @@ function testScrollingSmoothness() {
 	if(_testScrolledTimes == 0) {
 		windowScrollYBy(window.scrollY - window.innerHeight / 2);
 		_testScrolledTimes++;
-		setTimeout(testScrollingSmoothness, 650);
+		window.setTimeout(testScrollingSmoothness, 650);
 	} else if(_testScrolledTimes < 50) {
 		let _scrollAmmount = (_testScrolledTimes % 2 == 0) ? window.scrollY - window.innerHeight : window.scrollY + window.innerHeight;
 		windowScrollYBy(_scrollAmmount);
 		_testScrolledTimes++;
-		setTimeout(testScrollingSmoothness, 650);
+		window.setTimeout(testScrollingSmoothness, 650);
 	}
 }
