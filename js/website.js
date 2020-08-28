@@ -297,12 +297,10 @@ function eventListenersInitialization() {
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _websitePreviewImageBoundingRectangle.height + "px");
 
 				websitePreviewExpandedBackgroundContentElement.appendChild(_websitePreviewExpanded);
+				websitePreviewExpandedBackgroundContentElement.style.pointerEvents = "auto";
+				websitePreview.classList.add("expandedState");
 
-				window.requestAnimationFrame(() => {
-					websitePreview.classList.add("expandedState");
-					websitePreviewExpandedBackgroundContentElement.classList.add("expandedState");
-					websitePreviewExpandedBackgroundContentElement.style.pointerEvents = "auto";
-				});
+				window.requestAnimationFrame(() => websitePreviewExpandedBackgroundContentElement.classList.add("expandedState"));
 			});
 		}, {passive:true});
 	}
@@ -347,12 +345,10 @@ function eventListenersInitialization() {
 				websitePreviewExpandedBackgroundContentElement.classList.remove("expandedState");
 
 				window.setTimeout(() => {
-					window.requestAnimationFrame(() => {
-						_websitePreviewExpandedBackgroundListenerTriggered = false;
-						websitePreviewExpandedBackgroundContentElement.style.pointerEvents = "";
-						_currentWebsitePreview.classList.remove("expandedState");
-						websitePreviewExpandedBackgroundContentElement.removeChild(_currentWebsitePreviewExpanded);
-					});
+					_websitePreviewExpandedBackgroundListenerTriggered = false;
+					websitePreviewExpandedBackgroundContentElement.style.pointerEvents = "";
+					websitePreviewExpandedBackgroundContentElement.removeChild(_currentWebsitePreviewExpanded);
+					_currentWebsitePreview.classList.remove("expandedState");
 				}, transitionTimeMedium);
 
 			});
