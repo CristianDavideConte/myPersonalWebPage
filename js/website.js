@@ -118,17 +118,18 @@ function eventListenersInitialization() {
 	 * The user can use the arrow keys to navigate the website.
 	 * Pressing the Arrow-up or the Arrow-left keys will trigger a scroll upwards by a scrollDistance of windowHeight
  	 * Pressing the Arrow-down or the Arrow-right keys will trigger a scroll downwards by a scrollDistance of windowHeight
-	 * Safari support is added by using the smoothScrollVertically function.
    */
-	documentBodyElement.addEventListener("keydown", event => {
+	window.addEventListener("keydown", event => {
 		if(event.target.tagName == "BODY") {
 			let _keyName = event.key;
 			if(_keyName == "ArrowUp" || _keyName == "ArrowLeft") {
 				event.preventDefault();
-				universalSmoothScroll.scrollYby(-windowHeight, window, null, true);
+				let _firstY = window.scrollY;
+				windowScrollYBy(-windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
 			} else if(_keyName == "ArrowDown" || _keyName == "ArrowRight") {
 				event.preventDefault();
-				universalSmoothScroll.scrollYby(windowHeight, window, null, true);
+				let _firstY = window.scrollY;
+				windowScrollYBy(windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
 			}
 		}
 	}, {passive:false});
@@ -193,56 +194,39 @@ function eventListenersInitialization() {
 	document.getElementById("instagramContact").addEventListener("click", () => window.open("https://www.instagram.com/cristiandavideconte/?hl=it"), {passive:true});
 	document.getElementById("mailContact").addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 
+	//This allows for a smoother scrolling experience inside the presentationCard
 	let _presentationCard = document.getElementById("presentationCard");
 	_presentationCard.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		universalSmoothScroll.scrollYby(Math.sign(event.deltaY) * windowHeight/25, _presentationCard, null, true);
+		universalSmoothScroll.scrollYby(Math.sign(event.deltaY) * windowHeight/25, _presentationCard, null, false);
 	}, {passive:false});
 
-	let _smoothWebsiteShowcaseWheelScrollID = null;
+	//This allows for a smoother scrolling experience inside the websiteShowcase
 	websiteShowcase.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		universalSmoothScroll.scrollXby(Math.sign(event.deltaY) * windowWidth/25, websiteShowcase, null, true);
+		universalSmoothScroll.scrollXby(Math.sign(event.deltaY) * windowWidth/25, websiteShowcase, null, false);
 	}, {passive:false});
 
-	/*
-	 * The number of the pixel scrolled on the x-axis, it's calculated dynamically based on the windowWidth
-	 * and so that is +1/100th of the window's innerWidth at any given resolution.
-	 * If the direction is > 0  the scroll direction is from left to right, it's from right to left otherwise.
-	 */
-	let _carouselButtonScrollEnabled = false;
+
+	//If the direction is === -1  the scroll direction is from right to left, it's from left to right otherwise.
 	function _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection) {
-		websiteShowcase.scrollLeft += scrollDirection * windowWidth / 100;
-		if(_carouselButtonScrollEnabled)
-			window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection));
+		let finalXPosition = (scrollDirection === -1) ? 0 : websiteShowcase.scrollWidth;
+		universalSmoothScroll.scrollXto(finalXPosition, websiteShowcase, null, false);
 	}
 
-	carouselButtons[0].addEventListener("mousedown", () => {
-		_carouselButtonScrollEnabled = true;
-		window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(-1));
-	}, {passive:true});
+	carouselButtons[0].addEventListener("mousedown",  () => _smoothWebsiteShowcaseWheelScrollHorizzontally(-1), {passive:false});
+	carouselButtons[0].addEventListener("touchstart", () => _smoothWebsiteShowcaseWheelScrollHorizzontally(-1), {passive:false});
+	carouselButtons[1].addEventListener("mousedown",  () => _smoothWebsiteShowcaseWheelScrollHorizzontally(+1), {passive:false});
+	carouselButtons[1].addEventListener("touchstart", () => _smoothWebsiteShowcaseWheelScrollHorizzontally(+1), {passive:false});
 
-	carouselButtons[0].addEventListener("touchstart", () => {
-		_carouselButtonScrollEnabled = true;
-		window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(-1));
-	}, {passive:true});
-
-	carouselButtons[1].addEventListener("mousedown", () => {
-		_carouselButtonScrollEnabled = true;
-		window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(1));
-	}, {passive:true});
-
-	carouselButtons[1].addEventListener("touchstart", () => {
-		_carouselButtonScrollEnabled = true;
-		window.requestAnimationFrame(() => _smoothWebsiteShowcaseWheelScrollHorizzontally(1));
-	}, {passive:true});
-
-	carouselButtons[0].addEventListener("mouseup", () => _carouselButtonScrollEnabled = false, {passive:true});
-	carouselButtons[0].addEventListener("touchend", () => _carouselButtonScrollEnabled = false, {passive:true});
-	carouselButtons[1].addEventListener("mouseup", () => _carouselButtonScrollEnabled = false, {passive:true});
-	carouselButtons[1].addEventListener("touchend", () => _carouselButtonScrollEnabled = false, {passive:true});
+	carouselButtons[0].addEventListener("mouseup",  () => universalSmoothScroll.stopScrollingX(websiteShowcase), {passive:false});
+	carouselButtons[0].addEventListener("mouseout", () => universalSmoothScroll.stopScrollingX(websiteShowcase), {passive:false});
+	carouselButtons[0].addEventListener("touchend", () => universalSmoothScroll.stopScrollingX(websiteShowcase), {passive:false});
+	carouselButtons[1].addEventListener("mouseup",  () => universalSmoothScroll.stopScrollingX(websiteShowcase), {passive:false});
+	carouselButtons[1].addEventListener("mouseout", () => universalSmoothScroll.stopScrollingX(websiteShowcase), {passive:false});
+	carouselButtons[1].addEventListener("touchend", () => universalSmoothScroll.stopScrollingX(websiteShowcase), {passive:false});
 
 	for(const websitePreview of websitePreviews) {
 		/* First, all the websitePreviewExpanded basic components are created */
@@ -377,94 +361,6 @@ function eventListenersInitialization() {
 	}, {passive:true});
 
 	/*
-	 * This function animates the popUpMessageElement and modifies the text shown.
-	 * It also avoids the spam of this function by using a timeout which gets resetted at each function call.
-	 */
-	let _popUpMessageTimeout = null;
-	function _showMessage(message) {
-		popUpMessageTextElement.innerHTML = message;
-		popUpMessageElement.className = "messageOnScreen";
-
-		if(_popUpMessageTimeout != null)
-			clearTimeout(_popUpMessageTimeout);
-
-		_popUpMessageTimeout = window.setTimeout(() => popUpMessageElement.className = "", 6000);			//Every message on screen is shown for 6seconds
-	}
-
-	/*
-	 * This function returns:
-	 * case1: "validData" if both the contactMeFormEmail && contactMeFormBody are valid
-	 * case2: an error message if at least one of the two contactMeForm fields is not valid
-	 * It uses a regular expression to check if the email field is correctly formatted, no further investigation is done
-	 */
-	function _checkContactMeFormDataIntegrity() {
-		let regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		let valid = (regExp.test(contactMeFormEmailElement.value.toLowerCase())) ? "validData<br>" : "Type a valid email address";
-		if(contactMeFormBodyElement.value == "")
-			valid = (valid != "validData<br>") ?  "Fill the form first !" : valid + "Your message cannot by empty";
-		return valid;
-	}
-
- 	/* Success function for after the form is submitted */
-  function _ajaxResponceStatusSuccess() {
-    contactMeFormElement.reset();
-    contactMeFormEmailElement.disabled = true;
-    contactMeFormBodyElement.disabled = true;
-    contactMeFormSendButtonElement.disabled = true;
-		contactMeFormElement.removeEventListener("submit", _submitForm, {passive:false});
-		contactMeFormElement.removeAttribute("action");
-		contactMeFormElement.removeAttribute("method");
-		_showMessage("Message Sent!");
-  }
-
-	/* Error function for after the form is submitted */
-  function _ajaxResponceStatusError(status, response, responseType) {
-		contactMeFormSendButtonElement.disabled = false;
-		_showMessage("Oops! There was a problem, try again later");
-		console.log("Request rejected from server.\nStatus: " + status + "\nResponseType: " + responseType + "\nResponse: " + response);
-  }
-
-  /*
-	 * This function:
-	 * - creates an XMLHttpRequest
-	 * - sends the message request
-	 * - calls the _ajaxResponceStatusSuccess function when a positive response is returned (Code == 200)
-	 * - calls the _ajaxResponceStatusError function when a negative response is returned (Code != 200)
-	 */
-  function _ajax(method, url, data, success, error) {
-    let xhr = new XMLHttpRequest();
-    xhr.open(method, url);
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState !== XMLHttpRequest.DONE)
-				return;
-      if (xhr.status === 200)
-        success(xhr.response, xhr.responseType);
-      else
-        error(xhr.status, xhr.response, xhr.responseType);
-    };
-    xhr.send(data);
-  }
-
-	/*
-	 * This function:
-	 * - acquires the contactMeForm data
-	 * - calls _checkContactMeFormDataIntegrity in order to prevent the spam of invalid emails
-	 * - if the form data is valid calls _ajax to create the request, tells the user to fill the form fields with valid data otherwise
-	 */
-	function _submitForm() {
-		event.preventDefault();
-    contactMeFormSendButtonElement.disabled = true;
-		let validData = _checkContactMeFormDataIntegrity();
-		if(validData == "validData<br>")
-			_ajax(contactMeFormElement.method, contactMeFormElement.action, new FormData(contactMeFormElement), _ajaxResponceStatusSuccess, _ajaxResponceStatusError);
-		else {
-			_showMessage(validData.replace("validData<br>", ""));
-			window.setTimeout(() => contactMeFormSendButtonElement.disabled = false, 6000);			//Every message on screen is shown for 6seconds
-		}
-	}
-
-	/*
 	 * If clicked, the contactMeFormSendButton triggers a call to the _submitForm functon
 	 * which locally checks if the contactMeForm fields are valid and if so triggers an ajax request to the Formspree API.
 	 * The API will send an email to the registered receiver address.
@@ -507,6 +403,94 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 				windowScrollYBy(_scrollDirection * _pageOffset);
 			else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
 				windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset));
+	}
+}
+
+/*
+ * This function animates the popUpMessageElement and modifies the text shown.
+ * It also avoids the spam of this function by using a timeout which gets resetted at each function call.
+ */
+let _popUpMessageTimeout = null;
+function _showMessage(message) {
+	popUpMessageTextElement.innerHTML = message;
+	popUpMessageElement.className = "messageOnScreen";
+
+	if(_popUpMessageTimeout != null)
+		clearTimeout(_popUpMessageTimeout);
+
+	_popUpMessageTimeout = window.setTimeout(() => popUpMessageElement.className = "", 6000);			//Every message on screen is shown for 6seconds
+}
+
+/*
+ * This function returns:
+ * case1: "validData" if both the contactMeFormEmail && contactMeFormBody are valid
+ * case2: an error message if at least one of the two contactMeForm fields is not valid
+ * It uses a regular expression to check if the email field is correctly formatted, no further investigation is done
+ */
+function _checkContactMeFormDataIntegrity() {
+	let regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	let valid = (regExp.test(contactMeFormEmailElement.value.toLowerCase())) ? "validData<br>" : "Type a valid email address";
+	if(contactMeFormBodyElement.value == "")
+		valid = (valid != "validData<br>") ?  "Fill the form first !" : valid + "Your message cannot by empty";
+	return valid;
+}
+
+	/* Success function for after the form is submitted */
+function _ajaxResponceStatusSuccess() {
+  contactMeFormElement.reset();
+  contactMeFormEmailElement.disabled = true;
+  contactMeFormBodyElement.disabled = true;
+  contactMeFormSendButtonElement.disabled = true;
+	contactMeFormElement.removeEventListener("submit", _submitForm, {passive:false});
+	contactMeFormElement.removeAttribute("action");
+	contactMeFormElement.removeAttribute("method");
+	_showMessage("Message Sent!");
+}
+
+/* Error function for after the form is submitted */
+function _ajaxResponceStatusError(status, response, responseType) {
+	contactMeFormSendButtonElement.disabled = false;
+	_showMessage("Oops! There was a problem, try again later");
+	console.log("Request rejected from server.\nStatus: " + status + "\nResponseType: " + responseType + "\nResponse: " + response);
+}
+
+/*
+ * This function:
+ * - creates an XMLHttpRequest
+ * - sends the message request
+ * - calls the _ajaxResponceStatusSuccess function when a positive response is returned (Code == 200)
+ * - calls the _ajaxResponceStatusError function when a negative response is returned (Code != 200)
+ */
+function _ajax(method, url, data, success, error) {
+  let xhr = new XMLHttpRequest();
+  xhr.open(method, url);
+  xhr.setRequestHeader("Accept", "application/json");
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState !== XMLHttpRequest.DONE)
+			return;
+    if (xhr.status === 200)
+      success(xhr.response, xhr.responseType);
+    else
+      error(xhr.status, xhr.response, xhr.responseType);
+  };
+  xhr.send(data);
+}
+
+/*
+ * This function:
+ * - acquires the contactMeForm data
+ * - calls _checkContactMeFormDataIntegrity in order to prevent the spam of invalid emails
+ * - if the form data is valid calls _ajax to create the request, tells the user to fill the form fields with valid data otherwise
+ */
+function _submitForm() {
+	event.preventDefault();
+  contactMeFormSendButtonElement.disabled = true;
+	let validData = _checkContactMeFormDataIntegrity();
+	if(validData == "validData<br>")
+		_ajax(contactMeFormElement.method, contactMeFormElement.action, new FormData(contactMeFormElement), _ajaxResponceStatusSuccess, _ajaxResponceStatusError);
+	else {
+		_showMessage(validData.replace("validData<br>", ""));
+		window.setTimeout(() => contactMeFormSendButtonElement.disabled = false, 6000);			//Every message on screen is shown for 6seconds
 	}
 }
 
