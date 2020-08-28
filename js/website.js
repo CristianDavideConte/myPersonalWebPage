@@ -94,7 +94,7 @@ function eventListenersInitialization() {
 	let _firstScrollYPosition = null;
 	let _smoothPageScrollTimeout = 0;
 	window.addEventListener("scroll", event => {
-			if(_firstScrollYPosition == null) {
+			if(_firstScrollYPosition === null) {
 				_firstScrollYPosition = window.scrollY;
 				return;
 			}
@@ -116,17 +116,17 @@ function eventListenersInitialization() {
 
 	/*
 	 * The user can use the arrow keys to navigate the website.
-	 * Pressing the Arrow-up or the Arrow-left keys will trigger a scroll upwards by a scrollDistance of windowHeight
- 	 * Pressing the Arrow-down or the Arrow-right keys will trigger a scroll downwards by a scrollDistance of windowHeight
+	 * Pressing the Arrow-up or the Arrow-left or the PageUp keys will trigger a scroll upwards by a scrollDistance of windowHeight.
+ 	 * Pressing the Arrow-down or the Arrow-right or the PageDown keys will trigger a scroll downwards by a scrollDistance of windowHeight.
    */
 	window.addEventListener("keydown", event => {
-		if(event.target.tagName == "BODY") {
+		if(event.target.tagName === "BODY") {
 			let _keyName = event.key;
-			if(_keyName == "ArrowUp" || _keyName == "ArrowLeft") {
+			if(_keyName === "ArrowUp" || _keyName === "ArrowLeft" || _keyName === "PageUp") {
 				event.preventDefault();
 				let _firstY = window.scrollY;
 				windowScrollYBy(-windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
-			} else if(_keyName == "ArrowDown" || _keyName == "ArrowRight") {
+			} else if(_keyName === "ArrowDown" || _keyName === "ArrowRight" || _keyName === "PageDown") {
 				event.preventDefault();
 				let _firstY = window.scrollY;
 				windowScrollYBy(windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
@@ -143,14 +143,14 @@ function eventListenersInitialization() {
 	headerElement.addEventListener("wheel", event => {
 		event.preventDefault();
 		let _className = headerElement.className;
-		if(_className == "mobileExpanded" && event.deltaY > 0 || _className !== "mobileExpanded" && event.deltaY < 0)
+		if(_className === "mobileExpanded" && event.deltaY > 0 || _className !== "mobileExpanded" && event.deltaY < 0)
 			toggleHeaderExpandedState();
 	}, {passive:false});
 
 	headerBackgroundElement.addEventListener("wheel", event => {
 		event.preventDefault();
 		let _className = headerBackgroundElement.className;
-		if(_className == "mobileExpanded" && event.deltaY > 0 || _className !== "mobileExpanded" && event.deltaY < 0)
+		if(_className === "mobileExpanded" && event.deltaY > 0 || _className !== "mobileExpanded" && event.deltaY < 0)
 			toggleHeaderExpandedState();
 	}, {passive:false});
 
@@ -162,7 +162,7 @@ function eventListenersInitialization() {
 		event.preventDefault();
 		let _className = headerElement.className;
 		let _direction = event.touches[0].clientY - _firstTouchPosition; /* >0 downwards <0 upwards */
-		if(_className == "mobileExpanded" && _direction < 0 || _className !== "mobileExpanded" && _direction > 0)
+		if(_className === "mobileExpanded" && _direction < 0 || _className !== "mobileExpanded" && _direction > 0)
 			toggleHeaderExpandedState();
 	}, {passive:false});
 
@@ -170,7 +170,7 @@ function eventListenersInitialization() {
 		event.preventDefault();
 		let _className = headerBackgroundElement.className;
 		let _direction = event.touches[0].clientY - _firstTouchPosition; /* >0 downwards <0 upwards */
-		if(_className == "mobileExpanded" && _direction < 0 || _className !== "mobileExpanded" && _direction > 0)
+		if(_className === "mobileExpanded" && _direction < 0 || _className !== "mobileExpanded" && _direction > 0)
 			toggleHeaderExpandedState();
 	}, {passive:false});
 
@@ -397,7 +397,7 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 		let _scrollDirection = Math.sign(_scrollYAmmount); //1 if the scrolling is going downwards -1 otherwise.
 		let _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
-		if(_pageOffset != 0)
+		if(_pageOffset !== 0)
 			if(-_pageOffset < windowHeight / 3)	//Case 1: The user scroll too little (less than 1/4 of the page height)
 				windowScrollYBy(_scrollDirection * _pageOffset);
 			else //Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
@@ -429,8 +429,8 @@ function _showMessage(message) {
 function _checkContactMeFormDataIntegrity() {
 	let regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	let valid = (regExp.test(contactMeFormEmailElement.value.toLowerCase())) ? "validData<br>" : "Type a valid email address";
-	if(contactMeFormBodyElement.value == "")
-		valid = (valid != "validData<br>") ?  "Fill the form first !" : valid + "Your message cannot by empty";
+	if(contactMeFormBodyElement.value === "")
+		valid = (valid !== "validData<br>") ?  "Fill the form first !" : valid + "Your message cannot by empty";
 	return valid;
 }
 
@@ -485,7 +485,7 @@ function _submitForm() {
 	event.preventDefault();
   contactMeFormSendButtonElement.disabled = true;
 	let validData = _checkContactMeFormDataIntegrity();
-	if(validData == "validData<br>")
+	if(validData === "validData<br>")
 		_ajax(contactMeFormElement.method, contactMeFormElement.action, new FormData(contactMeFormElement), _ajaxResponceStatusSuccess, _ajaxResponceStatusError);
 	else {
 		_showMessage(validData.replace("validData<br>", ""));
