@@ -3,7 +3,6 @@ const WINDOWSCROLLYBYDURATION = 250;								//The duration of each windowScrollY
 
 var windowScrollYBy; 																//A shorthand for the y => zenscroll.toY(window.scrollY + y) function, used to scroll the window without the user's interaction
 var mobileMode; 																		//Indicates if the css for mobile is currently being applied
-var safariBrowserUsed;															//A Boolean which is true if the browser used is Apple's Safari, false otherwise
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
 var websitePreviewExpandedMap; 											//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
 var computedStyle;																	//All the computed styles for the document.body element
@@ -39,7 +38,7 @@ function init() {
 	window.setTimeout(eventListenersInitialization, 0);		//Initializes all the eventHandlers
 
 	window.setTimeout(universalSmoothScroll.hrefSetup, 0);
-	window.location.href = "#home";									//The page always starts from the the #home page
+	window.location.href = "#home";									      //The page always starts from the the #home page
 }
 
 /* This Function initializes all the public variables */
@@ -111,8 +110,9 @@ function eventListenersInitialization() {
 			}, 0);
 	}, {passive:true});
 
+	//Allows the page to always start from the #home page
+	window.addEventListener("beforeunload", () => history.replaceState({}, "", "/index.html"), {passive:false});
 	window.addEventListener("resize", updateWindowSize, {passive:true});
-	window.addEventListener("beforeunload", () => history.replaceState({}, "", "/index.html"), {passive:false}); //Allows the page to always start from the #home page
 
 	/*
 	 * The user can use the arrow keys to navigate the website.
@@ -179,11 +179,10 @@ function eventListenersInitialization() {
 
 	/*
 	 * When the website is in mobile mode the page links are hidden under the hamburgerMenu
-	 * which can be expanded by toggling the class "mobileExpanded" on the header.
+	 * which can be expanded by toggling the class "mobileExpanded" on the headerElement and the headerBackgroundElement.
 	 * Once it's expanded the pageLinks can be clicked to go to the relative website section.
-	 * Whenever a link is clicked and the window is scrolled, it's convenient to hide all the links under the hamburgerMenu.
-	 * This is done the same way the hamburgerMenu expands when clicked directly (see above in the comment).
-	 * Plus, if safari needs a manual implementation for the smoothScroll CSS attribute.
+	 * Whenever a pageLink is clicked, the hamburgerMenu is hidden.
+	 * This is done the same way the hamburgerMenu expands.
 	 */
 	for(const pageLink of pageLinksElements)
 		pageLink.addEventListener("click", toggleHeaderExpandedState, {passive:true});
@@ -364,7 +363,7 @@ function eventListenersInitialization() {
 	 * If clicked, the contactMeFormSendButton triggers a call to the _submitForm functon
 	 * which locally checks if the contactMeForm fields are valid and if so triggers an ajax request to the Formspree API.
 	 * The API will send an email to the registered receiver address.
-	 * The receiver address is always "cristiandavideconte@gmail.com"
+	 * The receiver address is my email.
 	 * The sender address is the contactMeFormEmail content
 	 * The body is the contactMeFormBody content
 	 */
@@ -372,8 +371,9 @@ function eventListenersInitialization() {
 }
 
 /*
- * This Function toggles the mobileExpanded class of the hamburgerMenu HTML element if the page is in mobileMode.
- * Mobile mode is triggered by the window's resize event.
+ * This Function toggles the mobileExpanded class of the headerElement and  headerBackgroundElement HTML elements
+ * This behaviour is triggered only if the page is in mobileMode.
+ * The mobileMode is triggered by the window's resize event if window's width > 1080px.
  */
 function toggleHeaderExpandedState() {
 	if(mobileMode)
@@ -384,24 +384,23 @@ function toggleHeaderExpandedState() {
 }
 
 /*
- * This Function emulates the smooth scroll behaviour provided by css
- * taking into consideration the current page position.
- * It triggers after a scroll is completed.
  * If at the end of the scroll, the current page is not alligned, it gets:
- * - alligned if it covers 3/4 of the windowHeight or more
- * - scrolled, following the original user's scroll direction, otherwise
+ * - alligned if it covers 3/4 of the windowHeight or more (same as scrollIntoView).
+ * - scrolled, following the original user's scroll direction, otherwise (same as scrollIntoView on the previous/nextPage).
  */
 function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 	currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
-	let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;																			//How much the y position has changed due to the user's scroll
-	if(_scrollYAmmount > windowHeight / 2 || _scrollYAmmount < -windowHeight / 2) {								//The helping behavior is triggered only if the user scrolls more than windowHeight / 2
-		let _scrollDirection = Math.sign(_scrollYAmmount);																										//1 if the scrolling is going downwards -1 otherwise.
-		let _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);		//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
+	let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;	//How much the y position has changed due to the user's scroll
+
+	//The helping behavior is triggered only if the user scrolls more than windowHeight / 2
+	if(_scrollYAmmount > windowHeight / 2 || _scrollYAmmount < -windowHeight / 2) {
+		let _scrollDirection = Math.sign(_scrollYAmmount); //1 if the scrolling is going downwards -1 otherwise.
+		let _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
 		if(_pageOffset != 0)
-			if(-_pageOffset < windowHeight / 3)																														//Case 1: The user scroll too little (less than 1/4 of the page height)
+			if(-_pageOffset < windowHeight / 3)	//Case 1: The user scroll too little (less than 1/4 of the page height)
 				windowScrollYBy(_scrollDirection * _pageOffset);
-			else 																																															//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
+			else //Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
 				windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset));
 	}
 }
@@ -566,9 +565,15 @@ function lazyLoad(target) {
 
 /*
  * This Function:
- * - calls the _update function when necessary in order to udate the windowHeight and windowWidth values
- * - checks if the page can go to the mobileMode and set the javascript mobileMode variable accordingly
- * - if needed calculates the window's offset between the previous height and the new one to adjust animation without triggering any layout shift
+ * - calls the _update function when necessary in order to udate:
+ *     -windowHeight
+ *     -windowHeightOffset
+ *     - computedStyle
+ *     - websitePreviewExpandedSize
+ *     - var(--100vh) css variable
+ * - checks if the page can go to the mobileMode
+ * - if needed calculates the windowHeightOffset without triggering any layout shift
+ * - updates windowWidth
  */
 function updateWindowSize(){
 	function _update(currentWindowHeight) {
@@ -599,78 +604,4 @@ function updateWindowSize(){
 
 	windowWidth = _currentwindowWidth;
 	window.requestAnimationFrame(() => documentElement.style.setProperty("--window-inner-height-offset", windowHeightOffset + "px")); //Fixes mobile browsers' url bar inconsistency that can be encountered when windowHeightOffset != 0
-}
-
-/* Returns true if the user's browser is Safari, false otherwise */
-function browserIsSafari() {
-	safariBrowserUsed = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
-									   	navigator.userAgent &&
-									   	navigator.userAgent.indexOf("CriOS") == -1 &&
-									   	navigator.userAgent.indexOf("FxiOS") == -1;
-	return safariBrowserUsed;
-}
-
-/* -------------------------------------------------------- 						TESTING CODE SECTION     					------------------------------------------------------------------*/
-var _test = 0;
-function lagTest() {
-	websitePreview = document.getElementsByClassName("websitePreview")[1];
-    var _testEvent = document.createEvent('Events');
-    _testEvent.initEvent("click", true, false);
-	if(_test < 100) {
-		if(_test % 2 == 0)
-			websitePreview.dispatchEvent(_testEvent);
-		else
-			websitePreviewExpandedBackgroundContentElement.dispatchEvent(_testEvent);
-
-		window.setTimeout(lagTest, transitionTimeMedium + 100);
-		_test++;
-	}
-}
-
-var _test2 = 0;
-function lagTestHeader() {
-	var _testEvent = document.createEvent('Events');
-    _testEvent.initEvent("click", true, false);
-	if(_test2 < 100) {
-		hamburgerMenuElement.dispatchEvent(_testEvent);
-		window.setTimeout(lagTestHeader, transitionTimeMedium);
-		_test2++;
-	}
-}
-
-var _scroll = 0;
-var _scrollDirectionTest = 1;
-function scrollTest(_scrollDirectionTest) {
-	if(_scroll < 10){
-		windowScrollYBy(_scrollDirectionTest * windowHeight / 4 + _scrollDirectionTest);
-		_scroll++;
-		window.setTimeout(() => scrollTest(-_scrollDirectionTest), 2000);
-	}
-}
-
-var _fastScroll = 0;
-function _fastPagesScrollTest() {
-	if(_fastScroll < 20) {
-		let _scrollAmmount = (_fastScroll % 2 == 0) ? windowHeight * 4 : windowHeight * -4;
-		windowScrollYBy(_scrollAmmount);
-		_fastScroll++;
-		window.setTimeout( _fastPagesScrollTest, 1000);
-	}
-}
-
-/*
- * Performs a scrolling test
- */
-let _testScrolledTimes = 0;
-function testScrollingSmoothness() {
-	if(_testScrolledTimes == 0) {
-		windowScrollYBy(window.scrollY - window.innerHeight / 2);
-		_testScrolledTimes++;
-		window.setTimeout(testScrollingSmoothness, 650);
-	} else if(_testScrolledTimes < 50) {
-		let _scrollAmmount = (_testScrolledTimes % 2 == 0) ? window.scrollY - window.innerHeight : window.scrollY + window.innerHeight;
-		windowScrollYBy(_scrollAmmount);
-		_testScrolledTimes++;
-		window.setTimeout(testScrollingSmoothness, 650);
-	}
 }
