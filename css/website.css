@@ -294,8 +294,6 @@ p {
 #bodyBackground {
   z-index:-1;
 	position:fixed;
-  top: 50%;
-  left: 50%;
   min-height: var(--100vh);
   min-width: 100vw;
 
@@ -303,8 +301,8 @@ p {
   background-repeat: no-repeat;
   background-size: cover;
 
-  -webkit-transform: translate3d(-50%, -50%, 0);
-  transform: translate3d(-50%, -50%, 0);
+  -webkit-transform: translate3d(calc(50vw - 50%), calc(var(--50vh) - 50% - var(--window-inner-height-offset) / 2), 0);
+  transform: translate3d(calc(50vw - 50%), calc(var(--50vh) - 50% - var(--window-inner-height-offset) / 2), 0);
 }
 
 #popUpMessage {
@@ -1169,11 +1167,6 @@ select:-webkit-autofill:focus {
   	--websitePreview-size:20rem;
     --websitePreview-expanded-size:75vmin;
 	}
-
-  #bodyBackground {
-    -webkit-transform: translate3d(-50%, calc(-50% - var(--window-inner-height-offset) / 2), 0);
-    transform: translate3d(-50%, calc(-50% - var(--window-inner-height-offset) / 2), 0);
-  }
 
   #popUpMessageText {
     font-size: 350%;
