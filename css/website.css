@@ -70,9 +70,9 @@
    * 1) When the keyboard rises the viewport shrinks and it becomes impossible to see what is been typed
    * 2) When, on mobile browsers, the toolbar shrinks and expands the pages' heights adjust accordingly and the whole page jumps back and forth
    */
-  --1vh:calc(var(--100vh) / 100);
-  --50vh:calc(var(--100vh) / 2);
   --100vh: 100vh;
+  --50vh:calc(var(--100vh) / 2);
+  --1vh:calc(var(--100vh) / 100);
 
   --backdrop-filter-blur-radius-ultra-reduced:0.13rem;
 	--backdrop-filter-blur-radius-reduced:1rem;
