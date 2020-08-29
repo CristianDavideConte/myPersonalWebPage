@@ -1,6 +1,3 @@
-const PAGELINKSCROLLDURATION = 500;									//The duration of each zenscroll.toY() scroll which is not invoked by windowScrollYBy
-const WINDOWSCROLLYBYDURATION = 250;								//The duration of each windowScrollYBy scroll
-
 var windowScrollYBy; 																//A shorthand for the y => zenscroll.toY(window.scrollY + y) function, used to scroll the window without the user's interaction
 var mobileMode; 																		//Indicates if the css for mobile is currently being applied
 var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
