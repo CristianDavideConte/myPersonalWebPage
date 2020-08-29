@@ -301,8 +301,8 @@ p {
   background-repeat: no-repeat;
   background-size: cover;
 
-  -webkit-transform: translate3d(calc(50vw - 50%), calc(var(--50vh) - 50% - var(--window-inner-height-offset) / 2), 0);
-  transform: translate3d(calc(50vw - 50%), calc(var(--50vh) - 50% - var(--window-inner-height-offset) / 2), 0);
+  -webkit-transform: translate3d(calc(50vw - 50%), calc(var(--50vh) - 50%), 0);
+  transform: translate3d(calc(50vw - 50%), calc(var(--50vh) - 50%), 0);
 }
 
 #popUpMessage {
