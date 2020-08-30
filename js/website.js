@@ -313,43 +313,41 @@ function eventListenersInitialization() {
 	websitePreviewExpandedBackgroundContentElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});
 	websitePreviewExpandedBackgroundContentElement.addEventListener("click", () => {
 		event.stopPropagation();
-		if(!_websitePreviewExpandedBackgroundListenerTriggered) {
-			_websitePreviewExpandedBackgroundListenerTriggered = true;
+		if(_websitePreviewExpandedBackgroundListenerTriggered) return;
+		_websitePreviewExpandedBackgroundListenerTriggered = true;
 
-			window.requestAnimationFrame(() => {
-				let _currentWebsitePreviewExpanded = websitePreviewExpandedBackgroundContentElement.firstChild;
-				let _currentWebsitePreview = websitePreviewExpandedMap.get(_currentWebsitePreviewExpanded);
-				let _currentWebsitePreviewImage = _currentWebsitePreview.firstElementChild;
-				/*
-				 * The websitePreview is scaled while hovered.
-				 * The top and left offset have to take the scaling into consideration otherwise
-				 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
-				 * The initial position is instead calculated adding the hover effect's expansion.
-				 */
-				let _websitePreviewBoundingRectangle = _currentWebsitePreview.getBoundingClientRect();
-				let _documentBodyElementStyle = documentBodyElement.style;
-				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
-				let _websitePreviewExpandedSizeValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * websitePreviewExpandedSize / 100 : windowWidth * websitePreviewExpandedSize / 100;
+		window.requestAnimationFrame(() => {
+			let _currentWebsitePreviewExpanded = websitePreviewExpandedBackgroundContentElement.firstChild;
+			let _currentWebsitePreview = websitePreviewExpandedMap.get(_currentWebsitePreviewExpanded);
+			let _currentWebsitePreviewImage = _currentWebsitePreview.firstElementChild;
+			/*
+			 * The websitePreview is scaled while hovered.
+			 * The top and left offset have to take the scaling into consideration otherwise
+			 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
+			 * The initial position is instead calculated adding the hover effect's expansion.
+			 */
+			let _websitePreviewBoundingRectangle = _currentWebsitePreview.getBoundingClientRect();
+			let _documentBodyElementStyle = documentBodyElement.style;
+			let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
+			let _websitePreviewExpandedSizeValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * websitePreviewExpandedSize / 100 : windowWidth * websitePreviewExpandedSize / 100;
 
-				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
-				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
-				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
-				_documentBodyElementStyle.setProperty("--scale3dFactor", _websitePreviewExpandedSizeValue / _websitePreviewCurrentSize);
+			_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
+			_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
+			_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
+			_documentBodyElementStyle.setProperty("--scale3dFactor", _websitePreviewExpandedSizeValue / _websitePreviewCurrentSize);
 
-				let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreviewImage.getBoundingClientRect();
-				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _currentWebsitePreviewImageBoundingRectangle.height + "px");
+			let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreviewImage.getBoundingClientRect();
+			_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _currentWebsitePreviewImageBoundingRectangle.height + "px");
 
-				websitePreviewExpandedBackgroundContentElement.classList.remove("expandedState");
+			websitePreviewExpandedBackgroundContentElement.classList.remove("expandedState");
 
-				window.setTimeout(() => {
-					_websitePreviewExpandedBackgroundListenerTriggered = false;
-					websitePreviewExpandedBackgroundContentElement.style.pointerEvents = "";
-					websitePreviewExpandedBackgroundContentElement.removeChild(_currentWebsitePreviewExpanded);
-					_currentWebsitePreview.classList.remove("expandedState");
-				}, transitionTimeMedium);
-
-			});
-		}
+			window.setTimeout(() => {
+				websitePreviewExpandedBackgroundContentElement.style.pointerEvents = "";
+				websitePreviewExpandedBackgroundContentElement.removeChild(_currentWebsitePreviewExpanded);
+				_currentWebsitePreview.classList.remove("expandedState");
+				_websitePreviewExpandedBackgroundListenerTriggered = false;
+			}, transitionTimeMedium);
+		});
 	}, {passive:true});
 
 	/*

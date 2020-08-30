@@ -829,18 +829,14 @@ p {
   transition:all var(--transition-time-medium);
 
   /*
-   * The websitePreviewExpanded is centered by default thanks to the display flex-allignment of its
-   * container (websitePreviewExpandedBackgroundContent).
+   * The websitePreviewExpanded is centered by default thanks to the display flex-allignment of
+   * its container (websitePreviewExpandedBackgroundContent).
    * Its initial position should match the corresponding websitePreview's one.
    * This is achieved throught 2 translation (X and Y, the Z is untouched).
    * The transformations:
    * - Reset the X and Y to (-websitePreview-current-size / 2, -websitePreview-current-size / 2) -> the transform-origin is center !
    * - Add half of the corresponding websitePreview's size (width and height are the same) to the X and Y so that the coordinates are now (0,0)
    * - Add the orginal-left-position to the X and the original-top-position to the Y to allign the websitePreviewExpanded to the corresponding websitePreview
-   *
-   * NOTE: var(--50vh) + window-inner-height-offset => current browser's height
-   *       this has to be subtracted from the current position in order to reset the Y to 0.
-   *       - (var(--50vh) + window-inner-height-offset) == - var(--50vh) - window-inner-height-offset (TranslateY).
    */
 	--transform-translateX: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-left-position) - 50vw );
 	--transform-translateY: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-top-position) - var(--50vh));
