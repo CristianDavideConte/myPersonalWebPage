@@ -843,7 +843,7 @@ p {
    *       - (var(--50vh) + window-inner-height-offset) == - var(--50vh) - window-inner-height-offset (TranslateY).
    */
 	--transform-translateX: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-left-position) - 50vw );
-	--transform-translateY: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-top-position) - var(--50vh) - var(--window-inner-height-offset));
+	--transform-translateY: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-top-position) - var(--50vh));
 
   /*
    * When expanded the image occupies only 50% of the height/width of the websitePreview, not the 70%.
