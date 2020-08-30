@@ -34,7 +34,10 @@ function init() {
 	window.setTimeout(imageLoading, 0);										//Initializes all the HTML img elements' contents
 	window.setTimeout(eventListenersInitialization, 0);		//Initializes all the eventHandlers
 
-	window.setTimeout(universalSmoothScroll.hrefSetup, 0);
+	window.setTimeout(() => {
+		universalSmoothScroll.hrefSetup();
+		universalSmoothScroll.setYStepLengthCalculator(remaning => {return remaning / 10 + 1;});
+	}, 0);
 	window.location.href = "#home";									      //The page always starts from the the #home page
 }
 
