@@ -35,15 +35,15 @@ function init() {
 	window.setTimeout(eventListenersInitialization, 0);		//Initializes all the eventHandlers
 
 	window.setTimeout(() => {
-		universalSmoothScroll.hrefSetup();
-		universalSmoothScroll.setYStepLengthCalculator(remaning => {return remaning / 10 + 1;});
+		uss.hrefSetup();
+		uss.setYStepLengthCalculator(remaning => {return remaning / 10 + 1;});
 	}, 0);
 	window.location.href = "#home";									      //The page always starts from the the #home page
 }
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
-	windowScrollYBy = (y, onDone = null) => universalSmoothScroll.scrollYby(y, window, onDone);
+	windowScrollYBy = (y, onDone = null) => uss.scrollYBy(y, window, onDone);
 	documentBodyElement = document.body;
 
 	websitePreviewExpandedMap = new Map();
@@ -81,13 +81,13 @@ function eventListenersInitialization() {
 	let _isFingerDown = false;
 	let _userTriggeredScroll = false;
 	window.addEventListener("touchstart", () => {
-		universalSmoothScroll.stopScrollingY();
+		uss.stopScrollingY();
 		_isFingerDown = true;
 	}, {passive:true});
 	window.addEventListener("touchmove",  () => _userTriggeredScroll = true, {passive:true});
 	window.addEventListener("touchend",   () => _isFingerDown = false, {passive:true});
 	window.addEventListener("wheel", () => {
-		universalSmoothScroll.stopScrollingY();
+		uss.stopScrollingY();
 		_userTriggeredScroll = true;
 	}, {passive:true});
 
@@ -198,21 +198,21 @@ function eventListenersInitialization() {
 	_presentationCard.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		universalSmoothScroll.scrollYby(Math.sign(event.deltaY) * windowHeight/25, _presentationCard, null, false);
+		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight/25, _presentationCard, null, false);
 	}, {passive:false});
 
 	//This allows for a smoother scrolling experience inside the websiteShowcase
 	websiteShowcase.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		universalSmoothScroll.scrollXby(Math.sign(event.deltaY) * windowWidth/25, websiteShowcase, null, false);
+		uss.scrollXBy(Math.sign(event.deltaY) * windowWidth/25, websiteShowcase, null, false);
 	}, {passive:false});
 
 
 	//If the direction is === -1  the scroll direction is from right to left, it's from left to right otherwise.
 	function _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection) {
 		let finalXPosition = (scrollDirection === -1) ? 0 : websiteShowcase.scrollWidth;
-		universalSmoothScroll.scrollXto(finalXPosition, websiteShowcase, null, false);
+		uss.scrollXTo(finalXPosition, websiteShowcase, null, false);
 	}
 
 	carouselButtons[0].addEventListener("mousedown",  () => _smoothWebsiteShowcaseWheelScrollHorizzontally(-1), {passive:false});
@@ -220,12 +220,12 @@ function eventListenersInitialization() {
 	carouselButtons[1].addEventListener("mousedown",  () => _smoothWebsiteShowcaseWheelScrollHorizzontally(+1), {passive:false});
 	carouselButtons[1].addEventListener("touchstart", () => _smoothWebsiteShowcaseWheelScrollHorizzontally(+1), {passive:false});
 
-	carouselButtons[0].addEventListener("mouseup",  () => universalSmoothScroll.stopScrollingX(websiteShowcase), {passive:false});
-	carouselButtons[0].addEventListener("mouseout", () => universalSmoothScroll.stopScrollingX(websiteShowcase), {passive:false});
-	carouselButtons[0].addEventListener("touchend", () => universalSmoothScroll.stopScrollingX(websiteShowcase), {passive:false});
-	carouselButtons[1].addEventListener("mouseup",  () => universalSmoothScroll.stopScrollingX(websiteShowcase), {passive:false});
-	carouselButtons[1].addEventListener("mouseout", () => universalSmoothScroll.stopScrollingX(websiteShowcase), {passive:false});
-	carouselButtons[1].addEventListener("touchend", () => universalSmoothScroll.stopScrollingX(websiteShowcase), {passive:false});
+	carouselButtons[0].addEventListener("mouseup",  () => uss.stopScrollingX(websiteShowcase), {passive:false});
+	carouselButtons[0].addEventListener("mouseout", () => uss.stopScrollingX(websiteShowcase), {passive:false});
+	carouselButtons[0].addEventListener("touchend", () => uss.stopScrollingX(websiteShowcase), {passive:false});
+	carouselButtons[1].addEventListener("mouseup",  () => uss.stopScrollingX(websiteShowcase), {passive:false});
+	carouselButtons[1].addEventListener("mouseout", () => uss.stopScrollingX(websiteShowcase), {passive:false});
+	carouselButtons[1].addEventListener("touchend", () => uss.stopScrollingX(websiteShowcase), {passive:false});
 
 	for(const websitePreview of websitePreviews) {
 		/* First, all the websitePreviewExpanded basic components are created */
