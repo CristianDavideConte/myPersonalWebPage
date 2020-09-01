@@ -25,11 +25,11 @@
  /* 0) KEYFRAMES GLOBAL ANIMATIONS */
 @keyframes scrollDownButtonBounce {
   0% {
-    transform: translate3d(-20%,0,0);
+    transform: translate3d(0, calc(var(--100vh) / 4 - 20%), 0);
   }
 
   100% {
-      transform: translate3d(0,0,0);
+      transform: translate3d(0, calc(var(--100vh) / 4), 0);
   }
 }
 
@@ -591,14 +591,6 @@ p {
   outline:none;
   border:none;
   text-decoration: none;
-
-  -webkit-transform: translate3d(0, calc(var(--100vh) / 4),0) rotate3d(0,0,1,90deg);
-  transform: translate3d(0, calc(var(--100vh) / 4),0) rotate3d(0,0,1,90deg);
-}
-
-#scrollDownButton::after {
-  content:"->";
-  display: block;
   width: 4rem;
   height: 4rem;
 
@@ -617,9 +609,11 @@ p {
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 
+  -webkit-transform: translate3d(0, calc(var(--100vh) / 4),0);
+  transform: translate3d(0, calc(var(--100vh) / 4),0);
+
   animation: scrollDownButtonBounce var(--transition-time-slow) ease-out alternate infinite;
 }
-
 
 
 
@@ -797,7 +791,6 @@ p {
 }
 
 .websitePreviewImage {
-	border-radius:100%;
 	width:70%;
 	height:70%;
 	border:none;
@@ -865,7 +858,6 @@ p {
   position: fixed;                                  /* This avoids layout shifts during the expandedState animation */
 	height:var(--websitePreviewImage-current-size);
 	width:var(--websitePreviewImage-current-size);
-	border-radius:100%;
 	transition:all var(--transition-time-medium);
 }
 
