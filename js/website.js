@@ -284,6 +284,7 @@ function eventListenersInitialization() {
 				 * The initial position is instead calculated adding the hover effect's expansion.
 				 */
 				let _websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
+				let _websitePreviewImageBoundingRectangle = _websitePreviewImage.getBoundingClientRect();
 				let _documentBodyElementStyle = documentBodyElement.style;
 				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 				let _websitePreviewExpandedSizeValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * websitePreviewExpandedSize / 100 : windowWidth * websitePreviewExpandedSize / 100;
@@ -292,8 +293,6 @@ function eventListenersInitialization() {
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 				_documentBodyElementStyle.setProperty("--scale3dFactor",  _websitePreviewExpandedSizeValue / _websitePreviewCurrentSize);
-
-				let _websitePreviewImageBoundingRectangle = _websitePreviewImage.getBoundingClientRect();
 				_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _websitePreviewImageBoundingRectangle.height + "px");
 
 				websitePreviewExpandedBackgroundContentElement.appendChild(_websitePreviewExpanded);
@@ -322,7 +321,6 @@ function eventListenersInitialization() {
 		window.requestAnimationFrame(() => {
 			let _currentWebsitePreviewExpanded = websitePreviewExpandedBackgroundContentElement.firstChild;
 			let _currentWebsitePreview = websitePreviewExpandedMap.get(_currentWebsitePreviewExpanded);
-			let _currentWebsitePreviewImage = _currentWebsitePreview.firstElementChild;
 			/*
 			 * The websitePreview is scaled while hovered.
 			 * The top and left offset have to take the scaling into consideration otherwise
@@ -330,6 +328,7 @@ function eventListenersInitialization() {
 			 * The initial position is instead calculated adding the hover effect's expansion.
 			 */
 			let _websitePreviewBoundingRectangle = _currentWebsitePreview.getBoundingClientRect();
+			let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreview.firstElementChild.getBoundingClientRect();
 			let _documentBodyElementStyle = documentBodyElement.style;
 			let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
 			let _websitePreviewExpandedSizeValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * websitePreviewExpandedSize / 100 : windowWidth * websitePreviewExpandedSize / 100;
@@ -338,8 +337,6 @@ function eventListenersInitialization() {
 			_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
 			_documentBodyElementStyle.setProperty("--websitePreview-current-size", _websitePreviewCurrentSize + "px");
 			_documentBodyElementStyle.setProperty("--scale3dFactor", _websitePreviewExpandedSizeValue / _websitePreviewCurrentSize);
-
-			let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreviewImage.getBoundingClientRect();
 			_documentBodyElementStyle.setProperty("--websitePreviewImage-current-size", _currentWebsitePreviewImageBoundingRectangle.height + "px");
 
 			websitePreviewExpandedBackgroundContentElement.classList.remove("expandedState");
