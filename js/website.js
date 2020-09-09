@@ -121,14 +121,17 @@ function eventListenersInitialization() {
    */
 	window.addEventListener("keydown", event => {
 		if(event.target.tagName === "BODY") {
-			let _keyName = event.key;
+			const websitePreviewIsExpanded = websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState") || _websitePreviewExpandedBackgroundListenerTriggered;
+			const _keyName = event.key;
 			if(_keyName === "ArrowUp" || _keyName === "ArrowLeft" || _keyName === "PageUp") {
 				event.preventDefault();
-				let _firstY = window.scrollY;
+				if(websitePreviewIsExpanded) return;
+				const _firstY = window.scrollY;
 				windowScrollYBy(-windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
 			} else if(_keyName === "ArrowDown" || _keyName === "ArrowRight" || _keyName === "PageDown") {
 				event.preventDefault();
-				let _firstY = window.scrollY;
+				if(websitePreviewIsExpanded) return;
+				const _firstY = window.scrollY;
 				windowScrollYBy(windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
 			}
 		}
@@ -149,7 +152,7 @@ function eventListenersInitialization() {
 
 	headerBackgroundElement.addEventListener("wheel", event => {
 		event.preventDefault();
-		let _className = headerBackgroundElement.className;
+		const _className = headerBackgroundElement.className;
 		if(_className === "mobileExpanded" && event.deltaY > 0 || _className !== "mobileExpanded" && event.deltaY < 0)
 			toggleHeaderExpandedState();
 	}, {passive:false});
@@ -160,16 +163,16 @@ function eventListenersInitialization() {
 
 	headerElement.addEventListener("touchmove", event => {
 		event.preventDefault();
-		let _className = headerElement.className;
-		let _direction = event.touches[0].clientY - _firstTouchPosition; /* >0 downwards <0 upwards */
+		const _className = headerElement.className;
+		const _direction = event.touches[0].clientY - _firstTouchPosition; /* >0 downwards <0 upwards */
 		if(_className === "mobileExpanded" && _direction < 0 || _className !== "mobileExpanded" && _direction > 0)
 			toggleHeaderExpandedState();
 	}, {passive:false});
 
 	headerBackgroundElement.addEventListener("touchmove", event => {
 		event.preventDefault();
-		let _className = headerBackgroundElement.className;
-		let _direction = event.touches[0].clientY - _firstTouchPosition; /* >0 downwards <0 upwards */
+		const _className = headerBackgroundElement.className;
+		const _direction = event.touches[0].clientY - _firstTouchPosition; /* >0 downwards <0 upwards */
 		if(_className === "mobileExpanded" && _direction < 0 || _className !== "mobileExpanded" && _direction > 0)
 			toggleHeaderExpandedState();
 	}, {passive:false});
@@ -283,11 +286,11 @@ function eventListenersInitialization() {
 				 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
 				 * The initial position is instead calculated adding the hover effect's expansion.
 				 */
-				let _websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
-				let _websitePreviewImageBoundingRectangle = _websitePreviewImage.getBoundingClientRect();
 				let _documentBodyElementStyle = documentBodyElement.style;
-				let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
-				let _websitePreviewExpandedSizeValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * websitePreviewExpandedSize / 100 : windowWidth * websitePreviewExpandedSize / 100;
+				const _websitePreviewBoundingRectangle = websitePreview.getBoundingClientRect();
+				const _websitePreviewImageBoundingRectangle = _websitePreviewImage.getBoundingClientRect();
+				const _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
+				const _websitePreviewExpandedSizeValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * websitePreviewExpandedSize / 100 : windowWidth * websitePreviewExpandedSize / 100;
 
 				_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
 				_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
@@ -319,19 +322,19 @@ function eventListenersInitialization() {
 		_websitePreviewExpandedBackgroundListenerTriggered = true;
 
 		window.requestAnimationFrame(() => {
-			let _currentWebsitePreviewExpanded = websitePreviewExpandedBackgroundContentElement.firstChild;
-			let _currentWebsitePreview = websitePreviewExpandedMap.get(_currentWebsitePreviewExpanded);
+			const _currentWebsitePreviewExpanded = websitePreviewExpandedBackgroundContentElement.firstChild;
+			const _currentWebsitePreview = websitePreviewExpandedMap.get(_currentWebsitePreviewExpanded);
 			/*
 			 * The websitePreview is scaled while hovered.
 			 * The top and left offset have to take the scaling into consideration otherwise
 			 * the final position of the websitePreviewExpanded will be slightly off due to the scaling factor.
 			 * The initial position is instead calculated adding the hover effect's expansion.
 			 */
-			let _websitePreviewBoundingRectangle = _currentWebsitePreview.getBoundingClientRect();
-			let _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreview.firstElementChild.getBoundingClientRect();
 			let _documentBodyElementStyle = documentBodyElement.style;
-			let _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
-			let _websitePreviewExpandedSizeValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * websitePreviewExpandedSize / 100 : windowWidth * websitePreviewExpandedSize / 100;
+			const _websitePreviewBoundingRectangle = _currentWebsitePreview.getBoundingClientRect();
+			const _currentWebsitePreviewImageBoundingRectangle = _currentWebsitePreview.firstElementChild.getBoundingClientRect();
+			const _websitePreviewCurrentSize = _websitePreviewBoundingRectangle.height;
+			const _websitePreviewExpandedSizeValue = (windowHeight < windowWidth) ? (windowHeight + windowHeightOffset) * websitePreviewExpandedSize / 100 : windowWidth * websitePreviewExpandedSize / 100;
 
 			_documentBodyElementStyle.setProperty("--websitePreview-original-top-position", _websitePreviewBoundingRectangle.top + "px");
 			_documentBodyElementStyle.setProperty("--websitePreview-original-left-position", _websitePreviewBoundingRectangle.left + "px");
@@ -381,12 +384,12 @@ function toggleHeaderExpandedState() {
  */
 function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 	currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
-	let _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;	//How much the y position has changed due to the user's scroll
+	const _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;	//How much the y position has changed due to the user's scroll
 
 	//The helping behavior is triggered only if the user scrolls more than windowHeight / 2
 	if(_scrollYAmmount > windowHeight / 2 || _scrollYAmmount < -windowHeight / 2) {
-		let _scrollDirection = Math.sign(_scrollYAmmount); //1 if the scrolling is going downwards -1 otherwise.
-		let _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
+		const _scrollDirection = Math.sign(_scrollYAmmount); //1 if the scrolling is going downwards -1 otherwise.
+		const _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
 		if(_pageOffset !== 0)
 			if(-_pageOffset < windowHeight / 3)	//Case 1: The user scroll too little (less than 1/4 of the page height)
@@ -495,7 +498,7 @@ function _submitForm() {
  */
 function imageLoading() {
 	function _changeWebsiteBackgroundTheme() {
-		let backgroundSrcPath = computedStyle.getPropertyValue("--theme-background-image-base-path");
+		const backgroundSrcPath = computedStyle.getPropertyValue("--theme-background-image-base-path");
 
 		/* When ios 14 is released use the .webp versions of the images */
 		backgroundElement.style.backgroundImage = "url(" + backgroundSrcPath + "initial.jpg)";
@@ -508,13 +511,13 @@ function imageLoading() {
 	window.matchMedia("(prefers-color-scheme:light)").addListener(_changeWebsiteBackgroundTheme);
 	_changeWebsiteBackgroundTheme();
 
-	let svgPageTitleMainTitleSVGPath = computedStyle.getPropertyValue("--main-title-svg-path").trim();
+	const svgPageTitleMainTitleSVGPath = computedStyle.getPropertyValue("--main-title-svg-path").trim();
 	let svgPageTitleMainTitle = document.getElementById("svgPageTitleMainTitle");
 	svgPageTitleMainTitle.style.webkitMaskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
 	svgPageTitleMainTitle.style.maskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
 	document.getElementById("svgPageTitleMainTitleShadowImage").setAttribute("href", svgPageTitleMainTitleSVGPath);
 
-	let svgPageTitleMyProjectsSVGPath = computedStyle.getPropertyValue("--my-projects-svg-path").trim();
+	const svgPageTitleMyProjectsSVGPath = computedStyle.getPropertyValue("--my-projects-svg-path").trim();
 	let svgPageTitleMyProjects = document.getElementById("svgPageTitleMyProjects");
 	svgPageTitleMyProjects.style.webkitMaskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
 	svgPageTitleMyProjects.style.maskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
@@ -523,7 +526,7 @@ function imageLoading() {
 
 	lazyLoad(document.getElementById("profilePic"));
 
-	let websitePreviewImages = document.getElementsByClassName("websitePreviewImage");
+	const websitePreviewImages = document.getElementsByClassName("websitePreviewImage");
 	for(websitePreviewImage of websitePreviewImages)
 		lazyLoad(websitePreviewImage);
 }
@@ -578,8 +581,8 @@ function updateWindowSize(){
 		});
 	}
 
-	let _currentWindowHeight = window.innerHeight;
-	let _currentwindowWidth = window.innerWidth;
+	const _currentWindowHeight = window.innerHeight;
+	const _currentwindowWidth = window.innerWidth;
 
 	mobileMode = (_currentwindowWidth < 1081) ? 1 : 0;
 
