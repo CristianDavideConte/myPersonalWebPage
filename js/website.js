@@ -133,7 +133,8 @@ function eventListenersInitialization() {
 				if(websitePreviewIsExpanded) return;
 				const _firstY = window.scrollY;
 				windowScrollYBy(windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
-			}
+			} else if(_keyName === "Home" || _keyName === "End")
+					if(websitePreviewIsExpanded) event.preventDefault();
 		}
 	}, {passive:false});
 
