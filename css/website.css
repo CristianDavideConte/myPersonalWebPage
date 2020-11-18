@@ -693,6 +693,9 @@ p {
 	margin:calc(0.25 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size));
 }
 
+#presentationCard > ul > li {
+  margin:calc(0.0625 * var(--profilePic-size)) 0 calc(0.0625 * var(--profilePic-size)) 0;
+}
 
 
 
@@ -1219,7 +1222,7 @@ select:-webkit-autofill:focus {
 		margin:0 auto 0 auto;
 	}
 
-	#socialNetworks {
+  #socialNetworks {
 		transition: var(--transition-time-medium);
 	}
 
