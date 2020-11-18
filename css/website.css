@@ -408,6 +408,10 @@ p {
 	margin:0 1em 0 1em;
 }
 
+.pageLink > p {
+  text-shadow:0 0 white;
+}
+
 .pageLinkBarOnHover {
 	width:100%;
 	height:0.15em;
@@ -1221,6 +1225,10 @@ select:-webkit-autofill:focus {
 	.pageLink {
 		margin:0 auto 0 auto;
 	}
+
+  .pageLink > p {
+    text-shadow:none;
+  }
 
   #socialNetworks {
 		transition: var(--transition-time-medium);
