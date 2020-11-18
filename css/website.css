@@ -409,7 +409,7 @@ p {
 }
 
 .pageLink > p {
-  text-shadow:0 0 white;
+  text-shadow:0 0 var(--theme-text-color);
 }
 
 .pageLinkBarOnHover {
@@ -417,10 +417,10 @@ p {
 	height:0.15em;
 	margin:auto;
 	border-radius:5rem;
-	background-color: var(--theme-text-color);
+	background-color:var(--theme-text-color);
 
-  -webkit-transform: scale3d(0,1,0);
-  transform: scale3d(0,1,0);
+  -webkit-transform:scale3d(0,1,0);
+  transform:scale3d(0,1,0);
 	transition:var(--transition-time-medium);
 }
 
