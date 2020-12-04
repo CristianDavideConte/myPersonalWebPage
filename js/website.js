@@ -80,35 +80,46 @@ function variableInitialization() {
 function eventListenersInitialization() {
 	let _isFingerDown = false;
 	let _userTriggeredScroll = false;
-	window.addEventListener("touchstart", () => {
-		uss.stopScrollingY();
-		_isFingerDown = true;
-	}, {passive:true});
-	window.addEventListener("touchmove",  () => _userTriggeredScroll = true, {passive:true});
-	window.addEventListener("touchend",   () => _isFingerDown = false, {passive:true});
-	window.addEventListener("wheel", () => {
-		uss.stopScrollingY();
-		_userTriggeredScroll = true;
-	}, {passive:true});
-
-	let _firstScrollYPosition = null;
+	let _firstScrollYPosition = undefined;
 	let _smoothPageScrollTimeout = 0;
-	window.addEventListener("scroll", event => {
-			if(_firstScrollYPosition === null) {
+
+	function _triggerSmoothScroll() {
+			if(_firstScrollYPosition === undefined) {
 				_firstScrollYPosition = window.scrollY;
 				return;
 			}
 			clearTimeout(_smoothPageScrollTimeout);
-			_smoothPageScrollTimeout = window.setTimeout(function _checkFingerDown() {
-					if(_isFingerDown) return;
+			_smoothPageScrollTimeout = window.setTimeout(() => {
+					if(_isFingerDown) {
+						if(_firstScrollYPosition === undefined)
+							_firstScrollYPosition = window.scrollY;
+						return;
+					}
 					_smoothPageScrollTimeout = window.setTimeout(() => {
 						if(!_userTriggeredScroll) return;
 						smoothPageScroll(_firstScrollYPosition, window.scrollY);
 						_userTriggeredScroll = false;
-						_firstScrollYPosition = null;
+						_firstScrollYPosition = undefined;
 					}, 100);
 			}, 0);
+	}
+	window.addEventListener("wheel", () => {
+		uss.stopScrollingY();
+		_userTriggeredScroll = true;
 	}, {passive:true});
+	window.addEventListener("touchstart", () => {
+		uss.stopScrollingY();
+		_isFingerDown = true;
+		_firstScrollYPosition = undefined;
+	}, {passive:true});
+	window.addEventListener("touchend", () => {
+		_isFingerDown = false;
+		if(_firstScrollYPosition !== undefined)
+			_triggerSmoothScroll();
+	}, {passive:true});
+	window.addEventListener("touchmove",  () => _userTriggeredScroll = true, {passive:true});
+	window.addEventListener("scroll", _triggerSmoothScroll, {passive:true});
+
 
 	//Allows the page to always start from the #home page
 	window.addEventListener("beforeunload", () => history.replaceState({}, "", "/index.html"), {passive:false});
@@ -147,14 +158,16 @@ function eventListenersInitialization() {
 	headerElement.addEventListener("wheel", event => {
 		event.preventDefault();
 		let _className = headerElement.className;
-		if(_className === "mobileExpanded" && event.deltaY > 0 || _className !== "mobileExpanded" && event.deltaY < 0)
+		const _direction = event.deltaY;
+		if(_className === "mobileExpanded" && _direction > 0 || _className !== "mobileExpanded" && _direction < 0)
 			toggleHeaderExpandedState();
 	}, {passive:false});
 
 	headerBackgroundElement.addEventListener("wheel", event => {
 		event.preventDefault();
 		const _className = headerBackgroundElement.className;
-		if(_className === "mobileExpanded" && event.deltaY > 0 || _className !== "mobileExpanded" && event.deltaY < 0)
+		const _direction = event.deltaY;
+		if(_className === "mobileExpanded" && _direction > 0 || _className !== "mobileExpanded" && _direction < 0)
 			toggleHeaderExpandedState();
 	}, {passive:false});
 
@@ -202,14 +215,15 @@ function eventListenersInitialization() {
 	_presentationCard.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight/25, _presentationCard, null, false);
+		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight / 10, _presentationCard, null, false);
 	}, {passive:false});
+	uss.setYStepLengthCalculator(remaning => {return remaning / 10 + 1;}, _presentationCard);
 
 	//This allows for a smoother scrolling experience inside the websiteShowcase
 	websiteShowcase.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		uss.scrollXBy(Math.sign(event.deltaY) * windowWidth/25, websiteShowcase, null, false);
+		uss.scrollXBy(Math.sign(event.deltaY) * windowWidth / 25, websiteShowcase, null, false);
 	}, {passive:false});
 
 
@@ -230,6 +244,8 @@ function eventListenersInitialization() {
 	carouselButtons[1].addEventListener("mouseup",  () => uss.stopScrollingX(websiteShowcase), {passive:false});
 	carouselButtons[1].addEventListener("mouseout", () => uss.stopScrollingX(websiteShowcase), {passive:false});
 	carouselButtons[1].addEventListener("touchend", () => uss.stopScrollingX(websiteShowcase), {passive:false});
+
+	uss.setXStepLengthCalculator(remaning => {return remaning / 10 + 1;}, websiteShowcase);
 
 	for(const websitePreview of websitePreviews) {
 		/* First, all the websitePreviewExpanded basic components are created */
@@ -524,12 +540,17 @@ function imageLoading() {
 	svgPageTitleMyProjects.style.maskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
 	document.getElementById("svgPageTitleMyProjectsShadowImage").setAttribute("href", svgPageTitleMyProjectsSVGPath);
 
+	const lazyLoadOptions = {
+		root: null,
+		rootMargin: windowHeight / 2 + "px",
+		threshold: 0
+	}
 
-	lazyLoad(document.getElementById("profilePic"));
+	lazyLoad(document.getElementById("profilePic"), lazyLoadOptions);
 
 	const websitePreviewImages = document.getElementsByClassName("websitePreviewImage");
 	for(websitePreviewImage of websitePreviewImages)
-		lazyLoad(websitePreviewImage);
+		lazyLoad(websitePreviewImage, lazyLoadOptions);
 }
 
 /*
@@ -537,13 +558,7 @@ function imageLoading() {
  * If it is, then its src attribute is made equals to its data-lazy attribute.
  * This allows the images to not be loaded until they're used and allows for quicker loading times.
  */
-function lazyLoad(target) {
-	let options = {
-	  root: null,
-	  rootMargin: windowHeight / 2 + "px",
-	  threshold: 0
-	}
-
+function lazyLoad(target, options) {
 	const intersectionObserver = new IntersectionObserver((entries, observer) => {
 		entries.forEach(entry => {
 			if(entry.isIntersecting) {
