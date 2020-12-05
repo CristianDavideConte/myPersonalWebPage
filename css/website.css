@@ -29,7 +29,7 @@
   }
 
   100% {
-      transform: translate3d(0, calc(var(--100vh) / 4), 0);
+    transform: translate3d(0, calc(var(--100vh) / 4), 0);
   }
 }
 
@@ -1126,8 +1126,7 @@ select:-webkit-autofill:focus {
 		--scaling-factor-decrease:0.9;
 	}
 
-  .pageLink:hover .pageLinkBarOnHover,
-  .pageLink:focus .pageLinkBarOnHover {
+  .pageLink:hover .pageLinkBarOnHover {
     -webkit-transform: scale3d(1,1,1);
     transform: scale3d(1,1,1);
   }

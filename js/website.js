@@ -36,7 +36,7 @@ function init() {
 
 	window.setTimeout(() => {
 		uss.hrefSetup();
-		uss.setYStepLengthCalculator(remaning => {return remaning / 10 + 1;});
+		uss.setYStepLengthCalculator(pageElementstepCalculator);
 	}, 0);
 	window.location.href = "#home";									      //The page always starts from the the #home page
 }
@@ -152,7 +152,7 @@ function eventListenersInitialization() {
 	/*
 	 * When a scroll triggered by mouse wheel, a trackpad or touch gesture is detected
 	 * on the header or its background:
-	 * if the scroll direction is opposite to the header (and its background) state
+	 * if the scroll direction is opposite to the header's (and its background's) state
 	 * (i.e. header is expanded and the scroll would is upwards) the toggleHeaderExpandedState function is called.
 	 */
 	headerElement.addEventListener("wheel", event => {
@@ -217,13 +217,13 @@ function eventListenersInitialization() {
 		event.stopPropagation();
 		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight / 10, _presentationCard, null, false);
 	}, {passive:false});
-	uss.setYStepLengthCalculator(remaning => {return remaning / 10 + 1;}, _presentationCard);
+	uss.setYStepLengthCalculator(pageElementstepCalculator, _presentationCard);
 
 	//This allows for a smoother scrolling experience inside the websiteShowcase
 	websiteShowcase.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		uss.scrollXBy(Math.sign(event.deltaY) * windowWidth / 25, websiteShowcase, null, false);
+		uss.scrollXBy(Math.sign(event.deltaY) * windowHeight / 10, websiteShowcase, null, false);
 	}, {passive:false});
 
 
@@ -245,7 +245,7 @@ function eventListenersInitialization() {
 	carouselButtons[1].addEventListener("mouseout", () => uss.stopScrollingX(websiteShowcase), {passive:false});
 	carouselButtons[1].addEventListener("touchend", () => uss.stopScrollingX(websiteShowcase), {passive:false});
 
-	uss.setXStepLengthCalculator(remaning => {return remaning / 10 + 1;}, websiteShowcase);
+	uss.setXStepLengthCalculator(pageElementstepCalculator, websiteShowcase);
 
 	for(const websitePreview of websitePreviews) {
 		/* First, all the websitePreviewExpanded basic components are created */
@@ -375,14 +375,28 @@ function eventListenersInitialization() {
 	 * which locally checks if the contactMeForm fields are valid and if so triggers an ajax request to the Formspree API.
 	 * The API will send an email to the registered receiver address.
 	 * The receiver address is my email.
-	 * The sender address is the contactMeFormEmail content
-	 * The body is the contactMeFormBody content
+	 * The sender address is the contactMeFormEmail content.
+	 * The body is the contactMeFormBody content.
 	 */
   contactMeFormElement.addEventListener("submit", _submitForm, {passive:false});
+	contactMeFormBodyElement.addEventListener("wheel", event => {
+		event.preventDefault();
+		event.stopPropagation();
+		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight / 10, contactMeFormBodyElement, null, false);
+	}, {passive:false});
+	uss.setYStepLengthCalculator(pageElementstepCalculator, contactMeFormBodyElement);
 }
 
 /*
- * This Function toggles the mobileExpanded class of the headerElement and  headerBackgroundElement HTML elements
+ * This functions calculates the length of each uss.scroll[...] animation's step.
+ * It follows a non linear behavior for smoother animations.
+ */
+function pageElementstepCalculator(remaning) {
+	return remaning / 10 + 1;
+}
+
+/*
+ * This Function toggles the mobileExpanded class of the headerElement and  headerBackgroundElement HTML elements.
  * This behaviour is triggered only if the page is in mobileMode.
  * The mobileMode is triggered by the window's resize event if window's width > 1080px.
  */
@@ -435,7 +449,7 @@ function _showMessage(message) {
  * This function returns:
  * case1: "validData" if both the contactMeFormEmail && contactMeFormBody are valid
  * case2: an error message if at least one of the two contactMeForm fields is not valid
- * It uses a regular expression to check if the email field is correctly formatted, no further investigation is done
+ * It uses a regular expression to check if the email field is correctly formatted, no further investigation is done.
  */
 function _checkContactMeFormDataIntegrity() {
 	let regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -542,11 +556,9 @@ function imageLoading() {
 
 	const lazyLoadOptions = {
 		root: null,
-		rootMargin: windowHeight / 2 + "px",
+		rootMargin: windowHeight + "px",
 		threshold: 0
 	}
-
-	lazyLoad(document.getElementById("profilePic"), lazyLoadOptions);
 
 	const websitePreviewImages = document.getElementsByClassName("websitePreviewImage");
 	for(websitePreviewImage of websitePreviewImages)
