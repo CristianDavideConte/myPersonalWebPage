@@ -79,11 +79,12 @@ function variableInitialization() {
 /* This function binds all the HTML elements that can be interacted to the corresponding eventHandlers */
 function eventListenersInitialization() {
 	let _isFingerDown = false;
-	let _userTriggeredScroll = false;
+	let _shouldSmoothScrollBeTriggered = false;
 	let _firstScrollYPosition = undefined;
 	let _smoothPageScrollTimeout = 0;
 
 	function _triggerSmoothScroll() {
+			if(!_shouldSmoothScrollBeTriggered) return;
 			if(_firstScrollYPosition === undefined) {
 				_firstScrollYPosition = window.scrollY;
 				return;
@@ -96,17 +97,28 @@ function eventListenersInitialization() {
 						return;
 					}
 					_smoothPageScrollTimeout = window.setTimeout(() => {
-						if(!_userTriggeredScroll) return;
+						if(!_shouldSmoothScrollBeTriggered) return;
 						smoothPageScroll(_firstScrollYPosition, window.scrollY);
-						_userTriggeredScroll = false;
+						_shouldSmoothScrollBeTriggered = false;
 						_firstScrollYPosition = undefined;
 					}, 100);
 			}, 0);
 	}
-	window.addEventListener("wheel", () => {
-		uss.stopScrollingY();
-		_userTriggeredScroll = true;
-	}, {passive:true});
+
+	window.addEventListener("wheel", event => {
+		event.preventDefault();
+		event.stopPropagation();
+		_shouldSmoothScrollBeTriggered = false;	//on wheelEvent we we manually trigger the smooth scroll for performance purposes
+		if(_firstScrollYPosition == undefined)
+		 	_firstScrollYPosition = window.scrollY;
+		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight / 3,
+									window,
+									() => {
+										smoothPageScroll(_firstScrollYPosition, window.scrollY);
+										_firstScrollYPosition = undefined;
+									},
+									false);
+	}, {passive:false});
 	window.addEventListener("touchstart", () => {
 		uss.stopScrollingY();
 		_isFingerDown = true;
@@ -117,9 +129,8 @@ function eventListenersInitialization() {
 		if(_firstScrollYPosition !== undefined)
 			_triggerSmoothScroll();
 	}, {passive:true});
-	window.addEventListener("touchmove",  () => _userTriggeredScroll = true, {passive:true});
+	window.addEventListener("touchmove",  () => _shouldSmoothScrollBeTriggered = true, {passive:true});
 	window.addEventListener("scroll", _triggerSmoothScroll, {passive:true});
-
 
 	//Allows the page to always start from the #home page
 	window.addEventListener("beforeunload", () => history.replaceState({}, "", "/index.html"), {passive:false});
@@ -131,22 +142,21 @@ function eventListenersInitialization() {
  	 * Pressing the Arrow-down or the Arrow-right or the PageDown keys will trigger a scroll downwards by a scrollDistance of windowHeight.
    */
 	window.addEventListener("keydown", event => {
-		if(event.target.tagName === "BODY") {
-			const websitePreviewIsExpanded = websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState") || _websitePreviewExpandedBackgroundListenerTriggered;
-			const _keyName = event.key;
-			if(_keyName === "ArrowUp" || _keyName === "ArrowLeft" || _keyName === "PageUp") {
-				event.preventDefault();
-				if(websitePreviewIsExpanded) return;
-				const _firstY = window.scrollY;
-				windowScrollYBy(-windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
-			} else if(_keyName === "ArrowDown" || _keyName === "ArrowRight" || _keyName === "PageDown") {
-				event.preventDefault();
-				if(websitePreviewIsExpanded) return;
-				const _firstY = window.scrollY;
-				windowScrollYBy(windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
-			} else if(_keyName === "Home" || _keyName === "End")
-					if(websitePreviewIsExpanded) event.preventDefault();
-		}
+		if(event.target.tagName !== "BODY") return;
+		const websitePreviewIsExpanded = websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState") || _websitePreviewExpandedBackgroundListenerTriggered;
+		const _keyName = event.key;
+		if(_keyName === "ArrowUp" || _keyName === "ArrowLeft" || _keyName === "PageUp") {
+			event.preventDefault();
+			if(websitePreviewIsExpanded) return;
+			const _firstY = window.scrollY;
+			windowScrollYBy(-windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
+		} else if(_keyName === "ArrowDown" || _keyName === "ArrowRight" || _keyName === "PageDown") {
+			event.preventDefault();
+			if(websitePreviewIsExpanded) return;
+			const _firstY = window.scrollY;
+			windowScrollYBy(windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
+		} else if(_keyName === "Home" || _keyName === "End")
+				if(websitePreviewIsExpanded) event.preventDefault();
 	}, {passive:false});
 
 	/*
@@ -157,6 +167,7 @@ function eventListenersInitialization() {
 	 */
 	headerElement.addEventListener("wheel", event => {
 		event.preventDefault();
+		event.stopPropagation();
 		let _className = headerElement.className;
 		const _direction = event.deltaY;
 		if(_className === "mobileExpanded" && _direction > 0 || _className !== "mobileExpanded" && _direction < 0)
@@ -165,6 +176,7 @@ function eventListenersInitialization() {
 
 	headerBackgroundElement.addEventListener("wheel", event => {
 		event.preventDefault();
+		event.stopPropagation();
 		const _className = headerBackgroundElement.className;
 		const _direction = event.deltaY;
 		if(_className === "mobileExpanded" && _direction > 0 || _className !== "mobileExpanded" && _direction < 0)
