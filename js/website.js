@@ -344,7 +344,7 @@ function eventListenersInitialization() {
 	 */
 	let _websitePreviewExpandedBackgroundListenerTriggered = false;
 	websitePreviewExpandedBackgroundContentElement.addEventListener("touchmove", event => event.preventDefault(), {passive:false});
-	websitePreviewExpandedBackgroundContentElement.addEventListener("wheel", event => event.preventDefault(), {passive:false});
+	websitePreviewExpandedBackgroundContentElement.addEventListener("wheel", event => {event.preventDefault(); event.stopPropagation();}, {passive:false});
 	websitePreviewExpandedBackgroundContentElement.addEventListener("click", () => {
 		event.stopPropagation();
 		if(_websitePreviewExpandedBackgroundListenerTriggered) return;
