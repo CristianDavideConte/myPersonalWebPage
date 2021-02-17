@@ -1,14 +1,15 @@
 # My Portfolio
 ## Introduction
 #### Hi,  it's Cristian here !</br>
-This is my personal portfolio and it will help you understand who i am and what i can do.</br>
+This is my personal portfolio and it will help you understand who I am and what I can do.</br>
 I've built it with **HTML5, CSS3 and Javascript.**</br>
-You will find a brief description of me, a carousel of projects that i developed and many options to contact me if you want to.</br>
-Feel free to take inspiration and/or make suggestions, i'm always in for learning something new and improve.</br>
+You will find a brief description of me, a carousel of projects that I developed and many options to contact me if you want to.</br>
+Feel free to take inspiration and/or make suggestions, I'm always in for learning something new and improve.</br>
 Hope to hear you soon 👋
 
 ## Skills you can learn from it
 * Basic UI/UX for modern design components and positioning
+* Examples of Glassmorphism Design principles
 * Animations and how to make them target 60FPS
 * Real time White/Dark Theme based on OS system preferences
 * Browsers' layers stacking system
