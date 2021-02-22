@@ -904,15 +904,18 @@ p {
   height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
 
   /* the *2 is due to the scale3dFactor-image having as the increasing factor 2 */
-  -webkit-transform: scale3d(0, var(--scale3dFactor-ButtonSection), 0) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
+  /*-webkit-transform: scale3d(0, var(--scale3dFactor-ButtonSection), 0) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
 	transform: scale3d(0, var(--scale3dFactor-ButtonSection), 0) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
-	transition:all var(--transition-time-medium);
+	*/
+  -webkit-transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
+  transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
+  transition:all var(--transition-time-medium);
 }
 
 .expandedState #websitePreviewExpandedButtonSection {
-  -webkit-transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
+  /*-webkit-transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
   transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
-}
+*/}
 
 .websitePreviewExpandedButton {
   font-family: "UniNeueLight";
