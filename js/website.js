@@ -241,7 +241,7 @@ function eventListenersInitialization() {
 
 	//If the direction is === -1  the scroll direction is from right to left, it's from left to right otherwise.
 	function _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection) {
-		let finalXPosition = (scrollDirection === -1) ? 0 : websiteShowcase.scrollWidth;
+		let finalXPosition = (scrollDirection === -1) ? 0 : (websiteShowcase.scrollWidth - websiteShowcase.clientWidth);
 		uss.scrollXTo(finalXPosition, websiteShowcase, null, false);
 	}
 
