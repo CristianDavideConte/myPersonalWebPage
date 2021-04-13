@@ -31,7 +31,27 @@ function init() {
 	window.setTimeout(variableInitialization, 0);					//Binds the js variables to the corresponding HTML elements
 	window.setTimeout(updateWindowSize, 0);								//Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
 
-	window.setTimeout(imageLoading, 0);										//Initializes all the HTML img elements' contents
+	if (window.Worker) { //Initializes all the data-lazy HTML img elements' contents
+			const lazyImages = document.getElementsByClassName("lazyLoad");
+			for(lazyImage of lazyImages) {
+				const worker = new Worker("js/worker.js");
+				let image = lazyImage;
+				worker.addEventListener("message", message => {
+					const imageObject = message.data;
+					const url = window.URL.createObjectURL(imageObject.image);
+
+					image.onload = () => {
+						window.URL.revokeObjectURL(url);
+						window.requestAnimationFrame(() => image.classList.add("lazyLoadElementAnimation"));
+					};
+					image.setAttribute("src", url);
+				});
+				worker.postMessage(image.getAttribute("data-lazy"));
+			}
+	}
+
+	window.setTimeout(loadSVGs, 0);												//Loads the first and third pages' titles
+	window.setTimeout(changeWebsiteBackgroundTheme, 0);   //Loads the website's background
 	window.setTimeout(eventListenersInitialization, 0);		//Initializes all the eventHandlers
 
 	window.setTimeout(() => {
@@ -78,6 +98,8 @@ function variableInitialization() {
 
 /* This function binds all the HTML elements that can be interacted to the corresponding eventHandlers */
 function eventListenersInitialization() {
+	window.matchMedia("(prefers-color-scheme:light)").addListener(changeWebsiteBackgroundTheme);
+
 	let _isFingerDown = false;
 	let _shouldSmoothScrollBeTriggered = false;
 	let _firstScrollYPosition = undefined;
@@ -530,71 +552,37 @@ function _submitForm() {
 	}
 }
 
-/*
- * This function, accordingly to the user's preferred theme, asyncronusly load:
- * - the src of the <img> elements (uses lazyLoad() function)
- * - the srcset of the backgroundElement (has different versions for different resolutions)
- * The full background-image is loaded when ready and not at the initial page loading.
- * Instead a lower resolution and blurry version of the image is loaded in the css file.
- * This allows the user to interact much quicker with the page and lowers the probability of a page crash.
- * Whenever the full image is ready the two images are swapped with a transition in between.
+/**
+ * This Function loads the svgs of the first and third pages' title
  */
-function imageLoading() {
-	function _changeWebsiteBackgroundTheme() {
-		const backgroundSrcPath = computedStyle.getPropertyValue("--theme-background-image-base-path");
+function loadSVGs() {
+		const svgPageTitleMainTitleSVGPath = computedStyle.getPropertyValue("--main-title-svg-path").trim();
+		let svgPageTitleMainTitle = document.getElementById("svgPageTitleMainTitle");
+		svgPageTitleMainTitle.style.webkitMaskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
+		svgPageTitleMainTitle.style.maskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
+		document.getElementById("svgPageTitleMainTitleShadowImage").setAttribute("href", svgPageTitleMainTitleSVGPath);
 
-		/* When ios 14 is released use the .webp versions of the images */
-		backgroundElement.style.backgroundImage = "url(" + backgroundSrcPath + "initial.jpg)";
-		backgroundElement.srcset = backgroundSrcPath + "1280w.jpg 1919w," +
-															 backgroundSrcPath + "1920w.jpg 1920w," +
-															 backgroundSrcPath + "2560w.jpg 2560w," +
-															 backgroundSrcPath + "4096w.jpg 4096w";
-	}
-
-	window.matchMedia("(prefers-color-scheme:light)").addListener(_changeWebsiteBackgroundTheme);
-	_changeWebsiteBackgroundTheme();
-
-	const svgPageTitleMainTitleSVGPath = computedStyle.getPropertyValue("--main-title-svg-path").trim();
-	let svgPageTitleMainTitle = document.getElementById("svgPageTitleMainTitle");
-	svgPageTitleMainTitle.style.webkitMaskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
-	svgPageTitleMainTitle.style.maskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
-	document.getElementById("svgPageTitleMainTitleShadowImage").setAttribute("href", svgPageTitleMainTitleSVGPath);
-
-	const svgPageTitleMyProjectsSVGPath = computedStyle.getPropertyValue("--my-projects-svg-path").trim();
-	let svgPageTitleMyProjects = document.getElementById("svgPageTitleMyProjects");
-	svgPageTitleMyProjects.style.webkitMaskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
-	svgPageTitleMyProjects.style.maskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
-	document.getElementById("svgPageTitleMyProjectsShadowImage").setAttribute("href", svgPageTitleMyProjectsSVGPath);
-
-	const lazyLoadOptions = {
-		root: null,
-		rootMargin: windowHeight + "px",
-		threshold: 0
-	}
-
-	const websitePreviewImages = document.getElementsByClassName("websitePreviewImage");
-	for(websitePreviewImage of websitePreviewImages)
-		lazyLoad(websitePreviewImage, lazyLoadOptions);
+		const svgPageTitleMyProjectsSVGPath = computedStyle.getPropertyValue("--my-projects-svg-path").trim();
+		let svgPageTitleMyProjects = document.getElementById("svgPageTitleMyProjects");
+		svgPageTitleMyProjects.style.webkitMaskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
+		svgPageTitleMyProjects.style.maskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
+		document.getElementById("svgPageTitleMyProjectsShadowImage").setAttribute("href", svgPageTitleMyProjectsSVGPath);
 }
 
-/*
- * This function uses an intersectionObserver to know when an image is in the viewport.
- * If it is, then its src attribute is made equals to its data-lazy attribute.
- * This allows the images to not be loaded until they're used and allows for quicker loading times.
+/**
+ * This function, accordingly to the user's preferred theme, asyncronusly loads
+ * the srcset of the backgroundElement (has different versions for different resolutions)
+ * The full background-image is loaded when ready and not at the initial page loading.
  */
-function lazyLoad(target, options) {
-	const intersectionObserver = new IntersectionObserver((entries, observer) => {
-		entries.forEach(entry => {
-			if(entry.isIntersecting) {
-				const image = entry.target;
-				image.setAttribute("src", image.getAttribute("data-lazy"));
-				window.requestAnimationFrame(() => image.classList.add("lazyLoadElementAnimation"));
-				intersectionObserver.disconnect();
-			}
-		});
-	}, options);
+function changeWebsiteBackgroundTheme() {
+	const backgroundSrcPath = computedStyle.getPropertyValue("--theme-background-image-base-path");
 
-	intersectionObserver.observe(target);
+	/* When ios 14 is released use the .webp versions of the images */
+	backgroundElement.style.backgroundImage = "url(" + backgroundSrcPath + "initial.jpg)";
+	backgroundElement.srcset = backgroundSrcPath + "1280w.jpg 1919w," +
+														 backgroundSrcPath + "1920w.jpg 1920w," +
+														 backgroundSrcPath + "2560w.jpg 2560w," +
+														 backgroundSrcPath + "4096w.jpg 4096w";
 }
 
 /*

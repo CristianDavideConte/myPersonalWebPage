@@ -8,6 +8,7 @@
 		<link rel = "icon" type = "image/jpg" href = "./images/favicon.jpg">
 		<link rel = "stylesheet" type = "text/css" href = "./css/fonts.css" media = "print" onload = "this.media='all'">
 		<link rel = "stylesheet" type = "text/css" href = "./css/website.css" media = "print" onload = "this.media='all'">
+		<script async src = "./js/worker.js"></script>
 		<script async src = "./js/website.js"></script>
 		<script async src = "./js/universalsmoothscroll-min.js"></script>
 		<script async src = "https://kit.fontawesome.com/f48b5d4594.js" crossorigin = "anonymous"></script>
@@ -26,7 +27,7 @@
 
 		<!-- 0) OUT-OF-THE-SCREEN/ NON-USER-REACHABLE ELEMENTS -->
 		<div id = "popUpMessage"><p id = "popUpMessageText"></p></div>
-		<div id="websitePreviewExpandedBackgroundContent" class="page"></div>
+		<div id = "websitePreviewExpandedBackgroundContent" class = "page"></div>
 		<img id = "bodyBackground" src = "" alt = ""/>
 		<div id = "headerBackground"></div>
 
@@ -115,7 +116,7 @@
 		<!-- 3) SECOND PAGE ELEMENTS: ABOUT ME -->
 		<div id = "aboutMe" class = "page">
 
-			<img id = "profilePic" src = "./images/profilePictures/profilePicture.jpg" alt = "profilePic"/>
+			<img id = "profilePic" class = "lazyLoad" data-lazy = "../images/profilePictures/profilePicture.jpg" alt = "profilePic"/>
 			<div id = "presentationCard">
 				<h2>Hi,</h2>
 				<p>I'm <strong>Cristian</strong> and I'm a <strong>Software Developer.</strong><br>
@@ -166,28 +167,28 @@
 				<button class = "carouselButton">_&lt;</button>
 				<div id = "websiteShowcase">
 					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/myPersonalWebPage" data-title = "THIS WEBSITE">
-						<img class = "websitePreviewImage" src = "" alt = "websitePreviewImage" data-lazy = "./images/favicon.jpg"/>
+						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../images/favicon.jpg"/>
 					</div>
 					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/spyfallWebInterface" data-demo = "https://cristiandavideconte.github.io/spyfallWebInterface/" data-title = "SPYFALL WEB-GAME">
-						<img class = "websitePreviewImage" src = "" alt = "websitePreviewImage" data-lazy = "./images/websitesPreviews/spyfall/preview.png"/>
+						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../images/websitesPreviews/spyfall/preview.png"/>
 					</div>
 					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/applyBackdropFilterBlurToText" data-demo = "https://cristiandavideconte.github.io/applyBackdropFilterBlurToText/" data-title = "BACKDROP BLUR FOR TEXT">
-						<img class = "websitePreviewImage" src = "" alt = "websitePreviewImage" data-lazy = "./images/websitesPreviews/applyBackdropFilterBlurToText/preview.png"/>
+						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../images/websitesPreviews/applyBackdropFilterBlurToText/preview.png"/>
 					</div>
 					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/universalSmoothScroll" data-demo = "https://cristiandavideconte.github.io/universalSmoothScroll/" data-title = "UNIVERSAL SMOOTH SCROLL">
-						<img class = "websitePreviewImage" src = "" alt = "websitePreviewImage" data-lazy = "./images/websitesPreviews/universalSmoothScroll/preview.png"/>
+						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../images/websitesPreviews/universalSmoothScroll/preview.png"/>
 					</div>
 					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/spyfallWebInterface" data-demo = "https://cristiandavideconte.github.io/spyfallWebInterface/" data-title = "SAMPLE">
-						<img class = "websitePreviewImage" src = "" alt = "websitePreviewImage" data-lazy = "./images/websitesPreviews/spyfall/preview.png"/>
+						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../images/websitesPreviews/spyfall/preview.png"/>
 					</div>
 					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/spyfallWebInterface" data-demo = "https://cristiandavideconte.github.io/spyfallWebInterface/" data-title = "SAMPLE">
-						<img class = "websitePreviewImage" src = "" alt = "websitePreviewImage" data-lazy = "./images/websitesPreviews/spyfall/preview.png"/>
+						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../images/websitesPreviews/spyfall/preview.png"/>
 					</div>
 					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/spyfallWebInterface" data-demo = "https://cristiandavideconte.github.io/spyfallWebInterface/" data-title = "SAMPLE">
-						<img class = "websitePreviewImage" src = "" alt = "websitePreviewImage" data-lazy = "./images/websitesPreviews/spyfall/preview.png"/>
+						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../images/websitesPreviews/spyfall/preview.png"/>
 					</div>
 					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/spyfallWebInterface" data-demo = "https://cristiandavideconte.github.io/spyfallWebInterface/" data-title = "SAMPLE">
-						<img class = "websitePreviewImage" src = "" alt = "websitePreviewImage" data-lazy = "./images/websitesPreviews/spyfall/preview.png"/>
+						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../images/websitesPreviews/spyfall/preview.png"/>
 					</div>
 				</div>
 				<button class = "carouselButton">&gt;_</button>
