@@ -292,7 +292,6 @@ function eventListenersInitialization() {
 		_websitePreviewExpandedImage.className = "websitePreviewExpandedImage";
 		_websitePreviewImage.addEventListener("load", () => {
 			_websitePreviewExpandedImage.src = _websitePreviewImage.src;
-			_websitePreviewExpandedImage.classList.add("lazyLoadElementAnimation");
 			_websitePreviewExpanded.appendChild(_websitePreviewExpandedImage);
 		});
 
