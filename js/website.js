@@ -289,9 +289,12 @@ function eventListenersInitialization() {
 
 		let _websitePreviewImage = websitePreview.firstElementChild;
 		let _websitePreviewExpandedImage = _websitePreviewImage.cloneNode(true);
-		_websitePreviewExpandedImage.src = _websitePreviewExpandedImage.getAttribute("data-lazy");
 		_websitePreviewExpandedImage.className = "websitePreviewExpandedImage";
-		_websitePreviewExpanded.appendChild(_websitePreviewExpandedImage);
+		_websitePreviewImage.addEventListener("load", () => {
+			_websitePreviewExpandedImage.src = _websitePreviewImage.src;
+			_websitePreviewExpandedImage.classList.add("lazyLoadElementAnimation");
+			_websitePreviewExpanded.appendChild(_websitePreviewExpandedImage);
+		});
 
 		let _dataTitle = websitePreview.getAttribute("data-title");
 		if(_dataTitle != null) {
