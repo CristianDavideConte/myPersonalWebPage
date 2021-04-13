@@ -35,7 +35,7 @@ function init() {
 			const lazyImages = document.getElementsByClassName("lazyLoad");
 			for(lazyImage of lazyImages) {
 				const worker = new Worker("js/worker.js");
-				let image = lazyImage;
+				const image = lazyImage;
 				worker.addEventListener("message", message => {
 					const imageObject = message.data;
 					const url = window.URL.createObjectURL(imageObject.image);
