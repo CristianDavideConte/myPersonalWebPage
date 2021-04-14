@@ -12,6 +12,7 @@ Hope to hear you soon 👋
 * Examples of Glassmorphism Design principles
 * Animations and how to make them target 60FPS
 * Real time White/Dark Theme based on OS system preferences
+* Asynchronously load images with Web Workers
 * Browsers' layers stacking system
 * Javascript event-loop
 * Form Validation
