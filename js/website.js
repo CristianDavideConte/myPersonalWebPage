@@ -42,9 +42,12 @@ function init() {
 
 					image.onload = () => {
 						window.URL.revokeObjectURL(url);
-						window.requestAnimationFrame(() => image.classList.add("lazyLoadElementAnimation"));
 					};
-					image.setAttribute("src", url);
+
+					window.requestAnimationFrame(() => {
+						image.setAttribute("src", url);
+						image.classList.add("lazyLoadElementAnimation");
+					});
 				});
 				worker.postMessage(image.getAttribute("data-lazy"));
 			}
