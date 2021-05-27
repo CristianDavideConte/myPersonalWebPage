@@ -54,3 +54,14 @@ function stressTestFullDocumentScroll() {
 		_stressTestFullDocumentScrollCounter++;
 	}
 }
+
+var _stressTestScrollIntoView = 0;
+var _page1 = document.getElementById("home");
+var _page4 = document.getElementById("contactMe");
+function stressTestScrollIntoView() {
+	if(_stressTestScrollIntoView < 50) {
+		let page = (_stressTestScrollIntoView % 2 == 0) ? _page4 : _page1;
+		uss.scrollIntoView(page, null, null, stressTestScrollIntoView);
+		_stressTestScrollIntoView++;
+	}
+}
