@@ -66,7 +66,7 @@ function init() {
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
-	windowScrollYBy = (y, onDone = null) => uss.scrollYBy(y, window, onDone);
+	windowScrollYBy = (y, onDone = null, stillStart = true) => uss.scrollYBy(y, window, onDone, stillStart);
 	documentBodyElement = document.body;
 
 	websitePreviewExpandedMap = new Map();
@@ -136,7 +136,7 @@ function eventListenersInitialization() {
 		_shouldSmoothScrollBeTriggered = false;	//on wheelEvent we we manually trigger the smooth scroll for performance purposes
 		if(_firstScrollYPosition == undefined)
 		 	_firstScrollYPosition = window.scrollY;
-		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight / 3,
+		uss.scrollYBy(event.deltaY,
 									window,
 									() => {
 										smoothPageScroll(_firstScrollYPosition, window.scrollY);
@@ -174,12 +174,12 @@ function eventListenersInitialization() {
 			event.preventDefault();
 			if(websitePreviewIsExpanded) return;
 			const _firstY = window.scrollY;
-			windowScrollYBy(-windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
+			windowScrollYBy(-windowHeight, () => smoothPageScroll(_firstY, window.scrollY), true);
 		} else if(_keyName === "ArrowDown" || _keyName === "ArrowRight" || _keyName === "PageDown") {
 			event.preventDefault();
 			if(websitePreviewIsExpanded) return;
 			const _firstY = window.scrollY;
-			windowScrollYBy(windowHeight, () => smoothPageScroll(_firstY, window.scrollY));
+			windowScrollYBy(windowHeight, () => smoothPageScroll(_firstY, window.scrollY), true);
 		} else if(_keyName === "Home" || _keyName === "End")
 				if(websitePreviewIsExpanded) event.preventDefault();
 	}, {passive:false});
@@ -252,7 +252,7 @@ function eventListenersInitialization() {
 	_presentationCard.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight / 10, _presentationCard, null, false);
+		uss.scrollYBy(event.deltaY / 2, _presentationCard, null, false);
 	}, {passive:false});
 	uss.setYStepLengthCalculator(pageElementstepCalculator, _presentationCard);
 
@@ -260,14 +260,14 @@ function eventListenersInitialization() {
 	websiteShowcase.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		uss.scrollXBy(Math.sign(event.deltaY) * windowHeight / 10, websiteShowcase, null, false);
+		uss.scrollXBy(event.deltaY / 3, websiteShowcase, null, false);
 	}, {passive:false});
 
 
 	//If the direction is === -1  the scroll direction is from right to left, it's from left to right otherwise.
 	function _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection) {
 		let finalXPosition = (scrollDirection === -1) ? 0 : (websiteShowcase.scrollWidth - websiteShowcase.clientWidth);
-		uss.scrollXTo(finalXPosition, websiteShowcase, null, false);
+		uss.scrollXTo(finalXPosition, websiteShowcase, null);
 	}
 
 	carouselButtons[0].addEventListener("mousedown",  () => _smoothWebsiteShowcaseWheelScrollHorizzontally(-1), {passive:false});
@@ -431,7 +431,7 @@ function eventListenersInitialization() {
  * It follows a non linear behavior for smoother animations.
  */
 function pageElementstepCalculator(remaning) {
-	return remaning / 10 + 1;
+	return remaning / 17 + 1;
 }
 
 /*
