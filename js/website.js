@@ -58,8 +58,8 @@ function init() {
 	window.setTimeout(eventListenersInitialization, 0);		//Initializes all the eventHandlers
 
 	window.setTimeout(() => {
-		uss.hrefSetup();
-		uss.setYStepLengthCalculator(pageElementstepCalculator);
+		uss.hrefSetup(null, null, () => uss.setYStepLengthCalculator(EASE_OUT_QUINT(1000)));
+		uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
 	}, 0);
 	window.location.href = "#home";									      //The page always starts from the the #home page
 }
@@ -129,6 +129,12 @@ function eventListenersInitialization() {
 					}, 100);
 			}, 0);
 	}
+	window.addEventListener("mousedown", event => {
+		if(event.button === 1) {
+			event.preventDefault();
+			event.stopPropagation();
+		}
+	}, {passive:false});
 
 	window.addEventListener("wheel", event => {
 		event.preventDefault();
@@ -136,6 +142,10 @@ function eventListenersInitialization() {
 		_shouldSmoothScrollBeTriggered = false;	//on wheelEvent we we manually trigger the smooth scroll for performance purposes
 		if(_firstScrollYPosition == undefined)
 		 	_firstScrollYPosition = window.scrollY;
+		if(uss.getYStepLengthCalculator() !== pageElementstepCalculatorUntimed) {
+			uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed)
+			uss.stopScrollingY();
+		}
 		uss.scrollYBy(event.deltaY,
 									window,
 									() => {
@@ -254,7 +264,7 @@ function eventListenersInitialization() {
 		event.stopPropagation();
 		uss.scrollYBy(event.deltaY / 2, _presentationCard, null, false);
 	}, {passive:false});
-	uss.setYStepLengthCalculator(pageElementstepCalculator, _presentationCard);
+	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed, _presentationCard);
 
 	//This allows for a smoother scrolling experience inside the websiteShowcase
 	websiteShowcase.addEventListener("wheel", event => {
@@ -282,7 +292,7 @@ function eventListenersInitialization() {
 	carouselButtons[1].addEventListener("mouseout", () => uss.stopScrollingX(websiteShowcase), {passive:false});
 	carouselButtons[1].addEventListener("touchend", () => uss.stopScrollingX(websiteShowcase), {passive:false});
 
-	uss.setXStepLengthCalculator(pageElementstepCalculator, websiteShowcase);
+	uss.setXStepLengthCalculator(pageElementstepCalculatorUntimed, websiteShowcase);
 
 	for(const websitePreview of websitePreviews) {
 		/* First, all the websitePreviewExpanded basic components are created */
@@ -423,15 +433,15 @@ function eventListenersInitialization() {
 		event.stopPropagation();
 		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight / 10, contactMeFormBodyElement, null, false);
 	}, {passive:false});
-	uss.setYStepLengthCalculator(pageElementstepCalculator, contactMeFormBodyElement);
+	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed, contactMeFormBodyElement);
 }
 
 /*
  * This functions calculates the length of each uss.scroll[...] animation's step.
  * It follows a non linear behavior for smoother animations.
  */
-function pageElementstepCalculator(remaning) {
-	return remaning / 17 + 1;
+function pageElementstepCalculatorUntimed(remaning) {
+	return remaning / 20 + 1;
 }
 
 /*
@@ -461,11 +471,13 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 		const _scrollDirection = Math.sign(_scrollYAmmount); //1 if the scrolling is going downwards -1 otherwise.
 		const _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
-		if(_pageOffset !== 0)
+		if(_pageOffset !== 0) {
+			uss.setYStepLengthCalculator(EASE_OUT_CUBIC(1200));
 			if(-_pageOffset < windowHeight / 3)	//Case 1: The user scroll too little (less than 1/4 of the page height)
 				windowScrollYBy(_scrollDirection * _pageOffset);
 			else //Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
 				windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset));
+		}
 	}
 }
 
