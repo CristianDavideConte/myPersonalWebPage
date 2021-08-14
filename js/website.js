@@ -25,6 +25,7 @@ var contactMeFormElement;														//The HTML element with the id "contactMe
 var contactMeFormEmailElement;											//The HTML element with the id "contactMeFormEmail", used to store the user's email when the contactMeForm is being filled
 var contactMeFormBodyElement;												//The HTML element with the id "contactMeFormBody",used to store the user's message when the contactMeForm is being filled
 var contactMeFormSendButtonElement;									//The HTML element with the id "contactMeFormSendButton", used to send a contact request based on the contactMeForm fields
+var pageElementstepCalculatorUntimed;               //A functions that calculates the length of each uss.scroll[...] animation's step, it follows a non linear behavior for smoother animations.
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {
@@ -66,6 +67,7 @@ function init() {
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
+	pageElementstepCalculatorUntimed = (remaning) => {return remaning / 20 + 1;};
 	windowScrollYBy = (y, onDone = null, stillStart = true) => uss.scrollYBy(y, window, onDone, stillStart);
 	documentBodyElement = document.body;
 
@@ -434,14 +436,6 @@ function eventListenersInitialization() {
 		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight / 10, contactMeFormBodyElement, null, false);
 	}, {passive:false});
 	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed, contactMeFormBodyElement);
-}
-
-/*
- * This functions calculates the length of each uss.scroll[...] animation's step.
- * It follows a non linear behavior for smoother animations.
- */
-function pageElementstepCalculatorUntimed(remaning) {
-	return remaning / 20 + 1;
 }
 
 /*
