@@ -59,7 +59,18 @@ function init() {
 	window.setTimeout(eventListenersInitialization, 0);		//Initializes all the eventHandlers
 
 	window.setTimeout(() => {
-		uss.hrefSetup(null, null, () => uss.setYStepLengthCalculator(EASE_OUT_QUINT(1000)));
+		uss.hrefSetup(null, null, () => {
+			uss.setYStepLengthCalculator(EASE_OUT_QUINT(1000));
+
+			/*
+			 * When the website is in mobile mode the page links are hidden under the hamburgerMenu
+			 * which can be expanded by toggling the class "mobileExpanded" on the headerElement and the headerBackgroundElement.
+			 * Once it's expanded the pageLinks can be clicked to go to the relative website section.
+			 * Whenever a pageLink is clicked, the hamburgerMenu is hidden.
+			 * This is done the same way the hamburgerMenu expands.
+			 */
+			toggleHeaderExpandedState();
+		});
 		uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
 	}, 0);
 	window.location.href = "#home";									      //The page always starts from the the #home page
@@ -242,16 +253,6 @@ function eventListenersInitialization() {
 
 	/* When the hamburgerMenu is pressed it expands by calling the toggleHeaderExpandedState function */
 	hamburgerMenuElement.addEventListener("click", toggleHeaderExpandedState, {passive:false});
-
-	/*
-	 * When the website is in mobile mode the page links are hidden under the hamburgerMenu
-	 * which can be expanded by toggling the class "mobileExpanded" on the headerElement and the headerBackgroundElement.
-	 * Once it's expanded the pageLinks can be clicked to go to the relative website section.
-	 * Whenever a pageLink is clicked, the hamburgerMenu is hidden.
-	 * This is done the same way the hamburgerMenu expands.
-	 */
-	for(const pageLink of pageLinksElements)
-		pageLink.addEventListener("click", toggleHeaderExpandedState, {passive:true});
 
 	/* All the social networks icons are linked to the corresponding website */
 	document.getElementById("githubContact").addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
