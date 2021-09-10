@@ -59,7 +59,7 @@ function init() {
 	window.setTimeout(eventListenersInitialization, 0);		//Initializes all the eventHandlers
 
 	window.setTimeout(() => {
-		uss.hrefSetup(null, null, () => {
+		uss.hrefSetup(null, null, (pageLink, destination) => {
 			uss.setYStepLengthCalculator(EASE_OUT_QUINT(1000));
 
 			/*
@@ -69,7 +69,7 @@ function init() {
 			 * Whenever a pageLink is clicked, the hamburgerMenu is hidden.
 			 * This is done the same way the hamburgerMenu expands.
 			 */
-			toggleHeaderExpandedState();
+			if(pageLink.id != "scrollDownButton") toggleHeaderExpandedState();
 		});
 		uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
 	}, 0);
