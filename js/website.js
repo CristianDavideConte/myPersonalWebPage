@@ -156,7 +156,7 @@ function eventListenersInitialization() {
 		if(_firstScrollYPosition == undefined)
 		 	_firstScrollYPosition = window.scrollY;
 		if(uss.getYStepLengthCalculator() !== pageElementstepCalculatorUntimed) {
-			uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed)
+			uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
 			uss.stopScrollingY();
 		}
 		uss.scrollYBy(event.deltaY,
@@ -167,17 +167,20 @@ function eventListenersInitialization() {
 									},
 									false);
 	}, {passive:false});
-	window.addEventListener("touchstart", () => {
+
+	window.addEventListener("touchstart", event => {
 		uss.stopScrollingY();
 		_isFingerDown = true;
 		_firstScrollYPosition = undefined;
-	}, {passive:true});
-	window.addEventListener("touchend", () => {
+	},{passive:true});
+	window.addEventListener("touchend", event => {
 		_isFingerDown = false;
-		if(_firstScrollYPosition !== undefined)
-			_triggerSmoothScroll();
+		if(_firstScrollYPosition !== undefined) _triggerSmoothScroll();
 	}, {passive:true});
-	window.addEventListener("touchmove",  () => _shouldSmoothScrollBeTriggered = true, {passive:true});
+	window.addEventListener("touchmove", event => {
+		_shouldSmoothScrollBeTriggered = true
+	}, {passive:true});
+
 	window.addEventListener("scroll", _triggerSmoothScroll, {passive:true});
 
 	//Allows the page to always start from the #home page
@@ -237,6 +240,7 @@ function eventListenersInitialization() {
 
 	headerElement.addEventListener("touchmove", event => {
 		event.preventDefault();
+		event.stopPropagation();
 		const _className = headerElement.className;
 		const _direction = event.touches[0].clientY - _firstTouchPosition; /* >0 downwards <0 upwards */
 		if(_className === "mobileExpanded" && _direction < 0 || _className !== "mobileExpanded" && _direction > 0)
@@ -245,6 +249,7 @@ function eventListenersInitialization() {
 
 	headerBackgroundElement.addEventListener("touchmove", event => {
 		event.preventDefault();
+		event.stopPropagation();
 		const _className = headerBackgroundElement.className;
 		const _direction = event.touches[0].clientY - _firstTouchPosition; /* >0 downwards <0 upwards */
 		if(_className === "mobileExpanded" && _direction < 0 || _className !== "mobileExpanded" && _direction > 0)
@@ -267,6 +272,7 @@ function eventListenersInitialization() {
 		event.stopPropagation();
 		uss.scrollYBy(event.deltaY / 2, _presentationCard, null, false);
 	}, {passive:false});
+	_presentationCard.addEventListener("touchmove", event => event.stopPropagation(), {passive:true});
 	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed, _presentationCard);
 
 	//This allows for a smoother scrolling experience inside the websiteShowcase
@@ -275,6 +281,7 @@ function eventListenersInitialization() {
 		event.stopPropagation();
 		uss.scrollXBy(event.deltaY / 3, websiteShowcase, null, false);
 	}, {passive:false});
+	websiteShowcase.addEventListener("touchmove", event => event.stopPropagation(), {passive:true});
 
 
 	//If the direction is === -1  the scroll direction is from right to left, it's from left to right otherwise.
@@ -436,6 +443,7 @@ function eventListenersInitialization() {
 		event.stopPropagation();
 		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight / 10, contactMeFormBodyElement, null, false);
 	}, {passive:false});
+	contactMeFormBodyElement.addEventListener("touchmove", event => event.stopPropagation(), {passive:true});
 	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed, contactMeFormBodyElement);
 }
 
