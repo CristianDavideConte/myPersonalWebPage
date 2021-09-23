@@ -146,8 +146,7 @@ function eventListenersInitialization() {
 	let _firstScrollYPosition = undefined;
 
 	function _triggerSmoothScroll() {
-		if(_Y !== null) return;
-		if(uss.isYscrolling()) return;
+		if(_Y !== null || uss.isYscrolling()) return;
 
 		smoothPageScroll(_firstScrollYPosition, window.scrollY);
 		uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
