@@ -116,32 +116,6 @@ function variableInitialization() {
 function eventListenersInitialization() {
 	window.matchMedia("(prefers-color-scheme:light)").addListener(changeWebsiteBackgroundTheme);
 
-	let _isFingerDown = false;
-	let _shouldSmoothScrollBeTriggered = false;
-	let _firstScrollYPosition = undefined;
-	let _smoothPageScrollTimeout = 0;
-
-	function _triggerSmoothScroll() {
-			if(!_shouldSmoothScrollBeTriggered) return;
-			if(_firstScrollYPosition === undefined) {
-				_firstScrollYPosition = window.scrollY;
-				return;
-			}
-			clearTimeout(_smoothPageScrollTimeout);
-			_smoothPageScrollTimeout = window.setTimeout(() => {
-					if(_isFingerDown) {
-						if(_firstScrollYPosition === undefined)
-							_firstScrollYPosition = window.scrollY;
-						return;
-					}
-					_smoothPageScrollTimeout = window.setTimeout(() => {
-						if(!_shouldSmoothScrollBeTriggered) return;
-						smoothPageScroll(_firstScrollYPosition, window.scrollY);
-						_shouldSmoothScrollBeTriggered = false;
-						_firstScrollYPosition = undefined;
-					}, 100);
-			}, 0);
-	}
 	window.addEventListener("mousedown", event => {
 		if(event.button === 1) {
 			event.preventDefault();
@@ -152,9 +126,7 @@ function eventListenersInitialization() {
 	window.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		_shouldSmoothScrollBeTriggered = false;	//on wheelEvent we we manually trigger the smooth scroll for performance purposes
-		if(_firstScrollYPosition == undefined)
-		 	_firstScrollYPosition = window.scrollY;
+		if(_firstScrollYPosition == undefined) _firstScrollYPosition = window.scrollY;
 		if(uss.getYStepLengthCalculator() !== pageElementstepCalculatorUntimed) {
 			uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
 			uss.stopScrollingY();
@@ -168,20 +140,43 @@ function eventListenersInitialization() {
 									false);
 	}, {passive:false});
 
-	window.addEventListener("touchstart", event => {
-		uss.stopScrollingY();
-		_isFingerDown = true;
+
+	//Smooth scrolling for touch devices
+	let _Y = null;
+	let _firstScrollYPosition = undefined;
+
+	function _triggerSmoothScroll() {
+		if(_Y !== null) return;
+		if(uss.isYscrolling()) return;
+
+		smoothPageScroll(_firstScrollYPosition, window.scrollY);
+		uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
 		_firstScrollYPosition = undefined;
+	}
+
+	window.addEventListener("touchstart", event => {
+		if(event.touches.length > 1) return;
+		uss.stopScrollingY();
+		_firstScrollYPosition = window.scrollY;
 	},{passive:true});
+
 	window.addEventListener("touchend", event => {
-		_isFingerDown = false;
-		if(_firstScrollYPosition !== undefined) _triggerSmoothScroll();
-	}, {passive:true});
-	window.addEventListener("touchmove", event => {
-		_shouldSmoothScrollBeTriggered = true
+		if(event.touches.length > 1) return;
+		_Y = null;
+		_triggerSmoothScroll();
 	}, {passive:true});
 
-	window.addEventListener("scroll", _triggerSmoothScroll, {passive:true});
+	window.addEventListener("touchmove", event => {
+		event.preventDefault();
+		if(event.touches.length > 1) return;
+
+		if(_Y === null) _Y = event.changedTouches[0].clientY;
+		const _originalDeltaY = _Y - event.changedTouches[0].clientY;
+		_Y -= _originalDeltaY;
+		const _deltaY = Math.abs(_originalDeltaY) > 2 ? 18 * _originalDeltaY : 2 * _originalDeltaY;
+
+		uss.scrollYBy(_deltaY, window, _triggerSmoothScroll);
+	}, {passive:false});
 
 	//Allows the page to always start from the #home page
 	window.addEventListener("beforeunload", () => history.replaceState({}, "", "/index.html"), {passive:false});
