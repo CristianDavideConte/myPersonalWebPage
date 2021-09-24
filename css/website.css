@@ -99,8 +99,8 @@
 	--header-elements-padding:1rem;
 	--header-socialNetworks-div-width:calc(4 * var(--header-elements-height) + 3 * var(--header-elements-padding)); /* 4: number of socialNetworks; 3: number of spaces between them*/
 
-  --main-title-svg-path:url(../svgs/mainTitles/svgs/haarlemDeco.svg);
-  --my-projects-svg-path:url(../svgs/myProjects/svgs/haarlemDeco.svg);
+  --main-title-svg-path:url(svgs/mainTitles/svgs/haarlemDeco.svg);
+  --my-projects-svg-path:url(svgs/myProjects/svgs/haarlemDeco.svg);
 
 	--profilePic-size:17vmin;
 	--presentationCard-height:60vmin;
@@ -125,7 +125,7 @@
 	--light-theme-stackoverflowContact-background-color: radial-gradient(circle, rgba(245,245,245,1) 60%, rgba(255,115,0,1) 64%);
 	--light-theme-instagramContact-background-color: linear-gradient(340deg, rgba(244,255,0,1) 0%, rgba(255,39,218,1) 58%, rgba(255,39,218,1) 72%, rgba(0,83,255,1) 99%);
 	--light-theme-mailContact-background-color: linear-gradient(35deg, rgba(255,248,0,1) 0%, rgba(255,99,0,1) 67%);
-  --light-theme-background-image-base-path: url("../images/backgroundImages/LightTheme/finalImages/final_light_4096w.jpg");  /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
+  --light-theme-background-image-base-path: url("images/backgroundImages/LightTheme/finalImages/final_light_4096w.jpg");  /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
 	--light-theme-background-color: linear-gradient(100deg, rgba(19,60,74,1) 0%, rgba(14,157,207,1) 48%, rgba(228,138,217,1) 49%, rgba(32,38,59,1) 93%);
 
 	--dark-theme-blur-background-color-Black: rgba(0,0,0,1);
@@ -144,7 +144,7 @@
 	--dark-theme-stackoverflowContact-background-color: radial-gradient(circle, rgba(57,57,57,1) 60%, rgba(255,124,0,1) 64%);
 	--dark-theme-instagramContact-background-color: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
 	--dark-theme-mailContact-background-color: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
-  --dark-theme-background-image-base-path: url("../images/backgroundImages/DarkTheme/finalImages/final_dark_4096w.jpg");      /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
+  --dark-theme-background-image-base-path: url("images/backgroundImages/DarkTheme/finalImages/final_dark_4096w.jpg");      /* MUST NOT HAVE ANY EXTENSION HERE, IT WILL BE ADDED BY THE JS */
   --dark-theme-background-color: linear-gradient(101deg, rgba(12,27,61,1) 0%, rgba(9,108,198,1) 54%, rgba(195,51,23,1) 55%, rgba(69,19,9,1) 95%);
 
   --theme-blur-background-color-Black: var(--dark-theme-blur-background-color-Black);

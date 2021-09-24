@@ -270,6 +270,7 @@ function eventListenersInitialization() {
 		uss.scrollXBy(event.deltaY / 3, websiteShowcase, null, false);
 	}, {passive:false});
 	websiteShowcase.addEventListener("touchmove", event => event.stopPropagation(), {passive:true});
+	uss.setXStepLengthCalculator(pageElementstepCalculatorUntimed, websiteShowcase);
 
 
 	//If the direction is === -1  the scroll direction is from right to left, it's from left to right otherwise.
@@ -290,7 +291,7 @@ function eventListenersInitialization() {
 	carouselButtons[1].addEventListener("mouseout", () => uss.stopScrollingX(websiteShowcase), {passive:false});
 	carouselButtons[1].addEventListener("touchend", () => uss.stopScrollingX(websiteShowcase), {passive:false});
 
-	uss.setXStepLengthCalculator(pageElementstepCalculatorUntimed, websiteShowcase);
+
 
 	for(const websitePreview of websitePreviews) {
 		/* First, all the websitePreviewExpanded basic components are created */
