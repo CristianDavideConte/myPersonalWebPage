@@ -29,34 +29,9 @@ var pageElementstepCalculatorUntimed;               //A functions that calculate
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {
+	window.location.href = "#home";		//The page always starts from the the #home page
 	variableInitialization();					//Binds the js variables to the corresponding HTML elements
-	window.requestAnimationFrame(updateWindowSize);								//Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
-
-	if (window.Worker) { //Initializes all the data-lazy HTML img elements' contents
-			const lazyImages = document.getElementsByClassName("lazyLoad");
-			for(lazyImage of lazyImages) {
-				const worker = new Worker("js/worker.js");
-				const image = lazyImage;
-				worker.addEventListener("message", message => {
-					const imageObject = message.data;
-					const url = window.URL.createObjectURL(imageObject.image);
-
-					image.onload = () => {
-						window.URL.revokeObjectURL(url);
-					};
-
-					window.requestAnimationFrame(() => {
-						image.setAttribute("src", url);
-						image.classList.add("lazyLoadElementAnimation");
-					});
-				});
-				worker.postMessage(image.getAttribute("data-lazy"));
-			}
-	}
-
-	window.requestAnimationFrame(loadSVGs);												//Loads the first and third pages' titles
-	window.requestAnimationFrame(changeWebsiteBackgroundTheme);   //Loads the website's background
-	window.requestAnimationFrame(eventListenersInitialization);		//Initializes all the eventHandlers
+	eventListenersInitialization()		//Initializes all the eventHandlers
 
 	uss.hrefSetup(null, null, (pageLink, destination) => {
 		uss.setYStepLengthCalculator(EASE_OUT_QUINT(1000));
@@ -72,7 +47,30 @@ function init() {
 	});
 	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
 
-	window.location.href = "#home";									      //The page always starts from the the #home page
+	window.requestAnimationFrame(updateWindowSize);			 //Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
+	window.requestAnimationFrame(loadWebsiteBackground); //Loads the website's background
+
+	if(window.Worker) { //Initializes all the data-lazy HTML img elements' contents
+		const lazyImages = document.getElementsByClassName("lazyLoad");
+		for(lazyImage of lazyImages) {
+			const worker = new Worker("js/worker.js");
+			const image = lazyImage;
+			worker.addEventListener("message", message => {
+				const imageObject = message.data;
+				const url = window.URL.createObjectURL(imageObject.image);
+
+				image.onload = () => {
+					window.URL.revokeObjectURL(url);
+				};
+
+				window.requestAnimationFrame(() => {
+					image.setAttribute("src", url);
+					image.classList.add("lazyLoadElementAnimation");
+				});
+			});
+			worker.postMessage(image.getAttribute("data-lazy"));
+		}
+	}
 }
 
 /* This Function initializes all the public variables */
@@ -113,7 +111,7 @@ function variableInitialization() {
 
 /* This function binds all the HTML elements that can be interacted to the corresponding eventHandlers */
 function eventListenersInitialization() {
-	window.matchMedia("(prefers-color-scheme:light)").addListener(changeWebsiteBackgroundTheme);
+	window.matchMedia("(prefers-color-scheme:light)").addListener(loadWebsiteBackground);
 
 	window.addEventListener("mousedown", event => {
 		if(event.button === 1) {
@@ -575,27 +573,10 @@ function _submitForm() {
 }
 
 /**
- * This Function loads the svgs of the first and third pages' title
- */
-function loadSVGs() {
-		const svgPageTitleMainTitleSVGPath = computedStyle.getPropertyValue("--main-title-svg-path").trim();
-		let svgPageTitleMainTitle = document.getElementById("svgPageTitleMainTitle");
-		svgPageTitleMainTitle.style.webkitMaskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
-		svgPageTitleMainTitle.style.maskImage = "url(" + svgPageTitleMainTitleSVGPath + ")";
-		document.getElementById("svgPageTitleMainTitleShadowImage").setAttribute("href", svgPageTitleMainTitleSVGPath);
-
-		const svgPageTitleMyProjectsSVGPath = computedStyle.getPropertyValue("--my-projects-svg-path").trim();
-		let svgPageTitleMyProjects = document.getElementById("svgPageTitleMyProjects");
-		svgPageTitleMyProjects.style.webkitMaskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
-		svgPageTitleMyProjects.style.maskImage = "url(" + svgPageTitleMyProjectsSVGPath + ")";
-		document.getElementById("svgPageTitleMyProjectsShadowImage").setAttribute("href", svgPageTitleMyProjectsSVGPath);
-}
-
-/**
  * This function, accordingly to the user's preferred theme, loads the srcset of the backgroundElement.
  * The full background-image is loaded when ready and not at the initial page loading.
  */
-function changeWebsiteBackgroundTheme() {
+function loadWebsiteBackground() {
 	/* Released use the .webp versions of the images with macOS 14*/
 	const backgroundSrcPath = computedStyle.getPropertyValue("--theme-background-image-base-path");
 	backgroundElement.srcset = backgroundSrcPath + "4096w.jpg 4096w";

@@ -99,8 +99,8 @@
 	--header-elements-padding:1rem;
 	--header-socialNetworks-div-width:calc(4 * var(--header-elements-height) + 3 * var(--header-elements-padding)); /* 4: number of socialNetworks; 3: number of spaces between them*/
 
-  --main-title-svg-path:./svgs/mainTitles/svgs/haarlemDeco.svg;
-  --my-projects-svg-path:./svgs/myProjects/svgs/haarlemDeco.svg;
+  --main-title-svg-path:url(../svgs/mainTitles/svgs/haarlemDeco.svg);
+  --my-projects-svg-path:url(../svgs/myProjects/svgs/haarlemDeco.svg);
 
 	--profilePic-size:17vmin;
 	--presentationCard-height:60vmin;
@@ -590,6 +590,11 @@ p {
   transform: translate3d(0, calc(var(--websitePreview-size) / -3), 0);
 }
 
+#svgPageTitleMainTitle {
+  mask-image:var(--main-title-svg-path);
+  -webkit-mask-image:var(--main-title-svg-path);
+}
+
 #scrollDownButton {
   position: absolute;
   cursor:pointer;
@@ -728,6 +733,11 @@ p {
   height:calc(var(--100vh) - var(--websitePreview-size) - 2rem); /* 2rem is the total websitePreviews margin */
   -webkit-transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0);    /* 2rem is the total websitePreviews margin */
   transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0);
+}
+
+#svgPageTitleMyProjects {
+  mask-image:var(--my-projects-svg-path);
+  -webkit-mask-image:var(--my-projects-svg-path);
 }
 
 .projectsCarousel {
