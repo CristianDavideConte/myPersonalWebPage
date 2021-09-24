@@ -29,8 +29,8 @@ var pageElementstepCalculatorUntimed;               //A functions that calculate
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {
-	window.setTimeout(variableInitialization, 0);					//Binds the js variables to the corresponding HTML elements
-	window.setTimeout(updateWindowSize, 0);								//Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
+	variableInitialization();					//Binds the js variables to the corresponding HTML elements
+	window.requestAnimationFrame(updateWindowSize);								//Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
 
 	if (window.Worker) { //Initializes all the data-lazy HTML img elements' contents
 			const lazyImages = document.getElementsByClassName("lazyLoad");
@@ -54,25 +54,24 @@ function init() {
 			}
 	}
 
-	window.setTimeout(loadSVGs, 0);												//Loads the first and third pages' titles
-	window.setTimeout(changeWebsiteBackgroundTheme, 0);   //Loads the website's background
-	window.setTimeout(eventListenersInitialization, 0);		//Initializes all the eventHandlers
+	window.requestAnimationFrame(loadSVGs);												//Loads the first and third pages' titles
+	window.requestAnimationFrame(changeWebsiteBackgroundTheme);   //Loads the website's background
+	window.requestAnimationFrame(eventListenersInitialization);		//Initializes all the eventHandlers
 
-	window.setTimeout(() => {
-		uss.hrefSetup(null, null, (pageLink, destination) => {
-			uss.setYStepLengthCalculator(EASE_OUT_QUINT(1000));
+	uss.hrefSetup(null, null, (pageLink, destination) => {
+		uss.setYStepLengthCalculator(EASE_OUT_QUINT(1000));
 
-			/*
-			 * When the website is in mobile mode the page links are hidden under the hamburgerMenu
-			 * which can be expanded by toggling the class "mobileExpanded" on the headerElement and the headerBackgroundElement.
-			 * Once it's expanded the pageLinks can be clicked to go to the relative website section.
-			 * Whenever a pageLink is clicked, the hamburgerMenu is hidden.
-			 * This is done the same way the hamburgerMenu expands.
-			 */
-			if(pageLink.id != "scrollDownButton") toggleHeaderExpandedState();
-		});
-		uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
-	}, 0);
+		/*
+		 * When the website is in mobile mode the page links are hidden under the hamburgerMenu
+		 * which can be expanded by toggling the class "mobileExpanded" on the headerElement and the headerBackgroundElement.
+		 * Once it's expanded the pageLinks can be clicked to go to the relative website section.
+		 * Whenever a pageLink is clicked, the hamburgerMenu is hidden.
+		 * This is done the same way the hamburgerMenu expands.
+		 */
+		if(pageLink.id != "scrollDownButton") toggleHeaderExpandedState();
+	});
+	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
+
 	window.location.href = "#home";									      //The page always starts from the the #home page
 }
 
@@ -593,19 +592,13 @@ function loadSVGs() {
 }
 
 /**
- * This function, accordingly to the user's preferred theme, asyncronusly loads
- * the srcset of the backgroundElement (has different versions for different resolutions)
+ * This function, accordingly to the user's preferred theme, loads the srcset of the backgroundElement.
  * The full background-image is loaded when ready and not at the initial page loading.
  */
 function changeWebsiteBackgroundTheme() {
+	/* Released use the .webp versions of the images with macOS 14*/
 	const backgroundSrcPath = computedStyle.getPropertyValue("--theme-background-image-base-path");
-
-	/* When ios 14 is released use the .webp versions of the images */
-	backgroundElement.style.backgroundImage = "url(" + backgroundSrcPath + "initial.jpg)";
-	backgroundElement.srcset = backgroundSrcPath + "1280w.jpg 1919w," +
-														 backgroundSrcPath + "1920w.jpg 1920w," +
-														 backgroundSrcPath + "2560w.jpg 2560w," +
-														 backgroundSrcPath + "4096w.jpg 4096w";
+	backgroundElement.srcset = backgroundSrcPath + "4096w.jpg 4096w";
 }
 
 /*
