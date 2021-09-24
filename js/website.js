@@ -13,7 +13,6 @@ var documentBodyElement;														//A shortcut for the HTML element document
 var popUpMessageElement;														//The HTML element with the id "popUpMessage", used as a pop-up message container: a modal
 var popUpMessageTextElement;												//The HTML element with the id "popUpMessageText", used as the text shown in the popUpMessage HTML element
 var websitePreviewExpandedBackgroundContentElement; //The HTML element with the id "websitePreviewExpandedBackgroundContent", used as a layer between a websitePreviewExpanded and the page beneath
-var backgroundElement;															//The HTML element with the id "backgroundElement", used as the website body background
 var headerBackgroundElement;												//The HTML element with the id "headerBackground", used as the website's navbar background
 var headerElement;																	//The HTML element with the id "header", used as the website navbar
 var hamburgerMenuElement;														//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px
@@ -31,7 +30,6 @@ var pageElementstepCalculatorUntimed;               //A functions that calculate
 function init() {
 	window.location.href = "#home";		//The page always starts from the the #home page
 	variableInitialization();					//Binds the js variables to the corresponding HTML elements
-	eventListenersInitialization()		//Initializes all the eventHandlers
 
 	uss.hrefSetup(null, null, (pageLink, destination) => {
 		uss.setYStepLengthCalculator(EASE_OUT_QUINT(1000));
@@ -46,9 +44,6 @@ function init() {
 		if(pageLink.id != "scrollDownButton") toggleHeaderExpandedState();
 	});
 	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
-
-	window.requestAnimationFrame(updateWindowSize);			 //Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
-	window.requestAnimationFrame(loadWebsiteBackground); //Loads the website's background
 
 	if(window.Worker) { //Initializes all the data-lazy HTML img elements' contents
 		const lazyImages = document.getElementsByClassName("lazyLoad");
@@ -71,6 +66,8 @@ function init() {
 			worker.postMessage(image.getAttribute("data-lazy"));
 		}
 	}
+	eventListenersInitialization() //Initializes all the eventHandlers
+	updateWindowSize();			       //Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
 }
 
 /* This Function initializes all the public variables */
@@ -95,7 +92,6 @@ function variableInitialization() {
 	popUpMessageTextElement = document.getElementById("popUpMessageText");
 	websitePreviewExpandedBackgroundContentElement = document.getElementById("websitePreviewExpandedBackgroundContent");
 
-	backgroundElement = document.getElementById("bodyBackground");
 	headerBackgroundElement = document.getElementById("headerBackground");
 	headerElement = document.getElementById("header");
 	hamburgerMenuElement = document.getElementById("hamburgerMenu");
@@ -111,15 +107,6 @@ function variableInitialization() {
 
 /* This function binds all the HTML elements that can be interacted to the corresponding eventHandlers */
 function eventListenersInitialization() {
-	window.matchMedia("(prefers-color-scheme:light)").addListener(loadWebsiteBackground);
-
-	window.addEventListener("mousedown", event => {
-		if(event.button === 1) {
-			event.preventDefault();
-			event.stopPropagation();
-		}
-	}, {passive:false});
-
 	window.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
@@ -164,6 +151,7 @@ function eventListenersInitialization() {
 
 	window.addEventListener("touchmove", event => {
 		event.preventDefault();
+		event.stopPropagation();
 		if(event.touches.length > 1) return;
 
 		if(_Y === null) _Y = event.changedTouches[0].clientY;
@@ -177,6 +165,13 @@ function eventListenersInitialization() {
 	//Allows the page to always start from the #home page
 	window.addEventListener("beforeunload", () => history.replaceState({}, "", "/index.html"), {passive:false});
 	window.addEventListener("resize", updateWindowSize, {passive:true});
+
+	window.addEventListener("mousedown", event => {
+		if(event.button === 1) {
+			event.preventDefault();
+			event.stopPropagation();
+		}
+	}, {passive:false});
 
 	/*
 	 * The user can use the arrow keys to navigate the website.
@@ -200,6 +195,8 @@ function eventListenersInitialization() {
 		} else if(_keyName === "Home" || _keyName === "End")
 				if(websitePreviewIsExpanded) event.preventDefault();
 	}, {passive:false});
+
+
 
 	/*
 	 * When a scroll triggered by mouse wheel, a trackpad or touch gesture is detected
@@ -466,11 +463,13 @@ function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
 		const _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
 		if(_pageOffset !== 0) {
-			uss.setYStepLengthCalculator(EASE_OUT_CUBIC(1200));
-			if(-_pageOffset < windowHeight / 3)	//Case 1: The user scroll too little (less than 1/4 of the page height)
+			if(-_pageOffset < windowHeight / 3)	{//Case 1: The user scroll too little (less than 1/4 of the page height)
+				uss.setYStepLengthCalculator(EASE_IN_OUT_QUAD(800));
 				windowScrollYBy(_scrollDirection * _pageOffset);
-			else //Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
+			} else {//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
+				uss.setYStepLengthCalculator(EASE_IN_OUT_QUINT(800));
 				windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset));
+			}
 		}
 	}
 }
@@ -572,16 +571,6 @@ function _submitForm() {
 	}
 }
 
-/**
- * This function, accordingly to the user's preferred theme, loads the srcset of the backgroundElement.
- * The full background-image is loaded when ready and not at the initial page loading.
- */
-function loadWebsiteBackground() {
-	/* Released use the .webp versions of the images with macOS 14*/
-	const backgroundSrcPath = computedStyle.getPropertyValue("--theme-background-image-base-path");
-	backgroundElement.srcset = backgroundSrcPath + "4096w.jpg 4096w";
-}
-
 /*
  * This Function:
  * - calls the _update function when necessary in order to udate:
@@ -594,7 +583,7 @@ function loadWebsiteBackground() {
  * - if needed calculates the windowHeightOffset without triggering any layout shift
  * - updates windowWidth
  */
-function updateWindowSize(){
+function updateWindowSize() {
 	function _update(currentWindowHeight) {
 		windowHeightOffset = 0;
 		windowHeight = currentWindowHeight;
