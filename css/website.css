@@ -167,6 +167,12 @@
 
 
 /* 1B) CSS WEBSITE LIGHT-THEME'S GLOBAL VARIABLES */
+@media (prefers-color-scheme:dark) {
+  body {
+    background-image: url("images/backgroundImages/DarkTheme/finalImages/final_dark_4096w.jpg");
+  }
+}
+
 @media (prefers-color-scheme:light) {
 	:root {
     --theme-blur-background-color-Black: var(--light-theme-blur-background-color-Black);
@@ -254,7 +260,6 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  background-image: url("images/backgroundImages/DarkTheme/finalImages/final_dark_4096w.jpg");
 }
 
 body::-webkit-scrollbar {
