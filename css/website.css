@@ -67,7 +67,7 @@
    * 1vh and 50vh would decrease if the browser's window shrinks,
    * but this is not a desired behaviour
    * Problems this methods solves:
-   * 1) When the keyboard rises the viewport shrinks and it becomes impossible to see what is been typed
+   * 1) When the keyboard rises the viewport shrinks and it becomes impossible to see what is being typed
    * 2) When, on mobile browsers, the toolbar shrinks and expands the pages' heights adjust accordingly and the whole page jumps back and forth
    */
   --100vh: 100vh;
