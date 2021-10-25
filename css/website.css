@@ -168,7 +168,7 @@
 
 /* 1B) CSS WEBSITE LIGHT-THEME'S GLOBAL VARIABLES */
 @media (prefers-color-scheme:dark) {
-  body {
+  #bodyBackground {
     background-image: url("images/backgroundImages/DarkTheme/finalImages/final_dark_4096w.jpg");
   }
 }
@@ -194,7 +194,7 @@
     --theme-background-color: var(--light-theme-background-color);
 	}
 
-  body {
+  #bodyBackground {
     background-image: url("images/backgroundImages/LightTheme/finalImages/final_light_4096w.jpg");
   }
 }
@@ -241,7 +241,6 @@ html {
   font-family: "UniNeueLight";
   font-size:1.3vmin;
 
-  margin:0;
   height: 100%;   /* Needed for the var(--100vh) fix */
 
   -ms-overflow-style:none !important;									/* Edge */
@@ -254,12 +253,8 @@ html {
 	user-select:none !important; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
 }
 
-body {
+html, body {
   margin:0;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
 }
 
 body::-webkit-scrollbar {
@@ -297,6 +292,14 @@ p {
 
 
 /* 3) OFFSCREEN/BACKGROUND ELEMENTS STYLING */
+#bodyBackground {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  background-position: center;
+  background-size: cover;
+}
+
 #popUpMessage {
   z-index:2;
   position: fixed;
