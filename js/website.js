@@ -139,6 +139,7 @@ function eventListenersInitialization() {
 
 	window.addEventListener("touchstart", event => {
 		if(event.touches.length > 1) return;
+		_Y = null;
 		uss.stopScrollingY();
 		_firstScrollYPosition = window.scrollY;
 	},{passive:true});
@@ -150,16 +151,17 @@ function eventListenersInitialization() {
 	}, {passive:true});
 
 	window.addEventListener("touchmove", event => {
-		event.preventDefault();
+		if(event.cancelable) event.preventDefault();
 		event.stopPropagation();
 		if(event.touches.length > 1) return;
 
 		if(_Y === null) _Y = event.changedTouches[0].clientY;
 		const _originalDeltaY = _Y - event.changedTouches[0].clientY;
 		_Y -= _originalDeltaY;
-		const _deltaY = Math.abs(_originalDeltaY) > 2 ? 18 * _originalDeltaY : 2 * _originalDeltaY;
+		const _absDeltaY = Math.abs(_originalDeltaY);
+		const _deltaY = _absDeltaY <= 1 ? _originalDeltaY : _originalDeltaY * Math.log(1e6 * _absDeltaY);
 
-		uss.scrollYBy(_deltaY, window, _triggerSmoothScroll);
+		uss.scrollYBy(_deltaY, window, _triggerSmoothScroll, true);
 	}, {passive:false});
 
 	//Allows the page to always start from the #home page
@@ -223,8 +225,14 @@ function eventListenersInitialization() {
 	}, {passive:false});
 
 	let _firstTouchPosition = null;
-	headerElement.addEventListener("touchstart", event => _firstTouchPosition = event.touches[0].clientY, {passive:false});
-	headerBackgroundElement.addEventListener("touchstart", event => _firstTouchPosition = event.touches[0].clientY, {passive:false});
+	headerElement.addEventListener("touchstart", event => {
+		event.stopPropagation();
+		_firstTouchPosition = event.touches[0].clientY;
+	}, {passive:false});
+	headerBackgroundElement.addEventListener("touchstart", event => {
+		event.stopPropagation();
+		_firstTouchPosition = event.touches[0].clientY;
+	}, {passive:false});
 
 	headerElement.addEventListener("touchmove", event => {
 		event.preventDefault();
@@ -256,11 +264,26 @@ function eventListenersInitialization() {
 	//This allows for a smoother scrolling experience inside the presentationCard
 	let _presentationCard = document.getElementById("presentationCard");
 	_presentationCard.addEventListener("wheel", event => {
+		const _scrollTop = _presentationCard.scrollTop;
+		const _direction = event.deltaY;
+		if((_scrollTop <= 0 && _direction < 0) || (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _direction > 0)) return;
 		event.preventDefault();
 		event.stopPropagation();
+		uss.stopScrollingY();
 		uss.scrollYBy(event.deltaY / 2, _presentationCard, null, false);
 	}, {passive:false});
-	_presentationCard.addEventListener("touchmove", event => event.stopPropagation(), {passive:true});
+
+	let _presentationCardLastYPosition = null;
+	_presentationCard.addEventListener("touchstart", event => {_presentationCardLastYPosition = event.touches[0].clientY}, {passive:true});
+	_presentationCard.addEventListener("touchend",   event => {_presentationCardLastYPosition = null}, {passive: true});
+	_presentationCard.addEventListener("touchmove",  event => {
+		const _direction = event.changedTouches[0].clientY - _presentationCardLastYPosition;
+		_presentationCardLastYPosition = event.changedTouches[0].clientY;
+		const _scrollTop = _presentationCard.scrollTop;
+		if((_scrollTop <= 0 && _direction > 0) || (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _direction < 0)) return;
+		_Y = null;
+		event.stopPropagation();
+	}, {passive:false});
 	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed, _presentationCard);
 
 	//This allows for a smoother scrolling experience inside the websiteShowcase

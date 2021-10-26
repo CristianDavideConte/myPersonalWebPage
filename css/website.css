@@ -672,7 +672,6 @@ p {
 
 	-ms-overflow-style:none !important;									/* Edge */
 	scrollbar-width:none !important;									/* Firefox */
-	overscroll-behavior:none;
 }
 
 #presentationCard::-webkit-scrollbar {
