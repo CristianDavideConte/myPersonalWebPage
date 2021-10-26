@@ -263,7 +263,8 @@ function eventListenersInitialization() {
 
 	//This allows for a smoother scrolling experience inside the presentationCard
 	let _presentationCard = document.getElementById("presentationCard");
-	_presentationCard.addEventListener("wheel", event => {
+	let _profilePic = document.getElementById("profilePic");
+	function _scrollPresentationCard(event) {
 		const _scrollTop = _presentationCard.scrollTop;
 		const _direction = event.deltaY;
 		if((_scrollTop <= 0 && _direction < 0) || (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _direction > 0)) return;
@@ -271,7 +272,10 @@ function eventListenersInitialization() {
 		event.stopPropagation();
 		uss.stopScrollingY();
 		uss.scrollYBy(event.deltaY / 2, _presentationCard, null, false);
-	}, {passive:false});
+	}
+
+	_profilePic.addEventListener("wheel", _scrollPresentationCard, {passive:false});
+	_presentationCard.addEventListener("wheel", _scrollPresentationCard, {passive:false});
 
 	let _presentationCardLastYPosition = null;
 	_presentationCard.addEventListener("touchstart", event => {_presentationCardLastYPosition = event.touches[0].clientY}, {passive:true});
