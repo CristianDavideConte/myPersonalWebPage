@@ -140,6 +140,9 @@ function eventListenersInitialization() {
 	window.addEventListener("touchstart", event => {
 		if(event.touches.length > 1) return;
 		_Y = null;
+		if(uss.getYStepLengthCalculator() !== pageElementstepCalculatorUntimed) {
+			uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
+		}
 		uss.stopScrollingY();
 		_firstScrollYPosition = window.scrollY;
 	},{passive:true});
@@ -578,9 +581,9 @@ function _ajax(method, url, data, success, error) {
  * - calls _checkContactMeFormDataIntegrity in order to prevent the spam of invalid emails
  * - if the form data is valid calls _ajax to create the request, tells the user to fill the form fields with valid data otherwise
  */
-function _submitForm() {
+function _submitForm(event) {
 	event.preventDefault();
-  contactMeFormSendButtonElement.disabled = true;
+    contactMeFormSendButtonElement.disabled = true;
 	let validData = _checkContactMeFormDataIntegrity();
 	if(validData === "validData<br>")
 		_ajax("GET", "https://json.geoiplookup.io", null,
