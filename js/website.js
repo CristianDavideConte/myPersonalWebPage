@@ -129,14 +129,6 @@ function eventListenersInitialization() {
 	let _Y = null;
 	let _firstScrollYPosition = undefined;
 
-	function _triggerSmoothScroll() {
-		if(_Y !== null || uss.isYscrolling()) return;
-
-		smoothPageScroll(_firstScrollYPosition, window.scrollY);
-		uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
-		_firstScrollYPosition = undefined;
-	}
-
 	window.addEventListener("touchstart", event => {
 		if(event.touches.length > 1) return;
 		_Y = null;
@@ -150,7 +142,9 @@ function eventListenersInitialization() {
 	window.addEventListener("touchend", event => {
 		if(event.touches.length > 1) return;
 		_Y = null;
-		_triggerSmoothScroll();
+		uss.stopScrollingY();
+		smoothPageScroll(_firstScrollYPosition, window.scrollY, windowHeight / 7, EASE_OUT_EXPO(600));
+		_firstScrollYPosition = undefined;
 	}, {passive:true});
 
 	window.addEventListener("touchmove", event => {
@@ -162,9 +156,8 @@ function eventListenersInitialization() {
 		const _originalDeltaY = _Y - event.changedTouches[0].clientY;
 		_Y -= _originalDeltaY;
 		const _absDeltaY = Math.abs(_originalDeltaY);
-		const _deltaY = _absDeltaY <= 1 ? _originalDeltaY : _originalDeltaY * Math.log(1e6 * _absDeltaY);
 
-		uss.scrollYBy(_deltaY, window, _triggerSmoothScroll, true);
+		uss.scrollYBy(_absDeltaY <= 1 ? _originalDeltaY : _originalDeltaY * Math.log(1e8 * _absDeltaY));
 	}, {passive:false});
 
 	//Allows the page to always start from the #home page
@@ -255,6 +248,9 @@ function eventListenersInitialization() {
 			toggleHeaderExpandedState();
 	}, {passive:false});
 
+	headerElement.addEventListener("touchend", event => event.stopPropagation(), {passive:true});
+	headerBackgroundElement.addEventListener("touchend", event => event.stopPropagation(), {passive:true});
+
 	/* When the hamburgerMenu is pressed it expands by calling the toggleHeaderExpandedState function */
 	hamburgerMenuElement.addEventListener("click", toggleHeaderExpandedState, {passive:false});
 
@@ -288,7 +284,6 @@ function eventListenersInitialization() {
 		_presentationCardLastYPosition = event.changedTouches[0].clientY;
 		const _scrollTop = _presentationCard.scrollTop;
 		if((_scrollTop <= 0 && _direction > 0) || (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _direction < 0)) return;
-		_Y = null;
 		event.stopPropagation();
 	}, {passive:false});
 	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed, _presentationCard);
@@ -484,24 +479,17 @@ function toggleHeaderExpandedState() {
  * - alligned if it covers 3/4 of the windowHeight or more (same as scrollIntoView).
  * - scrolled, following the original user's scroll direction, otherwise (same as scrollIntoView on the previous/nextPage).
  */
-function smoothPageScroll(firstScrollYPosition, lastScrollYPosition) {
+function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, threshold = windowHeight / 4, easing) {
 	currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
-	const _scrollYAmmount = lastScrollYPosition - firstScrollYPosition;	//How much the y position has changed due to the user's scroll
+	const _scrollDirection = Math.sign(lastScrollYPosition - firstScrollYPosition); //1 if the scrolling is going downwards -1 otherwise.
+	const _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
-	//The helping behavior is triggered only if the user scrolls more than windowHeight / 2
-	if(_scrollYAmmount > windowHeight / 2 || _scrollYAmmount < -windowHeight / 2) {
-		const _scrollDirection = Math.sign(_scrollYAmmount); //1 if the scrolling is going downwards -1 otherwise.
-		const _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
-
-		if(_pageOffset !== 0) {
-			if(-_pageOffset < windowHeight / 3)	{//Case 1: The user scroll too little (less than 1/4 of the page height)
-				uss.setYStepLengthCalculator(EASE_IN_OUT_QUAD(800));
-				windowScrollYBy(_scrollDirection * _pageOffset);
-			} else {//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
-				uss.setYStepLengthCalculator(EASE_IN_OUT_QUINT(800));
-				windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset));
-			}
-		}
+	if(-_pageOffset < threshold) {//Case 1: The user scroll too little (less than 1/4 of the page height)
+		uss.setYStepLengthCalculator(easing || EASE_IN_OUT_QUAD(800));
+		windowScrollYBy(_scrollDirection * _pageOffset);
+	} else {//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
+		uss.setYStepLengthCalculator(easing || EASE_IN_OUT_QUINT(800));
+		windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset));
 	}
 }
 
