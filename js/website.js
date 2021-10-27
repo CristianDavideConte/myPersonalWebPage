@@ -31,6 +31,7 @@ function init() {
 	window.location.href = "#home";		//The page always starts from the the #home page
 	variableInitialization();					//Binds the js variables to the corresponding HTML elements
 
+	uss.setPageScroller(documentBodyElement);
 	uss.hrefSetup(null, null, (pageLink, destination) => {
 		uss.setYStepLengthCalculator(EASE_OUT_QUINT(1000));
 
@@ -72,9 +73,10 @@ function init() {
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
-	pageElementstepCalculatorUntimed = (remaning) => {return remaning / 20 + 1;};
-	windowScrollYBy = (y, onDone = null, stillStart = true) => uss.scrollYBy(y, window, onDone, stillStart);
 	documentBodyElement = document.body;
+
+	pageElementstepCalculatorUntimed = (remaning) => {return remaning / 20 + 1;};
+	windowScrollYBy = (y, onDone = null, stillStart = true) => uss.scrollYBy(y, documentBodyElement, onDone, stillStart);
 
 	websitePreviewExpandedMap = new Map();
 
@@ -107,18 +109,18 @@ function variableInitialization() {
 
 /* This function binds all the HTML elements that can be interacted to the corresponding eventHandlers */
 function eventListenersInitialization() {
-	window.addEventListener("wheel", event => {
+	documentBodyElement.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		if(_firstScrollYPosition == undefined) _firstScrollYPosition = window.scrollY;
+		if(_firstScrollYPosition == undefined) _firstScrollYPosition = documentBodyElement.scrollTop;
 		if(uss.getYStepLengthCalculator() !== pageElementstepCalculatorUntimed) {
 			uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
 			uss.stopScrollingY();
 		}
 		uss.scrollYBy(event.deltaY,
-									window,
+									documentBodyElement,
 									() => {
-										smoothPageScroll(_firstScrollYPosition, window.scrollY);
+										smoothPageScroll(_firstScrollYPosition, documentBodyElement.scrollTop);
 										_firstScrollYPosition = undefined;
 									},
 									false);
@@ -129,25 +131,25 @@ function eventListenersInitialization() {
 	let _Y = null;
 	let _firstScrollYPosition = undefined;
 
-	window.addEventListener("touchstart", event => {
+	documentBodyElement.addEventListener("touchstart", event => {
 		if(event.touches.length > 1) return;
 		_Y = null;
 		if(uss.getYStepLengthCalculator() !== pageElementstepCalculatorUntimed) {
 			uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
 		}
 		uss.stopScrollingY();
-		_firstScrollYPosition = window.scrollY;
+		_firstScrollYPosition = documentBodyElement.scrollTop;
 	},{passive:true});
 
-	window.addEventListener("touchend", event => {
+	documentBodyElement.addEventListener("touchend", event => {
 		if(event.touches.length > 1) return;
 		_Y = null;
 		uss.stopScrollingY();
-		smoothPageScroll(_firstScrollYPosition, window.scrollY, windowHeight / 7, EASE_OUT_EXPO(600));
+		smoothPageScroll(_firstScrollYPosition, documentBodyElement.scrollTop, windowHeight / 7, EASE_OUT_EXPO(600));
 		_firstScrollYPosition = undefined;
 	}, {passive:true});
 
-	window.addEventListener("touchmove", event => {
+	documentBodyElement.addEventListener("touchmove", event => {
 		if(event.cancelable) event.preventDefault();
 		event.stopPropagation();
 		if(event.touches.length > 1) return;
@@ -164,7 +166,7 @@ function eventListenersInitialization() {
 	window.addEventListener("beforeunload", () => history.replaceState({}, "", "/index.html"), {passive:false});
 	window.addEventListener("resize", updateWindowSize, {passive:true});
 
-	window.addEventListener("mousedown", event => {
+	documentBodyElement.addEventListener("mousedown", event => {
 		if(event.button === 1) {
 			event.preventDefault();
 			event.stopPropagation();
@@ -176,22 +178,27 @@ function eventListenersInitialization() {
 	 * Pressing the Arrow-up or the Arrow-left or the PageUp keys will trigger a scroll upwards by a scrollDistance of windowHeight.
  	 * Pressing the Arrow-down or the Arrow-right or the PageDown keys will trigger a scroll downwards by a scrollDistance of windowHeight.
    */
-	window.addEventListener("keydown", event => {
-		if(event.target.tagName !== "BODY") return;
+	documentBodyElement.addEventListener("keydown", event => {
+		if(uss.isYscrolling() || event.target.tagName !== "BODY") return;
 		const websitePreviewIsExpanded = websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState") || _websitePreviewExpandedBackgroundListenerTriggered;
 		const _keyName = event.key;
 		if(_keyName === "ArrowUp" || _keyName === "ArrowLeft" || _keyName === "PageUp") {
 			event.preventDefault();
+			event.stopPropagation();
 			if(websitePreviewIsExpanded) return;
-			const _firstY = window.scrollY;
-			windowScrollYBy(-windowHeight, () => smoothPageScroll(_firstY, window.scrollY), true);
+			const _firstY = documentBodyElement.scrollTop;
+			windowScrollYBy(-windowHeight, () => smoothPageScroll(_firstY, documentBodyElement.scrollTop), true);
 		} else if(_keyName === "ArrowDown" || _keyName === "ArrowRight" || _keyName === "PageDown") {
 			event.preventDefault();
+			event.stopPropagation();
 			if(websitePreviewIsExpanded) return;
-			const _firstY = window.scrollY;
-			windowScrollYBy(windowHeight, () => smoothPageScroll(_firstY, window.scrollY), true);
+			const _firstY = documentBodyElement.scrollTop;
+			windowScrollYBy(windowHeight, () => smoothPageScroll(_firstY, documentBodyElement.scrollTop), true);
 		} else if(_keyName === "Home" || _keyName === "End")
-				if(websitePreviewIsExpanded) event.preventDefault();
+				if(websitePreviewIsExpanded) {
+					event.preventDefault();
+					event.stopPropagation();
+				}
 	}, {passive:false});
 
 
@@ -284,6 +291,7 @@ function eventListenersInitialization() {
 		_presentationCardLastYPosition = event.changedTouches[0].clientY;
 		const _scrollTop = _presentationCard.scrollTop;
 		if((_scrollTop <= 0 && _direction > 0) || (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _direction < 0)) return;
+		_Y = null;
 		event.stopPropagation();
 	}, {passive:false});
 	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed, _presentationCard);
@@ -367,7 +375,7 @@ function eventListenersInitialization() {
 		websitePreviewExpandedMap.set(_websitePreviewExpanded, websitePreview);
 
 		/* At the end of the process each websitePreview is given a listener for the back-to-normal-state animation */
-		websitePreview.addEventListener("click", () => {
+		websitePreview.addEventListener("click", (event) => {
 			event.stopPropagation();																				//Prevents the click to instantly remove the previewExpanded element that is going to be created next
 			window.requestAnimationFrame(() => {
 				/*

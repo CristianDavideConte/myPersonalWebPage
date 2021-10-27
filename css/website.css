@@ -255,6 +255,9 @@ html {
 
 html, body {
   margin:0;
+  height: var(--100vh);
+  width: 100vw;
+  overflow: scroll;
 }
 
 body::-webkit-scrollbar {
@@ -437,6 +440,7 @@ p {
 	min-height:var(--header-elements-height);
 	cursor:pointer;
 	-webkit-backface-visibility: hidden;			/* Safari Fix */
+	backface-visibility: hidden;			/* Safari Fix */
 }
 
 #socialNetworks > a::after{
@@ -518,7 +522,7 @@ p {
   height: 100%;
 
   background-color: rgba(255,255,255,0.1);
-  //background: linear-gradient(0deg, rgba(0,0,0,0.2) 40%, rgba(255,255,255,0.2) 60%);
+  /*background: linear-gradient(0deg, rgba(0,0,0,0.2) 40%, rgba(255,255,255,0.2) 60%);*/
   -webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius-reduced)) saturate(230%);
   backdrop-filter: blur(var(--backdrop-filter-blur-radius-reduced)) saturate(230%);
 
@@ -914,11 +918,6 @@ p {
   transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
   transition:all var(--transition-time-medium);
 }
-
-.expandedState #websitePreviewExpandedButtonSection {
-  /*-webkit-transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
-  transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
-*/}
 
 .websitePreviewExpandedButton {
   font-family: "UniNeueLight";
