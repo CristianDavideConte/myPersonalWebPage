@@ -1,7 +1,6 @@
-var windowScrollYBy; 																//A shorthand for the y => zenscroll.toY(window.scrollY + y) function, used to scroll the window without the user's interaction
 var mobileMode; 																		//Indicates if the css for mobile is currently being applied
-var currentPageIndex;																//The index of the HTML element with class "page" that is currently being displayed the most: if the page is 50% or on the screen, than it's currently being displayed
 var websitePreviewExpandedMap; 											//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
+var websitePreviewListenerDebounce;
 var computedStyle;																	//All the computed styles for the document.body element
 var websitePreviewExpandedSize;											//The --websitePreview-expanded-size css variable, used to calculate the scale factor of the websitePreviews expansion animation
 var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
@@ -16,36 +15,18 @@ var websitePreviewExpandedBackgroundContentElement; //The HTML element with the 
 var headerBackgroundElement;												//The HTML element with the id "headerBackground", used as the website's navbar background
 var headerElement;																	//The HTML element with the id "header", used as the website navbar
 var hamburgerMenuElement;														//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px
-var pageLinksElements; 															//All HTML elements with the class "pageLink", shown in the header to navigate through the website' sections
-var websiteShowcase;																//The HTML element with the id "websiteShowcase", children of the websitePreviewCarousel HTML element and used as container for all the websitePreviews
-var carouselButtons;																//All HTML elements with the class "carouselButton", used to scroll the websitePreview carousel
 var websitePreviews;																//All HTML elements with the class "websitePreview", used as a clickable previews for all the projects inside the websitePreviewShowcase
 var contactMeFormElement;														//The HTML element with the id "contactMeForm", used to keep the contact informations until the contactMeFormSendButton is pressed
 var contactMeFormEmailElement;											//The HTML element with the id "contactMeFormEmail", used to store the user's email when the contactMeForm is being filled
 var contactMeFormBodyElement;												//The HTML element with the id "contactMeFormBody",used to store the user's message when the contactMeForm is being filled
 var contactMeFormSendButtonElement;									//The HTML element with the id "contactMeFormSendButton", used to send a contact request based on the contactMeForm fields
-var pageElementstepCalculatorUntimed;               //A functions that calculates the length of each uss.scroll[...] animation's step, it follows a non linear behavior for smoother animations.
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {
 	window.location.href = "#home";		//The page always starts from the the #home page
-	variableInitialization();					//Binds the js variables to the corresponding HTML elements
-
-	uss.setPageScroller(documentBodyElement);
-	uss.hrefSetup(null, null, (pageLink, destination) => {
-		uss.setYStepLengthCalculator(EASE_OUT_QUINT(1000));
-
-		/*
-		 * When the website is in mobile mode the page links are hidden under the hamburgerMenu
-		 * which can be expanded by toggling the class "mobileExpanded" on the headerElement and the headerBackgroundElement.
-		 * Once it's expanded the pageLinks can be clicked to go to the relative website section.
-		 * Whenever a pageLink is clicked, the hamburgerMenu is hidden.
-		 * This is done the same way the hamburgerMenu expands.
-		 */
-		if(pageLink.id != "scrollDownButton") toggleHeaderExpandedState();
-	});
-	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
-
+	variableInitialization();			//Binds the js variables to the corresponding HTML elements
+	scrollInit();
+	
 	if(window.Worker) { //Initializes all the data-lazy HTML img elements' contents
 		const lazyImages = document.getElementsByClassName("lazyLoad");
 		for(lazyImage of lazyImages) {
@@ -68,17 +49,15 @@ function init() {
 		}
 	}
 	eventListenersInitialization() //Initializes all the eventHandlers
-	updateWindowSize();			       //Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
+	updateWindowSize();			   //Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
 }
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
 	documentBodyElement = document.body;
 
-	pageElementstepCalculatorUntimed = (remaning) => {return remaning / 20 + 1;};
-	windowScrollYBy = (y, onDone = null, stillStart = true) => uss.scrollYBy(y, documentBodyElement, onDone, stillStart);
-
 	websitePreviewExpandedMap = new Map();
+	websitePreviewListenerDebounce = false;
 
 	computedStyle = getComputedStyle(documentBodyElement);
 	websitePreviewExpandedSize = computedStyle.getPropertyValue("--websitePreview-expanded-size").replace("vmin", "");
@@ -97,9 +76,6 @@ function variableInitialization() {
 	headerBackgroundElement = document.getElementById("headerBackground");
 	headerElement = document.getElementById("header");
 	hamburgerMenuElement = document.getElementById("hamburgerMenu");
-	pageLinksElements = document.getElementsByClassName("pageLink");
-	websiteShowcase = document.getElementById("websiteShowcase");
-	carouselButtons = document.getElementsByClassName("carouselButton");
 	websitePreviews = document.getElementsByClassName("websitePreview");
 	contactMeFormElement = document.getElementById("contactMeForm");
 	contactMeFormEmailElement = document.getElementById("contactMeFormEmail");
@@ -109,59 +85,6 @@ function variableInitialization() {
 
 /* This function binds all the HTML elements that can be interacted to the corresponding eventHandlers */
 function eventListenersInitialization() {
-	documentBodyElement.addEventListener("wheel", event => {
-		event.preventDefault();
-		event.stopPropagation();
-		if(_firstScrollYPosition == undefined) _firstScrollYPosition = documentBodyElement.scrollTop;
-		if(uss.getYStepLengthCalculator() !== pageElementstepCalculatorUntimed) {
-			uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
-			uss.stopScrollingY();
-		}
-		uss.scrollYBy(event.deltaY,
-									documentBodyElement,
-									() => {
-										smoothPageScroll(_firstScrollYPosition, documentBodyElement.scrollTop);
-										_firstScrollYPosition = undefined;
-									},
-									false);
-	}, {passive:false});
-
-
-	//Smooth scrolling for touch devices
-	let _Y = null;
-	let _firstScrollYPosition = undefined;
-
-	documentBodyElement.addEventListener("touchstart", event => {
-		if(event.touches.length > 1) return;
-		_Y = null;
-		if(uss.getYStepLengthCalculator() !== pageElementstepCalculatorUntimed) {
-			uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed);
-		}
-		uss.stopScrollingY();
-		_firstScrollYPosition = documentBodyElement.scrollTop;
-	},{passive:true});
-
-	documentBodyElement.addEventListener("touchend", event => {
-		if(event.touches.length > 1) return;
-		_Y = null;
-		uss.stopScrollingY();
-		smoothPageScroll(_firstScrollYPosition, documentBodyElement.scrollTop, windowHeight / 7, EASE_OUT_EXPO(600));
-		_firstScrollYPosition = undefined;
-	}, {passive:true});
-
-	documentBodyElement.addEventListener("touchmove", event => {
-		if(event.cancelable) event.preventDefault();
-		event.stopPropagation();
-		if(event.touches.length > 1) return;
-
-		if(_Y === null) _Y = event.changedTouches[0].clientY;
-		const _originalDeltaY = _Y - event.changedTouches[0].clientY;
-		_Y -= _originalDeltaY;
-		const _absDeltaY = Math.abs(_originalDeltaY);
-
-		uss.scrollYBy(_absDeltaY <= 1 ? _originalDeltaY : _originalDeltaY * Math.log(1e8 * _absDeltaY));
-	}, {passive:false});
-
 	//Allows the page to always start from the #home page
 	window.addEventListener("beforeunload", () => history.replaceState({}, "", "/index.html"), {passive:false});
 	window.addEventListener("resize", updateWindowSize, {passive:true});
@@ -171,34 +94,6 @@ function eventListenersInitialization() {
 			event.preventDefault();
 			event.stopPropagation();
 		}
-	}, {passive:false});
-
-	/*
-	 * The user can use the arrow keys to navigate the website.
-	 * Pressing the Arrow-up or the Arrow-left or the PageUp keys will trigger a scroll upwards by a scrollDistance of windowHeight.
- 	 * Pressing the Arrow-down or the Arrow-right or the PageDown keys will trigger a scroll downwards by a scrollDistance of windowHeight.
-   */
-	documentBodyElement.addEventListener("keydown", event => {
-		if(uss.isYscrolling() || event.target.tagName !== "BODY") return;
-		const websitePreviewIsExpanded = websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState") || _websitePreviewExpandedBackgroundListenerTriggered;
-		const _keyName = event.key;
-		if(_keyName === "ArrowUp" || _keyName === "ArrowLeft" || _keyName === "PageUp") {
-			event.preventDefault();
-			event.stopPropagation();
-			if(websitePreviewIsExpanded) return;
-			const _firstY = documentBodyElement.scrollTop;
-			windowScrollYBy(-windowHeight, () => smoothPageScroll(_firstY, documentBodyElement.scrollTop), true);
-		} else if(_keyName === "ArrowDown" || _keyName === "ArrowRight" || _keyName === "PageDown") {
-			event.preventDefault();
-			event.stopPropagation();
-			if(websitePreviewIsExpanded) return;
-			const _firstY = documentBodyElement.scrollTop;
-			windowScrollYBy(windowHeight, () => smoothPageScroll(_firstY, documentBodyElement.scrollTop), true);
-		} else if(_keyName === "Home" || _keyName === "End")
-				if(websitePreviewIsExpanded) {
-					event.preventDefault();
-					event.stopPropagation();
-				}
 	}, {passive:false});
 
 
@@ -261,68 +156,17 @@ function eventListenersInitialization() {
 	/* When the hamburgerMenu is pressed it expands by calling the toggleHeaderExpandedState function */
 	hamburgerMenuElement.addEventListener("click", toggleHeaderExpandedState, {passive:false});
 
+
+
+
 	/* All the social networks icons are linked to the corresponding website */
 	document.getElementById("githubContact").addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
 	document.getElementById("stackoverflowContact").addEventListener("click", () => window.open("https://stackoverflow.com/users/13938363/cristian-davide-conte?tab=profile"), {passive:true});
 	document.getElementById("instagramContact").addEventListener("click", () => window.open("https://www.instagram.com/cristiandavideconte/?hl=it"), {passive:true});
 	document.getElementById("mailContact").addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 
-	//This allows for a smoother scrolling experience inside the presentationCard
-	let _presentationCard = document.getElementById("presentationCard");
-	let _profilePic = document.getElementById("profilePic");
-	function _scrollPresentationCard(event) {
-		const _scrollTop = _presentationCard.scrollTop;
-		const _direction = event.deltaY;
-		if((_scrollTop <= 0 && _direction < 0) || (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _direction > 0)) return;
-		event.preventDefault();
-		event.stopPropagation();
-		uss.stopScrollingY();
-		uss.scrollYBy(event.deltaY / 2, _presentationCard, null, false);
-	}
-
-	_profilePic.addEventListener("wheel", _scrollPresentationCard, {passive:false});
-	_presentationCard.addEventListener("wheel", _scrollPresentationCard, {passive:false});
-
-	let _presentationCardLastYPosition = null;
-	_presentationCard.addEventListener("touchstart", event => {_presentationCardLastYPosition = event.touches[0].clientY}, {passive:true});
-	_presentationCard.addEventListener("touchend",   event => {_presentationCardLastYPosition = null}, {passive: true});
-	_presentationCard.addEventListener("touchmove",  event => {
-		const _direction = event.changedTouches[0].clientY - _presentationCardLastYPosition;
-		_presentationCardLastYPosition = event.changedTouches[0].clientY;
-		const _scrollTop = _presentationCard.scrollTop;
-		if((_scrollTop <= 0 && _direction > 0) || (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _direction < 0)) return;
-		_Y = null;
-		event.stopPropagation();
-	}, {passive:false});
-	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed, _presentationCard);
-
-	//This allows for a smoother scrolling experience inside the websiteShowcase
-	websiteShowcase.addEventListener("wheel", event => {
-		event.preventDefault();
-		event.stopPropagation();
-		uss.scrollXBy(event.deltaY / 3, websiteShowcase, null, false);
-	}, {passive:false});
-	websiteShowcase.addEventListener("touchmove", event => event.stopPropagation(), {passive:true});
-	uss.setXStepLengthCalculator(pageElementstepCalculatorUntimed, websiteShowcase);
 
 
-	//If the direction is === -1  the scroll direction is from right to left, it's from left to right otherwise.
-	function _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection) {
-		let finalXPosition = (scrollDirection === -1) ? 0 : (websiteShowcase.scrollWidth - websiteShowcase.clientWidth);
-		uss.scrollXTo(finalXPosition, websiteShowcase, null);
-	}
-
-	carouselButtons[0].addEventListener("mousedown",  () => _smoothWebsiteShowcaseWheelScrollHorizzontally(-1), {passive:false});
-	carouselButtons[0].addEventListener("touchstart", () => _smoothWebsiteShowcaseWheelScrollHorizzontally(-1), {passive:false});
-	carouselButtons[1].addEventListener("mousedown",  () => _smoothWebsiteShowcaseWheelScrollHorizzontally(+1), {passive:false});
-	carouselButtons[1].addEventListener("touchstart", () => _smoothWebsiteShowcaseWheelScrollHorizzontally(+1), {passive:false});
-
-	carouselButtons[0].addEventListener("mouseup",  () => uss.stopScrollingX(websiteShowcase), {passive:false});
-	carouselButtons[0].addEventListener("mouseout", () => uss.stopScrollingX(websiteShowcase), {passive:false});
-	carouselButtons[0].addEventListener("touchend", () => uss.stopScrollingX(websiteShowcase), {passive:false});
-	carouselButtons[1].addEventListener("mouseup",  () => uss.stopScrollingX(websiteShowcase), {passive:false});
-	carouselButtons[1].addEventListener("mouseout", () => uss.stopScrollingX(websiteShowcase), {passive:false});
-	carouselButtons[1].addEventListener("touchend", () => uss.stopScrollingX(websiteShowcase), {passive:false});
 
 
 
@@ -406,18 +250,17 @@ function eventListenersInitialization() {
 	}
 
 	/*
-	 * The listenersAlreadyTriggered variable is used to prevent the user to execute the backgroundContent eventListener
+	 * The websitePreviewListenerDebounce variable is used to prevent the user to execute the backgroundContent eventListener
 	 * more than one time while the animation is still happening.
 	 * Otherwise the document.body would try to remove the backgroundContent multiple times generating errors in the browser console.
 	 * Note that this bug wouldn't cause the page to instantly crash.
 	 */
-	let _websitePreviewExpandedBackgroundListenerTriggered = false;
 	websitePreviewExpandedBackgroundContentElement.addEventListener("touchmove", event => event.preventDefault(), {passive:false});
 	websitePreviewExpandedBackgroundContentElement.addEventListener("wheel", event => {event.preventDefault(); event.stopPropagation();}, {passive:false});
-	websitePreviewExpandedBackgroundContentElement.addEventListener("click", () => {
+	websitePreviewExpandedBackgroundContentElement.addEventListener("click", (event) => {
 		event.stopPropagation();
-		if(_websitePreviewExpandedBackgroundListenerTriggered) return;
-		_websitePreviewExpandedBackgroundListenerTriggered = true;
+		if(websitePreviewListenerDebounce) return;
+		websitePreviewListenerDebounce = true;
 
 		window.requestAnimationFrame(() => {
 			const _currentWebsitePreviewExpanded = websitePreviewExpandedBackgroundContentElement.firstChild;
@@ -446,10 +289,14 @@ function eventListenersInitialization() {
 				websitePreviewExpandedBackgroundContentElement.style.pointerEvents = "";
 				websitePreviewExpandedBackgroundContentElement.removeChild(_currentWebsitePreviewExpanded);
 				_currentWebsitePreview.classList.remove("expandedState");
-				_websitePreviewExpandedBackgroundListenerTriggered = false;
+				websitePreviewListenerDebounce = false;
 			}, transitionTimeMedium);
 		});
 	}, {passive:true});
+
+
+
+
 
 	/*
 	 * If clicked, the contactMeFormSendButton triggers a call to the _submitForm functon
@@ -459,14 +306,7 @@ function eventListenersInitialization() {
 	 * The sender address is the contactMeFormEmail content.
 	 * The body is the contactMeFormBody content.
 	 */
-  contactMeFormElement.addEventListener("submit", _submitForm, {passive:false});
-	contactMeFormBodyElement.addEventListener("wheel", event => {
-		event.preventDefault();
-		event.stopPropagation();
-		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight / 10, contactMeFormBodyElement, null, false);
-	}, {passive:false});
-	contactMeFormBodyElement.addEventListener("touchmove", event => event.stopPropagation(), {passive:true});
-	uss.setYStepLengthCalculator(pageElementstepCalculatorUntimed, contactMeFormBodyElement);
+ 	contactMeFormElement.addEventListener("submit", _submitForm, {passive:false});
 }
 
 /*
@@ -475,31 +315,13 @@ function eventListenersInitialization() {
  * The mobileMode is triggered by the window's resize event if window's width > 1080px.
  */
 function toggleHeaderExpandedState() {
-	if(mobileMode)
-		window.requestAnimationFrame(() => {
-			headerBackgroundElement.classList.toggle("mobileExpanded");
-			headerElement.classList.toggle("mobileExpanded");
-		});
+	if(!mobileMode) return;
+	window.requestAnimationFrame(() => {
+		headerBackgroundElement.classList.toggle("mobileExpanded");
+		headerElement.classList.toggle("mobileExpanded");
+	});
 }
 
-/*
- * If at the end of the scroll, the current page is not alligned, it gets:
- * - alligned if it covers 3/4 of the windowHeight or more (same as scrollIntoView).
- * - scrolled, following the original user's scroll direction, otherwise (same as scrollIntoView on the previous/nextPage).
- */
-function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, threshold = windowHeight / 4, easing) {
-	currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
-	const _scrollDirection = Math.sign(lastScrollYPosition - firstScrollYPosition); //1 if the scrolling is going downwards -1 otherwise.
-	const _pageOffset = _scrollDirection * (currentPageIndex * windowHeight - lastScrollYPosition);	//The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
-
-	if(-_pageOffset < threshold) {//Case 1: The user scroll too little (less than 1/4 of the page height)
-		uss.setYStepLengthCalculator(easing || EASE_IN_OUT_QUAD(800));
-		windowScrollYBy(_scrollDirection * _pageOffset);
-	} else {//Case 2: The user scrolled enought for the next page to be visible on 1/4 of the windowHeight
-		uss.setYStepLengthCalculator(easing || EASE_IN_OUT_QUINT(800));
-		windowScrollYBy(_scrollDirection * (windowHeight + _pageOffset));
-	}
-}
 
 /*
  * This function animates the popUpMessageElement and modifies the text shown.
