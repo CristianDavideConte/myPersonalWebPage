@@ -174,9 +174,9 @@ function eventListenersInitialization() {
 		/* First, all the websitePreviewExpanded basic components are created */
 		let _websitePreviewExpanded = document.createElement("div");
 		_websitePreviewExpanded.id = "websitePreviewExpanded";
-		_websitePreviewExpanded.addEventListener("click", event => event.stopPropagation(), {passive:true});
+		_websitePreviewExpanded.addEventListener("click", event => {event.stopPropagation()}, {passive:true});
 
-		let _websitePreviewImage = websitePreview.firstElementChild;
+		const _websitePreviewImage = websitePreview.firstElementChild;
 		let _websitePreviewExpandedImage = _websitePreviewImage.cloneNode(true);
 		_websitePreviewExpandedImage.className = "websitePreviewExpandedImage";
 		_websitePreviewImage.addEventListener("load", () => {
@@ -184,7 +184,7 @@ function eventListenersInitialization() {
 			_websitePreviewExpanded.appendChild(_websitePreviewExpandedImage);
 		});
 
-		let _dataTitle = websitePreview.getAttribute("data-title");
+		const _dataTitle = websitePreview.getAttribute("data-title");
 		if(_dataTitle != null) {
 			let _websitePreviewExpandedTitle = document.createElement("div");
 			_websitePreviewExpandedTitle.className = "websitePreviewExpandedTitle";
@@ -195,7 +195,7 @@ function eventListenersInitialization() {
 		let _viewButtonsSection = document.createElement("div");
 		_viewButtonsSection.id = "websitePreviewExpandedButtonSection";
 
-		let _dataCode = websitePreview.getAttribute("data-code");
+		const _dataCode = websitePreview.getAttribute("data-code");
 		if(_dataCode != null) {													//There could be a project that isn't open-source
 			let _viewCodeButton = document.createElement("button");
 			_viewCodeButton.innerHTML = "VIEW CODE";
@@ -204,7 +204,7 @@ function eventListenersInitialization() {
 			_viewButtonsSection.appendChild(_viewCodeButton);
 		}
 
-		let _dataDemo = websitePreview.getAttribute("data-demo");
+		const _dataDemo = websitePreview.getAttribute("data-demo");
 		if(_dataDemo != null) {													//There could be a project that hasn't got a demo ready yet
 			let _viewDemoButton = document.createElement("button");
 			_viewDemoButton.innerHTML = "PLAY DEMO";
@@ -220,7 +220,7 @@ function eventListenersInitialization() {
 
 		/* At the end of the process each websitePreview is given a listener for the back-to-normal-state animation */
 		websitePreview.addEventListener("click", (event) => {
-			event.stopPropagation();																				//Prevents the click to instantly remove the previewExpanded element that is going to be created next
+			event.stopPropagation(); //Prevents the click to instantly remove the previewExpanded element that is going to be created next
 			window.requestAnimationFrame(() => {
 				/*
 				 * The websitePreview is scaled while hovered.
@@ -255,15 +255,13 @@ function eventListenersInitialization() {
 	 * Otherwise the document.body would try to remove the backgroundContent multiple times generating errors in the browser console.
 	 * Note that this bug wouldn't cause the page to instantly crash.
 	 */
-	websitePreviewExpandedBackgroundContentElement.addEventListener("touchmove", event => event.preventDefault(), {passive:false});
-	websitePreviewExpandedBackgroundContentElement.addEventListener("wheel", event => {event.preventDefault(); event.stopPropagation();}, {passive:false});
 	websitePreviewExpandedBackgroundContentElement.addEventListener("click", (event) => {
 		event.stopPropagation();
 		if(websitePreviewListenerDebounce) return;
 		websitePreviewListenerDebounce = true;
 
 		window.requestAnimationFrame(() => {
-			const _currentWebsitePreviewExpanded = websitePreviewExpandedBackgroundContentElement.firstChild;
+			const _currentWebsitePreviewExpanded = document.getElementById("websitePreviewExpanded");
 			const _currentWebsitePreview = websitePreviewExpandedMap.get(_currentWebsitePreviewExpanded);
 			/*
 			 * The websitePreview is scaled while hovered.

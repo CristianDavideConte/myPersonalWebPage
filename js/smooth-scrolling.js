@@ -48,6 +48,7 @@ function scrollInit() {
     document.body.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
+		if(websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState")) return;
 		if(_documentBodyFirstYPosition === null) _documentBodyFirstYPosition = document.body.scrollTop;
 		if(uss.getYStepLengthCalculator() !== _defaultEasing) {
 			uss.setYStepLengthCalculator(_defaultEasing);
@@ -122,6 +123,7 @@ function scrollInit() {
 	}, {passive:true});
 
 	document.body.addEventListener("touchmove", event => {
+		if(websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState")) return false;
 		if(event.cancelable) event.preventDefault();
 		event.stopPropagation();
 		if(event.touches.length > 1) return;

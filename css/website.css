@@ -52,29 +52,24 @@
 
 
 
-
-
-
-
-
 /* 1A) CSS GLOBAL VARIABLES */
 :root {
-  /*
-   * The var(--100vh) is initially set to 100vh
-   * so that the cumulative layout shift is greatly reduced,
-   * after the body element loaded it's defined with js.
-   * The var(--1vh) and var(--50vh) are used instead of 1vh and 50vh because
-   * 1vh and 50vh would decrease if the browser's window shrinks,
-   * but this is not a desired behaviour
-   * Problems this methods solves:
-   * 1) When the keyboard rises the viewport shrinks and it becomes impossible to see what is being typed
-   * 2) When, on mobile browsers, the toolbar shrinks and expands the pages' heights adjust accordingly and the whole page jumps back and forth
-   */
-  --100vh: 100vh;
-  --50vh:calc(var(--100vh) / 2);
-  --1vh:calc(var(--100vh) / 100);
+	/*
+	* The var(--100vh) is initially set to 100vh
+	* so that the cumulative layout shift is greatly reduced,
+	* after the body element loaded it's defined with js.
+	* The var(--1vh) and var(--50vh) are used instead of 1vh and 50vh because
+	* 1vh and 50vh would decrease if the browser's window shrinks,
+	* but this is not a desired behaviour
+	* Problems this methods solves:
+	* 1) When the keyboard rises the viewport shrinks and it becomes impossible to see what is being typed
+	* 2) When, on mobile browsers, the toolbar shrinks and expands the pages' heights adjust accordingly and the whole page jumps back and forth
+	*/
+	--100vh: 100vh;
+	--50vh:calc(var(--100vh) / 2);
+	--1vh:calc(var(--100vh) / 100);
 
-  --backdrop-filter-blur-radius-ultra-reduced: 0.6rem;
+	--backdrop-filter-blur-radius-ultra-reduced: 0.6rem;
 	--backdrop-filter-blur-radius-reduced:1rem;
 	--backdrop-filter-blur-radius:1.5rem;
 	--backdrop-filter-blur-radius-wide:2rem;
@@ -90,7 +85,7 @@
 	--scaling-factor-increase:1;
 	--scaling-factor-decrease:1;
 
-  --transition-time-slow:1s;
+	--transition-time-slow:1s;	
 	--transition-time:0.5s;
 	--transition-time-medium:0.4s;
 	--transition-time-quick:0.2s;
@@ -104,7 +99,7 @@
 	--presentationCard-width:55vmin;
 
 	--websitePreview-size:15rem;
-  --websitePreview-expanded-size:70vmin;
+  	--websitePreview-expanded-size:70vmin;
 
 	--light-theme-blur-background-color-Black: rgba(0,0,0,1);
 	--light-theme-blur-background-color-White: rgba(255,255,255,0.5);
@@ -140,25 +135,25 @@
 	--dark-theme-stackoverflowContact-background-color: radial-gradient(circle, rgba(57,57,57,1) 60%, rgba(255,124,0,1) 64%);
 	--dark-theme-instagramContact-background-color: linear-gradient(340deg, rgba(255,222,0,1) 0%, rgba(236,17,198,1) 69%, rgba(9,31,255,1) 100%);
 	--dark-theme-mailContact-background-color: linear-gradient(45deg, rgba(255,179,0,1) 0%, rgba(255,0,94,1) 100%);
-  --dark-theme-background-color: linear-gradient(101deg, rgba(12,27,61,1) 0%, rgba(9,108,198,1) 54%, rgba(195,51,23,1) 55%, rgba(69,19,9,1) 95%);
+	--dark-theme-background-color: linear-gradient(101deg, rgba(12,27,61,1) 0%, rgba(9,108,198,1) 54%, rgba(195,51,23,1) 55%, rgba(69,19,9,1) 95%);
 
-  --theme-blur-background-color-Black: var(--dark-theme-blur-background-color-Black);
-  --theme-blur-background-color-White: var(--dark-theme-blur-background-color-White);
-  --theme-blur-background-color-Darkest: var(--dark-theme-blur-background-color-Darkest);
-  --theme-blur-background-color-Dark: var(--dark-theme-blur-background-color-Dark);
-  --theme-blur-background-color-Average: var(--dark-theme-blur-background-color-Average);
-  --theme-blur-background-color-Bright: var(--dark-theme-blur-background-color-Bright);
-  --theme-blur-background-color-Brightest: var(--dark-theme-blur-background-color-Brightest);
-  --theme-box-shadow: var(--dark-theme-box-shadow);
-  --theme-text-shadow-color: var(--dark-theme-text-shadow-color);
-  --theme-text-shadow-color-inverted: var(--dark-theme-text-shadow-color-inverted);
-  --theme-text-color: var(--dark-theme-text-color);
-  --theme-text-color-disabled: var(--dark-theme-text-color-disabled);
-  --theme-githubContact-background-color: var(--dark-theme-githubContact-background-color);
-  --theme-stackoverflowContact-background-color: var(--dark-theme-stackoverflowContact-background-color);
-  --theme-instagramContact-background-color: var(--dark-theme-instagramContact-background-color);
-  --theme-mailContact-background-color: var(--dark-theme-mailContact-background-color);
-  --theme-background-color: var(--dark-theme-background-color);
+	--theme-blur-background-color-Black: var(--dark-theme-blur-background-color-Black);
+	--theme-blur-background-color-White: var(--dark-theme-blur-background-color-White);
+	--theme-blur-background-color-Darkest: var(--dark-theme-blur-background-color-Darkest);
+	--theme-blur-background-color-Dark: var(--dark-theme-blur-background-color-Dark);
+	--theme-blur-background-color-Average: var(--dark-theme-blur-background-color-Average);
+	--theme-blur-background-color-Bright: var(--dark-theme-blur-background-color-Bright);
+	--theme-blur-background-color-Brightest: var(--dark-theme-blur-background-color-Brightest);
+	--theme-box-shadow: var(--dark-theme-box-shadow);
+	--theme-text-shadow-color: var(--dark-theme-text-shadow-color);
+	--theme-text-shadow-color-inverted: var(--dark-theme-text-shadow-color-inverted);
+	--theme-text-color: var(--dark-theme-text-color);
+	--theme-text-color-disabled: var(--dark-theme-text-color-disabled);
+	--theme-githubContact-background-color: var(--dark-theme-githubContact-background-color);
+	--theme-stackoverflowContact-background-color: var(--dark-theme-stackoverflowContact-background-color);
+	--theme-instagramContact-background-color: var(--dark-theme-instagramContact-background-color);
+	--theme-mailContact-background-color: var(--dark-theme-mailContact-background-color);
+	--theme-background-color: var(--dark-theme-background-color);
 }
 
 
@@ -168,9 +163,9 @@
 
 /* 1B) CSS WEBSITE LIGHT-THEME'S GLOBAL VARIABLES */
 @media (prefers-color-scheme:dark) {
-  #bodyBackground {
-    background-image: url("images/backgroundImages/DarkTheme/finalImages/final_dark_4096w.jpg");
-  }
+	#bodyBackground {
+		background-image: url("images/backgroundImages/DarkTheme/finalImages/final_dark_4096w.jpg");
+	}
 }
 
 @media (prefers-color-scheme:light) {
@@ -194,9 +189,9 @@
     --theme-background-color: var(--light-theme-background-color);
 	}
 
-  #bodyBackground {
-    background-image: url("images/backgroundImages/LightTheme/finalImages/final_light_4096w.jpg");
-  }
+	#bodyBackground {
+		background-image: url("images/backgroundImages/LightTheme/finalImages/final_light_4096w.jpg");
+	}
 }
 
 
@@ -238,13 +233,13 @@
 }
 
 html {
-  font-family: "UniNeueLight";
-  font-size:1.3vmin;
+	font-family: "UniNeueLight";
+	font-size:1.3vmin;
 
-  height: 100%;   /* Needed for the var(--100vh) fix */
+	height: 100%;   /* Needed for the var(--100vh) fix */
 
-  -ms-overflow-style:none !important;									/* Edge */
-  scrollbar-width:none !important;									/* Firefox */
+	-ms-overflow-style:none !important;									/* Edge */
+	scrollbar-width:none !important;									/* Firefox */
 	-webkit-touch-callout:none !important; /* iOS Safari */
 	-webkit-user-select:none !important; /* Safari */
 	-khtml-user-select:none !important; /* Konqueror HTML */
@@ -363,13 +358,16 @@ p {
 	position:fixed;
 	height: var(--100vh);
 	width: 100vw;
-	background:var(--theme-blur-background-color-Dark);
+	background-color:var(--theme-blur-background-color-Dark);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 
 	-webkit-transform: translate3d(0, calc(var(--header-elements-height) + 2 * var(--header-elements-padding) - var(--100vh)), 0);
 	transform: translate3d(0, calc(var(--header-elements-height) + 2 * var(--header-elements-padding) - var(--100vh)), 0);
 	transition:var(--transition-time);
+	
+	background-position: center;
+	background-size: cover;	
 }
 
 #header {
@@ -727,14 +725,14 @@ p {
 
 /* 8) THIRD PAGE ELEMENTS' STYLING */
 #svgPageTitleWrapperMyProjects {
-  height:calc(var(--100vh) - var(--websitePreview-size) - 2rem); /* 2rem is the total websitePreviews margin */
-  -webkit-transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0);    /* 2rem is the total websitePreviews margin */
-  transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0);
+	height:calc(var(--100vh) - var(--websitePreview-size) - 2rem); /* 2rem is the total websitePreviews margin */
+	-webkit-transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0);    /* 2rem is the total websitePreviews margin */
+	transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0);
 }
 
 #svgPageTitleMyProjects {
-  mask-image:url(svgs/myProjects/svgs/haarlemDeco.svg);
-  -webkit-mask-image:url(svgs/myProjects/svgs/haarlemDeco.svg);
+	mask-image:url(svgs/myProjects/svgs/haarlemDeco.svg);
+	-webkit-mask-image:url(svgs/myProjects/svgs/haarlemDeco.svg);
 }
 
 .projectsCarousel {
@@ -742,28 +740,28 @@ p {
 	display:flex;
 	justify-content:center;
 
-  -webkit-transform: translate3d(0, calc(var(--50vh) - 25%), 0);
-  transform: translate3d(0, calc(var(--50vh) - 25%), 0);
+	-webkit-transform: translate3d(0, calc(var(--50vh) - 25%), 0);
+	transform: translate3d(0, calc(var(--50vh) - 25%), 0);
 }
 
 #websiteShowcase {
-  overscroll-behavior:none;
+  	overscroll-behavior:none;
 	display:flex;
 	max-width:70%;
 	overflow-y:hidden;
-  border-radius:var(--boxShapedElement-border-radius);
+  	border-radius:var(--boxShapedElement-border-radius);
 
-  -webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+  	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 
-  background:var(--theme-blur-background-color-Brightest);
+  	background:var(--theme-blur-background-color-Brightest);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(180%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(180%);
 
-  transition:var(--transition-time-quick);
+  	transition:var(--transition-time-quick);
 
-  -ms-overflow-style:none !important;								/* Edge */
-  scrollbar-width:none !important;									/* Firefox */
+	-ms-overflow-style:none !important; /* Edge */
+	scrollbar-width:none !important; /* Firefox */
 }
 
 #websiteShowcase::-webkit-scrollbar {
@@ -772,7 +770,7 @@ p {
 
 #websiteShowcase::after {
   content: "";
-  border-right: 1rem solid transparent;			/* Fix for the right margin being ignored by the overflow of websiteShowcase */
+  border-right: 1rem solid transparent; /* Fix for the right margin being ignored by the overflow of websiteShowcase */
 }
 
 .websitePreview {
@@ -782,18 +780,19 @@ p {
 	flex-direction:column;
 	justify-content:center;
 	align-items:center;
-  margin:1rem 0em 1rem 1rem;
-  border-radius:var(--boxShapedElement-border-radius);
+	margin:1rem 0em 1rem 1rem;
+	border-radius:var(--boxShapedElement-border-radius);
 
-  width:var(--websitePreview-size);
+	width:var(--websitePreview-size);
 	height:var(--websitePreview-size);
 
-  background:var(--theme-blur-background-color-Average);
+	background:var(--theme-blur-background-color-Average);
 
-  -webkit-box-shadow: var(--theme-box-shadow);
+	/* For white theme visibility */
+	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
 
-  transition:opacity 0s, transform var(--transition-time-quick);
+	transition:opacity 0s, transform var(--transition-time-quick);
 }
 
 .websitePreview:hover {
@@ -812,51 +811,52 @@ p {
 }
 
 #websitePreviewExpanded {
-  cursor:default;
+	cursor:default;
 
-  position: fixed;            /* This avoids layout shifts during the expandedState animation */
+	position: fixed;            /* This avoids layout shifts during the expandedState animation */
 	display:flex;
 	flex-direction:column;
 	justify-content:center;
 	align-items:center;
 
-  border-radius:5%;
+	border-radius:5%;
 
-  height:var(--websitePreview-current-size);
+	height:var(--websitePreview-current-size);
 	width:var(--websitePreview-current-size);
 
-  -webkit-box-shadow: var(--theme-box-shadow);
+	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
 
 	background:var(--theme-blur-background-color-Average);
+	
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced)) saturate(150%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced)) saturate(150%);
 
 	-webkit-transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0) scale3d(1,1,1);
 	transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0) scale3d(1,1,1);
-  transition:all var(--transition-time-medium);
+	transition:all var(--transition-time-medium);
 
-  /*
-   * The websitePreviewExpanded is centered by default thanks to the display flex-allignment of
-   * its container (websitePreviewExpandedBackgroundContent).
-   * Its initial position should match the corresponding websitePreview's one.
-   * This is achieved throught 2 translation (X and Y, the Z is untouched).
-   * The transformations:
-   * - Reset the X and Y to (-websitePreview-current-size / 2, -websitePreview-current-size / 2) -> the transform-origin is center !
-   * - Add half of the corresponding websitePreview's size (width and height are the same) to the X and Y so that the coordinates are now (0,0)
-   * - Add the orginal-left-position to the X and the original-top-position to the Y to allign the websitePreviewExpanded to the corresponding websitePreview
-   */
+	/*
+	* The websitePreviewExpanded is centered by default thanks to the display flex-allignment of
+	* its container (websitePreviewExpandedBackgroundContent).
+	* Its initial position should match the corresponding websitePreview's one.
+	* This is achieved throught 2 translation (X and Y, the Z is untouched).
+	* The transformations:
+	* - Reset the X and Y to (-websitePreview-current-size / 2, -websitePreview-current-size / 2) -> the transform-origin is center !
+	* - Add half of the corresponding websitePreview's size (width and height are the same) to the X and Y so that the coordinates are now (0,0)
+	* - Add the orginal-left-position to the X and the original-top-position to the Y to allign the websitePreviewExpanded to the corresponding websitePreview
+	*/
 	--transform-translateX: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-left-position) - 50vw );
 	--transform-translateY: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-top-position) - var(--50vh));
 
-  /*
-   * When expanded the image occupies only 50% of the height/width of the websitePreview, not the 70%.
-   * The *var(--scale3dFactor) is done when the websitePreviewExpanded container of the websitePreviewExpandedImage is transformed.
-   */
-  --scale3dFactor-Image: calc(50 / 70);
-  --scale3dFactor-Title: calc(1 / var(--scale3dFactor));
-  --scale3dFactor-ButtonSection: calc(1 / var(--scale3dFactor));
-  --websitePreviewImage-expanded-size: calc(var(--scale3dFactor-Image) * var(--scale3dFactor) * var(--websitePreviewImage-current-size));
+	/*
+	* When expanded the image occupies only 50% of the height/width of the websitePreview, not the 70%.
+	* The *var(--scale3dFactor) is done when the websitePreviewExpanded container of the websitePreviewExpandedImage is transformed.
+	*/
+	--scale3dFactor-Image: calc(50 / 70);
+	--scale3dFactor-Title: calc(1 / var(--scale3dFactor));
+	--scale3dFactor-ButtonSection: calc(1 / var(--scale3dFactor));
+	--websitePreviewImage-expanded-size: calc(var(--scale3dFactor-Image) * var(--scale3dFactor) * var(--websitePreviewImage-current-size));
 }
 
 .expandedState #websitePreviewExpanded {
@@ -870,7 +870,7 @@ p {
 }
 
 .websitePreviewExpandedImage {
-  position: fixed;                                  /* This avoids layout shifts during the expandedState animation */
+	position: fixed; /* This avoids layout shifts during the expandedState animation */
 	height:var(--websitePreviewImage-current-size);
 	width:var(--websitePreviewImage-current-size);
 	transition:all var(--transition-time-medium);
@@ -882,71 +882,68 @@ p {
 }
 
 .websitePreviewExpandedTitle {
-  position: fixed;            /* This avoids layout shifts during the expandedState animation */
-  height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
+	position: fixed;            /* This avoids layout shifts during the expandedState animation */
+	height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
 
-  line-height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
-  vertical-align: middle;
-  white-space: nowrap;
-  font-size:3rem;
-  font-weight: bold;
+	line-height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
+	vertical-align: middle;
+	white-space: nowrap;
+	font-size:3rem;
+	font-weight: bold;
 
-  /* The x2 is due to the var(scale3dFactor-Image) having as the increasing factor 2 */
+	/* The x2 is due to the var(scale3dFactor-Image) having as the increasing factor 2 */
 	-webkit-transform: scale3d(0, var(--scale3dFactor-Title), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-expanded-size)) / -4), 0);
 	transform: scale3d(0, var(--scale3dFactor-Title), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-expanded-size)) / -4), 0);
 	transition:all var(--transition-time-medium);
 }
 
 .expandedState .websitePreviewExpandedTitle {
-  -webkit-transform: scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / -2 - 50%), 0);
-  transform: scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / -2 - 50%), 0);
+	-webkit-transform: scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / -2 - 50%), 0);
+	transform: scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / -2 - 50%), 0);
 }
 
 #websitePreviewExpandedButtonSection {
-  position: fixed;            /* This avoids layout shifts during the expandedState animation  */
+	position: fixed;            /* This avoids layout shifts during the expandedState animation  */
 	display:flex;
-  justify-content: space-around;
-  align-items: center;
-  width: calc(100% * var(--scale3dFactor));
-  height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
+	justify-content: space-around;
+	align-items: center;
+	width: calc(100% * var(--scale3dFactor));
+	height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
 
-  /* the *2 is due to the scale3dFactor-image having as the increasing factor 2 */
-  /*-webkit-transform: scale3d(0, var(--scale3dFactor-ButtonSection), 0) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
-	transform: scale3d(0, var(--scale3dFactor-ButtonSection), 0) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
-	*/
-  -webkit-transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
-  transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
-  transition:all var(--transition-time-medium);
+  	/* the *2 is due to the scale3dFactor-image having as the increasing factor 2 */
+	-webkit-transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
+	transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
+	transition:all var(--transition-time-medium);
 }
 
 .websitePreviewExpandedButton {
-  font-family: "UniNeueLight";
-  font-weight: bold;
-  height: 60%;
+	font-family: "UniNeueLight";
+	font-weight: bold;
+	height: 60%;
 	outline:none;
 	border:none;
 	cursor:pointer;
-  white-space: nowrap;
-  font-size:3rem;
-  padding:0.7em;
+	white-space: nowrap;
+	font-size:3rem;
+	padding:0.7em;
 	background:var(--theme-blur-background-color-White);
 	border-radius:var(--boxShapedElement-border-radius-wide);
 	-webkit-box-shadow: 0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	box-shadow: 0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	transition:all var(--transition-time-medium);
 
-  -webkit-transform: scale3d(0,0,0);
+	-webkit-transform: scale3d(0,0,0);
 	transform: scale3d(0,0,0);
 }
 
 .expandedState .websitePreviewExpandedButton {
-  -webkit-transform: scale3d(1, 1, 1);
+	-webkit-transform: scale3d(1, 1, 1);
 	transform: scale3d(1, 1, 1);
 }
 
 #websitePreviewExpandedBackgroundContent {
-  position: fixed;                   /* This avoids layout shifts during the expandedState animation */
-  pointer-events: none;
+	position: fixed;                   /* This avoids layout shifts during the expandedState animation */
+	pointer-events: none;
 	z-index:4;
 	cursor:pointer;
 }
@@ -960,14 +957,14 @@ p {
 	outline:none;
 	border:none;
 
-  -webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 
-  background:var(--theme-blur-background-color-Brightest);
+	background:var(--theme-blur-background-color-Brightest);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 
-  transition:transform var(--transition-time-quick);
+	transition:transform var(--transition-time-quick);
 }
 
 .carouselButton:active {
@@ -1007,9 +1004,9 @@ p {
 }
 
 #contactMeForm > label {
-  font-family: "UniNeueLight";
-  font-weight: bold;
-  z-index:1;
+	font-family: "UniNeueLight";
+	font-weight: bold;
+	z-index:1;
 	box-sizing: border-box;
 	display:flex;
 	align-items:center;
@@ -1029,7 +1026,7 @@ p {
 #contactMeFormEmail,
 #contactMeFormBody,
 #contactMeFormSendButton {
-  font-family: "UniNeueLight";
+	font-family: "UniNeueLight";
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	font-size: calc(var(--1vh) * 3);
@@ -1068,7 +1065,7 @@ p {
 }
 
 #contactMeFormSendButton {
-  font-weight: bold;
+	font-weight: bold;
 	cursor: pointer;
 	margin:auto;
 	width: 50%;
@@ -1077,8 +1074,8 @@ p {
 	-webkit-box-shadow:var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
 
-  background:var(--theme-blur-background-color-Dark);
-  -webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
+	background:var(--theme-blur-background-color-Dark);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius)) saturate(150%);
 }
 
@@ -1087,13 +1084,13 @@ p {
 #contactMeFormBody:disabled,
 #contactMeFormEmail[disabled],
 #contactMeFormBody[disabled] {
-  cursor: not-allowed;
+	cursor: not-allowed;
 }
 
 #contactMeFormSendButton:disabled,
 #contactMeFormSendButton[disabled] {
-  cursor: not-allowed;
-  color:var(--theme-text-color-disabled);
+	cursor: not-allowed;
+	color:var(--theme-text-color-disabled);
 	background:var(--theme-blur-background-color-Brightest);
 }
 
@@ -1106,11 +1103,11 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--theme-text-color);
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  border: none;
-  transition: background-color 10000s ease-in-out;
+	-webkit-text-fill-color: var(--theme-text-color);
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	border: none;
+	transition: background-color 10000s ease-in-out;
 }
 
 
