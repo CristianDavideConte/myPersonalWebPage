@@ -24,23 +24,23 @@
 
  /* 0) KEYFRAMES GLOBAL ANIMATIONS */
 @keyframes scrollDownButtonBounce {
-  0% {
-    transform: translate3d(0, calc(var(--100vh) / 4 - 20%), 0);
-  }
+	0% {
+		transform: translate3d(0, calc(var(--100vh) / 4 - 20%), 0);
+	}
 
-  100% {
-    transform: translate3d(0, calc(var(--100vh) / 4), 0);
-  }
+	100% {
+		transform: translate3d(0, calc(var(--100vh) / 4), 0);
+	}
 }
 
 @keyframes lazyLoadElementAnimation {
-  0% {
-    opacity: 0;
-  }
+	0% {
+		opacity: 0;
+	}
 
-  100% {
-    opacity: 1;
-  }
+	100% {
+		opacity: 1;
+	}
 }
 
 
@@ -66,8 +66,8 @@
 	* 2) When, on mobile browsers, the toolbar shrinks and expands the pages' heights adjust accordingly and the whole page jumps back and forth
 	*/
 	--100vh: 100vh;
-	--50vh:calc(var(--100vh) / 2);
-	--1vh:calc(var(--100vh) / 100);
+	--50vh:calc(0.5 * var(--100vh));
+	--1vh:calc(0.01 * var(--100vh));
 
 	--backdrop-filter-blur-radius-ultra-reduced: 0.6rem;
 	--backdrop-filter-blur-radius-reduced:1rem;
@@ -166,31 +166,39 @@
 	#bodyBackground {
 		background-image: url("images/backgroundImages/DarkTheme/finalImages/final_dark_4096w.jpg");
 	}
+
+	#headerBackground {
+		background-image: url("images/backgroundImages/DarkTheme/finalImages/final_dark_4096w_blurry.jpg");
+	}
 }
 
 @media (prefers-color-scheme:light) {
 	:root {
-    --theme-blur-background-color-Black: var(--light-theme-blur-background-color-Black);
-    --theme-blur-background-color-White: var(--light-theme-blur-background-color-White);
-    --theme-blur-background-color-Darkest: var(--light-theme-blur-background-color-Darkest);
-    --theme-blur-background-color-Dark: var(--light-theme-blur-background-color-Dark);
-    --theme-blur-background-color-Average: var(--light-theme-blur-background-color-Average);
-    --theme-blur-background-color-Bright: var(--light-theme-blur-background-color-Bright);
-    --theme-blur-background-color-Brightest: var(--light-theme-blur-background-color-Brightest);
-    --theme-box-shadow: var(--light-theme-box-shadow);
-    --theme-text-shadow-color: var(--light-theme-text-shadow-color);
-    --theme-text-shadow-color-inverted: var(--light-theme-text-shadow-color-inverted);
-    --theme-text-color: var(--light-theme-text-color);
-    --theme-text-color-disabled: var(--light-theme-text-color-disabled);
-    --theme-githubContact-background-color: var(--light-theme-githubContact-background-color);
-    --theme-stackoverflowContact-background-color: var(--light-theme-stackoverflowContact-background-color);
-    --theme-instagramContact-background-color: var(--light-theme-instagramContact-background-color);
-    --theme-mailContact-background-color: var(--light-theme-mailContact-background-color);
-    --theme-background-color: var(--light-theme-background-color);
+		--theme-blur-background-color-Black: var(--light-theme-blur-background-color-Black);
+		--theme-blur-background-color-White: var(--light-theme-blur-background-color-White);
+		--theme-blur-background-color-Darkest: var(--light-theme-blur-background-color-Darkest);
+		--theme-blur-background-color-Dark: var(--light-theme-blur-background-color-Dark);
+		--theme-blur-background-color-Average: var(--light-theme-blur-background-color-Average);
+		--theme-blur-background-color-Bright: var(--light-theme-blur-background-color-Bright);
+		--theme-blur-background-color-Brightest: var(--light-theme-blur-background-color-Brightest);
+		--theme-box-shadow: var(--light-theme-box-shadow);
+		--theme-text-shadow-color: var(--light-theme-text-shadow-color);
+		--theme-text-shadow-color-inverted: var(--light-theme-text-shadow-color-inverted);
+		--theme-text-color: var(--light-theme-text-color);
+		--theme-text-color-disabled: var(--light-theme-text-color-disabled);
+		--theme-githubContact-background-color: var(--light-theme-githubContact-background-color);
+		--theme-stackoverflowContact-background-color: var(--light-theme-stackoverflowContact-background-color);
+		--theme-instagramContact-background-color: var(--light-theme-instagramContact-background-color);
+		--theme-mailContact-background-color: var(--light-theme-mailContact-background-color);
+		--theme-background-color: var(--light-theme-background-color);
 	}
 
 	#bodyBackground {
 		background-image: url("images/backgroundImages/LightTheme/finalImages/final_light_4096w.jpg");
+	}
+
+	#headerBackground {
+		background-image: url("images/backgroundImages/LightTheme/finalImages/final_light_4096w_blurry.jpg");
 	}
 }
 
@@ -208,11 +216,9 @@
 
 /* 2) GENERAL STYLING */
 * {
-	color:var(--theme-text-color);
 	-webkit-tap-highlight-color:rgba(0,0,0,0);
-	-webkit-appearance: none;						/* Fix for box-shadows on Safari */
+	-webkit-appearance: none; /* Fix for box-shadows on Safari */
 	-webkit-user-drag:none !important;
-	user-drag:none !important;
 }
 
 /* Scrollbar */
@@ -222,37 +228,35 @@
 
 /* Scrollbar - Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--theme-blur-background-color-Bright);
-  border-radius: 5rem;
+	background: var(--theme-blur-background-color-Bright);
+	border-radius: 5rem;
 }
 
 /* Scrollbar - Handle on hover */
 ::-webkit-scrollbar-thumb:hover,
 ::-webkit-scrollbar-thumb:active {
-  background: var(--theme-blur-background-color-Dark);
+	background: var(--theme-blur-background-color-Dark);
 }
 
 html {
-	font-family: "UniNeueLight";
+	height: 100%; /* Needed for the var(--100vh) fix */
 	font-size:1.3vmin;
 
-	height: 100%;   /* Needed for the var(--100vh) fix */
-
-	-ms-overflow-style:none !important;									/* Edge */
-	scrollbar-width:none !important;									/* Firefox */
+	-ms-overflow-style:none !important;    /* Edge */
+	scrollbar-width:none !important;       /* Firefox */
 	-webkit-touch-callout:none !important; /* iOS Safari */
-	-webkit-user-select:none !important; /* Safari */
-	-khtml-user-select:none !important; /* Konqueror HTML */
-	-moz-user-select:none !important; /* Old versions of Firefox */
-	-ms-user-select:none !important; /* Internet Explorer/Edge */
-	user-select:none !important; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+	-webkit-user-select:none !important;   /* Safari */
+	-khtml-user-select:none !important;    /* Konqueror HTML */
+	-moz-user-select:none !important;      /* Old versions of Firefox */
+	-ms-user-select:none !important;       /* Internet Explorer/Edge */
+	user-select:none !important;           /* Chrome, Opera and Firefox */
 }
 
 html, body {
-  margin:0;
-  height: var(--100vh);
-  width: 100vw;
-  overflow: hidden;
+	margin:0;
+	height: var(--100vh);
+	width: 100vw;
+	overflow: hidden;
 }
 
 body::-webkit-scrollbar {
@@ -264,6 +268,10 @@ p {
 	font-size:190%;
 }
 
+a, button, label, div, input, textarea {
+	font-family: "UniNeueLight";
+	color:var(--theme-text-color);
+}
 
 
 
@@ -291,50 +299,50 @@ p {
 
 /* 3) OFFSCREEN/BACKGROUND ELEMENTS STYLING */
 #bodyBackground {
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  background-position: center;
-  background-size: cover;
+	height: 100vh;
+	width: 100vw;
+	position: fixed;
+	background-position: center;
+	background-size: cover;
 }
 
 #popUpMessage {
-  z-index:2;
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5rem;
-  padding: var(--header-elements-padding) calc(2 * var(--header-elements-padding)) var(--header-elements-padding) calc(2 * var(--header-elements-padding));
-  top: calc(var(--header-height) + var(--header-elements-padding));
-  left: 50%;
+	z-index:2;
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 5rem;
+	padding: var(--header-elements-padding) calc(2 * var(--header-elements-padding)) var(--header-elements-padding) calc(2 * var(--header-elements-padding));
+	top: calc(var(--header-height) + var(--header-elements-padding));
+	left: 50%;
 
-  -webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
-  box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 
-  background:var(--theme-blur-background-color-Dark);
-  -webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
-  backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
+	background:var(--theme-blur-background-color-Dark);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 
-  -webkit-transform: translate3d(-50%,  calc(-2 * (var(--header-height) + 2 * var(--header-elements-padding))), 0);
-  transform: translate3d(-50%, calc(-2 * (var(--header-height) + 2 * var(--header-elements-padding))), 0);
+	-webkit-transform: translate3d(-50%,  calc(-2 * (var(--header-height) + 2 * var(--header-elements-padding))), 0);
+	transform: translate3d(-50%, calc(-2 * (var(--header-height) + 2 * var(--header-elements-padding))), 0);
 	transition:var(--transition-time-medium);
 
-  --header-height: calc(var(--header-elements-height) + 2 * var(--header-elements-padding));
+	--header-height: calc(var(--header-elements-height) + 2 * var(--header-elements-padding));
 }
 
 #popUpMessage.messageOnScreen{
-  -webkit-transform: translate3d(-50%, 0, 0);
-  transform: translate3d(-50%, 0, 0);
+	-webkit-transform: translate3d(-50%, 0, 0);
+	transform: translate3d(-50%, 0, 0);
 }
 
 #popUpMessageText {
-  font-weight: bold;
-  white-space: nowrap;
+	font-weight: bold;
+	white-space: nowrap;
 }
 
 .lazyLoadElementAnimation {
-  animation: lazyLoadElementAnimation var(--transition-time);
+	animation: lazyLoadElementAnimation var(--transition-time);
 }
 
 
@@ -356,18 +364,19 @@ p {
 #headerBackground {
 	z-index:2;
 	position:fixed;
-	height: var(--100vh);
+	height: calc(var(--100vh) + var(--header-height));
 	width: 100vw;
-	background-color:var(--theme-blur-background-color-Dark);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 
-	-webkit-transform: translate3d(0, calc(var(--header-elements-height) + 2 * var(--header-elements-padding) - var(--100vh)), 0);
-	transform: translate3d(0, calc(var(--header-elements-height) + 2 * var(--header-elements-padding) - var(--100vh)), 0);
-	transition:var(--transition-time);
+	-webkit-transform: translate3d(0, var(--headerBackground-offset), 0);
+	transform: translate3d(0, var(--headerBackground-offset), 0);
 	
-	background-position: center;
+	background-position: 50% calc(-1 * var(--header-height));
 	background-size: cover;	
+
+	--header-height: calc(var(--header-elements-height) + 2 * var(--header-elements-padding));
+	--headerBackground-offset: calc(-1* var(--100vh));
+	--headerBackground-width: calc(2725px * 100vw / 120vw) ;
+	--headerBackground-height: calc(4088px 100vh / 120vh) ;
 }
 
 #header {
@@ -380,8 +389,6 @@ p {
 	left:0%;
 	right:0%;
 	padding:var(--header-elements-padding);
-
-	transition:var(--transition-time);
 }
 
 #header > * {
@@ -404,7 +411,7 @@ p {
 }
 
 .pageLink > p {
-  text-shadow:0 0 var(--theme-text-color);
+	text-shadow:0 0 var(--theme-text-color);
 }
 
 .pageLinkBarOnHover {
@@ -414,8 +421,8 @@ p {
 	border-radius:5rem;
 	background-color:var(--theme-text-color);
 
-  -webkit-transform:scale3d(0,1,0);
-  transform:scale3d(0,1,0);
+	-webkit-transform:scale3d(0,1,0);
+	transform:scale3d(0,1,0);
 	transition:var(--transition-time-medium);
 }
 
@@ -476,7 +483,7 @@ p {
 }
 
 #socialNetworks > a:hover::after {
-  opacity: 1;
+	opacity: 1;
 }
 
 
@@ -498,65 +505,69 @@ p {
 
 /* 5) PAGES COMMON STYLING */
 .page {
-  position: relative;
-  width:100vw;
-  height:var(--100vh);
-  display:flex;
+	position: relative;
+	width:100vw;
+	height:var(--100vh);
+	display:flex;
 	flex-direction:column;
 	align-items:center;
 	justify-content:center;
 }
 
 .svgPageTitleWrapper {
-    pointer-events: none;             /* If the wrapper overlays with another element, this prevents the page to scroll instead of scrolling whithin that element */
+	pointer-events: none; /* If the wrapper overlays with another element, this prevents the page to scroll instead of scrolling whithin that element */
 
-    position: absolute;
-    width:100vw;
-    height:var(--100vh);
+	position: absolute;
+	width:100vw;
+	height:var(--100vh);
 }
 
 .svgPageTitle {
-  width: 100%;
-  height: 100%;
+	width: 100%;
+	height: 100%;
 
-  background-color: rgba(255,255,255,0.1);
-  /*background: linear-gradient(0deg, rgba(0,0,0,0.2) 40%, rgba(255,255,255,0.2) 60%);*/
-  -webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius-reduced)) saturate(230%);
-  backdrop-filter: blur(var(--backdrop-filter-blur-radius-reduced)) saturate(230%);
+	background-color: rgba(255,255,255,0.1);
+	/*background: linear-gradient(0deg, rgba(0,0,0,0.2) 40%, rgba(255,255,255,0.2) 60%);*/
+	-webkit-backdrop-filter: blur(var(--backdrop-filter-blur-radius-reduced)) saturate(230%);
+	backdrop-filter: blur(var(--backdrop-filter-blur-radius-reduced)) saturate(230%);
 
-  /* Chrome, Safari and all webkit browsers */
-  -webkit-mask-size: contain;
-  -webkit-mask-position: center;
-  -webkit-mask-repeat: no-repeat;
+	/* Chrome, Safari and all webkit browsers */
+	-webkit-mask-size: contain;
+	-webkit-mask-position: center;
+	-webkit-mask-repeat: no-repeat;
 
-  /* Firefox */
-  mask-size: contain;
-  mask-position: center;
-  mask-repeat: no-repeat;
+	/* Firefox */
+	mask-size: contain;
+	mask-position: center;
+	mask-repeat: no-repeat;
 
-  /* For 3d acceleration purpose only */
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
+	/* For 3d acceleration purpose only */
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
 }
 
 .svgPageTitleShadow {
-  width: 100%;
-  height: 100%;
-  -webkit-transform: translate3d(0,-100%, 0);
-  transform: translate3d(0,-100%, 0);
+	width: 100%;
+	height: 100%;
+	-webkit-transform: translate3d(0,-100%, 0);
+	transform: translate3d(0,-100%, 0);
 }
 
 .pageSeparator {
-  border-radius: 5rem;
+	border-radius: 5rem;
 	height:0.7%;
 	width:20%;
 	margin:auto auto 0 auto;
-	background:var(--theme-blur-background-color-Dark);
+	
+	/* For white theme visibility */
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius));
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius));
-	transition:var(--transition-time-quick);
+
+	background:var(--theme-blur-background-color-Darkest);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced));
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced));
+
+	transition:all var(--transition-time-quick);
 }
 
 
@@ -582,43 +593,41 @@ p {
 
 /* 6) FIRST PAGE ELEMENTS' STYLING */
 #svgPageTitleWrapperMainTitle {
-  -webkit-transform: translate3d(0, calc(var(--websitePreview-size) / -3), 0);
-  transform: translate3d(0, calc(var(--websitePreview-size) / -3), 0);
+	-webkit-transform: translate3d(0, calc(var(--websitePreview-size) / -3), 0);
+	transform: translate3d(0, calc(var(--websitePreview-size) / -3), 0);
 }
 
 #svgPageTitleMainTitle {
-  mask-image:url(svgs/mainTitles/svgs/haarlemDeco.svg);
-  -webkit-mask-image:url(svgs/mainTitles/svgs/haarlemDeco.svg);
+	mask-image:url(svgs/mainTitles/svgs/haarlemDeco.svg);
+	-webkit-mask-image:url(svgs/mainTitles/svgs/haarlemDeco.svg);
 }
 
 #scrollDownButton {
-  position: absolute;
-  cursor:pointer;
-  outline:none;
-  border:none;
-  text-decoration: none;
-  width: 4rem;
-  height: 4rem;
+	position: absolute;
+	cursor: pointer;
+	outline: none;
+	border: none;
+	text-decoration: none;
 
-  line-height: 4rem;
-  text-align: center;
-  white-space: nowrap;
+	font-size:6rem;
+	border-radius:50%;
+	white-space: nowrap;
+	text-align: center;
+	line-height: calc(0.5 * var(--websitePreview-size));
+	height: calc(0.5 * var(--websitePreview-size));
+	width: calc(0.5 * var(--websitePreview-size));
 
-  font-size:6rem;
-  padding:0.3em;
-  border-radius:100%;
+	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 
-  -webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
-  box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+	background:var(--theme-blur-background-color-Brightest);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced)) saturate(150%);
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced)) saturate(150%);
 
-  background:var(--theme-blur-background-color-Brightest);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(180%);
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(180%);
+	-webkit-transform: translate3d(0, calc(var(--100vh) / 4),0);
+	transform: translate3d(0, calc(var(--100vh) / 4),0);
 
-  -webkit-transform: translate3d(0, calc(var(--100vh) / 4),0);
-  transform: translate3d(0, calc(var(--100vh) / 4),0);
-
-  animation: scrollDownButtonBounce var(--transition-time-slow) ease-out alternate infinite;
+	animation: scrollDownButtonBounce var(--transition-time-slow) ease-out alternate infinite;
 }
 
 
@@ -650,15 +659,15 @@ p {
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	height:var(--profilePic-size);
 	width:var(--profilePic-size);
-	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size) * 0.75 - var(--presentationCard-height) / 2 + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
-	transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size) * 0.75 - var(--presentationCard-height) / 2 + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
+	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size) * 0.75 - 0.5 * var(--presentationCard-height) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
+	transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size) * 0.75 - 0.5 * var(--presentationCard-height) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
 }
 
 #presentationCard {
-  cursor:default;   /* Fix for safari text-cursor on non-selectable text */
-  overflow-x:hidden;
-  overflow-y:scroll;
-  border-radius:5%;
+	cursor:default;   /* Fix for safari text-cursor on non-selectable text */
+	overflow-x:hidden;
+	overflow-y:scroll;
+	border-radius:5%;
 	height:var(--presentationCard-height);
 	width:var(--presentationCard-width);
 
@@ -669,8 +678,8 @@ p {
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(150%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(150%);
 
-	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height) / 2 - var(--profilePic-size) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
-	transform:translate3d(0, calc(var(--50vh) - var(--presentationCard-height) / 2 - var(--profilePic-size) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
+	-webkit-transform:translate3d(0, calc(var(--50vh) - 0.5 * var(--presentationCard-height) - var(--profilePic-size) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
+	transform:translate3d(0, calc(var(--50vh) - 0.5 * var(--presentationCard-height) - var(--profilePic-size) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
 
 	-ms-overflow-style:none !important;									/* Edge */
 	scrollbar-width:none !important;									/* Firefox */
@@ -681,9 +690,9 @@ p {
 }
 
 #presentationCard > * {
-  color:var(--theme-text-color);
-  text-shadow: none;
-  font-size: 2rem;
+	color:var(--theme-text-color);
+	text-shadow: none;
+	font-size: 2rem;
 	margin:calc(0.25 * var(--profilePic-size));
 	backface-visibility:hidden;						/* Blurry text fix */
 }
@@ -693,12 +702,12 @@ p {
 }
 
 #presentationCard > h2 {
-  font-size: 3rem;
+	font-size: 3rem;
 	margin:calc(0.25 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size)) calc(0.25 * var(--profilePic-size));
 }
 
 #presentationCard > ul > li {
-  margin:calc(0.0625 * var(--profilePic-size)) 0 calc(0.0625 * var(--profilePic-size)) 0;
+	margin:calc(0.0625 * var(--profilePic-size)) 0 calc(0.0625 * var(--profilePic-size)) 0;
 }
 
 
@@ -726,7 +735,7 @@ p {
 /* 8) THIRD PAGE ELEMENTS' STYLING */
 #svgPageTitleWrapperMyProjects {
 	height:calc(var(--100vh) - var(--websitePreview-size) - 2rem); /* 2rem is the total websitePreviews margin */
-	-webkit-transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0);    /* 2rem is the total websitePreviews margin */
+	-webkit-transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0); /* 2rem is the total websitePreviews margin */
 	transform: translate3d(0, calc(-2/3 * (var(--websitePreview-size) + 2rem)), 0);
 }
 
@@ -755,8 +764,8 @@ p {
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 
   	background:var(--theme-blur-background-color-Brightest);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(180%);
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(180%);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(150%);
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(150%);
 
   	transition:var(--transition-time-quick);
 
@@ -769,8 +778,39 @@ p {
 }
 
 #websiteShowcase::after {
-  content: "";
-  border-right: 1rem solid transparent; /* Fix for the right margin being ignored by the overflow of websiteShowcase */
+	content: "";
+	border-right: 1rem solid transparent; /* Fix for the right margin being ignored by the overflow of websiteShowcase */
+}
+
+.carouselButton {
+	font-size: 3rem;
+	font-weight: bold;
+	margin:auto;
+	cursor:pointer;
+	border-radius:50%;
+	height: calc(0.5 * var(--websitePreview-size));
+	width: calc(0.5 * var(--websitePreview-size));
+	outline:none;
+	border:none;
+
+	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
+
+	background:var(--theme-blur-background-color-Brightest);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced));
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced));
+
+	transition:all var(--transition-time-quick);
+}
+
+.carouselButton:hover {
+	-webkit-transform: scale3d(1.1, 1.1, 1.1);
+	transform: scale3d(1.1, 1.1, 1.1);
+}
+
+.carouselButton:active {
+	-webkit-transform: scale3d(1, 1, 1);
+	transform: scale3d(1, 1, 1);
 }
 
 .websitePreview {
@@ -810,20 +850,29 @@ p {
 	border:none;
 }
 
+#websitePreviewExpandedBackgroundContent {
+	cursor:pointer;
+	position: fixed; /* This avoids layout shifts during the expandedState animation */
+	pointer-events: none;
+	z-index:4;
+}
+
 #websitePreviewExpanded {
 	cursor:default;
-
-	position: fixed;            /* This avoids layout shifts during the expandedState animation */
-	display:flex;
-	flex-direction:column;
-	justify-content:center;
+	position: fixed; /* This avoids layout shifts during the expandedState animation */
+	display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: 25% 50% 25%;
+	justify-items: center;
 	align-items:center;
+	backface-visibility: hidden;
 
-	border-radius:5%;
+	border-radius:var(--boxShapedElement-border-radius);
 
 	height:var(--websitePreview-current-size);
 	width:var(--websitePreview-current-size);
 
+	/* For white theme visibility */
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
 
@@ -832,9 +881,10 @@ p {
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced)) saturate(150%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced)) saturate(150%);
 
-	-webkit-transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0) scale3d(1,1,1);
-	transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0) scale3d(1,1,1);
 	transition:all var(--transition-time-medium);
+
+	-webkit-transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0);
+	transform: translate3d(var(--transform-translateX), var(--transform-translateY), 0);
 
 	/*
 	* The websitePreviewExpanded is centered by default thanks to the display flex-allignment of
@@ -846,131 +896,116 @@ p {
 	* - Add half of the corresponding websitePreview's size (width and height are the same) to the X and Y so that the coordinates are now (0,0)
 	* - Add the orginal-left-position to the X and the original-top-position to the Y to allign the websitePreviewExpanded to the corresponding websitePreview
 	*/
-	--transform-translateX: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-left-position) - 50vw );
-	--transform-translateY: calc(var(--websitePreview-current-size) / 2 + var(--websitePreview-original-top-position) - var(--50vh));
+	--transform-translateX: calc(0.5 * var(--websitePreview-current-size) + var(--websitePreview-original-left-position) - 50vw );
+	--transform-translateY: calc(0.5 * var(--websitePreview-current-size) + var(--websitePreview-original-top-position) - var(--50vh));
 
-	/*
-	* When expanded the image occupies only 50% of the height/width of the websitePreview, not the 70%.
-	* The *var(--scale3dFactor) is done when the websitePreviewExpanded container of the websitePreviewExpandedImage is transformed.
-	*/
-	--scale3dFactor-Image: calc(50 / 70);
-	--scale3dFactor-Title: calc(1 / var(--scale3dFactor));
-	--scale3dFactor-ButtonSection: calc(1 / var(--scale3dFactor));
-	--websitePreviewImage-expanded-size: calc(var(--scale3dFactor-Image) * var(--scale3dFactor) * var(--websitePreviewImage-current-size));
+	--scale3dFactor-Image: 1;
+	--scale3dFactor-Divs: 0;
+	--window-offset-half: calc(0.5 * var(--window-inner-height-offset));
 }
 
 .expandedState #websitePreviewExpanded {
-  /*
-   * var(--window-inner-height-offset) / 2 instead of var(--window-inner-height-offset)
-   * because the transform-origin is center.
-   */
-	-webkit-transform: translate3d(0, calc(var(--window-inner-height-offset) / 2), 0) scale3d(var(--scale3dFactor), var(--scale3dFactor), 1);
-	transform: translate3d(0, calc(var(--window-inner-height-offset) / 2), 0) scale3d(var(--scale3dFactor), var(--scale3dFactor), 1);
+   /*
+	* var(--window-inner-height-offset) / 2 instead of var(--window-inner-height-offset)
+	* because the transform-origin is center.
+	*/		
+	-webkit-transform: translate3d(0, var(--window-offset-half), 0) scale3d(var(--scale3dFactor), var(--scale3dFactor), 1);
+	transform: translate3d(0, var(--window-offset-half), 0) scale3d(var(--scale3dFactor), var(--scale3dFactor), 1);
 
-}
-
-.websitePreviewExpandedImage {
-	position: fixed; /* This avoids layout shifts during the expandedState animation */
-	height:var(--websitePreviewImage-current-size);
-	width:var(--websitePreviewImage-current-size);
-	transition:all var(--transition-time-medium);
-}
-
-.expandedState .websitePreviewExpandedImage {
-	-webkit-transform: scale3d(var(--scale3dFactor-Image),var(--scale3dFactor-Image), 1);
-	transform: scale3d(var(--scale3dFactor-Image), var(--scale3dFactor-Image), 1);
+	/* 
+	 * When expanded the image occupies only 50% of the height/width of the websitePreview, not the 70%.
+	 * 50 / 70 = 0.71
+	 */
+	--scale3dFactor-Image: 0.7;
+	--scale3dFactor-Divs: 1;
 }
 
 .websitePreviewExpandedTitle {
-	position: fixed;            /* This avoids layout shifts during the expandedState animation */
-	height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
-
-	line-height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
-	vertical-align: middle;
-	white-space: nowrap;
-	font-size:3rem;
+	font-size: 90%;
 	font-weight: bold;
+	white-space: nowrap;
 
-	/* The x2 is due to the var(scale3dFactor-Image) having as the increasing factor 2 */
-	-webkit-transform: scale3d(0, var(--scale3dFactor-Title), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-expanded-size)) / -4), 0);
-	transform: scale3d(0, var(--scale3dFactor-Title), 0) translate3d(0, calc((var(--websitePreview-expanded-size) + var(--websitePreviewImage-expanded-size)) / -4), 0);
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
 	transition:all var(--transition-time-medium);
+	
+	-webkit-transform: scale3d(var(--scale3dFactor-Divs), var(--scale3dFactor-Divs), 1);
+	transform: scale3d(var(--scale3dFactor-Divs), var(--scale3dFactor-Divs), 1);	
 }
 
-.expandedState .websitePreviewExpandedTitle {
-	-webkit-transform: scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / -2 - 50%), 0);
-	transform: scale3d(var(--scale3dFactor-Title), var(--scale3dFactor-Title), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / -2 - 50%), 0);
+.websitePreviewExpandedImage {
+	height:var(--websitePreviewImage-current-size);
+	width:var(--websitePreviewImage-current-size);
+
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	transition:all var(--transition-time-medium);
+
+	-webkit-transform: scale3d(var(--scale3dFactor-Image), var(--scale3dFactor-Image), 1);
+	transform: scale3d(var(--scale3dFactor-Image), var(--scale3dFactor-Image), 1);
 }
+
 
 #websitePreviewExpandedButtonSection {
-	position: fixed;            /* This avoids layout shifts during the expandedState animation  */
 	display:flex;
 	justify-content: space-around;
 	align-items: center;
-	width: calc(100% * var(--scale3dFactor));
-	height: calc(25 / 100 * var(--websitePreview-current-size) * var(--scale3dFactor));
+	width: 100%;
+	height: 100%;
 
-  	/* the *2 is due to the scale3dFactor-image having as the increasing factor 2 */
-	-webkit-transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
-	transform: scale3d(var(--scale3dFactor-ButtonSection), var(--scale3dFactor-ButtonSection), 1) translate3d(0, calc(var(--websitePreviewImage-expanded-size) / 2 + 50%), 0);
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
 	transition:all var(--transition-time-medium);
+
+	-webkit-transform: scale3d(var(--scale3dFactor-Divs), var(--scale3dFactor-Divs), 1);
+	transform: scale3d(var(--scale3dFactor-Divs), var(--scale3dFactor-Divs), 1);
 }
 
+
 .websitePreviewExpandedButton {
-	font-family: "UniNeueLight";
+    height: 60%;
+    width: 40%;
+	font-size: 100%; 
 	font-weight: bold;
-	height: 60%;
 	outline:none;
 	border:none;
 	cursor:pointer;
 	white-space: nowrap;
-	font-size:3rem;
-	padding:0.7em;
 	background:var(--theme-blur-background-color-White);
 	border-radius:var(--boxShapedElement-border-radius-wide);
+	
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+
+	/* For better visibility */
 	-webkit-box-shadow: 0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	box-shadow: 0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
-	transition:all var(--transition-time-medium);
-
-	-webkit-transform: scale3d(0,0,0);
-	transform: scale3d(0,0,0);
 }
 
-.expandedState .websitePreviewExpandedButton {
-	-webkit-transform: scale3d(1, 1, 1);
-	transform: scale3d(1, 1, 1);
+
+
+/* 
+ * Safari only selectors to fix blurry text:
+ * everything is 3x bigger by default and gets scaled down by the same factor. 
+ */
+_::-webkit-full-page-media, _:future, :root .websitePreviewExpandedTitle { 
+	font-size: calc(300% * var(--scale3dFactor));
+}
+_::-webkit-full-page-media, _:future, :root .websitePreviewExpandedButton { 
+	font-size: calc(300% * var(--scale3dFactor));
+	border-radius: calc(3 * var(--boxShapedElement-border-radius-wide) * var(--scale3dFactor));
+}
+_::-webkit-full-page-media, _:future, :root #websitePreviewExpandedButtonSection {
+    width: calc(300% * var(--scale3dFactor));
+    height: calc(300% * var(--scale3dFactor));
+}
+_::-webkit-full-page-media, _:future, :root .expandedState .websitePreviewExpandedTitle { 
+	-webkit-transform: scale3d(calc(0.33 / var(--scale3dFactor)), calc(0.33 / var(--scale3dFactor)), 1);
+}
+_::-webkit-full-page-media, _:future, :root .expandedState #websitePreviewExpandedButtonSection { 
+	-webkit-transform: scale3d(calc(0.33 / var(--scale3dFactor)), calc(0.33 / var(--scale3dFactor)), 1);
 }
 
-#websitePreviewExpandedBackgroundContent {
-	position: fixed;                   /* This avoids layout shifts during the expandedState animation */
-	pointer-events: none;
-	z-index:4;
-	cursor:pointer;
-}
-
-.carouselButton {
-	font-size:3rem;
-	padding:0.5em;
-	margin:auto;
-	cursor:pointer;
-	border-radius:100%;
-	outline:none;
-	border:none;
-
-	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
-	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
-
-	background:var(--theme-blur-background-color-Brightest);
-	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
-	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
-
-	transition:transform var(--transition-time-quick);
-}
-
-.carouselButton:active {
-	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black) inset;
-	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black) inset;
-}
 
 
 
@@ -1004,7 +1039,6 @@ p {
 }
 
 #contactMeForm > label {
-	font-family: "UniNeueLight";
 	font-weight: bold;
 	z-index:1;
 	box-sizing: border-box;
@@ -1026,7 +1060,6 @@ p {
 #contactMeFormEmail,
 #contactMeFormBody,
 #contactMeFormSendButton {
-	font-family: "UniNeueLight";
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	font-size: calc(var(--1vh) * 3);
@@ -1122,16 +1155,16 @@ select:-webkit-autofill:focus {
 
 
 /* 10) MEDIA:HOVER-WITH-ACTUAL-MOUSE ELEMENTS' STYLING */
-@media (hover:hover) and (pointer: fine) {					/* Prevents touch devices to trigger the fake hover behaviour */
+@media (hover:hover) and (pointer: fine) { /* Prevents touch devices to trigger the fake hover behaviour */
 	:root {
 		--scaling-factor-increase:1.1;
 		--scaling-factor-decrease:0.9;
 	}
 
-  .pageLink:hover .pageLinkBarOnHover {
-    -webkit-transform: scale3d(1,1,1);
-    transform: scale3d(1,1,1);
-  }
+	.pageLink:hover .pageLinkBarOnHover {
+		-webkit-transform: scale3d(1,1,1);
+		transform: scale3d(1,1,1);
+	}
 }
 
 
@@ -1161,22 +1194,32 @@ select:-webkit-autofill:focus {
 		--presentationCard-height:80vmin;
 		--presentationCard-width:75vmin;
 
-  	--websitePreview-size:20rem;
-    --websitePreview-expanded-size:75vmin;
+		--websitePreview-size:20rem;
+		--websitePreview-expanded-size:75vmin;
 	}
 
-  #popUpMessageText {
-    font-size: 350%;
-  }
+	#popUpMessageText {
+		font-size: 350%;
+	}
+
+	#headerBackground {
+		transition:transform var(--transition-time);
+	}
 
 	#headerBackground.mobileExpanded {
 		-webkit-transform: translate3d(0, 0, 0);
 		transform: translate3d(0, 0, 0);
 	}
 
+	#header {		
+		transition:all var(--transition-time);
+	}
+
 	#header.mobileExpanded {
-		-webkit-transform: translate3d(0, calc(var(--50vh) - var(--header-elements-height) / 2 - var(--header-elements-padding) + var(--window-inner-height-offset) / 2), 0);
-		transform: translate3d(0, calc(var(--50vh) - var(--header-elements-height) / 2 - var(--header-elements-padding) + var(--window-inner-height-offset) / 2), 0);
+		-webkit-transform: translate3d(0, var(--header-expanded-position), 0);
+		transform: translate3d(0, var(--header-expanded-position), 0);
+
+		--header-expanded-position: calc(var(--50vh) - 0.5 * var(--header-elements-height) - var(--header-elements-padding) + 0.5 * var(--window-inner-height-offset));
 	}
 
 	#hamburgerMenu {
@@ -1207,10 +1250,10 @@ select:-webkit-autofill:focus {
 	#linkSection {
 		pointer-events:none;
 		flex-direction:column;
-    justify-content: space-around;
+		justify-content: space-around;
 		font-size:2.5rem;
-    font-weight: bold;
-    height: calc(var(--1vh) * 65);
+		font-weight: bold;
+		height: calc(var(--1vh) * 65);
 
 		-webkit-transform:scale3d(0, 0, 0);
 		transform:scale3d(0, 0, 0);
@@ -1218,20 +1261,22 @@ select:-webkit-autofill:focus {
 
 	.mobileExpanded #linkSection {
 		pointer-events:auto;
+
 		-webkit-transform:scale3d(1, 1, 1);
 		transform:scale3d(1, 1, 1);
-		transition: var(--transition-time-medium);
+
+		transition:all var(--transition-time-medium);
 	}
 
 	.pageLink {
 		margin:0 auto 0 auto;
 	}
 
-  .pageLink > p {
-    text-shadow:none;
-  }
+	.pageLink > p {
+		text-shadow:none;
+	}
 
-  #socialNetworks {
+	#socialNetworks {
 		transition: var(--transition-time-medium);
 	}
 
@@ -1267,34 +1312,33 @@ select:-webkit-autofill:focus {
 		opacity: 1;
 	}
 
-  #scrollDownButton {
-    width: 5rem;
-    height: 5rem;
+	#scrollDownButton {
+		font-size:7rem;
+		font-weight: bold;
+	}
 
-    line-height: 5rem;
-
-    font-size:7rem;
-    font-weight: bold;
-  }
-
-  #presentationCard > * {
-    font-size: 3rem;
-  }
+	#presentationCard > * {
+		font-size: 3rem;
+	}
 
 	#websiteShowcase {
 		max-width:85%;
 	}
 
-  .websitePreview {
-  	margin:1.2rem 0em 1.2rem 1.2rem;
-  }
-
-  #websiteShowcase::after {
-    border-right: 1.2rem solid transparent;			/* Fix for the right margin being ignored by the overflow of websiteShowcase */
-  }
-
 	.carouselButton {
 		display:none;
+	}
+
+	.websitePreview {
+		margin:1.2rem 0em 1.2rem 1.2rem;
+	}
+	
+	#websiteShowcase::after {
+		border-right: 1.2rem solid transparent; /* Fix for the right margin being ignored by the overflow of websiteShowcase */
+	}
+
+	.websitePreviewExpandedTitle {
+		font-size: 115%;
 	}
 
 	#contactMeForm {
@@ -1311,15 +1355,15 @@ select:-webkit-autofill:focus {
 
 /* 12) MEDIA:MOBILE-LANDASCAPE BROWSERS ELEMENTS' STYLING */
 @media only screen and (max-height:600px) and (orientation: landscape){
-  :root {
-    --websitePreview-expanded-size:85vmin;
-  }
+	:root {
+		--websitePreview-expanded-size:85vmin;
+	}
 
-  .pageSeparator {
+	.pageSeparator {
 		opacity:0;
 	}
 
-  #scrollDownButton {
-    display: none;
-  }
+	#scrollDownButton {
+		display: none;
+	}
 }

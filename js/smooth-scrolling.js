@@ -15,8 +15,9 @@ function scrollInit() {
     
     //If the direction is === -1  the scroll direction is from right to left, it's from left to right otherwise.
 	function _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection) {
-		let finalXPosition = (scrollDirection === -1) ? 0 : (_websiteShowcase.scrollWidth - _websiteShowcase.clientWidth);
-		uss.scrollXTo(finalXPosition, _websiteShowcase, null);
+		const finalPos = scrollDirection < 0 ? 0 : uss.getMaxScrollX(_websiteShowcase);
+		uss.setXStepLengthCalculator(EASE_IN_OUT_QUAD(1000), _websiteShowcase);
+		uss.scrollXTo(finalPos, _websiteShowcase, null);
 	}
 
     
@@ -25,7 +26,7 @@ function scrollInit() {
     uss.setPageScroller(document.body);
 	uss.setYStepLengthCalculator(_defaultEasing);
 	uss.hrefSetup(null, null, (pageLink, destination) => {
-		uss.setYStepLengthCalculator(EASE_OUT_QUINT(1000));
+		uss.setYStepLengthCalculator(EASE_OUT_QUINT(800));
 
 		/*
 		 * When the website is in mobile mode the page links are hidden under the hamburgerMenu
@@ -84,9 +85,9 @@ function scrollInit() {
 	_websiteShowcase.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		uss.scrollXBy(event.deltaY / 3, _websiteShowcase, null, false);
+		uss.setXStepLengthCalculator(_defaultEasing, _websiteShowcase);
+		uss.scrollXBy(event.deltaY / 2, _websiteShowcase, null, false);
 	}, {passive:false});
-	uss.setXStepLengthCalculator(_defaultEasing, _websiteShowcase);
 
 
 

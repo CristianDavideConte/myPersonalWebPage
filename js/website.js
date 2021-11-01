@@ -181,7 +181,7 @@ function eventListenersInitialization() {
 		_websitePreviewExpandedImage.className = "websitePreviewExpandedImage";
 		_websitePreviewImage.addEventListener("load", () => {
 			_websitePreviewExpandedImage.src = _websitePreviewImage.src;
-			_websitePreviewExpanded.appendChild(_websitePreviewExpandedImage);
+			_websitePreviewExpanded.insertBefore(_websitePreviewExpandedImage, _websitePreviewExpanded.lastChild);
 		});
 
 		const _dataTitle = websitePreview.getAttribute("data-title");
@@ -198,7 +198,7 @@ function eventListenersInitialization() {
 		const _dataCode = websitePreview.getAttribute("data-code");
 		if(_dataCode != null) {													//There could be a project that isn't open-source
 			let _viewCodeButton = document.createElement("button");
-			_viewCodeButton.innerHTML = "VIEW CODE";
+			_viewCodeButton.innerHTML = "CODE";
 			_viewCodeButton.className = "websitePreviewExpandedButton";
 			_viewCodeButton.addEventListener("click", () => window.open(_dataCode), {passive:true});
 			_viewButtonsSection.appendChild(_viewCodeButton);
@@ -207,7 +207,7 @@ function eventListenersInitialization() {
 		const _dataDemo = websitePreview.getAttribute("data-demo");
 		if(_dataDemo != null) {													//There could be a project that hasn't got a demo ready yet
 			let _viewDemoButton = document.createElement("button");
-			_viewDemoButton.innerHTML = "PLAY DEMO";
+			_viewDemoButton.innerHTML = "DEMO";
 			_viewDemoButton.className = "websitePreviewExpandedButton";
 			_viewDemoButton.addEventListener("click", () => window.open(_dataDemo), {passive:true});
 			_viewButtonsSection.appendChild(_viewDemoButton);
