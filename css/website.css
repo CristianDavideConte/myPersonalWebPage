@@ -25,11 +25,7 @@
  /* 0) KEYFRAMES GLOBAL ANIMATIONS */
 @keyframes scrollDownButtonBounce {
 	0% {
-		transform: translate3d(0, calc(var(--100vh) / 4 - 20%), 0);
-	}
-
-	100% {
-		transform: translate3d(0, calc(var(--100vh) / 4), 0);
+		transform: translate3d(0, -20%, 0);
 	}
 }
 
@@ -93,6 +89,7 @@
 	--header-elements-height:4rem;
 	--header-elements-padding:1rem;
 	--header-socialNetworks-div-width:calc(4 * var(--header-elements-height) + 3 * var(--header-elements-padding)); /* 4: number of socialNetworks; 3: number of spaces between them*/
+	--header-height: calc(var(--header-elements-height) + 2 * var(--header-elements-padding));
 
 	--profilePic-size:17vmin;
 	--presentationCard-height:60vmin;
@@ -100,6 +97,8 @@
 
 	--websitePreview-size:15rem;
   	--websitePreview-expanded-size:70vmin;
+
+	--button-size: calc(0.5 * var(--websitePreview-size));
 
 	--light-theme-blur-background-color-Black: rgba(0,0,0,1);
 	--light-theme-blur-background-color-White: rgba(255,255,255,0.5);
@@ -327,8 +326,6 @@ a, button, label, div, input, textarea {
 	-webkit-transform: translate3d(-50%,  calc(-2 * (var(--header-height) + 2 * var(--header-elements-padding))), 0);
 	transform: translate3d(-50%, calc(-2 * (var(--header-height) + 2 * var(--header-elements-padding))), 0);
 	transition:var(--transition-time-medium);
-
-	--header-height: calc(var(--header-elements-height) + 2 * var(--header-elements-padding));
 }
 
 #popUpMessage.messageOnScreen{
@@ -373,7 +370,6 @@ a, button, label, div, input, textarea {
 	background-position: center calc(-1 * var(--header-height));
 	background-size: cover;	
 
-	--header-height: calc(var(--header-elements-height) + 2 * var(--header-elements-padding));
 	--headerBackground-offset: calc(-1* var(--100vh));
 }
 
@@ -606,14 +602,16 @@ a, button, label, div, input, textarea {
 	outline: none;
 	border: none;
 	text-decoration: none;
+    
+	bottom: calc(0.5 * (var(--50vh) - var(--button-size)));
 
 	font-size:6rem;
 	border-radius:50%;
 	white-space: nowrap;
 	text-align: center;
-	line-height: calc(0.5 * var(--websitePreview-size));
-	height: calc(0.5 * var(--websitePreview-size));
-	width: calc(0.5 * var(--websitePreview-size));
+	line-height: var(--button-size);
+	height: var(--button-size);
+	width: var(--button-size);
 
 	-webkit-box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
@@ -622,10 +620,7 @@ a, button, label, div, input, textarea {
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced)) saturate(150%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-ultra-reduced)) saturate(150%);
 
-	-webkit-transform: translate3d(0, calc(var(--100vh) / 4),0);
-	transform: translate3d(0, calc(var(--100vh) / 4),0);
-
-	animation: scrollDownButtonBounce var(--transition-time-slow) ease-out alternate infinite;
+	animation: scrollDownButtonBounce var(--transition-time-slow) ease-out alternate infinite;	
 }
 
 
@@ -786,8 +781,8 @@ a, button, label, div, input, textarea {
 	margin:auto;
 	cursor:pointer;
 	border-radius:50%;
-	height: calc(0.5 * var(--websitePreview-size));
-	width: calc(0.5 * var(--websitePreview-size));
+	height: var(--button-size);
+	width: var(--button-size);
 	outline:none;
 	border:none;
 
