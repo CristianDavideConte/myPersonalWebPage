@@ -359,6 +359,7 @@ a, button, label, div, input, textarea {
 
 /* 4) HEADER ELEMENTS STYLING */
 #headerBackground {
+	display: none;
 	z-index:2;
 	position:fixed;
 	height: calc(var(--100vh) + var(--header-height));
@@ -383,6 +384,10 @@ a, button, label, div, input, textarea {
 	left:0%;
 	right:0%;
 	padding:var(--header-elements-padding);
+
+	background:var(--theme-blur-background-color-Dark);
+	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
+	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced));
 }
 
 #header > * {
@@ -1196,6 +1201,7 @@ select:-webkit-autofill:focus {
 	}
 
 	#headerBackground {
+		display:initial;
 		transition:transform var(--transition-time);
 	}
 
@@ -1205,6 +1211,10 @@ select:-webkit-autofill:focus {
 	}
 
 	#header {		
+		background:none;
+		-webkit-backdrop-filter:none;
+		backdrop-filter:none;
+
 		transition:all var(--transition-time);
 	}
 
