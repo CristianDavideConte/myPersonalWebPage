@@ -9,6 +9,7 @@ function scrollInit() {
 	let _documentBodyFirstYPosition = null;
 	let _documentBodyLastYPosition  = null;
 	let _presentationCardLastYPosition = null;
+	let _presentationCardScrollPropagation = true;
 
     const _defaultEasing = (remaning) => {return remaning / 20 + 1;};
 
@@ -69,11 +70,10 @@ function scrollInit() {
 
     function _scrollPresentationCard(event) {
         const _scrollTop = _presentationCard.scrollTop;
-        const _direction = event.deltaY;
-        if((_scrollTop <= 0 && _direction < 0) || (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _direction > 0)) return;
+        const _delta = event.deltaY;
+        if((_scrollTop <= 0 && _delta < 0) || (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _delta > 0)) return;
         event.preventDefault();
         event.stopPropagation();
-        uss.stopScrollingY();
         uss.scrollYBy(event.deltaY / 2, _presentationCard, null, false);
 	}
 
@@ -141,14 +141,21 @@ function scrollInit() {
     
 
 	_presentationCard.addEventListener("touchstart", event => {_presentationCardLastYPosition = event.touches[0].clientY}, {passive:true});
-	_presentationCard.addEventListener("touchend",   event => {_presentationCardLastYPosition = null}, {passive: true});
+	_presentationCard.addEventListener("touchend",   event => {_presentationCardLastYPosition = null; _presentationCardScrollPropagation = true;}, {passive: true});
 	_presentationCard.addEventListener("touchmove",  event => {
-		const _direction = event.changedTouches[0].clientY - _presentationCardLastYPosition;
-		_presentationCardLastYPosition = event.changedTouches[0].clientY;
+		const _delta = event.changedTouches[0].clientY - _presentationCardLastYPosition;
+		_presentationCardLastYPosition += _delta;
 		const _scrollTop = _presentationCard.scrollTop;
-		if((_scrollTop <= 0 && _direction > 0) || (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _direction < 0)) return;
-		_documentBodyLastYPosition = null;
+		const _maxScrollY = uss.getMaxScrollY(_presentationCard);
+
+		if((_scrollTop <= 0 && _delta > 0) || (_scrollTop >= _maxScrollY && _delta < 0)) {
+			_presentationCardScrollPropagation = false;
+			return;
+		} else if(!_presentationCardScrollPropagation && (_scrollTop <= 0 || _scrollTop >= _maxScrollY)) {
+			return 
+		}
 		event.stopPropagation();
+		_documentBodyLastYPosition = null;
 	}, {passive:false});
 	uss.setYStepLengthCalculator(_defaultEasing, _presentationCard);
 

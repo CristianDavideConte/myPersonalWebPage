@@ -298,7 +298,7 @@ a, button, label, div, input, textarea {
 
 /* 3) OFFSCREEN/BACKGROUND ELEMENTS STYLING */
 #bodyBackground {
-	height: 100vh;
+	height: var(--100vh);
 	width: 100vw;
 	position: fixed;
 	background-position: center;
