@@ -370,13 +370,11 @@ a, button, label, div, input, textarea {
 	-webkit-transform: translate3d(0, var(--headerBackground-offset), 0);
 	transform: translate3d(0, var(--headerBackground-offset), 0);
 	
-	background-position: 50% calc(-1 * var(--header-height));
+	background-position: center calc(-1 * var(--header-height));
 	background-size: cover;	
 
 	--header-height: calc(var(--header-elements-height) + 2 * var(--header-elements-padding));
 	--headerBackground-offset: calc(-1* var(--100vh));
-	--headerBackground-width: calc(2725px * 100vw / 120vw) ;
-	--headerBackground-height: calc(4088px 100vh / 120vh) ;
 }
 
 #header {
