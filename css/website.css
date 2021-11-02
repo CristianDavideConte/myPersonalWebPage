@@ -652,8 +652,8 @@ a, button, label, div, input, textarea {
 	box-shadow:0 0 var(--box-shadow-radius) 0 var(--theme-blur-background-color-Black);
 	height:var(--profilePic-size);
 	width:var(--profilePic-size);
-	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size) * 0.75 - 0.5 * var(--presentationCard-height) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
-	transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size) * 0.75 - 0.5 * var(--presentationCard-height) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
+	-webkit-transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size) * 0.75 - 0.5 * var(--presentationCard-height) + var(--header-height)), 0);
+	transform:translate3d(0, calc(var(--50vh) - var(--profilePic-size) * 0.75 - 0.5 * var(--presentationCard-height) + var(--header-height)), 0);
 }
 
 #presentationCard {
@@ -671,11 +671,11 @@ a, button, label, div, input, textarea {
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(150%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-wide)) saturate(150%);
 
-	-webkit-transform:translate3d(0, calc(var(--50vh) - 0.5 * var(--presentationCard-height) - var(--profilePic-size) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
-	transform:translate3d(0, calc(var(--50vh) - 0.5 * var(--presentationCard-height) - var(--profilePic-size) + var(--header-elements-height) + 2 * var(--header-elements-padding)), 0);
+	-webkit-transform:translate3d(0, calc(var(--50vh) - 0.5 * var(--presentationCard-height) - var(--profilePic-size) + var(--header-height)), 0);
+	transform:translate3d(0, calc(var(--50vh) - 0.5 * var(--presentationCard-height) - var(--profilePic-size) + var(--header-height)), 0);
 
-	-ms-overflow-style:none !important;									/* Edge */
-	scrollbar-width:none !important;									/* Firefox */
+	-ms-overflow-style:none !important; /* Edge */
+	scrollbar-width:none !important;    /* Firefox */
 }
 
 #presentationCard::-webkit-scrollbar {
@@ -687,7 +687,7 @@ a, button, label, div, input, textarea {
 	text-shadow: none;
 	font-size: 2rem;
 	margin:calc(0.25 * var(--profilePic-size));
-	backface-visibility:hidden;						/* Blurry text fix */
+	backface-visibility:hidden; /* Blurry text fix */
 }
 
 #presentationCard > * strong {
@@ -763,7 +763,7 @@ a, button, label, div, input, textarea {
   	transition:var(--transition-time-quick);
 
 	-ms-overflow-style:none !important; /* Edge */
-	scrollbar-width:none !important; /* Firefox */
+	scrollbar-width:none !important;    /* Firefox */
 }
 
 #websiteShowcase::-webkit-scrollbar {
@@ -1044,7 +1044,7 @@ _::-webkit-full-page-media, _:future, :root .expandedState #websitePreviewExpand
 	border-radius:1rem;
 	-webkit-box-shadow: var(--theme-box-shadow);
 	box-shadow: var(--theme-box-shadow);
-	backface-visibility:hidden;						/* Blurry text fix */
+	backface-visibility:hidden; /* Blurry text fix */
 	background:var(--theme-blur-background-color-Dark);
 	-webkit-backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(150%);
 	backdrop-filter:blur(var(--backdrop-filter-blur-radius-reduced)) saturate(150%);
