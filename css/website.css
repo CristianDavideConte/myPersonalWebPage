@@ -262,6 +262,10 @@ body::-webkit-scrollbar {
 	display:none;
 }
 
+body {
+	will-change: scroll-position;
+}
+
 p {
 	margin:0;
 	font-size:190%;
@@ -1340,7 +1344,7 @@ select:-webkit-autofill:focus {
 	#websiteShowcase::after {
 		border-right: 1.2rem solid transparent; /* Fix for the right margin being ignored by the overflow of websiteShowcase */
 	}
-
+	
 	.websitePreviewExpandedTitle {
 		font-size: 115%;
 	}
