@@ -17,7 +17,7 @@ function scrollInit() {
     //If the direction is === -1  the scroll direction is from right to left, it's from left to right otherwise.
 	function _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection) {
 		const finalPos = scrollDirection < 0 ? 0 : uss.getMaxScrollX(_websiteShowcase);
-		uss.setXStepLengthCalculator(EASE_IN_OUT_QUAD(1000), _websiteShowcase);
+		uss.setXStepLengthCalculator(EASE_IN_OUT_QUAD(700), _websiteShowcase);
 		uss.scrollXTo(finalPos, _websiteShowcase, null);
 	}
 

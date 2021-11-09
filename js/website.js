@@ -223,6 +223,7 @@ function eventListenersInitialization() {
 			event.stopPropagation(); //Prevents the click to instantly remove the previewExpanded element that is going to be created next
 			if(websitePreviewListenerDebounce) return;
 			websitePreviewListenerDebounce = true;
+			uss.setXStepLengthCalculator(EASE_OUT_QUART(450), document.getElementById("websiteShowcase"));
 			uss.scrollIntoViewIfNeeded(websitePreview, false, () => {
 				websitePreviewListenerDebounce = false;
 				/*
