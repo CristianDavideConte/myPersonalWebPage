@@ -221,7 +221,10 @@ function eventListenersInitialization() {
 		/* At the end of the process each websitePreview is given a listener for the back-to-normal-state animation */
 		websitePreview.addEventListener("click", (event) => {
 			event.stopPropagation(); //Prevents the click to instantly remove the previewExpanded element that is going to be created next
-			window.requestAnimationFrame(() => {
+			if(websitePreviewListenerDebounce) return;
+			websitePreviewListenerDebounce = true;
+			uss.scrollIntoViewIfNeeded(websitePreview, false, () => {
+				websitePreviewListenerDebounce = false;
 				/*
 				 * The websitePreview is scaled while hovered.
 				 * The top and left offset have to take the scaling into consideration otherwise
