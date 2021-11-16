@@ -288,10 +288,12 @@ function eventListenersInitialization() {
 			websitePreviewExpandedBackgroundContentElement.classList.remove("expandedState");
 
 			window.setTimeout(() => {
-				websitePreviewExpandedBackgroundContentElement.style.pointerEvents = "";
-				websitePreviewExpandedBackgroundContentElement.removeChild(_currentWebsitePreviewExpanded);
-				_currentWebsitePreview.classList.remove("expandedState");
-				websitePreviewListenerDebounce = false;
+				window.requestAnimationFrame(() => {
+					websitePreviewExpandedBackgroundContentElement.style.pointerEvents = "";
+					_currentWebsitePreview.classList.remove("expandedState");
+					websitePreviewExpandedBackgroundContentElement.removeChild(_currentWebsitePreviewExpanded);
+					websitePreviewListenerDebounce = false;
+				});
 			}, transitionTimeMedium);
 		});
 	}, {passive:true});
@@ -350,7 +352,7 @@ function _checkContactMeFormDataIntegrity() {
 	let regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	let valid = (regExp.test(contactMeFormEmailElement.value.toLowerCase())) ? "validData<br>" : "Insert a valid email address";
 	if(contactMeFormBodyElement.value === "")
-		valid = (valid !== "validData<br>") ?  "Fill the form first !" : valid + "Your message cannot by empty";
+		valid = (valid !== "validData<br>") ?  "Fill the form first !" : valid + "Your message can't be empty";
 	return valid;
 }
 
@@ -358,7 +360,9 @@ function _checkContactMeFormDataIntegrity() {
 function _ajaxResponceStatusSuccess() {
   contactMeFormElement.reset();
   contactMeFormEmailElement.disabled = true;
+  contactMeFormEmailElement.labels[0].classList.add("disabled");
   contactMeFormBodyElement.disabled = true;
+  contactMeFormBodyElement.labels[0].classList.add("disabled");
   contactMeFormSendButtonElement.disabled = true;
 	contactMeFormElement.removeEventListener("submit", _submitForm, {passive:false});
 	contactMeFormElement.removeAttribute("action");
@@ -367,7 +371,11 @@ function _ajaxResponceStatusSuccess() {
 }
 
 /* Error function for after the form is submitted */
-function _ajaxResponceStatusError(status, response, responseType) {
+function _ajaxResponceStatusError(status, response, responseType) {				
+	contactMeFormEmailElement.disabled = false;
+	contactMeFormEmailElement.labels[0].classList.remove("disabled");
+	contactMeFormBodyElement.disabled = false;
+	contactMeFormBodyElement.labels[0].classList.remove("disabled");
 	contactMeFormSendButtonElement.disabled = false;
 	_showMessage("Oops! There was a problem, try again later");
 	console.log("Request rejected from server.\nStatus: " + status + "\nResponseType: " + responseType + "\nResponse: " + response);
@@ -403,7 +411,11 @@ function _ajax(method, url, data, success, error) {
  */
 function _submitForm(event) {
 	event.preventDefault();
-    contactMeFormSendButtonElement.disabled = true;
+	contactMeFormEmailElement.disabled = true;
+	contactMeFormEmailElement.labels[0].classList.add("disabled");
+	contactMeFormBodyElement.disabled = true;
+	contactMeFormBodyElement.labels[0].classList.add("disabled");
+	contactMeFormSendButtonElement.disabled = true;
 	let validData = _checkContactMeFormDataIntegrity();
 	if(validData === "validData<br>")
 		_ajax("GET", "https://json.geoiplookup.io", null,
@@ -414,11 +426,23 @@ function _submitForm(event) {
 		},
 		() => { //Error callback
 			_showMessage("Ops, something went wrong...");
-			window.setTimeout(() => contactMeFormSendButtonElement.disabled = false, 6000);			//Every message on screen is shown for 6seconds
+			window.setTimeout(() => {
+				contactMeFormEmailElement.disabled = false;
+				contactMeFormEmailElement.labels[0].classList.remove("disabled");
+				contactMeFormBodyElement.disabled = false;
+				contactMeFormBodyElement.labels[0].classList.remove("disabled");
+				contactMeFormSendButtonElement.disabled = false;
+			}, 6000); //Every message on screen is shown for 6seconds
 		});
 	else {
 		_showMessage(validData.replace("validData<br>", ""));
-		window.setTimeout(() => contactMeFormSendButtonElement.disabled = false, 6000);			//Every message on screen is shown for 6seconds
+		window.setTimeout(() => {
+			contactMeFormEmailElement.disabled = false;
+			contactMeFormEmailElement.labels[0].classList.remove("disabled");
+			contactMeFormBodyElement.disabled = false;
+			contactMeFormBodyElement.labels[0].classList.remove("disabled");
+			contactMeFormSendButtonElement.disabled = false;
+		}, 6000); //Every message on screen is shown for 6seconds
 	}
 }
 
