@@ -20,11 +20,8 @@ function scrollInit() {
 		uss.setXStepLengthCalculator(EASE_IN_OUT_QUAD(700), _websiteShowcase);
 		uss.scrollXTo(finalPos, _websiteShowcase, null);
 	}
-
     
-	setTimeout(() => uss._scrollbarsMaxDimension = 0, 300); //Fix for api bug
-    
-    uss.setPageScroller(document.body);
+	uss.setPageScroller(document.body);
 	uss.setYStepLengthCalculator(_defaultEasing);
 	uss.hrefSetup(null, null, (pageLink, destination) => {
 		uss.setYStepLengthCalculator(EASE_OUT_QUINT(800));

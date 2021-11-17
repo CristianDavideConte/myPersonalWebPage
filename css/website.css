@@ -267,10 +267,6 @@ html, body {
 	overflow: hidden;
 }
 
-body::-webkit-scrollbar {
-	display:none;
-}
-
 body {
 	will-change: scroll-position;
 }
