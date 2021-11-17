@@ -758,7 +758,7 @@ a, button, label, div, input, textarea {
   	overscroll-behavior:none;
 	display:flex;
 	max-width:70%;
-	overflow-y:hidden;
+	overflow-x:scroll;
   	border-radius:var(--border-radius);
 
 	border: var(--border-size) solid var(--theme-blur-background-color-Bright);
