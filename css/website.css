@@ -110,8 +110,8 @@
 	--light-theme-blur-background-color-Average:   rgba(255,255,255,0.7);
 	--light-theme-blur-background-color-Bright:    rgba(240,240,240,0.3);
 	--light-theme-blur-background-color-Brightest: rgba(255,255,255,0.5);
-	--light-theme-box-shadow-color-Dark:    rgba(50,50,50,0.8);
-	--light-theme-box-shadow-color-Average: rgba(100,100,100,0.4);
+	--light-theme-box-shadow-color-Dark:    rgba(0,0,0,0.8);
+	--light-theme-box-shadow-color-Average: rgba(20,20,20,0.5);
 	--light-theme-box-shadow-color-Bright:  rgba(150,150,150,0.35);
 	--light-theme-websitePreview-background-color: rgba(255,255,255,0.5);
 
