@@ -37,13 +37,12 @@ function scrollInit() {
 	}, null, true);
 
 
+
+
+
     /* 
      * WHEEL EVENT-LISTENERS 
      */
-
-
-
-
     document.body.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
@@ -102,8 +101,6 @@ function scrollInit() {
     /* 
      * TOUCH EVENT-LISTENERS 
      */
-    
-
 	document.body.addEventListener("touchstart", event => {
 		if(event.touches.length > 1) return;
 		uss.stopScrollingY();
@@ -189,7 +186,6 @@ function scrollInit() {
     /*
      * KEYBOARD EVENT-LISTENERS
      */
-
 	document.body.addEventListener("keydown", event => {
 		if(uss.isYscrolling() || event.target.tagName !== "BODY") return;
 		const _websitePreviewIsExpanded = _websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState") || websitePreviewListenerDebounce;
