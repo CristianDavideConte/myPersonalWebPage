@@ -264,7 +264,7 @@ function eventListenersInitialization() {
 		if(websitePreviewListenerDebounce) return;
 		websitePreviewListenerDebounce = true;
 
-		window.requestAnimationFrame(() => {
+		uss.scrollIntoViewIfNeeded(document.getElementById("myProjects"), true, () => window.requestAnimationFrame(() => {
 			const _currentWebsitePreviewExpanded = document.getElementById("websitePreviewExpanded");
 			const _currentWebsitePreview = websitePreviewExpandedMap.get(_currentWebsitePreviewExpanded);
 			/*
@@ -295,7 +295,7 @@ function eventListenersInitialization() {
 					websitePreviewListenerDebounce = false;
 				});
 			}, transitionTimeMedium);
-		});
+		}), true);
 	}, {passive:true});
 
 
