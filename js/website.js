@@ -29,7 +29,7 @@ function init() {
 	
 	if(window.Worker) { //Initializes all the data-lazy HTML img elements' contents
 		const lazyImages = document.getElementsByClassName("lazyLoad");
-		for(lazyImage of lazyImages) {
+		for(let lazyImage of lazyImages) {
 			const worker = new Worker("js/worker.js");
 			const image = lazyImage;
 			worker.addEventListener("message", message => {
