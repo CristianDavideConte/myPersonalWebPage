@@ -1,25 +1,25 @@
-var mobileMode; 																		//Indicates if the css for mobile is currently being applied
-var websitePreviewExpandedMap; 											//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
+var mobileMode; 					//Indicates if the css for mobile is currently being applied
+var websitePreviewExpandedMap; 		//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
 var websitePreviewListenerDebounce;
-var computedStyle;																	//All the computed styles for the document.body element
-var websitePreviewExpandedSize;											//The --websitePreview-expanded-size css variable, used to calculate the scale factor of the websitePreviews expansion animation
-var transitionTimeMedium;														//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
-var documentElement; 																//A shorthand for document.documentElement (<html> element), used for getting the browser's inner dimensions and computed styles
-var windowWidth;																		//A shortcut for the DOM element window.innerWidth
-var windowHeight;																		//A shortcut for the DOM element window.innerHeight
-var windowHeightOffset;															//The difference between the previous windowHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
-var documentBodyElement;														//A shortcut for the HTML element document.body
-var popUpMessageElement;														//The HTML element with the id "popUpMessage", used as a pop-up message container: a modal
-var popUpMessageTextElement;												//The HTML element with the id "popUpMessageText", used as the text shown in the popUpMessage HTML element
+var computedStyle;					//All the computed styles for the document.body element
+var websitePreviewExpandedSize;		//The --websitePreview-expanded-size css variable, used to calculate the scale factor of the websitePreviews expansion animation
+var transitionTimeMedium;			//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
+var documentElement; 				//A shorthand for document.documentElement (<html> element), used for getting the browser's inner dimensions and computed styles
+var windowWidth;					//A shortcut for the DOM element window.innerWidth
+var windowHeight;					//A shortcut for the DOM element window.innerHeight
+var windowHeightOffset;				//The difference between the previous windowHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
+var documentBodyElement;			//A shortcut for the HTML element document.body
+var popUpMessageElement;			//The HTML element with the id "popUpMessage", used as a pop-up message container: a modal
+var popUpMessageTextElement;		//The HTML element with the id "popUpMessageText", used as the text shown in the popUpMessage HTML element
 var websitePreviewExpandedBackgroundContentElement; //The HTML element with the id "websitePreviewExpandedBackgroundContent", used as a layer between a websitePreviewExpanded and the page beneath
-var headerBackgroundElement;												//The HTML element with the id "headerBackground", used as the website's navbar background
-var headerElement;																	//The HTML element with the id "header", used as the website navbar
-var hamburgerMenuElement;														//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px
-var websitePreviews;																//All HTML elements with the class "websitePreview", used as a clickable previews for all the projects inside the websitePreviewShowcase
-var contactMeFormElement;														//The HTML element with the id "contactMeForm", used to keep the contact informations until the contactMeFormSendButton is pressed
-var contactMeFormEmailElement;											//The HTML element with the id "contactMeFormEmail", used to store the user's email when the contactMeForm is being filled
-var contactMeFormBodyElement;												//The HTML element with the id "contactMeFormBody",used to store the user's message when the contactMeForm is being filled
-var contactMeFormSendButtonElement;									//The HTML element with the id "contactMeFormSendButton", used to send a contact request based on the contactMeForm fields
+var headerBackgroundElement;		//The HTML element with the id "headerBackground", used as the website's navbar background
+var headerElement;					//The HTML element with the id "header", used as the website navbar
+var hamburgerMenuElement;			//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px
+var websitePreviews;				//All HTML elements with the class "websitePreview", used as a clickable previews for all the projects inside the websitePreviewShowcase
+var contactMeFormElement;			//The HTML element with the id "contactMeForm", used to keep the contact informations until the contactMeFormSendButton is pressed
+var contactMeFormEmailElement;		//The HTML element with the id "contactMeFormEmail", used to store the user's email when the contactMeForm is being filled
+var contactMeFormBodyElement;		//The HTML element with the id "contactMeFormBody",used to store the user's message when the contactMeForm is being filled
+var contactMeFormSendButtonElement;	//The HTML element with the id "contactMeFormSendButton", used to send a contact request based on the contactMeForm fields
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 function init() {

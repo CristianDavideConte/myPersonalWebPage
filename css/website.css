@@ -941,7 +941,7 @@ a, button, label, div, input, textarea {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-size: 90%;
+	font-size: 1rem;
 	font-weight: bold;
 	white-space: nowrap;
 
@@ -1410,7 +1410,7 @@ select:-webkit-autofill:focus {
 	}
 	
 	.websitePreviewExpandedTitle {
-		font-size: 115%;
+		font-size: 1.2rem;
 	}
 
 	#contactMeForm {

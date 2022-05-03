@@ -23,7 +23,7 @@ function scrollInit() {
     
 	uss.setPageScroller(document.body);
 	uss.setYStepLengthCalculator(_defaultEasing);
-	uss.hrefSetup(null, null, (pageLink, destination) => {
+	uss.hrefSetup(null, null, (pageLink) => {
 		uss.setYStepLengthCalculator(EASE_OUT_QUINT(800));
 
 		/*
@@ -112,7 +112,8 @@ function scrollInit() {
 	document.body.addEventListener("touchend", event => {
 		if(event.touches.length > 1) return;
 		uss.stopScrollingY();
-		smoothPageScroll(_documentBodyFirstYPosition, document.body.scrollTop, 20, EASE_OUT_QUINT());
+		const backwardEasing = _documentBodyFirstYPosition - document.body.scrollTop < 0 ? EASE_OUT_QUAD(450) : EASE_OUT_SINE(350);
+		smoothPageScroll(_documentBodyFirstYPosition, document.body.scrollTop, 20, EASE_OUT_QUINT(), backwardEasing);
 		_documentBodyFirstYPosition = null;
 		_documentBodyLastYPosition = null;
 	}, {passive:true});
@@ -230,16 +231,29 @@ function scrollInit() {
  * - alligned if it covers 3/4 of the windowHeight or more (same as scrollIntoView).
  * - scrolled, following the original user's scroll direction, otherwise (same as scrollIntoView on the previous/nextPage).
  */
-function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, threshold = windowHeight / 4, easing) {
+function smoothPageScroll(firstScrollYPosition, lastScrollYPosition, threshold = windowHeight / 4, forwardEasing, backwardEasing) {
 	const _currentPageIndex = Math.round(lastScrollYPosition / windowHeight);
 	const _scrollDirection  = Math.sign(lastScrollYPosition - firstScrollYPosition); //1 if the scrolling is going downwards -1 otherwise.
 	const _pageOffset = _scrollDirection * (_currentPageIndex * windowHeight - lastScrollYPosition); //The offset measure by how much the page is not alligned with the screen: pageOffset is always negative
 
 	if(-_pageOffset < threshold) {//The user didn't scroll enough pixels 
-		uss.setYStepLengthCalculator(easing || EASE_IN_OUT_QUAD(700));
-		uss.scrollYBy(_scrollDirection * _pageOffset);
+		const _bounceOffset = _pageOffset <= 0 ? 0 : 60; 
+		uss.setYStepLengthCalculator(EASE_ELASTIC_Y(
+			forwardEasing  || EASE_IN_OUT_QUAD(700),
+			backwardEasing || EASE_OUT_QUAD(450),
+			(orTime, time, currentPos) => currentPos === 0 || currentPos >= windowHeight * 3 ? 0 : _bounceOffset
+			)
+		);
+		uss.scrollYBy(_scrollDirection * (_pageOffset + _bounceOffset));
 	} else {
-		uss.setYStepLengthCalculator(easing || EASE_IN_OUT_QUINT(700));
-		uss.scrollYBy(_scrollDirection * (windowHeight + _pageOffset));
+		const _finalPos = uss.getScrollYCalculator(uss.getPageScroller())() + _scrollDirection * (windowHeight + _pageOffset);
+		const _bounceOffset = _finalPos <= 0 || _finalPos >= windowHeight * 3 ? 0 : 60; 
+		uss.setYStepLengthCalculator(EASE_ELASTIC_Y(
+			forwardEasing  || EASE_IN_OUT_QUINT(700),
+			backwardEasing || EASE_OUT_CUBIC(),
+			(orTime, time, currentPos) => currentPos === 0 || currentPos >= windowHeight * 3 ? 0 : _bounceOffset
+			)
+		);
+		uss.scrollYBy(_scrollDirection * (windowHeight + _pageOffset + _bounceOffset));
 	}
 }
