@@ -3,7 +3,7 @@
   font-style:normal;
   font-weight:200;
   src:url("../fonts/UniNeue/UniNeue-Light.ttf");
-  font-display: swap;												/* Allow the default font to be visible while this one is loading */
+  font-display: swap;	/* Allow the default font to be visible while this one is loading */
 }
 
 @font-face {
@@ -11,5 +11,5 @@
   font-style:normal;
   font-weight:600;
   src:url("../fonts/UniNeue/UniNeue-Bold.otf") format("opentype");
-  font-display: swap;												/* Allow the default font to be visible while this one is loading */
+  font-display: swap;	/* Allow the default font to be visible while this one is loading */
 }
