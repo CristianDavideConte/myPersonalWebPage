@@ -1,21 +1,9 @@
 var mobileMode; 					//Indicates if the css for mobile is currently being applied
-var websitePreviewExpandedMap; 		//A map which contains all the already expanded websitePreviews HTML elements, used for not having to recalculate them every time the user wants to see them
 var websitePreviewListenerDebounce;
-var computedStyle;					//All the computed styles for the document.body element
 var websitePreviewExpandedSize;		//The --websitePreview-expanded-size css variable, used to calculate the scale factor of the websitePreviews expansion animation
-var transitionTimeMedium;			//The --transition-time-medium css variable, used to know the duration of the normal speed-transitioning elements
-var documentElement; 				//A shorthand for document.documentElement (<html> element), used for getting the browser's inner dimensions and computed styles
 var windowWidth;					//A shortcut for the DOM element window.innerWidth
 var windowHeight;					//A shortcut for the DOM element window.innerHeight
 var windowHeightOffset;				//The difference between the previous windowHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
-var documentBodyElement;			//A shortcut for the HTML element document.body
-var popUpMessageElement;			//The HTML element with the id "popUpMessage", used as a pop-up message container: a modal
-var popUpMessageTextElement;		//The HTML element with the id "popUpMessageText", used as the text shown in the popUpMessage HTML element
-var websitePreviewExpandedBackgroundContentElement; //The HTML element with the id "websitePreviewExpandedBackgroundContent", used as a layer between a websitePreviewExpanded and the page beneath
-var headerBackgroundElement;		//The HTML element with the id "headerBackground", used as the website's navbar background
-var headerElement;					//The HTML element with the id "header", used as the website navbar
-var hamburgerMenuElement;			//The HTML element with the id "hamburgerMenu", used to interact with the navbar when the width of the window is below 1081px
-var websitePreviews;				//All HTML elements with the class "websitePreview", used as a clickable previews for all the projects inside the websitePreviewShowcase
 var contactMeFormElement;			//The HTML element with the id "contactMeForm", used to keep the contact informations until the contactMeFormSendButton is pressed
 var contactMeFormEmailElement;		//The HTML element with the id "contactMeFormEmail", used to store the user's email when the contactMeForm is being filled
 var contactMeFormBodyElement;		//The HTML element with the id "contactMeFormBody",used to store the user's message when the contactMeForm is being filled
@@ -41,42 +29,27 @@ function init() {
 				};
 
 				window.requestAnimationFrame(() => {
+					image.style.transition = "0.2s";
 					image.setAttribute("src", url);
-					image.classList.add("lazyLoadElementAnimation");
+					image.classList.remove("lazyLoad");
+					image.removeAttribute("data-lazy");
 				});
 			});
 			worker.postMessage(image.getAttribute("data-lazy"));
 		}
 	}
-	eventListenersInitialization() //Initializes all the eventHandlers
 	updateWindowSize();			   //Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
+	eventListenersInitialization() //Initializes all the eventHandlers
 }
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
-	documentBodyElement = document.body;
-
-	websitePreviewExpandedMap = new Map();
 	websitePreviewListenerDebounce = false;
-
-	computedStyle = getComputedStyle(documentBodyElement);
-	websitePreviewExpandedSize = computedStyle.getPropertyValue("--websitePreview-expanded-size").replace("vmin", "");
-	transitionTimeMedium = computedStyle.getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
-
-	documentElement = document.documentElement;
 
 	windowWidth = 0;
 	windowHeight = 0;
 	windowHeightOffset = 0;
 
-	popUpMessageElement = document.getElementById("popUpMessage");
-	popUpMessageTextElement = document.getElementById("popUpMessageText");
-	websitePreviewExpandedBackgroundContentElement = document.getElementById("websitePreviewExpandedBackgroundContent");
-
-	headerBackgroundElement = document.getElementById("headerBackground");
-	headerElement = document.getElementById("header");
-	hamburgerMenuElement = document.getElementById("hamburgerMenu");
-	websitePreviews = document.getElementsByClassName("websitePreview");
 	contactMeFormElement = document.getElementById("contactMeForm");
 	contactMeFormEmailElement = document.getElementById("contactMeFormEmail");
 	contactMeFormBodyElement = document.getElementById("contactMeFormBody");
@@ -89,6 +62,7 @@ function eventListenersInitialization() {
 	window.addEventListener("beforeunload", () => history.replaceState({}, "", "/index.html"), {passive:false});
 	window.addEventListener("resize", updateWindowSize, {passive:true});
 
+	const documentBodyElement = document.body;
 	documentBodyElement.addEventListener("mousedown", event => {
 		if(event.button === 1) {
 			event.preventDefault();
@@ -104,6 +78,9 @@ function eventListenersInitialization() {
 	 * if the scroll direction is opposite to the header's (and its background's) state
 	 * (i.e. header is expanded and the scroll would is upwards) the toggleHeaderExpandedState function is called.
 	 */
+	const headerElement = document.getElementById("header");
+	const headerBackgroundElement = document.getElementById("headerBackground");
+
 	headerElement.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
@@ -154,7 +131,7 @@ function eventListenersInitialization() {
 	headerBackgroundElement.addEventListener("touchend", event => event.stopPropagation(), {passive:true});
 
 	/* When the hamburgerMenu is pressed it expands by calling the toggleHeaderExpandedState function */
-	hamburgerMenuElement.addEventListener("click", toggleHeaderExpandedState, {passive:false});
+	document.getElementById("hamburgerMenu").addEventListener("click", toggleHeaderExpandedState, {passive:false});
 
 
 
@@ -168,8 +145,12 @@ function eventListenersInitialization() {
 
 
 
-
-
+	//A map which contains all the already expanded websitePreviews HTML elements, 
+	//used for not having to recalculate them every time the user wants to see them
+	const websitePreviewExpandedMap = new Map();
+	const websitePreviewExpandedBackgroundContentElement = document.getElementById("websitePreviewExpandedBackgroundContent");
+	const transitionTimeMedium = window.getComputedStyle(documentBodyElement).getPropertyValue("--transition-time-medium").replace("s", "") * 1000;
+	const websitePreviews = document.getElementsByClassName("websitePreview");
 	for(const websitePreview of websitePreviews) {
 		/* First, all the websitePreviewExpanded basic components are created */
 		let _websitePreviewExpanded = document.createElement("div");
@@ -321,8 +302,8 @@ function eventListenersInitialization() {
 function toggleHeaderExpandedState() {
 	if(!mobileMode) return;
 	window.requestAnimationFrame(() => {
-		headerBackgroundElement.classList.toggle("mobileExpanded");
-		headerElement.classList.toggle("mobileExpanded");
+		document.getElementById("headerBackground").classList.toggle("mobileExpanded");
+		document.getElementById("header").classList.toggle("mobileExpanded");
 	});
 }
 
@@ -333,7 +314,8 @@ function toggleHeaderExpandedState() {
  */
 let _popUpMessageTimeout = null;
 function _showMessage(message) {
-	popUpMessageTextElement.innerHTML = message;
+	const popUpMessageElement = document.getElementById("popUpMessage");
+	document.getElementById("popUpMessageText").innerHTML = message;
 	popUpMessageElement.className = "messageOnScreen";
 
 	if(_popUpMessageTimeout != null)
@@ -451,7 +433,6 @@ function _submitForm(event) {
  * - calls the _update function when necessary in order to udate:
  *     -windowHeight
  *     -windowHeightOffset
- *     - computedStyle
  *     - websitePreviewExpandedSize
  *     - var(--100vh) css variable
  * - checks if the page can go to the mobileMode
@@ -465,11 +446,11 @@ function updateWindowSize() {
 
 		window.requestAnimationFrame(() => {
 			documentElement.style.setProperty("--100vh", currentWindowHeight + "px");
-			computedStyle = getComputedStyle(documentBodyElement);
-			websitePreviewExpandedSize = computedStyle.getPropertyValue("--websitePreview-expanded-size").replace("vmin", "");
+			websitePreviewExpandedSize = window.getComputedStyle(document.body).getPropertyValue("--websitePreview-expanded-size").replace("vmin", "");
 		});
 	}
 
+	const documentElement = document.documentElement;
 	const _currentWindowHeight = window.innerHeight;
 	const _currentwindowWidth = window.innerWidth;
 

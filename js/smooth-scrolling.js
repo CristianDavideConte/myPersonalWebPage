@@ -46,7 +46,7 @@ function scrollInit() {
     document.body.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		if(websitePreviewListenerDebounce || websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState")) return;
+		if(websitePreviewListenerDebounce || _websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState")) return;
 		if(_documentBodyFirstYPosition === null) _documentBodyFirstYPosition = document.body.scrollTop;
 		if(uss.getYStepLengthCalculator() !== _defaultEasing) {
 			uss.setYStepLengthCalculator(_defaultEasing);
@@ -90,7 +90,9 @@ function scrollInit() {
     _contactMeFormBodyElement.addEventListener("wheel", event => {
 		event.preventDefault();
 		event.stopPropagation();
-		uss.scrollYBy(Math.sign(event.deltaY) * windowHeight / 10, _contactMeFormBodyElement, null, false);
+		if(uss.getMaxScrollY(_contactMeFormBodyElement) > 1) {
+			uss.scrollYBy(Math.sign(event.deltaY) * windowHeight / 10, _contactMeFormBodyElement, null, false);
+		}
 	}, {passive:false});
     
 	uss.setYStepLengthCalculator(_defaultEasing, _contactMeFormBodyElement);
@@ -119,7 +121,7 @@ function scrollInit() {
 	}, {passive:true});
 
 	document.body.addEventListener("touchmove", event => {
-		if(websitePreviewListenerDebounce || websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState")) return false;
+		if(websitePreviewListenerDebounce || _websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState")) return false;
 		if(event.cancelable) event.preventDefault();
 		event.stopPropagation();
 		if(event.touches.length > 1) return;

@@ -29,18 +29,6 @@
 	}
 }
 
-@keyframes lazyLoadElementAnimation {
-	0% {
-		opacity: 0;
-	}
-
-	100% {
-		opacity: 1;
-	}
-}
-
-
-
 
 
 
@@ -349,8 +337,8 @@ a, button, label, div, input, textarea {
 	white-space: nowrap;
 }
 
-.lazyLoadElementAnimation {
-	animation: lazyLoadElementAnimation var(--transition-time);
+.lazyLoad {
+	opacity: 0;
 }
 
 

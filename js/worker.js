@@ -5,6 +5,6 @@ self.addEventListener("message", async srcs => {
 
   self.postMessage({
     url: url,
-    image: await imageBlob
+    image: imageBlob
   });
 });

@@ -5,8 +5,26 @@
 		<meta name = "Description" content = "Hi, i'm Cristian Davide Conte and this is my portfolio. You will find my projects, my resume and you can contact me if you're interested in knowing what i can do.">
 		<meta name = "viewport" content = "width=device-width, initial-scale=1.0, viewport-fit=cover">
 		<title>Cristian Davide Conte</title>
-		<link rel = "icon" type = "image/jpg" href = "css/images/favicon.jpg">
+		<link rel = "icon" type = "image/jpg" href = "./css/images/favicon.jpg">
 		
+		<script>
+			const themesSupported = window.matchMedia("(prefers-color-scheme: dark)");
+			if(!!themesSupported) {
+				const preloadLinkBodyBackground = document.createElement("link");
+				preloadLinkBodyBackground.rel = "preload";
+				preloadLinkBodyBackground.href   = themesSupported.matches ? "./css/images/backgroundImages/DarkTheme/dark_4k.jpg"        : "./css/images/backgroundImages/LightTheme/light_4k.jpg"; 
+				preloadLinkBodyBackground.as = "image";
+				document.head.appendChild(preloadLinkBodyBackground);
+				
+				if(window.innerWidth <= 1080) {
+					const preloadLinkHeaderBackground = document.createElement("link");
+					preloadLinkHeaderBackground.rel = "preload";
+					preloadLinkHeaderBackground.href = themesSupported.matches ? "./css/images/backgroundImages/DarkTheme/dark_4k_mobile.jpg" : "./css/images/backgroundImages/LightTheme/light_4k_mobile.jpg"; 
+					preloadLinkHeaderBackground.as = "image";
+					document.head.appendChild(preloadLinkHeaderBackground);
+				}
+			}
+		</script>
 		<link rel = "preload" href = "./css/fonts.css" as = "style">
 		<link rel = "preload" href = "./css/website.css" as = "style">
 		
@@ -210,5 +228,4 @@
 		</div>
 
 	</body>
-	<!-- <script async src = "./js/tests.js"></script> -->
 </html>
