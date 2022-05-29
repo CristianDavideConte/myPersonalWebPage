@@ -13,7 +13,8 @@
  * 9) FOURTH PAGE ELEMENTS' STYLING
  * 10) MEDIA:HOVER-WITH-ACTUAL-MOUSE ELEMENTS' STYLING
  * 11) MEDIA:MOBILE-PORTRAIT BROWSERS ELEMENTS' STYLING
- * 12) MEDIA:MOBILE-LANDASCAPE BROWSERS ELEMENTS' STYLING
+ * 12) MEDIA:IPHONE-MOBILE-PORTRAIT BROWSERS ELEMENTS' STYLING 
+ * 13) MEDIA:MOBILE-LANDSCAPE BROWSERS ELEMENTS' STYLING
  */
 
 
@@ -566,6 +567,8 @@ a, button, label, div, input, textarea {
 	margin:0; 
     padding: 2vmin 10vmin;
     -webkit-text-stroke-width:2px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 #firstPageSubtitle {
@@ -929,7 +932,7 @@ a, button, label, div, input, textarea {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-size: 1rem;
+	font-size: 1.2rem;
 	font-weight: bold;
 	white-space: nowrap;
 
@@ -1234,8 +1237,8 @@ select:-webkit-autofill:focus {
 		--socialNetworks-offsetY-translate3d:calc((var(--header-socialNetworks-div-width) - var(--header-elements-height))/2);
 
 		--profilePic-size:23vmin;
-		--presentationCard-height:80vmin;
-		--presentationCard-width:75vmin;
+		--presentationCard-height:90vmin;
+		--presentationCard-width:77vmin;
 
 		--websitePreview-size:20rem;
 		--websitePreview-expanded-size:75vmin;
@@ -1371,6 +1374,10 @@ select:-webkit-autofill:focus {
 		opacity: 1;
 	}
 
+	#firstPageTitle {
+		width: 71vw;
+	}
+
 	#scrollDownButton {
 		font-size:7rem;
 		font-weight: bold;
@@ -1381,12 +1388,11 @@ select:-webkit-autofill:focus {
 	}
 
 	#websiteShowcase {
-		max-width:85%;
+		max-width: 91vw;
 	}
 
 	.carouselButton {
-		-webkit-transform:scale3d(0, 0, 0);
-		transform:scale3d(0, 0, 0);
+		display: none;
 	}
 
 	.websitePreview {
@@ -1396,13 +1402,17 @@ select:-webkit-autofill:focus {
 	#websiteShowcase::after {
 		border-right: 1.2rem solid transparent; /* Fix for the right margin being ignored by the overflow of websiteShowcase */
 	}
-	
-	.websitePreviewExpandedTitle {
-		font-size: 1.2rem;
-	}
 
 	#contactMeForm {
-		width: 75%;
+		width: var(--presentationCard-width);
+	}
+}
+
+
+/* 12) MEDIA:IPHONE-MOBILE-PORTRAIT BROWSERS ELEMENTS' STYLING */
+@media only screen and (-webkit-max-device-pixel-ratio: 2) {
+	#websitePreviewExpandedTitle {
+		font-size: 1rem;
 	}
 }
 
@@ -1413,7 +1423,7 @@ select:-webkit-autofill:focus {
 
 
 
-/* 12) MEDIA:MOBILE-LANDASCAPE BROWSERS ELEMENTS' STYLING */
+/* 13) MEDIA:MOBILE-LANDSCAPE BROWSERS ELEMENTS' STYLING */
 @media only screen and (max-height:600px) and (orientation: landscape){
 	:root {
 		--websitePreview-expanded-size:85vmin;
