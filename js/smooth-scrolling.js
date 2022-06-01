@@ -105,7 +105,6 @@ function scrollInit() {
      */
 	document.body.addEventListener("touchstart", event => {
 		if(event.touches.length > 1) return;
-		uss.stopScrollingY();
 		uss.setYStepLengthCalculator(_defaultEasing);
 		_documentBodyFirstYPosition = document.body.scrollTop;
 		_documentBodyLastYPosition = null;
@@ -113,7 +112,6 @@ function scrollInit() {
 
 	document.body.addEventListener("touchend", event => {
 		if(event.touches.length > 1) return;
-		uss.stopScrollingY();
 		const backwardEasing = _documentBodyFirstYPosition - document.body.scrollTop < 0 ? EASE_OUT_QUAD(450) : EASE_OUT_SINE(350);
 		smoothPageScroll(_documentBodyFirstYPosition, document.body.scrollTop, 20, EASE_OUT_QUINT(), backwardEasing);
 		_documentBodyFirstYPosition = null;
