@@ -67,7 +67,9 @@ function scrollInit() {
     function _scrollPresentationCard(event) {
         const _scrollTop = _presentationCard.scrollTop;
         const _delta = event.deltaY;
-        if((_scrollTop <= 0 && _delta < 0) || (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _delta > 0)) return;
+        if(uss.isYscrolling() ||
+		   (_scrollTop <= 0 && _delta < 0) || 
+		   (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _delta > 0)) return;
         event.preventDefault();
         event.stopPropagation();
         uss.scrollYBy(event.deltaY / 2, _presentationCard, null, false);
@@ -79,6 +81,7 @@ function scrollInit() {
 
 
 	_websiteShowcase.addEventListener("wheel", event => {
+		if(uss.isYscrolling()) return;
 		event.preventDefault();
 		event.stopPropagation();
 		uss.setXStepLengthCalculator(_defaultEasing, _websiteShowcase);
@@ -136,7 +139,7 @@ function scrollInit() {
     
 
 	_presentationCard.addEventListener("touchstart", event => {_presentationCardLastYPosition = event.touches[0].clientY}, {passive:true});
-	_presentationCard.addEventListener("touchend",   event => {_presentationCardLastYPosition = null; _presentationCardScrollPropagation = true;}, {passive: true});
+	_presentationCard.addEventListener("touchend",   event => {_presentationCardLastYPosition = null; _presentationCardScrollPropagation = true;}, {passive:true});
 	_presentationCard.addEventListener("touchmove",  event => {
 		const _delta = event.changedTouches[0].clientY - _presentationCardLastYPosition;
 		_presentationCardLastYPosition += _delta;
@@ -149,7 +152,7 @@ function scrollInit() {
 		} else if(!_presentationCardScrollPropagation && (_scrollTop <= 0 || _scrollTop >= _maxScrollY)) {
 			return 
 		}
-		event.stopPropagation();
+		if(!uss.isYscrolling()) event.stopPropagation();
 		_documentBodyLastYPosition = null;
 	}, {passive:false});
 	uss.setYStepLengthCalculator(_defaultEasing, _presentationCard);
@@ -157,7 +160,7 @@ function scrollInit() {
 
 
     
-	_websiteShowcase.addEventListener("touchmove", event => event.stopPropagation(), {passive:true});
+	_websiteShowcase.addEventListener("touchmove", event => {if(!uss.isYscrolling()) event.stopPropagation()}, {passive:true});
 	_contactMeFormBodyElement.addEventListener("touchmove", event => event.stopPropagation(), {passive:true});
 
 

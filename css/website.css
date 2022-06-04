@@ -87,7 +87,9 @@
 	--presentationCard-width:55vmin;
 
 	--websitePreview-size:15rem;
+	--websitePreview-margin-size:1rem;
   	--websitePreview-expanded-size:70vmin;
+	--projectsCarousel-height:calc(var(--websitePreview-size) + var(--websitePreview-margin-size) + 4 * var(--border-size));
 
 	--button-size: calc(0.5 * var(--websitePreview-size));
 
@@ -364,9 +366,7 @@ a, button, label, div, input, textarea {
 	position:fixed;
 	height: calc(var(--100vh) + var(--header-height));
 	width: 100vw;
-
-	-webkit-transform: translate3d(0, var(--headerBackground-offset), 0);
-	transform: translate3d(0, var(--headerBackground-offset), 0);
+	margin-top: var(--headerBackground-offset);
 	
 	background-position: center calc(-1 * var(--header-height));
 	background-size: cover;	
@@ -727,12 +727,15 @@ a, button, label, div, input, textarea {
 
 /* 8) THIRD PAGE ELEMENTS' STYLING */
 #thirdPageTitle {
+	position: absolute;
     font-size: 8vmin;
 	padding: 2vmin 10vmin;
     -webkit-text-stroke-width:2px;
 
-	transform: translate3d(0, var(--carousel-height) , 0);
-	--carousel-height: calc(var(--50vh) - 50% - var(--websitePreview-size) - 1rem);
+	-webkit-transform: translate3d(0, calc(0.25 * var(--projectsCarousel-height) - 0.5 * (var(--projectsCarousel-height) - 100%) - 100% - var(--space-based-on-border-size)), 0);
+	transform: translate3d(0, calc(0.25 * var(--projectsCarousel-height) - 0.5 * (var(--projectsCarousel-height) - 100%) - 100% - var(--space-based-on-border-size)), 0);
+
+	--space-based-on-border-size: calc(5 * var(--border-size));
 }
 
 .projectsCarousel {
@@ -816,7 +819,7 @@ a, button, label, div, input, textarea {
 	flex-direction:column;
 	justify-content:center;
 	align-items:center;
-	margin:1rem 0em 1rem 1rem;
+	margin:var(--websitePreview-margin-size) 0em var(--websitePreview-margin-size) var(--websitePreview-margin-size);
 	
 	border-radius:var(--border-radius);
 	
@@ -1241,6 +1244,7 @@ select:-webkit-autofill:focus {
 		--presentationCard-width:77vmin;
 
 		--websitePreview-size:20rem;
+		--websitePreview-margin-size:1.2rem;
 		--websitePreview-expanded-size:75vmin;
 	}
 	
@@ -1266,8 +1270,8 @@ select:-webkit-autofill:focus {
 	}
 
 	#headerBackground.mobileExpanded {
-		-webkit-transform: translate3d(0, 0, 0);
-		transform: translate3d(0, 0, 0);
+		-webkit-transform: translate3d(0, var(--100vh), 0);
+		transform: translate3d(0, var(--100vh), 0);
 	}
 
 	#header {		
@@ -1387,16 +1391,16 @@ select:-webkit-autofill:focus {
 		font-size: 3rem;
 	}
 
+	#thirdPageTitle {
+		--space-based-on-border-size: calc(3 * var(--border-size));
+	}
+	
 	#websiteShowcase {
 		max-width: 91vw;
 	}
 
 	.carouselButton {
 		display: none;
-	}
-
-	.websitePreview {
-		margin:1.2rem 0em 1.2rem 1.2rem;
 	}
 	
 	#websiteShowcase::after {
