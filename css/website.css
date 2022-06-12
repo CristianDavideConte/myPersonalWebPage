@@ -935,7 +935,7 @@ a, button, label, div, input, textarea {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-size: 1.2rem;
+	/*font-size: 1.2rem; BUGGY */
 	font-weight: bold;
 	white-space: nowrap;
 
