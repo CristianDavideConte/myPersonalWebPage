@@ -67,7 +67,7 @@ function scrollInit() {
     function _scrollPresentationCard(event) {
         const _scrollTop = _presentationCard.scrollTop;
         const _delta = event.deltaY;
-        if(uss.isYscrolling() ||
+        if(uss.isYScrolling() ||
 		   (_scrollTop <= 0 && _delta < 0) || 
 		   (_scrollTop >= uss.getMaxScrollY(_presentationCard) && _delta > 0)) return;
         event.preventDefault();
@@ -81,7 +81,7 @@ function scrollInit() {
 
 
 	_websiteShowcase.addEventListener("wheel", event => {
-		if(uss.isYscrolling()) return;
+		if(uss.isYScrolling()) return;
 		event.preventDefault();
 		event.stopPropagation();
 		uss.setXStepLengthCalculator(_defaultEasing, _websiteShowcase);
@@ -152,7 +152,7 @@ function scrollInit() {
 		} else if(!_presentationCardScrollPropagation && (_scrollTop <= 0 || _scrollTop >= _maxScrollY)) {
 			return 
 		}
-		if(!uss.isYscrolling()) event.stopPropagation();
+		if(!uss.isYScrolling()) event.stopPropagation();
 		_documentBodyLastYPosition = null;
 	}, {passive:false});
 	uss.setYStepLengthCalculator(_defaultEasing, _presentationCard);
@@ -160,7 +160,7 @@ function scrollInit() {
 
 
     
-	_websiteShowcase.addEventListener("touchmove", event => {if(!uss.isYscrolling()) event.stopPropagation()}, {passive:true});
+	_websiteShowcase.addEventListener("touchmove", event => {if(!uss.isYScrolling()) event.stopPropagation()}, {passive:true});
 	_contactMeFormBodyElement.addEventListener("touchmove", event => event.stopPropagation(), {passive:true});
 
 
@@ -191,7 +191,7 @@ function scrollInit() {
      * KEYBOARD EVENT-LISTENERS
      */
 	document.body.addEventListener("keydown", event => {
-		if(uss.isYscrolling() || event.target.tagName !== "BODY") return;
+		if(uss.isYScrolling() || event.target.tagName !== "BODY") return;
 		const _websitePreviewIsExpanded = _websitePreviewExpandedBackgroundContentElement.classList.contains("expandedState") || websitePreviewListenerDebounce;
 		const _keyName = event.key;
 		if(_keyName === "ArrowUp" || _keyName === "ArrowLeft" || _keyName === "PageUp") {
