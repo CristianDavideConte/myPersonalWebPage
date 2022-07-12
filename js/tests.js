@@ -1,11 +1,7 @@
 //Returns true if the browser used is Apple's Safari, false otherwisee
-let _safariBrowserUsed;
-function browserIsSafari() {
-	_safariBrowserUsed = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
-									   	navigator.userAgent &&
-									   	navigator.userAgent.indexOf("CriOS") == -1 &&
-									   	navigator.userAgent.indexOf("FxiOS") == -1;
-	return _safariBrowserUsed;
+//Source: https://stackoverflow.com/questions/7944460/detect-safari-browser
+function browserIsSafari(window) {
+	return /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
 }
 
 //Performs a stress test for the headerElement and the headerBackgroundElement
@@ -40,7 +36,7 @@ var _stressTestVeryFastScrollCounter = 0;
 function stressTestVeryFastScroll() {
 	if(_stressTestVeryFastScrollCounter < 100){
 		let _scrollAmmount = (_stressTestVeryFastScrollCounter % 2 === 0) ? windowHeight / 4 : -windowHeight / 4;
-		uss.scrollYBy(_scrollAmmount, window, stressTestVeryFastScroll);
+		uss.scrollYBy(_scrollAmmount, uss.getPageScroller(), stressTestVeryFastScroll);
 		_stressTestVeryFastScrollCounter++;
 	} else _stressTestVeryFastScrollCounter = 0;
 }
@@ -48,9 +44,9 @@ function stressTestVeryFastScroll() {
 //Performs a scrolling test scrolling the whole document
 var _stressTestFullDocumentScrollCounter = 0;
 function stressTestFullDocumentScroll() {
-	if(_stressTestFullDocumentScrollCounter < 20) {
+	if(_stressTestFullDocumentScrollCounter < 100) {
 		let _scrollAmmount = (_stressTestFullDocumentScrollCounter % 2 === 0) ? windowHeight * 4 : -windowHeight * 4;
-		uss.scrollYBy(_scrollAmmount, window, stressTestFullDocumentScroll);
+		uss.scrollYBy(_scrollAmmount, uss.getPageScroller(), stressTestFullDocumentScroll);
 		_stressTestFullDocumentScrollCounter++;
 	} else _stressTestFullDocumentScrollCounter = 0;
 }
