@@ -731,11 +731,9 @@ a, button, label, div, input, textarea {
     font-size: 8vmin;
 	padding: 2vmin 10vmin;
     -webkit-text-stroke-width:2px;
-
-	-webkit-transform: translate3d(0, calc(0.25 * var(--projectsCarousel-height) - 0.5 * (var(--projectsCarousel-height) - 100%) - 100% - var(--space-based-on-border-size)), 0);
-	transform: translate3d(0, calc(0.25 * var(--projectsCarousel-height) - 0.5 * (var(--projectsCarousel-height) - 100%) - 100% - var(--space-based-on-border-size)), 0);
-
-	--space-based-on-border-size: calc(5 * var(--border-size));
+	
+	-webkit-transform: translate3d(0, -12rem,0);
+	transform: translate3d(0, -12rem,0);
 }
 
 .projectsCarousel {
@@ -1392,7 +1390,8 @@ select:-webkit-autofill:focus {
 	}
 
 	#thirdPageTitle {
-		--space-based-on-border-size: calc(3 * var(--border-size));
+		-webkit-transform: translate3d(0, -15rem,0);
+		transform: translate3d(0, -15rem,0);
 	}
 	
 	#websiteShowcase {

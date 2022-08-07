@@ -1,16 +1,19 @@
-var mobileMode; 					//Indicates if the css for mobile is currently being applied
-var websitePreviewListenerDebounce;
-var websitePreviewExpandedSize;		//The --websitePreview-expanded-size css variable, used to calculate the scale factor of the websitePreviews expansion animation
-var windowWidth;					//A shortcut for the DOM element window.innerWidth
-var windowHeight;					//A shortcut for the DOM element window.innerHeight
-var windowHeightOffset;				//The difference between the previous windowHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
-var contactMeFormElement;			//The HTML element with the id "contactMeForm", used to keep the contact informations until the contactMeFormSendButton is pressed
-var contactMeFormEmailElement;		//The HTML element with the id "contactMeFormEmail", used to store the user's email when the contactMeForm is being filled
-var contactMeFormBodyElement;		//The HTML element with the id "contactMeFormBody",used to store the user's message when the contactMeForm is being filled
-var contactMeFormSendButtonElement;	//The HTML element with the id "contactMeFormSendButton", used to send a contact request based on the contactMeForm fields
+import {EASE_OUT_QUART} from "./universalsmoothscroll-ease-functions-min.js";
+import {scrollInit} from "./smooth-scrolling.js";
+
+export var mobileMode; 					//Indicates if the css for mobile is currently being applied
+export var websitePreviewListenerDebounce;
+export var websitePreviewExpandedSize;		//The --websitePreview-expanded-size css variable, used to calculate the scale factor of the websitePreviews expansion animation
+export var windowWidth;					//A shortcut for the DOM element window.innerWidth
+export var windowHeight;					//A shortcut for the DOM element window.innerHeight
+export var windowHeightOffset;				//The difference between the previous windowHeight  and the current window.innerHeight, used only when the browser's height lowers by less than 1/3 of the current height to calculate the offset
+export var contactMeFormElement;			//The HTML element with the id "contactMeForm", used to keep the contact informations until the contactMeFormSendButton is pressed
+export var contactMeFormEmailElement;		//The HTML element with the id "contactMeFormEmail", used to store the user's email when the contactMeForm is being filled
+export var contactMeFormBodyElement;		//The HTML element with the id "contactMeFormBody",used to store the user's message when the contactMeForm is being filled
+export var contactMeFormSendButtonElement;	//The HTML element with the id "contactMeFormSendButton", used to send a contact request based on the contactMeForm fields
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
-function init() {
+window.addEventListener("load", () => {
 	window.location.href = "#home";		//The page always starts from the the #home page
 	variableInitialization();			//Binds the js variables to the corresponding HTML elements
 	scrollInit();
@@ -40,7 +43,7 @@ function init() {
 	}
 	updateWindowSize();			   //Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
 	eventListenersInitialization() //Initializes all the eventHandlers
-}
+}, {passive:true, once:true});
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
@@ -299,7 +302,7 @@ function eventListenersInitialization() {
  * This behaviour is triggered only if the page is in mobileMode.
  * The mobileMode is triggered by the window's resize event if window's width > 1080px.
  */
-function toggleHeaderExpandedState() {
+export function toggleHeaderExpandedState() {
 	if(!mobileMode) return;
 	window.requestAnimationFrame(() => {
 		document.getElementById("headerBackground").classList.toggle("mobileExpanded");

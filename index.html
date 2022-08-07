@@ -2,7 +2,7 @@
 <html lang = "en">
 	<head>
 		<meta charset = "UTF-8">
-		<meta name = "Description" content = "Hi, i'm Cristian Davide Conte and this is my portfolio. You will find my projects, my resume and you can contact me if you're interested in knowing what i can do.">
+		<meta name = "Description" content = "Hi, I'm Cristian Davide Conte and this is my portfolio.">
 		<meta name = "viewport" content = "width=device-width, initial-scale=1.0, viewport-fit=cover">
 		<title>Cristian Davide Conte</title>
 		<link rel = "icon" type = "image/jpg" href = "./css/images/favicon.jpg"/>
@@ -12,7 +12,7 @@
 			 * Preload the background image if possible 
 			 */
 			const themesSupported = window.matchMedia("(prefers-color-scheme: dark)");
-			if(!!themesSupported) {
+			if(themesSupported) {
 				const preloadLinkBodyBackground = document.createElement("link");
 				preloadLinkBodyBackground.rel = "preload";
 				preloadLinkBodyBackground.href = themesSupported.matches ? "./css/images/backgroundImages/DarkTheme/dark_4k.jpg" : "./css/images/backgroundImages/LightTheme/light_4k.jpg"; 
@@ -28,29 +28,34 @@
 				}
 			}
 		</script>
+
+		<!-- Preload resources -->
 		<link rel = "preconnect" href = "https://kit.fontawesome.com/f48b5d4594.js" crossorigin = "anonymous"/>
 		<link rel = "preload" href = "./fonts/UniNeue/UniNeue-Bold.otf" as = "font" crossorigin = "anonymous"/>
 		<link rel = "preload" href = "./fonts/UniNeue/UniNeue-Light.ttf" as = "font" crossorigin = "anonymous"/>
+
 		<link rel = "preload" href = "./css/fonts.css" as = "style"/>
 		<link rel = "preload" href = "./css/website.css" as = "style"/>
-		<link rel = "preload" href = "./js/worker.js" as = "script"/>
-		<link rel = "preload" href = "./js/smooth-scrolling.js" as = "script"/>
-		<link rel = "preload" href = "./js/website.js" as = "script"/>
-		<link rel = "preload" href = "./js/universalsmoothscroll-min.js" as = "script"/>
-		<link rel = "preload" href = "./js/universalsmoothscroll-ease-functions-min.js" as = "script"/>
-		
 
+		<link rel = "modulepreload" href = "./js/website.js"/>
+		<link rel = "preload" href = "./js/worker.js" as = "script"/>
+
+		<link rel = "modulepreload" href = "./js/smooth-scrolling.js"/>
+		<link rel = "preload" href = "./js/universalsmoothscroll-min.js" as = "script"/>
+		<link rel = "modulepreload" href = "./js/universalsmoothscroll-ease-functions-min.js"/>
+		
+		<!-- Load the stylesheets -->
 		<link rel = "stylesheet" type = "text/css" href = "./css/fonts.css"/>
 		<link rel = "stylesheet" type = "text/css" href = "./css/website.css"/>
 
+		<!-- Load the initializations scripts -->
 		<script async src = "./js/worker.js"></script>
-		<script async src = "./js/smooth-scrolling.js"></script>
-		<script async src = "./js/website.js"></script>
+		<script async src = "./js/smooth-scrolling.js" type = "module"></script>
+		<script async src = "./js/website.js" type = "module"></script>
 		<!--<script async src = "./js/tests.js"></script>-->
-		<script async src = "./js/universalsmoothscroll-ease-functions-min.js"></script>
 		<script async src = "./js/universalsmoothscroll-min.js"></script>
-		<!--<script async src = "./js/universalsmoothscroll.js"></script>-->
-
+		<script async src = "./js/universalsmoothscroll-ease-functions-min.js" type = "module"></script>
+		
 		<script async src = "https://kit.fontawesome.com/f48b5d4594.js" crossorigin = "anonymous"></script>
 	</head>
 
@@ -63,8 +68,7 @@
 		- 4) THIRD PAGE ELEMENTS: MY PROJECTS
 		- 5) FOURTH PAGE ELEMENTS: CONTACT ME
   	-->
-	<body onload = "init()">
-
+	<body>
 		<!-- 0) OUT-OF-THE-SCREEN/ NON-USER-REACHABLE ELEMENTS -->
 		<div id = "bodyBackground"></div>
 		<div id = "popUpMessage"><p id = "popUpMessageText"></p></div>

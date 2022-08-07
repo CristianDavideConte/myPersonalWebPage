@@ -1,4 +1,20 @@
-function scrollInit() {
+import {
+	EASE_OUT_SINE,
+	EASE_OUT_CUBIC,
+	EASE_OUT_QUAD,
+	EASE_OUT_QUINT,
+	EASE_IN_OUT_QUAD,
+	EASE_IN_OUT_QUINT,
+	EASE_ELASTIC_Y,
+} from "./universalsmoothscroll-ease-functions-min.js";
+
+import {
+	windowHeight,
+	websitePreviewListenerDebounce,
+	toggleHeaderExpandedState
+} from "./website.js";
+
+export function scrollInit() {
     const _profilePic = document.getElementById("profilePic");
     const _presentationCard = document.getElementById("presentationCard");
     const _websiteShowcase = document.getElementById("websiteShowcase");
