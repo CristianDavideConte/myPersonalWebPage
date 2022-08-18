@@ -35,7 +35,7 @@ function stressTestWebsitePreview() {
 var _stressTestVeryFastScrollCounter = 0;
 function stressTestVeryFastScroll() {
 	if(_stressTestVeryFastScrollCounter < 100){
-		let _scrollAmmount = (_stressTestVeryFastScrollCounter % 2 === 0) ? windowHeight / 4 : -windowHeight / 4;
+		let _scrollAmmount = _stressTestVeryFastScrollCounter % 2 === 0 ? uss.getMaxScrollY() / 4 : -uss.getMaxScrollY() / 4;
 		uss.scrollYBy(_scrollAmmount, uss.getPageScroller(), stressTestVeryFastScroll);
 		_stressTestVeryFastScrollCounter++;
 	} else _stressTestVeryFastScrollCounter = 0;
@@ -45,7 +45,7 @@ function stressTestVeryFastScroll() {
 var _stressTestFullDocumentScrollCounter = 0;
 function stressTestFullDocumentScroll() {
 	if(_stressTestFullDocumentScrollCounter < 100) {
-		let _scrollAmmount = (_stressTestFullDocumentScrollCounter % 2 === 0) ? windowHeight * 4 : -windowHeight * 4;
+		let _scrollAmmount = _stressTestFullDocumentScrollCounter % 2 === 0 ? uss.getMaxScrollY() : -uss.getMaxScrollY();
 		uss.scrollYBy(_scrollAmmount, uss.getPageScroller(), stressTestFullDocumentScroll);
 		_stressTestFullDocumentScrollCounter++;
 	} else _stressTestFullDocumentScrollCounter = 0;
