@@ -1350,8 +1350,9 @@ select:-webkit-autofill:focus {
 		transition: var(--transition-time);
 	}
 
-	#socialNetworks > #mailContact,
-	#socialNetworks > #stackoverflowContact {
+	#socialNetworks > #stackoverflowContact,
+	#socialNetworks > #linkedinContact, 
+	#socialNetworks > #mailContact {
 		font-size: var(--header-elements-height-reduced);
 	}
 
