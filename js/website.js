@@ -142,7 +142,7 @@ function eventListenersInitialization() {
 	/* All the social networks icons are linked to the corresponding website */
 	document.getElementById("githubContact").addEventListener("click", () => window.open("https://github.com/CristianDavideConte"), {passive:true});
 	document.getElementById("stackoverflowContact").addEventListener("click", () => window.open("https://stackoverflow.com/users/13938363/cristian-davide-conte?tab=profile"), {passive:true});
-	document.getElementById("instagramContact").addEventListener("click", () => window.open("https://www.instagram.com/cristiandavideconte/?hl=it"), {passive:true});
+	document.getElementById("linkedinContact").addEventListener("click", () => window.open("https://www.linkedin.com/in/cristiandavideconte/"), {passive:true});
 	document.getElementById("mailContact").addEventListener("click", () => window.open("mailto:cristiandavideconte@gmail.com", "mail"), {passive:true});
 
 
