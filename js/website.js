@@ -335,8 +335,8 @@ function _showMessage(message) {
  */
 function _checkContactMeFormDataIntegrity() {
 	let regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	let valid = (regExp.test(contactMeFormEmailElement.value.toLowerCase())) ? "validData<br>" : "Insert a valid email address";
-	if(contactMeFormBodyElement.value === "")
+	let valid = (regExp.test(contactMeFormEmailElement.value.trim().toLowerCase())) ? "validData<br>" : "Insert a valid email address";
+	if(contactMeFormBodyElement.value.trim() === "")
 		valid = (valid !== "validData<br>") ?  "Fill the form first !" : valid + "Your message can't be empty";
 	return valid;
 }
@@ -401,11 +401,13 @@ function _submitForm(event) {
 	contactMeFormBodyElement.disabled = true;
 	contactMeFormBodyElement.labels[0].classList.add("disabled");
 	contactMeFormSendButtonElement.disabled = true;
-	let validData = _checkContactMeFormDataIntegrity();
-	if(validData === "validData<br>")
+	const _validData = _checkContactMeFormDataIntegrity();
+	if(_validData === "validData<br>")
 		_ajax("GET", "https://json.geoiplookup.io", null,
 		(data, type) => { //Success callback
-			let _formData = new FormData(contactMeFormElement);
+			let _formData = new FormData();
+			_formData.append("email", contactMeFormEmailElement.value);
+			_formData.append("message", contactMeFormBodyElement.value);
 			_formData.append("informations", data);
 			_ajax(contactMeFormElement.method, contactMeFormElement.action, _formData, _ajaxResponceStatusSuccess, _ajaxResponceStatusError);
 		},
@@ -420,7 +422,7 @@ function _submitForm(event) {
 			}, 6000); //Every message on screen is shown for 6seconds
 		});
 	else {
-		_showMessage(validData.replace("validData<br>", ""));
+		_showMessage(_validData.replace("validData<br>", ""));
 		window.setTimeout(() => {
 			contactMeFormEmailElement.disabled = false;
 			contactMeFormEmailElement.labels[0].classList.remove("disabled");
