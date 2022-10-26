@@ -39,7 +39,8 @@ export function scrollInit() {
     
 	uss.setPageScroller(document.body);
 	uss.setYStepLengthCalculator(_defaultEasing);
-	uss.hrefSetup(null, null, (pageLink) => {
+	uss.hrefSetup(null, null, (pageLink, destination, event) => {
+		event.stopPropagation();
 		uss.setYStepLengthCalculator(EASE_OUT_QUINT(800));
 
 		/*
@@ -49,7 +50,7 @@ export function scrollInit() {
 		 * Whenever a pageLink is clicked, the hamburgerMenu is hidden.
 		 * This is done the same way the hamburgerMenu expands.
 		 */
-		if(pageLink.id != "scrollDownButton") toggleHeaderExpandedState();
+		if(pageLink.id !== "scrollDownButton") toggleHeaderExpandedState();
 	}, null, true);
 
 
