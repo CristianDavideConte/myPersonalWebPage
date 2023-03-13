@@ -29,7 +29,9 @@ export function scrollInit() {
 
     const _defaultEasing = (remaning) => {return remaning / 20 + 1;};
 
-    
+
+
+	
     //If the direction is === -1  the scroll direction is from right to left, it's from left to right otherwise.
 	function _smoothWebsiteShowcaseWheelScrollHorizzontally(scrollDirection) {
 		const finalPos = scrollDirection < 0 ? 0 : uss.getMaxScrollX(_websiteShowcase);
