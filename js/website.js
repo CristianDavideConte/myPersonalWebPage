@@ -14,13 +14,21 @@ export var contactMeFormSendButtonElement;	//The HTML element with the id "conta
 
 /* This Function calls all the necessary functions that are needed to initialize the page */
 window.addEventListener("load", () => {
-	window.location.href = "#home";		//The page always starts from the the #home page
-	variableInitialization();			//Binds the js variables to the corresponding HTML elements
+	window.location.href = "#home"; //The page always starts from the the #home page
+	variableInitialization(); //Binds the js variables to the corresponding HTML elements
 	scrollInit();
-	
-	if(window.Worker) { //Initializes all the data-lazy HTML img elements' contents
-		const lazyImages = document.getElementsByClassName("lazyLoad");
-		for(let lazyImage of lazyImages) {
+
+	lazyLoadImages();
+		
+	updateWindowSize(); //Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
+	eventListenersInitialization() //Initializes all the eventHandlers
+}, { passive: true, once: true });
+
+function lazyLoadImages() {
+	const lazyImages = document.getElementsByClassName("lazyLoad");
+
+	if (window.Worker) {
+		for (let lazyImage of lazyImages) {
 			const worker = new Worker("js/worker.js");
 			const image = lazyImage;
 			worker.addEventListener("message", message => {
@@ -40,10 +48,30 @@ window.addEventListener("load", () => {
 			});
 			worker.postMessage(image.getAttribute("data-lazy"));
 		}
+	} else {
+		for (let lazyImage of lazyImages) {
+			const url = lazyImage.getAttribute("data-lazy")
+			fetch(url)
+				.then(response => {
+					response.blob()
+						.then(data => {
+							const url = window.URL.createObjectURL(data);
+
+							lazyImage.onload = () => {
+								window.URL.revokeObjectURL(url);
+							};
+
+							window.requestAnimationFrame(() => {
+								lazyImage.style.transition = "0.2s";
+								lazyImage.setAttribute("src", url);
+								lazyImage.classList.remove("lazyLoad");
+								lazyImage.removeAttribute("data-lazy");
+							});
+						}).catch(error => { console.log(error) });
+				}).catch(error => { console.log(error) });
+		}
 	}
-	updateWindowSize();			   //Initially sets the 100vh css measure (var(--100vh)) which is updated only when the window's height grows
-	eventListenersInitialization() //Initializes all the eventHandlers
-}, {passive:true, once:true});
+}
 
 /* This Function initializes all the public variables */
 function variableInitialization() {
