@@ -30,7 +30,19 @@
 	}
 }
 
+@keyframes backgroundAnimation {
+	0% {
+		transform: scale3d(1, 1, 1);
+	}
 
+	50% {
+		transform: scale3d(1.5, 1.5, 1.5);
+	}
+	
+	100% {
+		transform: scale3d(1, 1, 1);
+	}
+}
 
 
 
@@ -303,6 +315,7 @@ a, button, label, div, input, textarea {
 	position: fixed;
 	background-position: center;
 	background-size: cover;
+	animation: backgroundAnimation 40s ease-in-out infinite alternate;
 }
 
 #popUpMessage {
