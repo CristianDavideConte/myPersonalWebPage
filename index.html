@@ -1,68 +1,76 @@
-<!DOCTYPE html>
-<html lang = "en">
-	<head>
-		<meta charset = "UTF-8">
-		<meta name = "Description" content = "Hi, I'm Cristian Davide Conte and this is my portfolio.">
-		<meta name = "viewport" content = "width=device-width, initial-scale=1.0, viewport-fit=cover">
-		<meta name = "apple-mobile-web-app-capable" content = "yes">
-		<meta name = "theme-color" media = "(prefers-color-scheme: light)" content = "rgba(255, 228, 224, 1)" />
-		<meta name = "apple-mobile-web-app-status-bar-style" media = "(prefers-color-scheme: light)" content = "rgba(255, 228, 224, 1)">
-		<title>Cristian Davide Conte</title>
-		<link rel = "icon" type = "image/jpg" href = "./css/images/favicon.jpg"/>
-		
-		<script>
-			/**
-			 * Preload the background image if possible 
-			 */
-			const themesSupported = window.matchMedia("(prefers-color-scheme: dark)");
-			if(themesSupported) {
-				const preloadLinkBodyBackground = document.createElement("link");
-				preloadLinkBodyBackground.rel = "preload";
-				preloadLinkBodyBackground.href = themesSupported.matches ? "./css/images/backgroundImages/DarkTheme/dark_4k.jpg" : "./css/images/backgroundImages/LightTheme/light_4k.jpg"; 
-				preloadLinkBodyBackground.as = "image";
-				document.head.appendChild(preloadLinkBodyBackground);
-				
-				if(window.innerWidth <= 1080) {
-					const preloadLinkHeaderBackground = document.createElement("link");
-					preloadLinkHeaderBackground.rel = "preload";
-					preloadLinkHeaderBackground.href = themesSupported.matches ? "./css/images/backgroundImages/DarkTheme/dark_4k_mobile.jpg" : "./css/images/backgroundImages/LightTheme/light_4k_mobile.jpg"; 
-					preloadLinkHeaderBackground.as = "image";
-					document.head.appendChild(preloadLinkHeaderBackground);
-				}
-			}
-		</script>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="Description" content="Hi, I'm Cristian Davide Conte and this is my portfolio." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="rgba(255, 228, 224, 1)" />
+        <meta
+            name="apple-mobile-web-app-status-bar-style"
+            media="(prefers-color-scheme: light)"
+            content="rgba(255, 228, 224, 1)"
+        />
+        <title>Cristian Davide Conte</title>
+        <link rel="icon" type="image/jpg" href="./css/images/favicon.jpg" />
 
-		<!-- Preload resources -->
-		<link rel = "preconnect" href = "https://kit.fontawesome.com/f48b5d4594.js" crossorigin = "anonymous"/>
-		<link rel = "preload" href = "./fonts/UniNeue/UniNeue-Bold.otf" as = "font" crossorigin = "anonymous"/>
-		<link rel = "preload" href = "./fonts/UniNeue/UniNeue-Light.ttf" as = "font" crossorigin = "anonymous"/>
+        <script>
+            /**
+             * Preload the background image if possible
+             */
+            const themesSupported = window.matchMedia('(prefers-color-scheme: dark)');
+            if (themesSupported) {
+                const preloadLinkBodyBackground = document.createElement('link');
+                preloadLinkBodyBackground.rel = 'preload';
+                preloadLinkBodyBackground.href = themesSupported.matches
+                    ? './css/images/backgroundImages/DarkTheme/dark_4k.jpg'
+                    : './css/images/backgroundImages/LightTheme/light_4k.jpg';
+                preloadLinkBodyBackground.as = 'image';
+                document.head.appendChild(preloadLinkBodyBackground);
 
-		<link rel = "preload" href = "./css/fonts.css" as = "style"/>
-		<link rel = "preload" href = "./css/website.css" as = "style"/>
+                if (window.innerWidth <= 1080) {
+                    const preloadLinkHeaderBackground = document.createElement('link');
+                    preloadLinkHeaderBackground.rel = 'preload';
+                    preloadLinkHeaderBackground.href = themesSupported.matches
+                        ? './css/images/backgroundImages/DarkTheme/dark_4k_mobile.jpg'
+                        : './css/images/backgroundImages/LightTheme/light_4k_mobile.jpg';
+                    preloadLinkHeaderBackground.as = 'image';
+                    document.head.appendChild(preloadLinkHeaderBackground);
+                }
+            }
+        </script>
 
-		<link rel = "modulepreload" href = "./js/website.js"/>
-		<link rel = "preload" href = "./js/worker.js" as = "script"/>
+        <!-- Preload resources -->
+        <link rel="preconnect" href="https://kit.fontawesome.com/f48b5d4594.js" crossorigin="anonymous" />
+        <link rel="preload" href="./fonts/UniNeue/UniNeue-Bold.otf" as="font" crossorigin="anonymous" />
+        <link rel="preload" href="./fonts/UniNeue/UniNeue-Light.ttf" as="font" crossorigin="anonymous" />
 
-		<link rel = "modulepreload" href = "./js/smooth-scrolling.js"/>
-		<link rel = "preload" href = "./js/universalsmoothscroll-min.js" as = "script"/>
-		<link rel = "modulepreload" href = "./js/universalsmoothscroll-ease-functions-min.js"/>
-		
-		<!-- Load the stylesheets -->
-		<link rel = "stylesheet" type = "text/css" href = "./css/fonts.css"/>
-		<link rel = "stylesheet" type = "text/css" href = "./css/website.css"/>
+        <link rel="preload" href="./css/fonts.css" as="style" />
+        <link rel="preload" href="./css/website.css" as="style" />
 
-		<!-- Load the initializations scripts -->
-		<script async src = "./js/worker.js"></script>
-		<script async src = "./js/smooth-scrolling.js" type = "module"></script>
-		<script async src = "./js/website.js" type = "module"></script>
-		<!--<script async src = "./js/tests.js"></script>-->
-		<script async src = "./js/universalsmoothscroll-min.js"></script>
-		<script async src = "./js/universalsmoothscroll-ease-functions-min.js" type = "module"></script>
-		
-		<script async src = "https://kit.fontawesome.com/45f85de49d.js" crossorigin = "anonymous"></script>
-	</head>
+        <link rel="modulepreload" href="./js/website.js" />
+        <link rel="preload" href="./js/worker.js" as="script" />
 
-	<!--
+        <link rel="modulepreload" href="./js/smooth-scrolling.js" />
+        <link rel="preload" href="./js/universalsmoothscroll-min.js" as="script" />
+        <link rel="modulepreload" href="./js/universalsmoothscroll-ease-functions-min.js" />
+
+        <!-- Load the stylesheets -->
+        <link rel="stylesheet" type="text/css" href="./css/fonts.css" />
+        <link rel="stylesheet" type="text/css" href="./css/website.css" />
+
+        <!-- Load the initializations scripts -->
+        <script async src="./js/worker.js"></script>
+        <script async src="./js/smooth-scrolling.js" type="module"></script>
+        <script async src="./js/website.js" type="module"></script>
+        <!--<script async src = "./js/tests.js"></script>-->
+        <script async src="./js/universalsmoothscroll-min.js"></script>
+        <script async src="./js/universalsmoothscroll-ease-functions-min.js" type="module"></script>
+
+        <script async src="https://kit.fontawesome.com/45f85de49d.js" crossorigin="anonymous"></script>
+    </head>
+
+    <!--
 	 	- BODY ELEMENTS' ORGANIZATION
 		- 0) OUT-OF-THE-SCREEN / NON-USER-REACHABLE ELEMENTS
 		- 1) HEADER-NAVIGATION-BAR ELEMENTS
@@ -71,185 +79,228 @@
 		- 4) THIRD PAGE ELEMENTS: MY PROJECTS
 		- 5) FOURTH PAGE ELEMENTS: CONTACT ME
   	-->
-	<body>
-		<!-- 0) OUT-OF-THE-SCREEN/ NON-USER-REACHABLE ELEMENTS -->
-		<div id = "bodyBackground"></div>
-		<div id = "popUpMessage"><p id = "popUpMessageText"></p></div>
-		<div id = "websitePreviewExpandedBackgroundContent" class = "page"></div>
-		<div id = "headerBackground"></div>
+    <body>
+        <!-- 0) OUT-OF-THE-SCREEN/ NON-USER-REACHABLE ELEMENTS -->
+        <div id="bodyBackground"></div>
+        <div id="popUpMessage"><p id="popUpMessageText"></p></div>
+        <div id="websitePreviewExpandedBackgroundContent" class="page"></div>
+        <div id="headerBackground"></div>
 
+        <!-- 1) HEADER-NAVIGATION-BAR ELEMENTS -->
+        <nav id="header">
+            <div id="hamburgerMenu">
+                <div id="hamburgerMenuUpperBar"></div>
+                <div id="hamburgerMenuLowerBar"></div>
+            </div>
 
+            <div id="linkSection">
+                <a class="pageLink" href="#home">
+                    <p>HOME</p>
+                    <div class="pageLinkBarOnHover"></div>
+                </a>
+                <a class="pageLink" href="#aboutMe">
+                    <p>ABOUT ME</p>
+                    <div class="pageLinkBarOnHover"></div>
+                </a>
+                <a class="pageLink" href="#myProjects">
+                    <p>PROJECTS</p>
+                    <div class="pageLinkBarOnHover"></div>
+                </a>
+                <a class="pageLink" href="#contactMe">
+                    <p>CONTACT ME</p>
+                    <div class="pageLinkBarOnHover"></div>
+                </a>
+            </div>
 
+            <div id="socialNetworks">
+                <i id="linkedinContact" class="fa-brands fa-linkedin"></i>
+                <i id="githubContact" class="fa-brands fa-github"></i>
+                <i id="stackoverflowContact" class="fa-brands fa-stack-overflow"></i>
+                <i id="mailContact" class="fa-regular fa-envelope"></i>
+            </div>
+        </nav>
 
+        <!-- 2) FIRST PAGE ELEMENTS: HOME -->
+        <div id="home" class="page">
+            <section id="pageTitleWrapper">
+                <h1 class="pageTitle" id="firstPageTitle">Cristian Davide Conte</h1>
+                <h2 class="pageTitle" id="firstPageSubtitle">Software Engineer</h2>
+            </section>
 
+            <a id="scrollDownButton" href="#aboutMe">&darr;</a>
 
+            <div class="pageSeparator"></div>
+        </div>
 
+        <!-- 3) SECOND PAGE ELEMENTS: ABOUT ME -->
+        <div id="aboutMe" class="page">
+            <img
+                id="profilePic"
+                class="lazyLoad"
+                data-lazy="../css/images/profilePictures/profilePicture.jpg"
+                alt="profilePic"
+            />
+            <div id="presentationCard">
+                <h2>Hi,</h2>
+                <p>
+                    I'm <strong>Cristian</strong> and I'm a <strong>Software Engineer.</strong><br />
+                    I started my academic carreer in 2018 at the <strong>University of Bologna</strong> (Italy) and in
+                    2023 I completed my studies with a <strong>Master Degree in Computer Engineering</strong> and a
+                    final theses on the Vision Transformer architecture applied in an unsupervised semantic segmentation
+                    context. <br />
+                    I fluently speak <strong>Italian</strong> and <strong>English</strong> and I'm very familiar with
+                    the following <strong>languages</strong> and <strong>frameworks</strong>:
+                </p>
+                <ul>
+                    <li><strong>Assembly</strong> [RISC & RISCV]</li>
+                    <li><strong>Shell Scripting</strong> [Bash]</li>
+                    <li><strong>C</strong> / <strong>C++</strong></li>
+                    <li><strong>Rust</strong> &amp; <strong>WebAssembly</strong></li>
+                    <li><strong>Java</strong></li>
+                    <li><strong>Dart</strong> &amp; <strong>Flutter</strong></li>
+                    <li>
+                        <strong>Python</strong> &amp; <strong>Numpy</strong>, <strong>TensorFlow</strong>,
+                        <strong>PyTorch</strong>
+                    </li>
+                    <li><strong>Javascript</strong>, HTML, CSS</li>
+                    <li><strong>React.js</strong>, <strong>Node.js</strong></li>
+                </ul>
+                <p>
+                    Down<strong> below</strong> you'll find some of <strong>my projects</strong> and many ways to
+                    contact me.
+                </p>
+                <h2>Feel free to reach out !</h2>
+            </div>
 
+            <div class="pageSeparator"></div>
+        </div>
 
-		<!-- 1) HEADER-NAVIGATION-BAR ELEMENTS -->
-		<nav id = "header">
+        <!-- 4) THIRD PAGE ELEMENTS: MY PROJECTS -->
+        <div id="myProjects" class="page">
+            <h1 class="pageTitle" id="thirdPageTitle">My Projects</h1>
 
-			<div id ="hamburgerMenu">
-				<div id = "hamburgerMenuUpperBar"></div>
-				<div id = "hamburgerMenuLowerBar"></div>
-			</div>
+            <div class="projectsCarousel">
+                <button class="carouselButton">_&lt;</button>
+                <div id="websiteShowcase">
+                    <div
+                        class="websitePreview"
+                        data-code="https://github.com/CristianDavideConte/myPersonalWebPage"
+                        data-title="THIS WEBSITE"
+                    >
+                        <img
+                            class="websitePreviewImage lazyLoad"
+                            src=""
+                            alt="websitePreviewImage"
+                            data-lazy="../css/images/favicon.jpg"
+                        />
+                    </div>
+                    <div
+                        class="websitePreview"
+                        data-code="https://github.com/CristianDavideConte/universalSmoothScroll"
+                        data-demo="https://cristiandavideconte.github.io/universalSmoothScroll/"
+                        data-title="UNIVERSAL SMOOTH SCROLL"
+                    >
+                        <img
+                            class="websitePreviewImage lazyLoad"
+                            src=""
+                            alt="websitePreviewImage"
+                            data-lazy="../css/images/websitesPreviews/universalSmoothScroll/preview.png"
+                        />
+                    </div>
+                    <div
+                        class="websitePreview"
+                        data-code="https://github.com/CristianDavideConte/pasta-smart-package-project"
+                        data-demo="https://cristiandavideconte.github.io/pasta-smart-package-project/?lan=eng"
+                        data-title="PASTA SMART PACKAGE"
+                    >
+                        <img
+                            class="websitePreviewImage lazyLoad"
+                            src=""
+                            alt="websitePreviewImage"
+                            data-lazy="../css/images/websitesPreviews/packagingLinters/preview.png"
+                        />
+                    </div>
+                    <div
+                        class="websitePreview"
+                        data-code="https://github.com/CristianDavideConte/applyBackdropFilterBlurToText"
+                        data-demo="https://cristiandavideconte.github.io/applyBackdropFilterBlurToText/"
+                        data-title="BACKDROP-BLUR FOR TEXT"
+                    >
+                        <img
+                            class="websitePreviewImage lazyLoad"
+                            src=""
+                            alt="websitePreviewImage"
+                            data-lazy="../css/images/websitesPreviews/applyBackdropFilterBlurToText/preview.png"
+                        />
+                    </div>
+                    <div
+                        class="websitePreview"
+                        data-code="https://github.com/CristianDavideConte/spyfall-game"
+                        data-demo="https://cristiandavideconte.github.io/spyfall-game/"
+                        data-title="SAMPLE"
+                    >
+                        <img
+                            class="websitePreviewImage lazyLoad"
+                            src=""
+                            alt="websitePreviewImage"
+                            data-lazy="../css/images/websitesPreviews/spyfall/preview.png"
+                        />
+                    </div>
+                    <div
+                        class="websitePreview"
+                        data-code="https://github.com/CristianDavideConte/spyfall-game"
+                        data-demo="https://cristiandavideconte.github.io/spyfall-game/"
+                        data-title="SAMPLE"
+                    >
+                        <img
+                            class="websitePreviewImage lazyLoad"
+                            src=""
+                            alt="websitePreviewImage"
+                            data-lazy="../css/images/websitesPreviews/spyfall/preview.png"
+                        />
+                    </div>
+                    <div
+                        class="websitePreview"
+                        data-code="https://github.com/CristianDavideConte/spyfall-game"
+                        data-demo="https://cristiandavideconte.github.io/spyfall-game/"
+                        data-title="SAMPLE"
+                    >
+                        <img
+                            class="websitePreviewImage lazyLoad"
+                            src=""
+                            alt="websitePreviewImage"
+                            data-lazy="../css/images/websitesPreviews/spyfall/preview.png"
+                        />
+                    </div>
+                    <div
+                        class="websitePreview"
+                        data-code="https://github.com/CristianDavideConte/spyfall-game"
+                        data-demo="https://cristiandavideconte.github.io/spyfall-game/"
+                        data-title="SAMPLE"
+                    >
+                        <img
+                            class="websitePreviewImage lazyLoad"
+                            src=""
+                            alt="websitePreviewImage"
+                            data-lazy="../css/images/websitesPreviews/spyfall/preview.png"
+                        />
+                    </div>
+                </div>
+                <button class="carouselButton">&gt;_</button>
+            </div>
 
-			<div id = "linkSection">
-				<a class = "pageLink" href = "#home">
-					<p>HOME</p>
-					<div class = "pageLinkBarOnHover"></div>
-				</a>
-				<a class = "pageLink" href = "#aboutMe">
-					<p>ABOUT ME</p>
-					<div class = "pageLinkBarOnHover"></div>
-				</a>
-				<a class = "pageLink" href = "#myProjects">
-					<p>PROJECTS</p>
-					<div class = "pageLinkBarOnHover"></div>
-				</a>
-				<a class = "pageLink" href = "#contactMe">
-					<p>CONTACT ME</p>
-					<div class = "pageLinkBarOnHover"></div>
-				</a>
-			</div>
+            <div class="pageSeparator"></div>
+        </div>
 
-			<div id = "socialNetworks">
-				<i id = "linkedinContact" class = "fa-brands fa-linkedin"></i>
-				<i id = "githubContact" class = "fa-brands fa-github"></i>
-				<i id = "stackoverflowContact" class = "fa-brands fa-stack-overflow"></i>
-				<i id = "mailContact" class = "fa-regular fa-envelope"></i>
-			</div>
-
-		</nav>
-
-
-
-
-
-
-
-
-
-		<!-- 2) FIRST PAGE ELEMENTS: HOME -->
-		<div id = "home" class = "page">
-
-			<section id = "pageTitleWrapper">
-				<h1 class = "pageTitle" id = "firstPageTitle">Cristian Davide Conte</h1>
-				<h2 class = "pageTitle" id = "firstPageSubtitle">Software Engineer</h2>
-			</section>
-
-			<a id = "scrollDownButton" href = "#aboutMe">&darr;</a>
-
-			<div class = "pageSeparator"></div>
-
-		</div>
-
-
-
-
-
-
-
-
-
-		<!-- 3) SECOND PAGE ELEMENTS: ABOUT ME -->
-		<div id = "aboutMe" class = "page">
-
-			<img id = "profilePic" class = "lazyLoad" data-lazy = "../css/images/profilePictures/profilePicture.jpg" alt = "profilePic"/>
-			<div id = "presentationCard">
-				<h2>Hi,</h2>
-				<p>I'm <strong>Cristian</strong> and I'm a <strong>Software Engineer.</strong><br>
-					I started my academic carreer in 2018 at the <strong>University of Bologna</strong> (Italy) and in 2023 
-					I completed my studies with a <strong>Master Degree in Computer Engineering</strong> and a final theses on the Vision Transformer
-					architecture applied in an unsupervised semantic segmentation context. <br>
-					I fluently speak <strong>Italian</strong> and <strong>English</strong> and I'm very familiar with the following
-					<strong>languages</strong> and <strong>frameworks</strong>:</p>
-					<ul>
-						<li><strong>Assembly</strong> [RISC & RISCV]</li>
-						<li><strong>Shell Scripting</strong> [Bash]</li>
-						<li><strong>C</strong> / <strong>C++</strong></li>
-						<li><strong>Rust</strong> &amp; <strong>WebAssembly</strong></li>
-						<li><strong>Java</strong></li>
-						<li><strong>Dart</strong> &amp; <strong>Flutter</strong></li>
-						<li><strong>Python</strong> &amp; <strong>Numpy</strong>, <strong>TensorFlow</strong>, <strong>PyTorch</strong></li>
-						<li><strong>Javascript</strong>, HTML, CSS</li>
-						<li><strong>React.js</strong>, <strong>Node.js</strong></li>
-					</ul>
-				<p>Down<strong> below</strong> you'll find some of <strong>my projects</strong> and many ways to contact me.</p>
-				<h2>Feel free to reach out !</h2>
-			</div>
-
-			<div class = "pageSeparator"></div>
-
-		</div>
-
-
-
-
-
-
-
-
-
-		<!-- 4) THIRD PAGE ELEMENTS: MY PROJECTS -->
-		<div id = "myProjects" class = "page">
-
-			<h1 class = "pageTitle" id = "thirdPageTitle">My Projects</h1>
-
-			<div class = "projectsCarousel">
-				<button class = "carouselButton">_&lt;</button>
-				<div id = "websiteShowcase">
-					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/myPersonalWebPage" data-title = "THIS WEBSITE">
-						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../css/images/favicon.jpg"/>
-					</div>
-					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/universalSmoothScroll" data-demo = "https://cristiandavideconte.github.io/universalSmoothScroll/" data-title = "UNIVERSAL SMOOTH SCROLL">
-						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../css/images/websitesPreviews/universalSmoothScroll/preview.png"/>
-					</div>
-					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/pasta-smart-package" data-demo = "https://cristiandavideconte.github.io/pasta-smart-package/?lan=eng" data-title = "PASTA SMART LABEL">
-						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../css/images/websitesPreviews/packagingLinters/preview.png"/>
-					</div>
-					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/applyBackdropFilterBlurToText" data-demo = "https://cristiandavideconte.github.io/applyBackdropFilterBlurToText/" data-title = "BACKDROP-BLUR FOR TEXT">
-						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../css/images/websitesPreviews/applyBackdropFilterBlurToText/preview.png"/>
-					</div>
-					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/spyfallWebInterface" data-demo = "https://cristiandavideconte.github.io/spyfallWebInterface/" data-title = "SAMPLE">
-						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../css/images/websitesPreviews/spyfall/preview.png"/>
-					</div>
-					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/spyfallWebInterface" data-demo = "https://cristiandavideconte.github.io/spyfallWebInterface/" data-title = "SAMPLE">
-						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../css/images/websitesPreviews/spyfall/preview.png"/>
-					</div>
-					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/spyfallWebInterface" data-demo = "https://cristiandavideconte.github.io/spyfallWebInterface/" data-title = "SAMPLE">
-						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../css/images/websitesPreviews/spyfall/preview.png"/>
-					</div>
-					<div class = "websitePreview" data-code = "https://github.com/CristianDavideConte/spyfallWebInterface" data-demo = "https://cristiandavideconte.github.io/spyfallWebInterface/" data-title = "SAMPLE">
-						<img class = "websitePreviewImage lazyLoad" src = "" alt = "websitePreviewImage" data-lazy = "../css/images/websitesPreviews/spyfall/preview.png"/>
-					</div>
-				</div>
-				<button class = "carouselButton">&gt;_</button>
-			</div>
-
-			<div class = "pageSeparator"></div>
-		</div>
-
-
-
-
-
-
-
-
-
-		<!-- 5) FOURTH PAGE ELEMENTS: CONTACT ME -->
-		<div id = "contactMe" class = "page">
-
-			<form id = "contactMeForm" action = "https://formspree.io/f/xwkrawyv" method = "POST">
-				<label for = "contactMeFormEmail">Your email</label>
-				<input id = "contactMeFormEmail" type = "email" name="email" autocomplete = "email">
-				<label for = "contactMeFormBody">Your message</label>
-				<textarea id = "contactMeFormBody" type = "text" name="message"></textarea>
-				<button  id = "contactMeFormSendButton" type="submit">SEND</button>
-			</form>
-			
-		</div>
-
-	</body>
+        <!-- 5) FOURTH PAGE ELEMENTS: CONTACT ME -->
+        <div id="contactMe" class="page">
+            <form id="contactMeForm" action="https://formspree.io/f/xwkrawyv" method="POST">
+                <label for="contactMeFormEmail">Your email</label>
+                <input id="contactMeFormEmail" type="email" name="email" autocomplete="email" />
+                <label for="contactMeFormBody">Your message</label>
+                <textarea id="contactMeFormBody" type="text" name="message"></textarea>
+                <button id="contactMeFormSendButton" type="submit">SEND</button>
+            </form>
+        </div>
+    </body>
 </html>
